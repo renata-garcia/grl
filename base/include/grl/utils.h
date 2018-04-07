@@ -224,9 +224,8 @@ inline bool convert(const std::string& str, LargeVector *obj)
 /// Sample from distribution
 inline size_t sample(const LargeVector &dist, double sum)
 {
-  double r = RandGen::get()*sum;    
+  double r = RandGen::get()*sum;
   
-  //rgo std::cout << "Utils::act::r: " << r << std::endl; //#rgo
   sum = 0;
   for (size_t ii=0; ii < dist.size(); ++ii)
   {
@@ -244,8 +243,7 @@ inline size_t sample(const LargeVector &dist)
   double sum = 0;
   for (size_t ii=0; ii < dist.size(); ++ii)
     sum += dist[ii];
-  //rgo std::cout << "Utils::act::sum: " << sum << "; dist.size(): " << dist.size() << "; dist: " << dist << std::endl; //#rgo
-  
+
   return sample(dist, sum);
 }
 
