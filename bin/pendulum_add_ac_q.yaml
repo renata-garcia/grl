@@ -22,7 +22,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_rank_voting_prob
+      strategy: policy_strategy_add_prob
       tau: 0.1
       discretizer: 
         type: discretizer/uniform
@@ -61,7 +61,7 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415, 1]
+            resolution: [0.31415, 3.1415, 3]
             wrapping: [6.283, 0, 0]
           representation: 
             type: representation/parameterized/linear
@@ -113,7 +113,7 @@ experiment:
     type: agent/fixed
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_rank_voting_prob
+      strategy: policy_strategy_add_prob
       tau: experiment/agent/policy/tau
       discretizer: experiment/agent/policy/discretizer
       policy: 
@@ -139,6 +139,7 @@ ac_probability_value:
   input_max: experiment/environment/task/observation_max
   points: 65536
   savepoints: 1048576
+  state: experiment/state
   projection: mean
   output_dim: 0
   projector: experiment/agent/predictor/predictor/1/critic_projector

@@ -118,6 +118,9 @@ void MultiPolicy::distribution(const Observation &in, const Action &prev, LargeV
       {
         // Add subsequent policies' probabilities according to chosen strategy
         policy_[ii]->distribution(in, prev, &dist);
+        
+        CRAWL("MultiPolicy::dist: " << dist);
+        
         if (dist.size() != out->size())
         {
           ERROR("Subpolicy " << ii << " has incompatible number of actions");
@@ -142,6 +145,9 @@ void MultiPolicy::distribution(const Observation &in, const Action &prev, LargeV
       {
         // Multiply subsequent policies' probabilities according to chosen strategy
         policy_[ii]->distribution(in, prev, &dist);
+        
+        CRAWL("MultiPolicy::dist: " << dist);
+        
         if (dist.size() != out->size())
         {
           ERROR("Subpolicy " << ii << " has incompatible number of actions");
@@ -166,6 +172,9 @@ void MultiPolicy::distribution(const Observation &in, const Action &prev, LargeV
       for (size_t ii=0; ii != policy_.size(); ++ii)
       {
         policy_[ii]->distribution(in, prev, &dist);
+        
+        CRAWL("MultiPolicy::dist: " << dist);
+        
         if (dist.size() != out->size())
         {
           ERROR("Subpolicy " << ii << " has incompatible number of actions");
@@ -201,6 +210,9 @@ void MultiPolicy::distribution(const Observation &in, const Action &prev, LargeV
       for (size_t ii=0; ii != policy_.size(); ++ii)
       {
         policy_[ii]->distribution(in, prev, &dist);
+        
+        CRAWL("MultiPolicy::dist: " << dist);
+        
         if (dist.size() != out->size())
         {
           ERROR("Subpolicy " << ii << " has incompatible number of actions");

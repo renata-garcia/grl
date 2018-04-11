@@ -171,6 +171,14 @@ def getconf(conf, param):
     
   path = param.split('/')
   if len(path) == 1:
+    print("rgo: path[0]: ")
+    print(path[0])
+    print("rgo: type(path[0])")
+    print(type(path[0]))
+    print("rgo: conf['predictor']: ")
+    print(conf[3])
+    print(conf[path[0]])
+    print("rgo")
     return conf[path[0]]
   else:
     return getconf(conf[path[0]], '/'.join(path[1:]))
