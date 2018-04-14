@@ -4,7 +4,7 @@ repetitions: 100
 regret: simple
 rounds: 100
 parameters:
-  - name: /experiment/agent/predictor/predictor/gamma
+  - name: /experiment/agent/predictor/predictor/0/gamma
     values:
       - 0.9
       - 0.95
@@ -13,7 +13,7 @@ parameters:
       - 0.98
       - 0.99
       - 1.00
-  - name: /experiment/agent/predictor/predictor/critic/gamma
+  - name: /experiment/agent/predictor/predictor/1/gamma
     values:
       - 0.9
       - 0.95
@@ -22,21 +22,21 @@ parameters:
       - 0.98
       - 0.99
       - 1.00
-  - name: /experiment/agent/predictor/predictor/lambda
+  - name: /experiment/agent/predictor/predictor/0/lambda
     values:
       - 0.4
       - 0.5
       - 0.6
       - 0.7
       - 0.8
-  - name: /experiment/agent/predictor/predictor/critic/lambda
+  - name: /experiment/agent/predictor/predictor/1/lambda
     values:
       - 0.4
       - 0.5
       - 0.6
       - 0.7
       - 0.8
-  - name: /experiment/agent/policy/sampler/epsilon
+  - name: /experiment/agent/policy/policy/0/sampler/epsilon
     values:
       - 0.01
       - 0.02
@@ -44,7 +44,7 @@ parameters:
       - 0.10
       - 0.20
       - 0.50
-  - name: /experiment/agent/predictor/predictor/alpha
+  - name: /experiment/agent/predictor/predictor/0/alpha
     values:
       - 0.01
       - 0.02
@@ -53,7 +53,7 @@ parameters:
       - 0.15
       - 0.20
       - 0.25
-  - name: /experiment/agent/predictor/predictor/critic/alpha
+  - name: /experiment/agent/predictor/predictor/1/alpha
     values:
       - 0.01
       - 0.02
@@ -62,4 +62,3 @@ parameters:
       - 0.15
       - 0.20
       - 0.25
-      
