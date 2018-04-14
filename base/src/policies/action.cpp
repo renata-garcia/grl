@@ -158,7 +158,7 @@ void ActionProbabilityPolicy::distribution(const Observation &in, const Action &
   double total=0.;
   
   for (size_t ii=0; ii < variants.size(); ++ii)
-   total += (*out)[ii] = representation_->read(projections[ii], &v);
+   total += (*out)[ii] = exp(representation_->read(projections[ii], &v));
    
   (*out) /= total;
 }
