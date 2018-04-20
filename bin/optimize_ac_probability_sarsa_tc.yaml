@@ -1,6 +1,6 @@
 file: ac_probability_sarsa_tc.yaml
 algorithm: random
-repetitions: 100
+repetitions: 50
 regret: simple
 rounds: 100
 parameters:

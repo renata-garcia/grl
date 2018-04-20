@@ -3,7 +3,7 @@ experiment:
   runs: 1
   run_offset: 0
   trials: 0
-  steps: 0
+  steps: 1000000
   rate: 0
   test_interval: 10
   environment: 
@@ -130,37 +130,3 @@ experiment:
           projector: experiment/agent/policy/policy/1/projector
           representation: experiment/agent/policy/policy/1/representation
   save_every: never
-visualizer: 
-  type: visualizer/glut
-ac_probability_value: 
-  type: visualization/field/value
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  state: experiment/state
-  projection: mean
-  output_dim: 0
-  projector: experiment/agent/predictor/predictor/1/critic_projector
-  representation: experiment/agent/predictor/predictor/1/critic_representation
-ac_visibility_mapping: 
-  type: visualization/field/mapping
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  projection: mean
-  mapping: experiment/test_agent/policy/policy/1
-  output_dim: 0
-q_value: 
-  type: visualization/field/policy/value
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  state: experiment/state
-  projection: mean
-  policy: experiment/agent/policy/policy/0
