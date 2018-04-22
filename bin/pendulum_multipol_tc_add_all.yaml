@@ -3,7 +3,7 @@ experiment:
   runs: 1
   run_offset: 0
   trials: 0
-  steps: 300000
+  steps: 400000
   rate: 0
   test_interval: 10
   environment: 
@@ -83,15 +83,15 @@ experiment:
             wrapping: experiment/agent/policy/policy/0/projector/wrapping
           representation: 
             type: representation/parameterized/linear
-            init_min: [ 0 ]
-            init_max: [ 1 ]
+            init_min: [0]
+            init_max: [1]
             memory: 8388608
             outputs: 1
-            output_min: [  ]
-            output_max: [  ]
+            output_min: []
+            output_max: []
           sampler: 
             type: sampler/epsilon_greedy
-            epsilon: [ 0.050000000000000003 ]
+            epsilon: [0.05]
             decay_rate: 1
             decay_min: 0
         - 
@@ -106,15 +106,15 @@ experiment:
             wrapping: experiment/agent/policy/policy/0/projector/wrapping
           representation: 
             type: representation/parameterized/linear
-            init_min: [ 0 ]
-            init_max: [ 1 ]
+            init_min: [0]
+            init_max: [1]
             memory: 8388608
             outputs: 1
-            output_min: [  ]
-            output_max: [  ]
+            output_min: []
+            output_max: []
           sampler: 
             type: sampler/epsilon_greedy
-            epsilon: [ 0.050000000000000003 ]
+            epsilon: [0.05]
             decay_rate: 1
             decay_min: 0
     predictor: 
@@ -172,12 +172,12 @@ experiment:
             wrapping: experiment/agent/predictor/predictor/1/critic_projector/wrapping
           v_representation: 
             type: representation/parameterized/linear
-            init_min: [ 0 ]
-            init_max: [ 1 ]
+            init_min: [0]
+            init_max: [1]
             memory: 8388608
             outputs: 1
-            output_min: [  ]
-            output_max: [  ]
+            output_min: []
+            output_max: []
           trace: 
             type: trace/enumerated/replacing
         - 
@@ -194,7 +194,7 @@ experiment:
     type: agent/fixed
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_add_prob
+      strategy: experiment/agent/policy/strategy
       tau: experiment/agent/policy/tau
       discretizer: experiment/agent/policy/discretizer
       policy: 

@@ -1,8 +1,8 @@
-file: pendulum_add_ac_q.yaml
+file: pendulum_multipol_tc_add_all.yaml
 algorithm: random
-repetitions: 2
+repetitions: 50
 regret: simple
-rounds: 2
+rounds: 100
 parameters:
   - name: /experiment/agent/predictor/predictor/0/gamma
     values:

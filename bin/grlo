@@ -460,7 +460,7 @@ def random_optimize(base, spec, conf):
         print "Found new best lower confidence margin", score
         bestscore = score
         stream = open(bestout, 'w')
-        yaml.dump(conf, stream)
+        yaml.dump(c, stream)
         stream.close()
 
       it += 1

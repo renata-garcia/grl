@@ -158,7 +158,15 @@ void ActionProbabilityPolicy::distribution(const Observation &in, const Action &
   double total=0.;
   
   for (size_t ii=0; ii < variants.size(); ++ii)
+  {
    total += (*out)[ii] = exp(representation_->read(projections[ii], &v));
+   if (std::isnan(total))
+   {
+      ERROR("action.cpp:: total: " << total);
+      for (size_t kk=0; kk < variants.size(); ++kk)
+        ERROR("action.cpp:: (kk" << kk << " - total: " << total << " - out[kk:" << kk << "]: " << (*out)[kk] << " - representation_->read(projections[kk:" << kk << "], &v): " << representation_->read(projections[kk], &v) << " - &v: " << &v << " - exp(): " << exp(representation_->read(projections[kk], &v)) );
+   }
+  }
    
   (*out) /= total;
 }

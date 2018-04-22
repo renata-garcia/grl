@@ -1,8 +1,8 @@
 file: ac_probability_sarsa_tc.yaml
 algorithm: random
-repetitions: 50
+repetitions: 2
 regret: simple
-rounds: 100
+rounds: 2
 parameters:
   - name: /experiment/agent/predictor/gamma
     values:
