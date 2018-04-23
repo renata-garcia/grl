@@ -113,6 +113,7 @@ void ActionProbabilityPolicy::request(ConfigurationRequest *config)
   config->push_back(CRP("discretizer", "discretizer.action", "Action discretizer", discretizer_));
   config->push_back(CRP("projector", "projector.pair", "Projects observation-action pairs onto representation space", projector_));
   config->push_back(CRP("representation", "representation.value/action", "Action-probability representation", representation_));
+  config->push_back(CRP("sampler", "sampler", "Samples actions from action-values", sampler_));
 }
 
 void ActionProbabilityPolicy::configure(Configuration &config)
@@ -121,6 +122,7 @@ void ActionProbabilityPolicy::configure(Configuration &config)
   
   projector_ = (Projector*)config["projector"].ptr();
   representation_ = (Representation*)config["representation"].ptr();
+  sampler_ = (Sampler*)config["sampler"].ptr();
 }
 
 void ActionProbabilityPolicy::reconfigure(const Configuration &config)
@@ -144,7 +146,41 @@ void ActionProbabilityPolicy::act(const Observation &in, Action *out) const
   out->type = atExploratory;
 }
 
+void ActionProbabilityPolicy::values(const Observation &in, LargeVector *out) const
+{
+  // 'projections' contains list of neighbours around state 'in' and any possible action. Number of projections is equal to number of possible actions.
+  std::vector<Vector> variants;
+  std::vector<ProjectionPtr> projections;
+
+  discretizer_->options(in, &variants);
+  projector_->project(in, variants, &projections);
+
+  out->resize(variants.size());
+  Vector value;
+  for (size_t ii=0; ii < variants.size(); ++ii)
+    (*out)[ii] = representation_->read(projections[ii], &value); // reading approximated values
+}
+
 void ActionProbabilityPolicy::distribution(const Observation &in, const Action &prev, LargeVector *out) const
+{
+  
+
+  LargeVector apvalues;
+
+  values(in, &apvalues);
+  sampler_->distribution(apvalues, out);
+
+  for (size_t ii=0; ii < out->size(); ++ii) 
+  {
+   if (std::isnan((*out)[ii]))
+   {
+     ERROR("rgo action::ActionProbabilityPolicy::distribution:: (*distribution)(ii:" << ii << ") " << (*out)[ii]);
+     for (size_t kk=0; kk < out->size(); ++kk)
+       ERROR("rgo action::ActionProbabilityPolicy::distribution:: (*distribution)(kk:" << kk << ") " << (*out)[kk]);
+   }
+  }  
+}
+/*void ActionProbabilityPolicy::distribution(const Observation &in, const Action &prev, LargeVector *out) const
 {
   std::vector<Vector> variants;
   std::vector<ProjectionPtr> projections;
@@ -157,16 +193,54 @@ void ActionProbabilityPolicy::distribution(const Observation &in, const Action &
   Vector v;
   double total=0.;
   
+  for (size_t ii = 0; ii != out->size(); ++ii) {
+    if (std::isnan((*out)[ii]))
+    {
+      ERROR("rgo action before::ActionProbabilityPolicy::distribution policy_[0] out(ii:" << ii << ") " << (*out)[ii]);
+      for (size_t kk=0; kk < out->size(); ++kk)
+        ERROR("rgo action before::ActionProbabilityPolicy::distribution out(kk:" << kk << ") " << (*out)[kk]);
+    }
+  }
+  
   for (size_t ii=0; ii < variants.size(); ++ii)
   {
-   total += (*out)[ii] = exp(representation_->read(projections[ii], &v));
-   if (std::isnan(total))
-   {
-      ERROR("action.cpp:: total: " << total);
-      for (size_t kk=0; kk < variants.size(); ++kk)
-        ERROR("action.cpp:: (kk" << kk << " - total: " << total << " - out[kk:" << kk << "]: " << (*out)[kk] << " - representation_->read(projections[kk:" << kk << "], &v): " << representation_->read(projections[kk], &v) << " - &v: " << &v << " - exp(): " << exp(representation_->read(projections[kk], &v)) );
-   }
+    if (std::isnan(exp(representation_->read(projections[ii], &v))))
+    {
+      ERROR("rgo action::ActionProbabilityPolicy::distribution representation_" << (exp(representation_->read(projections[ii], &v))));
+      ERROR("rgo action::ActionProbabilityPolicy::distribution projections[" << ii<< "]" << projections[ii]);
+      ERROR("rgo action::ActionProbabilityPolicy::distribution &v" << &v);
+    }
+    
+    //total += (*out)[ii] = exp(representation_->read(projections[ii], &v));
+    normalization_gibbs(representation_->read(projections[ii], &v), out);
+    
+    if (std::isnan(total))
+    {
+       ERROR("action.cpp:: total: " << total);
+       for (size_t kk=0; kk < variants.size(); ++kk)
+         ERROR("action.cpp:: (kk" << kk << " - total: " << total << " - out[kk:" << kk << "]: " << (*out)[kk] << " - representation_->read(projections[kk:" << kk << "], &v): " << representation_->read(projections[kk], &v) << " - &v: " << &v << " - exp(): " << exp(representation_->read(projections[kk], &v)) );
+    }
   }
-   
-  (*out) /= total;
-}
+  
+  //if (total > 0 && total < std::numeric_limits<double>::infinity())
+  //{
+  //  (*out) /= total;
+  //}
+  
+  for (size_t ii = 0; ii != out->size(); ++ii) {
+    if (std::isnan((*out)[ii]))
+    {
+      ERROR("rgo action after::ActionProbabilityPolicy::distribution policy_[0] out(ii:" << ii << ") " << (*out)[ii]);
+      //ERROR("rgo action after::ActionProbabilityPolicy::distribution policy_[0] total:" << total);
+      for (size_t kk=0; kk < out->size(); ++kk)
+        ERROR("rgo action after::ActionProbabilityPolicy::distribution out(kk:" << kk << ") " << (*out)[kk]);
+    }
+    if (std::isinf((*out)[ii]))
+    {
+      ERROR("rgo action isinf::ActionProbabilityPolicy::distribution policy_[0] out(ii:" << ii << ") " << (*out)[ii]);
+      //ERROR("rgo action isinf::ActionProbabilityPolicy::distribution policy_[0] total:" << total);
+      for (size_t kk=0; kk < out->size(); ++kk)
+        ERROR("rgo action isinf::ActionProbabilityPolicy::distribution out(kk:" << kk << ") " << (*out)[kk]);
+    }
+  }
+}*/

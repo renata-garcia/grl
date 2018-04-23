@@ -71,6 +71,9 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+          sampler: 
+            type: sampler/softmax
+            tau: 1
         - 
           type: mapping/policy/value/q
           discretizer: experiment/agent/policy/discretizer
@@ -210,6 +213,9 @@ experiment:
           discretizer: experiment/agent/policy/discretizer
           projector: experiment/agent/policy/policy/1/projector
           representation: experiment/agent/policy/policy/1/representation
+          sampler: 
+            type: sampler/softmax
+            tau: 1
         - 
           type: mapping/policy/value/q
           discretizer: experiment/agent/policy/discretizer

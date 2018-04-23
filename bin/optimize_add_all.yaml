@@ -1,6 +1,6 @@
 file: pendulum_multipol_tc_add_all.yaml
 algorithm: random
-repetitions: 50
+repetitions: 100
 regret: simple
 rounds: 100
 parameters:

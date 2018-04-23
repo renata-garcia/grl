@@ -119,7 +119,7 @@ void MultiPolicy::distribution(const Observation &in, const Action &prev, LargeV
         {
           ERROR("MultiPolicy::param_choice::csAddProbabilities policy_[0] out(ii:" << ii << ") " << (*out)[ii]);
           for (size_t kk=0; kk < out->size(); ++kk)
-            ERROR("MultiPolicy::dist::csAddProbabilities out(kk:" << kk << ") " << (*out)             [kk]);
+            ERROR("MultiPolicy::dist::csAddProbabilities out(kk:" << kk << ") " << (*out)[kk]);
         }
       }
       
@@ -130,7 +130,7 @@ void MultiPolicy::distribution(const Observation &in, const Action &prev, LargeV
         
         CRAWL("MultiPolicy::dist: " << dist);
         
-        if (dist.size() != out->size())n 
+        if (dist.size() != out->size())
         {
           ERROR("Subpolicy " << ii << " has incompatible number of actions");
           throw bad_param("mapping/policy/multi:policy");
@@ -316,12 +316,14 @@ void MultiPolicy::softmax(const LargeVector &values, LargeVector *distribution) 
 void MultiPolicy::normalized_function(const LargeVector &values, LargeVector *distribution) const
 {  
   LargeVector v = LargeVector::Zero(values.size());
+  
   for (size_t ii=0; ii < values.size(); ++ii)
+    
     if (std::isnan(values[ii]))
     {
-      ERROR("normalized_function: NaN value in  distribution 1 - (ii:" << ii << ") " << values[ii]);
+      ERROR("rgo normalized_function: NaN value in  distribution 1 - (ii:" << ii << ") " << values[ii]);
       for (size_t ii=0; ii < values.size(); ++ii)
-        ERROR("normalized_function: NaN value in  distribution 1 - (ii:" << ii << ") " << values[ii]);
+        ERROR("rgo normalized_function: NaN value in  distribution 1 - (ii:" << ii << ") " << values[ii]);
     }
 
   distribution->resize(values.size());
@@ -333,17 +335,18 @@ void MultiPolicy::normalized_function(const LargeVector &values, LargeVector *di
     sum += pow(values[ii], (1.0/tau_));
     
     if (std::isnan(v[ii])) 
-        ERROR("normalized_function: NaN value in  distribution 2");
+        ERROR("rgo normalized_function: NaN value in  distribution 2");
   }
 
   for (size_t ii=0; ii < values.size(); ++ii)
   {
     (*distribution)[ii] = pow(values[ii], (1.0/tau_))/sum;
+    
     if (std::isnan((*distribution)[ii]))
     {
-      ERROR("normalized_function: NaN value in  distribution 4 - " << values[ii] << " - sum - " << sum);
+      ERROR("rgo normalized_function: NaN value in  distribution 4 - " << values[ii] << " - sum - " << sum);
       for (size_t kk=0; kk < values.size(); ++kk)
-        ERROR("normalized_function: NaN value in  distribution 4 - (kk" << kk << ") values[kk] - " << values[kk] << " - sum - " << sum);
+        ERROR("rgo normalized_function: NaN value in  distribution 4 - (kk" << kk << ") values[kk] - " << values[kk] << " - sum - " << sum);
     }
   }
 }
