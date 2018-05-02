@@ -25,6 +25,8 @@
  * \endverbatim
  */
 
+#include <grl/samplers/softmax.h>
+
 #include <grl/policies/action.h>
 
 using namespace grl;
@@ -113,7 +115,7 @@ void ActionProbabilityPolicy::request(ConfigurationRequest *config)
   config->push_back(CRP("discretizer", "discretizer.action", "Action discretizer", discretizer_));
   config->push_back(CRP("projector", "projector.pair", "Projects observation-action pairs onto representation space", projector_));
   config->push_back(CRP("representation", "representation.value/action", "Action-probability representation", representation_));
-  config->push_back(CRP("sampler", "sampler", "Samples actions from action-values", sampler_));
+  //config->push_back(CRP("sampler", "sampler", "Samples actions from action-values", sampler_));
 }
 
 void ActionProbabilityPolicy::configure(Configuration &config)
@@ -122,7 +124,13 @@ void ActionProbabilityPolicy::configure(Configuration &config)
   
   projector_ = (Projector*)config["projector"].ptr();
   representation_ = (Representation*)config["representation"].ptr();
-  sampler_ = (Sampler*)config["sampler"].ptr();
+  
+  sampler_ = new SoftmaxSampler();
+  Configuration sampler_config;
+  sampler_config.set("tau", 1.0);
+  sampler_->configure(sampler_config);
+  
+  //sampler_ = (Sampler*)config["sampler"].ptr();
 }
 
 void ActionProbabilityPolicy::reconfigure(const Configuration &config)

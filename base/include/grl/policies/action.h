@@ -79,6 +79,10 @@ class ActionProbabilityPolicy : public Policy
 
   public:
     ActionProbabilityPolicy() : discretizer_(NULL), projector_(NULL), representation_(NULL), sampler_(NULL) { }
+    ~ActionProbabilityPolicy()
+    {
+      if (sampler_) delete sampler_;
+    }
   
     // From Configurable  
     virtual void request(ConfigurationRequest *config);
