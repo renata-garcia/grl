@@ -146,3 +146,18 @@ parameters:
       - 0.15
       - 0.20
       - 0.25
+  - name: /experiment/agent/policy/tau
+    values:
+      - 0.01
+      - 0.02
+      - 0.05
+      - 0.10
+      - 0.15
+      - 0.20
+      - 0.25
+  - name: /experiment/agent/policy/strategy
+    values:
+      - "policy_strategy_add_prob"
+      - "policy_strategy_multiply_prob"
+      - "policy_strategy_majority_voting_prob"
+      - "policy_strategy_rank_voting_prob"

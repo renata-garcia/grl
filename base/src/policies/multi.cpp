@@ -34,7 +34,6 @@ REGISTER_CONFIGURABLE(MultiPolicy)
 void MultiPolicy::request(ConfigurationRequest *config)
 {
   config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"policy_strategy_add_prob", "policy_strategy_multiply_prob", "policy_strategy_majority_voting_prob", "policy_strategy_rank_voting_prob"}));
-  //TODO: rgo
   config->push_back(CRP("tau", "Temperature of Boltzmann distribution", tau_));
   config->push_back(CRP("discretizer", "discretizer.action", "Action discretizer", discretizer_));
   config->push_back(CRP("policy", "mapping/policy", "Sub-policies", &policy_));
@@ -316,46 +315,6 @@ void MultiPolicy::softmax(const LargeVector &values, LargeVector *distribution) 
 void MultiPolicy::normalized_function(const LargeVector &values, LargeVector *distribution) const
 {  
   LargeVector v = LargeVector::Zero(values.size());
-  
-  for (size_t ii=0; ii < values.size(); ++ii)
-    
-    if (std::isnan(values[ii]))
-    {
-      ERROR("rgo normalized_function: NaN value in  distribution 1 - (ii:" << ii << ") " << values[ii]);
-      for (size_t ii=0; ii < values.size(); ++ii)
-        ERROR("rgo normalized_function: NaN value in  distribution 1 - (ii:" << ii << ") " << values[ii]);
-    }
-
-  distribution->resize(values.size());
-
-  // Discard powers from interval [0.0; threshold] * max_power
-  double sum = 0;
-  for (size_t ii=0; ii < values.size(); ++ii)
-  {
-    sum += pow(values[ii], (1.0/tau_));
-    
-    if (std::isnan(v[ii])) 
-        ERROR("rgo normalized_function: NaN value in  distribution 2");
-  }
-
-  for (size_t ii=0; ii < values.size(); ++ii)
-  {
-    (*distribution)[ii] = pow(values[ii], (1.0/tau_))/sum;
-    
-    if (std::isnan((*distribution)[ii]))
-    {
-      ERROR("rgo normalized_function: NaN value in  distribution 4 - " << values[ii] << " - sum - " << sum);
-      for (size_t kk=0; kk < values.size(); ++kk)
-        ERROR("rgo normalized_function: NaN value in  distribution 4 - (kk" << kk << ") values[kk] - " << values[kk] << " - sum - " << sum);
-    }
-  }
-}
-
-
-/*
-void MultiPolicy::normalized_function_backup(const LargeVector &values, LargeVector *distribution) const
-{  
-  LargeVector v = LargeVector::Zero(values.size());
   for (size_t ii=0; ii < values.size(); ++ii)
     if (std::isnan(values[ii]))
       ERROR("normalized_function: NaN value in  distribution 1");
@@ -400,6 +359,3 @@ void MultiPolicy::normalized_function_backup(const LargeVector &values, LargeVec
       ERROR("normalized_function: NaN value in  distribution 4");
   }
 }
-
-*/
-
