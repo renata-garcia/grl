@@ -30,6 +30,7 @@
 
 #include <grl/policy.h>
 #include <grl/discretizer.h>
+#include <grl/signal.h>
 
 namespace grl
 {
@@ -51,9 +52,10 @@ class MultiPolicy : public Policy
     TypedConfigurableList<Policy> policy_;
     int bins_;
     double r_distance_parameter_;
+    VectorSignal *action_;
 
   public:
-    MultiPolicy() : bins_(10), r_distance_parameter_(0.001) { }
+    MultiPolicy() : bins_(10), r_distance_parameter_(0.001) { srand(time(0)); }
   
     // From Configurable
     virtual void request(ConfigurationRequest *config);
@@ -62,6 +64,7 @@ class MultiPolicy : public Policy
 
     // From Policy
     virtual void act(const Observation &in, Action *out) const;
+    
 };
 
 /// Policy that combines two or more sub-policies using different strategies

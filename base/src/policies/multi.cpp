@@ -26,6 +26,7 @@
  */
 
 #include <grl/policies/multi.h>
+#include <queue>
 
 using namespace grl;
 
@@ -43,6 +44,8 @@ void MultiPolicy::request(ConfigurationRequest *config)
   
   config->push_back(CRP("output_min", "vector.action_min", "Lower limit on outputs", min_, CRP::System));
   config->push_back(CRP("output_max", "vector.action_max", "Upper limit on outputs", max_, CRP::System));
+
+  config->push_back(CRP("actions", "signal/vector.action", "Suggested actions", CRP::Provided));
 }
 
 void MultiPolicy::configure(Configuration &config)
@@ -73,6 +76,9 @@ void MultiPolicy::configure(Configuration &config)
   if (policy_.empty())
     throw bad_param("mapping/policy/multi:policy is empty");
   
+  action_ = new VectorSignal();
+  
+  config.set("actions", action_);
 }
 
 void MultiPolicy::reconfigure(const Configuration &config)
@@ -82,12 +88,13 @@ void MultiPolicy::reconfigure(const Configuration &config)
 void MultiPolicy::act(const Observation &in, Action *out) const
 {
   LargeVector dist;
- 
   Action tmp_action;
-  double normalized = 0.0;
-  policy_[0]->act(in, &tmp_action);
-  int n_dimension = tmp_action.size();
-      
+  std::vector<Action> actions_actors(policy_.size());
+  policy_[0]->act(in, &actions_actors[0]);
+  int n_dimension = actions_actors[0].v.size();
+  int n_policies = policy_.size();
+  double* result = new double[n_dimension];
+
   switch (strategy_)
   {
     case csBinning:
@@ -150,53 +157,81 @@ void MultiPolicy::act(const Observation &in, Action *out) const
         
     case csDensityBased:
     {
-      double norm_actors[n_dimension][policy_.size()];
-      double actions_actors[n_dimension][policy_.size()];
+      size_t ii_max = 0;
+      std::string strspace = "";
+      for(size_t kk=0; kk < 32; ++kk)
+        strspace += " ";
 
-      dist = LargeVector::Zero(policy_.size());
+      std::vector<Action> aa_normalized(n_policies);
+      std::vector<double> density(n_policies);
+      std::vector<size_t> ii_max_density;
+      double exp_result = 0.0;
+  
+      size_t ii = 0;
+      dist = LargeVector::Zero(n_policies);
       
-      for (size_t jj=0; jj < n_dimension; ++jj)
-      {
-        for (size_t ii=0; ii < policy_.size(); ++ii)
-        {
-        policy_[ii]->act(in, &tmp_action);
-        actions_actors[jj][ii] = tmp_action.v[jj];
-        normalized = -1 + 2*(( actions_actors[jj][ii] - min_[jj]) / (max_[jj] - min_[jj]));
-        norm_actors[jj][ii] = normalized;
-        CRAWL("MultiPolicy::policy_[jj=" << jj << "][ii=" << ii << "]->act(in, &tmp_action): " << actions_actors[jj][ii]);
-        CRAWL("MultiPolicy::normalized: " << norm_actors[jj][ii]);
-        }
-      }
+      Vector send_actions(n_policies);
       
-      double* density = new double[policy_.size()];
-      for(size_t ii=0; ii < policy_.size(); ++ii)
+      Action tmp;
+      std::vector<Action>::iterator it_norm = aa_normalized.begin();
+      for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
       {
-        density[ii] = 0;
-        double expoent = 0.0;
-        for(size_t kk=0; kk < n_dimension; ++kk)
-        {
-          for(size_t jj=0; jj < policy_.size(); ++jj)
-            expoent += sqrt(fabs(actions_actors[kk][ii] - actions_actors[kk][jj]))/pow(r_distance_parameter_, 2);
-        }
-        density[ii] += exp(-1 * expoent);
-        CRAWL("MultiPolicy::density[" << ii << "]: " << density[ii]);
+        policy_[ii]->act(in, &*it);
+        tmp.v = -1 + 2*( ((*it).v - min_) / (max_ - min_) );
+        (*it_norm) = tmp;
+        ++it_norm;
+        CRAWL("ii: " << ii << " actions_actors: " << (*it).v << " normalized: " << tmp.v);
+
+        send_actions[ii] = it->v[0];
       }
 
-      int i_max = 0;
-      for(size_t ii=1; ii < policy_.size(); ++ii)
+      action_->set(send_actions);
+
+      double max = -1 * std::numeric_limits<double>::infinity();
+      std::vector<Action>::iterator it, it2, i_max;
+      ii = 0;
+      for( it=aa_normalized.begin(); it != aa_normalized.end(); ++it, ++ii)
       {
-        if(density[ii] > density[ii-1])
-          i_max = ii;
+        std::string strtmp = "";
+        double r_dist = 0.0;
+        for( it2=aa_normalized.begin(); it2 != aa_normalized.end(); ++it2)
+        {
+          double expoent = 0.0;
+          for(size_t jj = 0; jj != n_dimension; ++jj)
+          {
+            expoent += pow((*it).v[jj] - (*it2).v[jj], 2);
+            //strtmp += strspace + "expoent(jj:" + std::to_string(jj) + "): " +  std::to_string(expoent) + " (1): " + std::to_string((*it).v[jj]) + " (2): " + std::to_string((*it2).v[jj]) + "\n";
+          }
+          //strtmp += strspace + strspace + "r_dist(before): " + std::to_string(r_dist) + " expoent: " + std::to_string((-1 * expoent / pow(r_distance_parameter_, 2))) + " exp: " + std::to_string(exp( -1 * expoent / pow(r_distance_parameter_, 2))) + "\n";
+          r_dist = r_dist + exp( -1 * expoent / pow(r_distance_parameter_, 2) );
+        }
+        density.push_back( r_dist );
+        CRAWL(strtmp << strspace << "sum(expo) - density[ii:" << ii << "]: " << r_dist );
+        if (r_dist > max)
+        {
+          max = r_dist;
+          CRAWL("******************************************************************max(ii:"<<ii<<") = " << max );
+          i_max = it;
+          ii_max_density.clear();
+          ii_max_density.push_back(ii);
+          //ii_max = ii;
+        } else if (r_dist == max)
+        {
+          CRAWL("******************************************************************max(ii:"<<ii<<") = " << max );
+          ii_max_density.push_back(ii);
+        }
       }
-      CRAWL("MultiPolicy::density[i_max(" << i_max << ")]: " << density[i_max]);
-      
-      double* tmp = new double[n_dimension];
+
       for (size_t jj=0; jj < n_dimension; ++jj)
       {
-        tmp[jj] = actions_actors[jj][i_max];
-        CRAWL("MultiPolicy::tmp_[jj=" << jj << "]: " << tmp[jj]);
+        int aleatorio = rand();
+        size_t index = ii_max_density.at(aleatorio%ii_max_density.size());
+        CRAWL( "MultiPolicy::ii_max_density.size(): " << ii_max_density.size() << " aleatorio: " << aleatorio << " index: " << index);
+        result[jj] = actions_actors[index].v[jj];
+        //CRAWL( "MultiPolicy::result_[ii_max=" << index << "][jj:" << jj << "]: " << result[jj] );
       }
-      dist = ConstantLargeVector(n_dimension, *tmp);
+
+      dist = ConstantLargeVector( n_dimension, *result );
     }
     break;
         
