@@ -97,6 +97,10 @@ void DPGPredictor::update(const Transition &transition)
   
   // Here we "read out" the local advantage model by taking the dot product.
   double delta = transition.reward - (dot(q, amu) + v);
+  // TRACE("actor_representation_: " << mu);
+  // INFO("advantage_representation_: " << q);
+  // TRACE("critic_representation_: " << v);
+  // TRACE("delta: " << delta);
   
   if (transition.action.size())
   {

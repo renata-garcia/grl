@@ -206,18 +206,18 @@ void MultiPolicy::act(const Observation &in, Action *out) const
           r_dist = r_dist + exp( -1 * expoent / pow(r_distance_parameter_, 2) );
         }
         density.push_back( r_dist );
-        CRAWL(strtmp << strspace << "sum(expo) - density[ii:" << ii << "]: " << r_dist );
+        //CRAWL(strtmp << strspace << "sum(expo) - density[ii:" << ii << "]: " << r_dist );
         if (r_dist > max)
         {
           max = r_dist;
-          CRAWL("******************************************************************max(ii:"<<ii<<") = " << max );
+          //CRAWL("******************************************************************max(ii:"<<ii<<") = " << max );
           i_max = it;
           ii_max_density.clear();
           ii_max_density.push_back(ii);
           //ii_max = ii;
         } else if (r_dist == max)
         {
-          CRAWL("******************************************************************max(ii:"<<ii<<") = " << max );
+          //CRAWL("******************************************************************max(ii:"<<ii<<") = " << max );
           ii_max_density.push_back(ii);
         }
       }
