@@ -110,10 +110,8 @@ experiment:
         - 
           type: predictor/dpg
           alpha: 0.1
-          beta_v: 0.001
+          beta_v: 0.1
           beta_a: 0.0001
-#          beta_v: 0.1
-#          beta_a: 0.01
           gamma: 0.97
           lambda: 0.65
           target: off-policy
@@ -195,20 +193,6 @@ policy1:
     type: mapping/represented
     projector: experiment/agent/policy/policy/1/projector
     representation: experiment/agent/policy/policy/1/representation
-#actions: 
-#  type: visualization/state
-#  input_dims: []
-#  input_min: [-3, -3]
-#  input_max: [3, 3]
-#  memory: 256
-#  state: experiment/test_agent/policy/actions
-#state: 
-#  type: visualization/state
-#  input_dims: []
-#  input_min: experiment/environment/task/observation_min
-#  input_max: experiment/environment/task/observation_max
-#  memory: 256
-#  state: experiment/state
 advantage0: 
   type: visualization/slice
   field_dims: [0, 1]
@@ -239,10 +223,10 @@ advantage1:
     representation: experiment/agent/predictor/predictor/1/advantage_representation
 critic0: 
   type: visualization/slice
-  field_dims: [ 0, 1 ]
+  field_dims: [0, 1]
   input_min: experiment/environment/task/observation_min
   input_max: experiment/environment/task/observation_max
-  operating_point: [  ]
+  operating_point: []
   output_dim: 0
   points: 65536
   state: experiment/state
@@ -253,10 +237,10 @@ critic0:
     representation: experiment/agent/predictor/predictor/0/critic_representation
 critic1: 
   type: visualization/slice
-  field_dims: [ 0, 1 ]
+  field_dims: [0, 1]
   input_min: experiment/environment/task/observation_min
   input_max: experiment/environment/task/observation_max
-  operating_point: [  ]
+  operating_point: []
   output_dim: 0
   points: 65536
   state: experiment/state
@@ -265,3 +249,24 @@ critic1:
     type: mapping/represented
     projector: experiment/agent/policy/policy/1/projector
     representation: experiment/agent/predictor/predictor/1/critic_representation
+actions: 
+  type: visualization/state
+  input_dims: []
+  input_min: [-3, -3]
+  input_max: [3, 3]
+  memory: 256
+  state: experiment/test_agent/policy/actions
+state: 
+  type: visualization/state
+  input_dims: []
+  input_min: experiment/environment/task/observation_min
+  input_max: experiment/environment/task/observation_max
+  memory: 256
+  state: experiment/state
+actions2: 
+  type: visualization/state
+  input_dims: []
+  input_min: [-3, -3]
+  input_max: [3, 3]
+  memory: 256
+  state: experiment/action

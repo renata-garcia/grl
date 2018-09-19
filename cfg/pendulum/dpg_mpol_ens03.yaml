@@ -1421,3 +1421,24 @@ policy_visualization1:
   projection: mean
   mapping: experiment/test_agent/policy/policy/3
   output_dim: 0
+actions: 
+  type: visualization/state
+  input_dims: []
+  input_min: [-3, -3]
+  input_max: [3, 3]
+  memory: 256
+  state: experiment/test_agent/policy/actions
+state: 
+  type: visualization/state
+  input_dims: []
+  input_min: experiment/environment/task/observation_min
+  input_max: experiment/environment/task/observation_max
+  memory: 256
+  state: experiment/state
+actions2: 
+  type: visualization/state
+  input_dims: []
+  input_min: [-3, -3]
+  input_max: [3, 3]
+  memory: 256
+  state: experiment/action
