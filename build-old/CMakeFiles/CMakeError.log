@@ -1,0 +1,452 @@
+Determining if the function sb02od_ exists in the slicot failed with the following output:
+Change Dir: /home/renata/projects/grl/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_7c1fc/fast"
+/usr/bin/make -f CMakeFiles/cmTC_7c1fc.dir/build.make CMakeFiles/cmTC_7c1fc.dir/build
+make[1]: Entering directory '/home/renata/projects/grl/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7c1fc.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=sb02od_   -o CMakeFiles/cmTC_7c1fc.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_7c1fc
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7c1fc.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=sb02od_    -rdynamic CMakeFiles/cmTC_7c1fc.dir/CheckFunctionExists.c.o  -o cmTC_7c1fc -lslicot 
+/usr/bin/x86_64-linux-gnu-ld: cannot find -lslicot
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_7c1fc.dir/build.make:97: recipe for target 'cmTC_7c1fc' failed
+make[1]: *** [cmTC_7c1fc] Error 1
+make[1]: Leaving directory '/home/renata/projects/grl/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_7c1fc/fast' failed
+make: *** [cmTC_7c1fc/fast] Error 2
+
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/renata/projects/grl/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_33c2b/fast"
+/usr/bin/make -f CMakeFiles/cmTC_33c2b.dir/build.make CMakeFiles/cmTC_33c2b.dir/build
+make[1]: Entering directory '/home/renata/projects/grl/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_33c2b.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_33c2b.dir/CheckSymbolExists.c.o   -c /home/renata/projects/grl/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_33c2b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_33c2b.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_33c2b.dir/CheckSymbolExists.c.o  -o cmTC_33c2b 
+CMakeFiles/cmTC_33c2b.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1b): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_33c2b.dir/build.make:97: recipe for target 'cmTC_33c2b' failed
+make[1]: *** [cmTC_33c2b] Error 1
+make[1]: Leaving directory '/home/renata/projects/grl/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_33c2b/fast' failed
+make: *** [cmTC_33c2b/fast] Error 2
+
+File /home/renata/projects/grl/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/renata/projects/grl/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_20f86/fast"
+/usr/bin/make -f CMakeFiles/cmTC_20f86.dir/build.make CMakeFiles/cmTC_20f86.dir/build
+make[1]: Entering directory '/home/renata/projects/grl/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_20f86.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_20f86.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_20f86
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_20f86.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_20f86.dir/CheckFunctionExists.c.o  -o cmTC_20f86 -lpthreads 
+/usr/bin/x86_64-linux-gnu-ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_20f86.dir/build.make:97: recipe for target 'cmTC_20f86' failed
+make[1]: *** [cmTC_20f86] Error 1
+make[1]: Leaving directory '/home/renata/projects/grl/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_20f86/fast' failed
+make: *** [cmTC_20f86/fast] Error 2
+
+
+Determining if the function TF_Version exists in the tensorflow failed with the following output:
+Change Dir: /home/renata/projects/grl/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_9e0c7/fast"
+/usr/bin/make -f CMakeFiles/cmTC_9e0c7.dir/build.make CMakeFiles/cmTC_9e0c7.dir/build
+make[1]: Entering directory '/home/renata/projects/grl/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_9e0c7.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=TF_Version   -o CMakeFiles/cmTC_9e0c7.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_9e0c7
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9e0c7.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=TF_Version    -rdynamic CMakeFiles/cmTC_9e0c7.dir/CheckFunctionExists.c.o  -o cmTC_9e0c7 -ltensorflow 
+/usr/bin/x86_64-linux-gnu-ld: warning: libcublas.so.9.0, needed by //usr/local/lib/libtensorflow.so, not found (try using -rpath or -rpath-link)
+/usr/bin/x86_64-linux-gnu-ld: warning: libcusolver.so.9.0, needed by //usr/local/lib/libtensorflow.so, not found (try using -rpath or -rpath-link)
+/usr/bin/x86_64-linux-gnu-ld: warning: libcudart.so.9.0, needed by //usr/local/lib/libtensorflow.so, not found (try using -rpath or -rpath-link)
+/usr/bin/x86_64-linux-gnu-ld: warning: libcudnn.so.7, needed by //usr/local/lib//libtensorflow_framework.so, not found (try using -rpath or -rpath-link)
+/usr/bin/x86_64-linux-gnu-ld: warning: libcufft.so.9.0, needed by //usr/local/lib//libtensorflow_framework.so, not found (try using -rpath or -rpath-link)
+/usr/bin/x86_64-linux-gnu-ld: warning: libcurand.so.9.0, needed by //usr/local/lib//libtensorflow_framework.so, not found (try using -rpath or -rpath-link)
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasGemmEx@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasSgetrfBatched@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDormqr_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZhpmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnCreate@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnCreatePoolingDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnCreateConvolutionDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnConvolutionBiasActivationForward@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftExecD2Z@libcufft.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSrotg_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnDestroyConvolutionDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftExecR2C@libcufft.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSsyrk_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDgemm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftSetWorkArea@libcufft.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasChemm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZher2k_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSorgqr@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftExecC2C@libcufft.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSgesvd_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `curandSetStream@libcurand.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDrotm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `curandSetPseudoRandomGeneratorSeed@libcurand.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudaMallocManaged@libcudart.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnZungqr@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnZgeqrf@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCunmqr_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftExecZ2D@libcufft.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasStpsv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSspmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDznrm2_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnDestroyFilterDescriptor@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSorgqr_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCtrsv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZdscal_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDestroy@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCgeqrf_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasIzamax_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCgeru_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZhpr2_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZher2_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `curandDestroyGenerator@libcurand.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasStpmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudaFree@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasIsamax_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftMakePlan1d@libcufft.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnLRNCrossChannelForward@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `__cudaUnregisterFatBinary@libcudart.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnZunmqr@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `__cudaRegisterFunction@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnCreateRNNDescriptor@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `__cudaRegisterFatBinary@libcudart.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnZunmqr_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnDestroyRNNDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnConvolutionBackwardData@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnCreateFilterDescriptor@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `__cudaRegisterVar@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSsbmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSgemm_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasCgetrfBatched@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaDeviceGetAttribute@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnLRNCrossChannelBackward@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasScopy_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasScnrm2_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaSetupArgument@libcudart.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDgesvd_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftMakePlan3d@libcufft.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSnrm2_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDtbmv_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasCgetriBatched@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSgemmEx@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnDestroyLRNDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnDestroy@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZtpsv_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasCmatinvBatched@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasCgeam@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDrotg_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasSetStream_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSswap_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnDropoutGetStatesSize@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasZgetrfBatched@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZtrsv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetConvolutionForwardWorkspaceSize@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSrotmg_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnSetActivationDescriptor@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasSgetriBatched@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCheevd_bufferSize@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaFuncGetAttributes@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasIsamin_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDgeqrf@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDspmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnSetPoolingNdDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetRNNWorkspaceSize@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftSetStream@libcufft.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCrotg_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetConvolutionForwardAlgorithm@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCher_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSdot_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnConvolutionBackwardBias@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCsscal_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaMemsetAsync@libcudart.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSgetrf_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDtpmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasStrsm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDsyr_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSsyr2_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCsyr2k_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDrot_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSaxpy_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `curandGenerateUniformDouble@libcurand.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnSetTensorNdDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `curandGenerateUniform@libcurand.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDgbmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSsyr2k_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaLaunch@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDnrm2_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZtrsm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnAddTensor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasStrmm_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDsyevd@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasDgetriBatched@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCgetrf_bufferSize@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCpotrf@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnDestroyActivationDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZgeru_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnZgetrf_bufferSize@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCgetrs@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDdot_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaStreamSynchronize@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCher2_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnSetConvolutionNdDescriptor@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnZpotrf_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftSetAutoAllocation@libcufft.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSgemv_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDgeqrf_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDsbmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnPoolingBackward@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDorgqr@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnRNNBackwardData@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasIdamin_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaGetLastError@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetFilterNdDescriptor@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCgeqrf@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCgemv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCtrsm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetProperty@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetConvolutionBackwardFilterWorkspaceSize@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDtrmm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasChpmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCdotu_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZherk_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZtpmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetRNNTrainingReserveSize@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCgerc_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSetStream@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftDestroy@libcufft.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZhemm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftCreate@libcufft.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCpotrf_bufferSize@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDormqr@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZgemv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnSetLRNDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCaxpy_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasChpr2_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnBatchNormalizationForwardTraining@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnDestroyTensorDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDtrmv_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaGetErrorString@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasIdamax_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDpotrf_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnDestroyDropoutDescriptor@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDgetrf@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZtrmv_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCungqr@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftPlan3d@libcufft.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDtbsv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZhemv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZhbmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDsyrk_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnCreateTensorDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSger_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZtbmv_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnSetStream@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDswap_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `curandGenerateNormalDouble@libcurand.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZdotc_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasStbmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftExecC2R@libcufft.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasCreate_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftPlan1d@libcufft.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCreate@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZrotg_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSgetrf@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnBatchNormalizationForwardInference@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDsyevd_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDscal_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDger_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnCreateDropoutDescriptor@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasZgeam@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSsyevd_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasChemv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasChpr_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasZmatinvBatched@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaGetDevice@libcudart.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaMemcpyAsync@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudaGetDeviceCount@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasStbsv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `curandCreateGenerator@libcurand.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSetPointerMode_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSsymv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDsyr2_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDtpsv_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnZgetrs@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaStreamQuery@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnDestroyPoolingDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasGetPointerMode_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasStrsv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCswap_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDgemv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnCreateActivationDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDspr2_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCdotc_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasDestroy_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSrot_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasDgetrfBatched@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZtrmm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCtpsv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnRNNForwardInference@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCgemm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDzasum_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasChbmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasIcamin_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZswap_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnZheevd_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCherk_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSormqr@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnZgetrf@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCsymm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetConvolutionBackwardDataAlgorithm@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSgemmBatched@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSgeqrf@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSgbmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCtbmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnActivationForward@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetRNNLinLayerMatrixParams@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZsyrk_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudaStreamAddCallback@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZsymm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZscal_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSormqr_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCtpmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `curandGenerateNormal@libcurand.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnSetRNNDescriptor_v6@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetConvolutionBackwardDataWorkspaceSize@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnZheevd@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDasum_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDrotmg_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCheevd@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZher_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasIcamax_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnZungqr_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnBatchNormalizationBackward@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZgbmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSetMathMode@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDgesvd@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZgemm_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDpotrf@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnSetDropoutDescriptor@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSgetrs@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZgerc_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnZpotrf@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSspr2_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDorgqr_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSasum_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasSgeam@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSsymm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDgemmBatched@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDcopy_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftPlanMany@libcufft.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSpotrf_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnConvolutionForward@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCsyrk_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDspr_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCunmqr@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnConvolutionBackwardFilter@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasStrmv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCscal_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZtbsv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCtbsv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetConvolutionBackwardFilterAlgorithm@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZdrot_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasIzamin_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetRNNLinLayerBiasParams@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudaSetDevice@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnSetFilterNdDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnSetRNNMatrixMathType@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftExecZ2Z@libcufft.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCtrmv_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasDgeam@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDgetrs@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCsrot_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnZgeqrf_bufferSize@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSgeqrf_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZdotu_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetRNNParamsSize@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasSmatinvBatched@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftMakePlan2d@libcufft.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDtrsv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnGetConvolutionNdForwardOutputDim@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `curandSetGeneratorOffset@libcurand.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDaxpy_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftPlan2d@libcufft.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasDmatinvBatched@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZaxpy_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnSetTensor4dDescriptor@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasGetMathMode@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZcopy_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCgemmBatched@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZgemmBatched@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnRNNBackwardWeights@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cufftMakePlanMany@libcufft.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDtrsm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDsyr2k_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCcopy_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCgbmv_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnDgetrf_bufferSize@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaPeekAtLastError@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCtrmm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDsymv_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSrotm_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZhpr_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCungqr_bufferSize@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSscal_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnRNNForwardTraining@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnTransformTensor@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cublasZgetriBatched@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSgesvd@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaGetDeviceProperties@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasZsyr2k_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSsyr_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnSetConvolutionMathType@libcudnn.so.7'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnPoolingForward@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cudaConfigureCall@libcudart.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasScasum_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasSspr_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasCher2k_v2@libcublas.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cublasDsymm_v2@libcublas.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnCgetrf@libcusolver.so.9.0'
+//usr/local/lib//libtensorflow_framework.so: undefined reference to `cudnnCreateLRNDescriptor@libcudnn.so.7'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSpotrf@libcusolver.so.9.0'
+//usr/local/lib/libtensorflow.so: undefined reference to `cusolverDnSsyevd@libcusolver.so.9.0'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_9e0c7.dir/build.make:97: recipe for target 'cmTC_9e0c7' failed
+make[1]: *** [cmTC_9e0c7] Error 1
+make[1]: Leaving directory '/home/renata/projects/grl/build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_9e0c7/fast' failed
+make: *** [cmTC_9e0c7/fast] Error 2
+
+

@@ -340,10 +340,14 @@ void MultiPolicy::act(const Observation &in, Action *out) const
 
 void DiscreteMultiPolicy::request(ConfigurationRequest *config)
 {
-  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"policy_strategy_add_prob", "policy_strategy_multiply_prob", "policy_strategy_majority_voting_prob", "policy_strategy_rank_voting_prob"}));
+  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"policy_strategy_add_prob", "policy_strategy_multiply_prob", "policy_strategy_majority_voting_prob", "policy_strategy_rank_voting_prob", "policy_strategy_density_based"}));
   config->push_back(CRP("tau", "Temperature of Boltzmann distribution", tau_));
   config->push_back(CRP("discretizer", "discretizer.action", "Action discretizer", discretizer_));
   config->push_back(CRP("policy", "mapping/policy/discrete", "Sub-policies", &policy_));
+  config->push_back(CRP("r_distance_parameter", "R Distance Parameter", r_distance_parameter_));
+  
+  config->push_back(CRP("output_min", "vector.action_min", "Lower limit on outputs", min_, CRP::System));
+  config->push_back(CRP("output_max", "vector.action_max", "Upper limit on outputs", max_, CRP::System));
 }
 
 void DiscreteMultiPolicy::configure(Configuration &config)
@@ -359,14 +363,23 @@ void DiscreteMultiPolicy::configure(Configuration &config)
     strategy_ = csMajorityVotingProbabilities;
   else if (strategy_str_ == "policy_strategy_rank_voting_prob")
     strategy_ = csRankVotingProbabilities;
+  else if(strategy_str_ == "policy_strategy_density_based")
+    strategy_ = csDensityBased;
   else
     throw bad_param("mapping/policy/discrete/multi:strategy");
 
   tau_ = config["tau"];
+  r_distance_parameter_ = config["r_distance_parameter"];
   
   discretizer_ = (Discretizer*)config["discretizer"].ptr();
   
   policy_ = *(ConfigurableList*)config["policy"].ptr();
+
+  min_ = config["output_min"].v();
+  max_ = config["output_max"].v();
+
+  if (min_.size() != max_.size() || !min_.size())
+    throw bad_param("policy/action:{output_min,output_max}");
   
   if (policy_.empty())
     throw bad_param("mapping/policy/discrete/multi:policy");
@@ -572,6 +585,93 @@ void DiscreteMultiPolicy::distribution(const Observation &in, const Action &prev
       CRAWL("DiscreteMultiPolicy::out: " << (*out));
       }
       break;
+        
+    case csDensityBased:
+    {
+      LargeVector dist;
+      Action tmp_action;
+      std::vector<Action> actions_actors(policy_.size());
+      policy_[0]->act(in, &actions_actors[0]);
+      int n_dimension = actions_actors[0].v.size();
+      int n_policies = policy_.size();
+      double* result = new double[n_dimension];
+      size_t ii_max = 0;
+      std::string strspace = "";
+      for(size_t kk=0; kk < 32; ++kk)
+        strspace += " ";
+
+      std::vector<Action> aa_normalized(n_policies);
+      std::vector<double> density(n_policies);
+      std::vector<size_t> ii_max_density;
+      double exp_result = 0.0;
+  
+      size_t ii = 0;
+      dist = LargeVector::Zero(n_policies);
+      
+      Vector send_actions(n_policies);
+      
+      Action tmp;
+      std::vector<Action>::iterator it_norm = aa_normalized.begin();
+      for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
+      {
+        policy_[ii]->act(in, &*it);
+        tmp.v = -1 + 2*( ((*it).v - min_) / (max_ - min_) );
+        (*it_norm) = tmp;
+        ++it_norm;
+        CRAWL("ii: " << ii << " actions_actors: " << (*it).v << " normalized: " << tmp.v);
+
+        send_actions[ii] = it->v[0];
+      }
+
+      //action_->set(send_actions);
+
+      double max = -1 * std::numeric_limits<double>::infinity();
+      std::vector<Action>::iterator it, it2, i_max;
+      ii = 0;
+      for( it=aa_normalized.begin(); it != aa_normalized.end(); ++it, ++ii)
+      {
+        std::string strtmp = "";
+        double r_dist = 0.0;
+        for( it2=aa_normalized.begin(); it2 != aa_normalized.end(); ++it2)
+        {
+          double expoent = 0.0;
+          for(size_t jj = 0; jj != n_dimension; ++jj)
+          {
+            expoent += pow((*it).v[jj] - (*it2).v[jj], 2);
+            //strtmp += strspace + "expoent(jj:" + std::to_string(jj) + "): " +  std::to_string(expoent) + " (1): " + std::to_string((*it).v[jj]) + " (2): " + std::to_string((*it2).v[jj]) + "\n";
+          }
+          //strtmp += strspace + strspace + "r_dist(before): " + std::to_string(r_dist) + " expoent: " + std::to_string((-1 * expoent / pow(r_distance_parameter_, 2))) + " exp: " + std::to_string(exp( -1 * expoent / pow(r_distance_parameter_, 2))) + "\n";
+          r_dist = r_dist + exp( -1 * expoent / pow(r_distance_parameter_, 2) );
+        }
+        density.push_back( r_dist );
+        //CRAWL(strtmp << strspace << "sum(expo) - density[ii:" << ii << "]: " << r_dist );
+        if (r_dist > max)
+        {
+          max = r_dist;
+          //CRAWL("******************************************************************max(ii:"<<ii<<") = " << max );
+          i_max = it;
+          ii_max_density.clear();
+          ii_max_density.push_back(ii);
+          //ii_max = ii;
+        } else if (r_dist == max)
+        {
+          //CRAWL("******************************************************************max(ii:"<<ii<<") = " << max );
+          ii_max_density.push_back(ii);
+        }
+      }
+
+      for (size_t jj=0; jj < n_dimension; ++jj)
+      {
+        int aleatorio = rand();
+        size_t index = ii_max_density.at(aleatorio%ii_max_density.size());
+        CRAWL( "MultiPolicy::ii_max_density.size(): " << ii_max_density.size() << " aleatorio: " << aleatorio << " index: " << index);
+        result[jj] = actions_actors[index].v[jj];
+        //CRAWL( "MultiPolicy::result_[ii_max=" << index << "][jj:" << jj << "]: " << result[jj] );
+      }
+
+      dist = ConstantLargeVector( n_dimension, *result );
+    }
+    break;
   }      
 }
 

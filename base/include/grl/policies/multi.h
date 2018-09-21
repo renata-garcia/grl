@@ -73,17 +73,19 @@ class DiscreteMultiPolicy : public DiscretePolicy
   public:
     TYPEINFO("mapping/policy/discrete/multi", "Combines multiple discrete policies")
     
-    enum CombinationStrategy {csAddProbabilities, csMultiplyProbabilities, csMajorityVotingProbabilities, csRankVotingProbabilities};
+    enum CombinationStrategy {csAddProbabilities, csMultiplyProbabilities, csMajorityVotingProbabilities, csRankVotingProbabilities, csDensityBased};
 
   protected:
     std::string strategy_str_;
     CombinationStrategy strategy_;
     Discretizer *discretizer_;
     TypedConfigurableList<DiscretePolicy> policy_;
+    Vector min_, max_;
     double tau_;
+    double r_distance_parameter_;
 
   public:
-    DiscreteMultiPolicy() : tau_(0.1) { }
+    DiscreteMultiPolicy() : tau_(0.1), r_distance_parameter_(0.001) { }
   
     // From Configurable
     virtual void request(ConfigurationRequest *config);

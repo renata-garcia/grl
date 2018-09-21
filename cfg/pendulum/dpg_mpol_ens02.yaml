@@ -22,7 +22,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_data_center
+      strategy: policy_strategy_density_based
       policy: 
         - 
           type: mapping/policy/action
@@ -507,7 +507,7 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
-      bins: 10
+      bins: 800
       r_distance_parameter: 0.001
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
@@ -1348,8 +1348,8 @@ visualizer:
   type: visualizer/glut
 actions: 
   type: visualization/state
-  input_dims: [  ]
-  input_min: [-3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3]
-  input_max: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+  input_dims: []
+  input_min: [-3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3]
+  input_max: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
   memory: 256
   state: experiment/test_agent/policy/actions

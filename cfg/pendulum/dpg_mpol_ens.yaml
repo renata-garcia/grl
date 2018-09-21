@@ -22,7 +22,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_binning
+      strategy: policy_strategy_mean
       policy: 
         - 
           type: mapping/policy/action

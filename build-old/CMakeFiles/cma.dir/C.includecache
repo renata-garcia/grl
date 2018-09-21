@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../externals/cma/include/cma/cmaes.h
+time.h
+-
+
+../externals/cma/include/cma/cmaes_interface.h
+cmaes.h
+../externals/cma/include/cma/cmaes.h
+
+/home/renata/projects/grl/externals/cma/src/cmaes.c
+math.h
+-
+stddef.h
+-
+stdlib.h
+-
+string.h
+-
+stdio.h
+-
+cma/cmaes_interface.h
+-
+
