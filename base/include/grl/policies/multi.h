@@ -50,6 +50,7 @@ class MultiPolicy : public Policy
     Representation *representation_;
     Vector min_, max_;
     TypedConfigurableList<Policy> policy_;
+    TypedConfigurableList<Mapping> value_;
     int bins_;
     double r_distance_parameter_;
     VectorSignal *action_;
@@ -64,7 +65,6 @@ class MultiPolicy : public Policy
 
     // From Policy
     virtual void act(const Observation &in, Action *out) const;
-    
 };
 
 /// Policy that combines two or more sub-policies using different strategies

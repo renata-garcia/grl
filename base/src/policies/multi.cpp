@@ -38,6 +38,7 @@ void MultiPolicy::request(ConfigurationRequest *config)
 {
   config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"policy_strategy_binning", "policy_strategy_density_based", "policy_strategy_data_center", "policy_strategy_mean"}));
   config->push_back(CRP("policy", "mapping/policy", "Sub-policies", &policy_));
+  config->push_back(CRP("value", "mapping", "Values of sub-policy actions", &value_));
 
   config->push_back(CRP("bins", "Binning Simple Discretization", bins_));
   config->push_back(CRP("r_distance_parameter", "R Distance Parameter", r_distance_parameter_));
@@ -72,6 +73,7 @@ void MultiPolicy::configure(Configuration &config)
     throw bad_param("policy/action:{output_min,output_max}");
 
   policy_ = *(ConfigurableList*)config["policy"].ptr();
+  value_ = *(ConfigurableList*)config["value"].ptr();
   
   if (policy_.empty())
     throw bad_param("mapping/policy/multi:policy is empty");

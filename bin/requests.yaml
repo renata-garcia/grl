@@ -20,7 +20,11 @@ agent/communicator:
     type: communicator
     description: Comunicator which exchanges messages with an actual/virtual environment
     mutability: configuration
+<<<<<<< HEAD
     default: 0
+=======
+    default: 0x1
+>>>>>>> upstream/master
     optional: 0
   observation_dims:
     type: int.observation_dims
@@ -204,7 +208,11 @@ agent/master/exclusive:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
+<<<<<<< HEAD
     default: 0x56014fef2c88
+=======
+    default: 0x56472ac26ec8
+>>>>>>> upstream/master
     optional: 0
 agent/master/predicated:
   description: Master agent in which execution is predicated on preceding agent confidence
@@ -234,7 +242,11 @@ agent/master/predicated:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
+<<<<<<< HEAD
     default: 0x56014fef2c88
+=======
+    default: 0x56472ac26ec8
+>>>>>>> upstream/master
     optional: 0
 agent/master/random:
   description: Master agent that chooses sub-agents randomly
@@ -264,7 +276,11 @@ agent/master/random:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
+<<<<<<< HEAD
     default: 0x56014fef2c88
+=======
+    default: 0x56472ac26ec8
+>>>>>>> upstream/master
     optional: 0
 agent/master/sequential:
   description: Master agent that executes sub-agents sequentially
@@ -1372,7 +1388,10 @@ mapping/policy/discrete/multi:
       - policy_strategy_multiply_prob
       - policy_strategy_majority_voting_prob
       - policy_strategy_rank_voting_prob
+<<<<<<< HEAD
       - policy_strategy_density_based
+=======
+>>>>>>> upstream/master
   tau:
     type: double
     description: Temperature of Boltzmann distribution
@@ -1385,12 +1404,17 @@ mapping/policy/discrete/multi:
     type: discretizer.action
     description: Action discretizer
     mutability: configuration
+<<<<<<< HEAD
     default: 0
+=======
+    default: 0x6573626f202c6574
+>>>>>>> upstream/master
     optional: 0
   policy:
     type: "[mapping/policy/discrete]"
     description: Sub-policies
     mutability: configuration
+<<<<<<< HEAD
     default: 0x56014fef1f60
     optional: 0
   r_distance_parameter:
@@ -1413,6 +1437,10 @@ mapping/policy/discrete/multi:
     mutability: system
     default: "[  ]"
     optional: 1
+=======
+    default: 0x56472ad7d0d0
+    optional: 0
+>>>>>>> upstream/master
 mapping/policy/discrete/random:
   description: Policy that chooses discrete random actions
   discretizer:
@@ -1648,7 +1676,11 @@ mapping/policy/multi:
     type: "[mapping/policy]"
     description: Sub-policies
     mutability: configuration
+<<<<<<< HEAD
     default: 0x56014ff00570
+=======
+    default: 0x56472ac32f70
+>>>>>>> upstream/master
     optional: 0
   bins:
     type: int
@@ -1678,10 +1710,13 @@ mapping/policy/multi:
     mutability: system
     default: "[  ]"
     optional: 1
+<<<<<<< HEAD
   actions:
     type: signal/vector.action
     description: Suggested actions
     mutability: provided
+=======
+>>>>>>> upstream/master
 mapping/policy/parameterized/action:
   description: Parameterized policy based on a direct action representation
   sigma:
@@ -3475,7 +3510,11 @@ predictor/multi:
     type: "[predictor]"
     description: First downstream predictor
     mutability: configuration
+<<<<<<< HEAD
     default: 0x5601502a2a40
+=======
+    default: 0x56472b035260
+>>>>>>> upstream/master
     optional: 0
 predictor/reinforce:
   description: Monte-Carlo Policy Gradient predictor
@@ -3666,7 +3705,11 @@ projector/multi:
     type: "[projector.]"
     description: Downstream projectors
     mutability: configuration
+<<<<<<< HEAD
     default: 0x56014ff00ff0
+=======
+    default: 0x56472ac27960
+>>>>>>> upstream/master
     optional: 0
   memories:
     type: vector.memory
@@ -4074,7 +4117,11 @@ representation/additive:
     type: "[representation.]"
     description: Downstream representations
     mutability: configuration
+<<<<<<< HEAD
     default: 0x56015029c520
+=======
+    default: 0x56472b02ed40
+>>>>>>> upstream/master
     optional: 0
 representation/communicator:
   description: Interface to an out-of-process representation
@@ -5660,6 +5707,151 @@ task/flyer2d/regulator:
     optional: 1
     min: 0
     max: 1
+<<<<<<< HEAD
+=======
+  timeout:
+    type: double
+    description: Episode timeout
+    mutability: configuration
+    default: 2.99
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
+task/integrator/regulator:
+  description: Integrator regulator task
+  order:
+    type: int.order
+    description: Order of integrator (number of state dimensions)
+    mutability: system
+    default: 2
+    optional: 1
+    min: 0
+    max: 2147483647
+  observation_dims:
+    type: int.observation_dims
+    description: Number of observation dimensions
+    mutability: provided
+  observation_min:
+    type: vector.observation_min
+    description: Lower limit on observations
+    mutability: provided
+  observation_max:
+    type: vector.observation_max
+    description: Upper limit on observations
+    mutability: provided
+  action_dims:
+    type: int.action_dims
+    description: Number of action dimensions
+    mutability: provided
+  action_min:
+    type: vector.action_min
+    description: Lower limit on actions
+    mutability: provided
+  action_max:
+    type: vector.action_max
+    description: Upper limit on actions
+    mutability: provided
+  reward_min:
+    type: double.reward_min
+    description: Lower limit on immediate reward
+    mutability: provided
+  reward_max:
+    type: double.reward_max
+    description: Upper limit on immediate reward
+    mutability: provided
+  start:
+    type: vector
+    description: Starting state
+    mutability: configuration
+    default: "[ 1, 0 ]"
+    optional: 1
+  goal:
+    type: vector
+    description: Goal state
+    mutability: configuration
+    default: "[ 0, 0 ]"
+    optional: 1
+  stddev:
+    type: vector
+    description: Starting state standard deviation
+    mutability: configuration
+    default: "[ 1, 0 ]"
+    optional: 1
+  q:
+    type: vector
+    description: Q (state cost) matrix diagonal
+    mutability: configuration
+    default: "[ 1, 0 ]"
+    optional: 1
+  r:
+    type: vector
+    description: R (action cost) matrix diagonal
+    mutability: configuration
+    default: "[ 0.01 ]"
+    optional: 1
+  function:
+    type: string
+    description: Cost function style
+    mutability: configuration
+    default: quadratic
+    optional: 1
+    options:
+      - quadratic
+      - absolute
+      - sqrt
+  r_function:
+    type: string
+    description: R cost function style
+    mutability: configuration
+    default: quadratic
+    optional: 1
+    options:
+      - quadratic
+      - absolute
+      - sqrt
+  smoothing:
+    type: double
+    description: Cost function smoothing parameter
+    mutability: configuration
+    default: 0.01
+    optional: 1
+    min: 0
+    max: 1
+task/leo_squatting:
+  description: Task specification for Leo squatting with a fixed arm
+  observation_dims:
+    type: int.observation_dims
+    description: Number of observation dimensions
+    mutability: provided
+  observation_min:
+    type: vector.observation_min
+    description: Lower limit on observations
+    mutability: provided
+  observation_max:
+    type: vector.observation_max
+    description: Upper limit on observations
+    mutability: provided
+  action_dims:
+    type: int.action_dims
+    description: Number of action dimensions
+    mutability: provided
+  action_min:
+    type: vector.action_min
+    description: Lower limit on actions
+    mutability: provided
+  action_max:
+    type: vector.action_max
+    description: Upper limit on actions
+    mutability: provided
+  reward_min:
+    type: double.reward_min
+    description: Lower limit on immediate reward
+    mutability: provided
+  reward_max:
+    type: double.reward_max
+    description: Upper limit on immediate reward
+    mutability: provided
+>>>>>>> upstream/master
   timeout:
     type: double
     description: Episode timeout
@@ -7037,7 +7229,11 @@ projector/multi.observation:
     type: "[projector.observation]"
     description: Downstream projectors
     mutability: configuration
+<<<<<<< HEAD
     default: 0x56014ff00ff0
+=======
+    default: 0x56472ac27960
+>>>>>>> upstream/master
     optional: 0
   memories:
     type: vector.memory
@@ -7373,7 +7569,11 @@ representation/additive.action:
     type: "[representation.action]"
     description: Downstream representations
     mutability: configuration
+<<<<<<< HEAD
     default: 0x5601504ea6e0
+=======
+    default: 0x56472b28ea30
+>>>>>>> upstream/master
     optional: 0
 representation/communicator.action:
   description: Interface to an out-of-process representation
@@ -7682,7 +7882,11 @@ projector/multi.pair:
     type: "[projector.pair]"
     description: Downstream projectors
     mutability: configuration
+<<<<<<< HEAD
     default: 0x56014ff00ff0
+=======
+    default: 0x56472ac27960
+>>>>>>> upstream/master
     optional: 0
   memories:
     type: vector.memory
@@ -8018,7 +8222,11 @@ representation/additive.value/action:
     type: "[representation.value/action]"
     description: Downstream representations
     mutability: configuration
+<<<<<<< HEAD
     default: 0x5601504ea6e0
+=======
+    default: 0x56472b28ea30
+>>>>>>> upstream/master
     optional: 0
 representation/communicator.value/action:
   description: Interface to an out-of-process representation
@@ -8246,7 +8454,11 @@ representation/additive.value/state:
     type: "[representation.value/state]"
     description: Downstream representations
     mutability: configuration
+<<<<<<< HEAD
     default: 0x5601504ea6e0
+=======
+    default: 0x56472b28ea30
+>>>>>>> upstream/master
     optional: 0
 representation/communicator.value/state:
   description: Interface to an out-of-process representation
@@ -8488,7 +8700,11 @@ representation/additive.transition:
     type: "[representation.transition]"
     description: Downstream representations
     mutability: configuration
+<<<<<<< HEAD
     default: 0x5601504ea6e0
+=======
+    default: 0x56472b28ea30
+>>>>>>> upstream/master
     optional: 0
 representation/communicator.transition:
   description: Interface to an out-of-process representation
