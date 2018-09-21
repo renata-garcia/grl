@@ -96,6 +96,9 @@ void MultiPolicy::act(const Observation &in, Action *out) const
   int n_dimension = actions_actors[0].v.size();
   int n_policies = policy_.size();
   double* result = new double[n_dimension];
+  
+  Vector dummy;
+  double q = value_[0]->read(in, &dummy);
 
   switch (strategy_)
   {
