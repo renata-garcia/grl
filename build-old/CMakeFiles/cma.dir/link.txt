@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC -O2 -g -DNDEBUG  -shared -Wl,-soname,libcma.so -o libcma.so CMakeFiles/cma.dir/externals/cma/src/cmaes.c.o 
