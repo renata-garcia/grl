@@ -36,7 +36,7 @@ REGISTER_CONFIGURABLE(MultiPolicy)
 
 void MultiPolicy::request(ConfigurationRequest *config)
 {
-  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"policy_strategy_binning", "policy_strategy_density_based", "policy_strategy_data_center", "policy_strategy_mean"}));
+  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"policy_strategy_binning", "policy_strategy_density_based", "policy_strategy_data_center", "policy_strategy_mean", "policy_strategy_random", "policy_strategy_static"}));
   config->push_back(CRP("policy", "mapping/policy", "Sub-policies", &policy_));
   config->push_back(CRP("value", "mapping", "Values of sub-policy actions", &value_));
 
@@ -60,6 +60,10 @@ void MultiPolicy::configure(Configuration &config)
     strategy_ = csDataCenter;
   else if (strategy_str_ == "policy_strategy_mean")
     strategy_ = csMean;
+  else if (strategy_str_ == "policy_strategy_random")
+    strategy_ = csRandom;
+  else if (strategy_str_ == "policy_strategy_static")
+    strategy_ = csStatic;
   else
     throw bad_param("mapping/policy/multi:strategy");
 
@@ -96,6 +100,7 @@ void MultiPolicy::act(const Observation &in, Action *out) const
   int n_dimension = actions_actors[0].v.size();
   int n_policies = policy_.size();
   double* result = new double[n_dimension];
+  size_t ii;
   
   Vector dummy;
   double q = value_[0]->read(in, &dummy);
@@ -310,11 +315,10 @@ void MultiPolicy::act(const Observation &in, Action *out) const
         
     case csMean:
     {
-      std::deque<Action> actions_actors2(policy_.size());
       LargeVector mean;
       bool first = true;
-      size_t ii = 0;
-      for(std::deque<Action>::iterator it = actions_actors2.begin(); it != actions_actors2.end(); ++it, ++ii)
+      ii = 0;
+      for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
       {
         policy_[ii]->act(in, &*it);
         if (first)
@@ -323,9 +327,51 @@ void MultiPolicy::act(const Observation &in, Action *out) const
           mean = mean + it->v;
         first = false;
       }
-      mean = mean / policy_.size();
+      dist = mean / n_policies;
+    }
+    break;
 
-      dist = mean;
+    case csRandom:
+    {
+      // LargeVector mean;
+      // bool first = true;
+      // ii = 0;
+
+      int aleatorio = rand();
+      size_t policy_random = aleatorio%n_policies;
+      //CRAWL( "MultiPolicy::ii_max_density.size(): " << ii_max_density.size() << " aleatorio: " << aleatorio << " index: " << index);
+      dist = actions_actors[policy_random].v;
+      //CRAWL( "MultiPolicy::result_[ii_max=" << index << "][jj:" << jj << "]: " << result[jj] );
+      //dist = ConstantLargeVector( n_dimension, *result );
+
+    //   for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
+    //   {
+    //     policy_[ii]->act(in, &*it);
+    //     if (first)
+    //       mean = it->v;
+    //     else
+    //       mean = mean + it->v;
+    //     first = false;
+    //   }
+    //   dist = mean / n_policies;
+    }
+    break;
+    
+    case csStatic:
+    {
+      LargeVector mean;
+      bool first = true;
+      ii = 0;
+      for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
+      {
+        policy_[ii]->act(in, &*it);
+        if (first)
+          mean = it->v;
+        else
+          mean = mean + it->v;
+        first = false;
+      }
+      dist = mean / n_policies;
     }
     break;
   }
