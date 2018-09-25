@@ -52,11 +52,12 @@ class MultiPolicy : public Policy
     TypedConfigurableList<Policy> policy_;
     TypedConfigurableList<Mapping> value_;
     int bins_;
+    int static_policy_;
     double r_distance_parameter_;
     VectorSignal *action_;
 
   public:
-    MultiPolicy() : bins_(10), r_distance_parameter_(0.001) { srand(time(0)); }
+    MultiPolicy() : bins_(10), static_policy_(), r_distance_parameter_(0.001) { srand(time(0)); }
   
     // From Configurable
     virtual void request(ConfigurationRequest *config);

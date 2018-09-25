@@ -41,6 +41,7 @@ void MultiPolicy::request(ConfigurationRequest *config)
   config->push_back(CRP("value", "mapping", "Values of sub-policy actions", &value_));
 
   config->push_back(CRP("bins", "Binning Simple Discretization", bins_));
+  config->push_back(CRP("static_policy", "Static Policy Chosen to Learning", static_policy_));
   config->push_back(CRP("r_distance_parameter", "R Distance Parameter", r_distance_parameter_));
   
   config->push_back(CRP("output_min", "vector.action_min", "Lower limit on outputs", min_, CRP::System));
@@ -68,11 +69,15 @@ void MultiPolicy::configure(Configuration &config)
     throw bad_param("mapping/policy/multi:strategy");
 
   bins_ = config["bins"];
+
+  static_policy_ = config["static_policy"];
+  if (static_policy_ >= 0 && static_policy_ < policy_.size())
+    throw bad_param("policy/static_policy:static_policy is out of bound");
+
   r_distance_parameter_ = config["r_distance_parameter"];
 
   min_ = config["output_min"].v();
   max_ = config["output_max"].v();
-
   if (min_.size() != max_.size() || !min_.size())
     throw bad_param("policy/action:{output_min,output_max}");
 
@@ -82,8 +87,7 @@ void MultiPolicy::configure(Configuration &config)
   if (policy_.empty())
     throw bad_param("mapping/policy/multi:policy is empty");
   
-  action_ = new VectorSignal();
-  
+  action_ = new VectorSignal();  
   config.set("actions", action_);
 }
 
@@ -333,46 +337,24 @@ void MultiPolicy::act(const Observation &in, Action *out) const
 
     case csRandom:
     {
-      // LargeVector mean;
-      // bool first = true;
-      // ii = 0;
-
       int aleatorio = rand();
       size_t policy_random = aleatorio%n_policies;
-      //CRAWL( "MultiPolicy::ii_max_density.size(): " << ii_max_density.size() << " aleatorio: " << aleatorio << " index: " << index);
-      dist = actions_actors[policy_random].v;
-      //CRAWL( "MultiPolicy::result_[ii_max=" << index << "][jj:" << jj << "]: " << result[jj] );
-      //dist = ConstantLargeVector( n_dimension, *result );
+      policy_[policy_random]->act(in, &tmp_action);
+      dist = tmp_action.v;
 
-    //   for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
-    //   {
-    //     policy_[ii]->act(in, &*it);
-    //     if (first)
-    //       mean = it->v;
-    //     else
-    //       mean = mean + it->v;
-    //     first = false;
-    //   }
-    //   dist = mean / n_policies;
+      CRAWL("MultiPolicy::case csRandom policy_[policy_random: " << policy_random << "]->v: " << dist);
     }
+    CRAWL("MultiPolicy::dist: " << dist);
     break;
     
     case csStatic:
     {
-      LargeVector mean;
-      bool first = true;
-      ii = 0;
-      for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
-      {
-        policy_[ii]->act(in, &*it);
-        if (first)
-          mean = it->v;
-        else
-          mean = mean + it->v;
-        first = false;
-      }
-      dist = mean / n_policies;
+      size_t policy_chosen = static_policy_%n_policies;
+      policy_[policy_chosen]->act(in, &tmp_action);
+      dist = tmp_action.v;
+      CRAWL("MultiPolicy::case csStatic policy_[policy_chosen:" << policy_chosen << "]->v: " << dist);
     }
+    CRAWL("MultiPolicy::dist: " << dist);
     break;
   }
 
