@@ -35,8 +35,9 @@ REGISTER_CONFIGURABLE(MultiPolicy)
 void MultiPolicy::request(ConfigurationRequest *config)
 {
   config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"policy_strategy_binning", "policy_strategy_density_based", "policy_strategy_data_center", "policy_strategy_mean", "policy_strategy_random", "policy_strategy_static", "policy_strategy_softmax"}));
+  config->push_back(CRP("sampler", "sampler", "Sampler for value-based strategy", sampler_, true));
   config->push_back(CRP("policy", "mapping/policy", "Sub-policies", &policy_));
-  config->push_back(CRP("value", "mapping", "Values of sub-policy actions", &value_));
+  config->push_back(CRP("value", "mapping", "Values of sub-policy actions", &value_, true));
 
   config->push_back(CRP("bins", "Binning Simple Discretization", bins_));
   config->push_back(CRP("static_policy", "Static Policy Chosen to Learning", static_policy_));
@@ -67,6 +68,8 @@ void MultiPolicy::configure(Configuration &config)
     strategy_ = csSoftmax;
   else
     throw bad_param("mapping/policy/multi:strategy");
+
+  sampler_ = (Sampler*)config["sampler"].ptr();
 
   bins_ = config["bins"];
 
@@ -347,35 +350,30 @@ void MultiPolicy::act(const Observation &in, Action *out) const
     {
       ii = 0;
       //double* values = new double[n_policies];
+      dist = LargeVector::Zero(n_dimension);
       LargeVector values = LargeVector::Zero(n_policies);
-      for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
-      {
-        policy_[ii]->act(in, &*it);
-        values[ii] = value_[ii]->read(in, &dummy);
-        CRAWL("MultiPolicy::ii: " << ii << " actions_actors: " << (*it).v << " values: " << values[ii]);
 
-        send_actions[ii] = it->v[0];
+      //#ifdef _OPENMP
+      //#pragma omp parallel for
+      //#endif
+      //for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
+      for(size_t ii=0; ii < actions_actors.size(); ++ii)
+      {
+        policy_[ii]->act(in, &actions_actors[ii]);
+        values[ii] = value_[ii]->read(in, &dummy);
+        CRAWL("MultiPolicy::ii: " << ii << " actions_actors: " << actions_actors[ii].v << " values: " << values[ii]);
+
+        send_actions[ii] = actions_actors[ii].v[0];
       }
 
-      softmax(values, &dist);
       for(ii = 0; ii != n_policies; ++ii)
         CRAWL("MultiPolicy::values[ii="<<ii<<"]: " << values[ii]);
 
-      double max = -1*std::numeric_limits<double>::infinity();
-      CRAWL("MultiPolicy::max: " << max);
-      double ii_max = 0;
-      for(ii = 0; ii<n_policies; ++ii)
-      {
-          if (max < dist[ii])
-          {
-            max = dist[ii];
-            ii_max = ii;
-          }
-          CRAWL("MultiPolicy::max: " << max << " dist[ii="<<ii<<"]: " << dist[ii]);
-      }
-      policy_[ii_max]->act(in, &tmp_action);
-      CRAWL("Multipolicy::-std::ii_max: " << ii_max << " tmp_action.v: " << tmp_action.v);
-      dist = tmp_action.v;
+      size_t ind = sampler_->sample(values);
+      dist = actions_actors[ind].v;
+
+      // CRAWL("Multipolicy::-std::ii_max: " << ii_max << " tmp_action.v: " << tmp_action.v);
+
     }
     break;
 
