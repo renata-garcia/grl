@@ -1429,6 +1429,28 @@ experiment:
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/20/projector
           representation: experiment/agent/policy/policy/20/representation
+      value: 
+        - experiment/agent/policy/value/0
+        - experiment/agent/policy/value/1
+        - experiment/agent/policy/value/2
+        - experiment/agent/policy/value/3
+        - experiment/agent/policy/value/4
+        - experiment/agent/policy/value/5
+        - experiment/agent/policy/value/6
+        - experiment/agent/policy/value/7
+        - experiment/agent/policy/value/8
+        - experiment/agent/policy/value/9
+        - experiment/agent/policy/value/10
+        - experiment/agent/policy/value/11
+        - experiment/agent/policy/value/12
+        - experiment/agent/policy/value/13
+        - experiment/agent/policy/value/14
+        - experiment/agent/policy/value/15
+        - experiment/agent/policy/value/16
+        - experiment/agent/policy/value/17
+        - experiment/agent/policy/value/18
+        - experiment/agent/policy/value/19
+        - experiment/agent/policy/value/20
       bins: experiment/agent/policy/bins
       static_policy: experiment/agent/policy/static_policy
       r_distance_parameter: experiment/agent/policy/r_distance_parameter
