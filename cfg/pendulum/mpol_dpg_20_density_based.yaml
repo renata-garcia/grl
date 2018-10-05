@@ -1236,7 +1236,6 @@ experiment:
     policy: 
       type: mapping/policy/multi
       strategy: experiment/agent/policy/strategy
-      sampler: experiment/agent/policy/sampler
       policy:
         - 
           type: mapping/policy/action
