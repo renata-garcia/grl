@@ -6,7 +6,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_20_data
+  output: mpol_dpg_20_greedy_data
   environment: 
     type: environment/modeled
     model: 
@@ -23,9 +23,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_softmax
-      sampler: 
-        type: sampler/greedy
+      strategy: policy_strategy_density_based
       policy: 
         - 
           type: mapping/policy/action
