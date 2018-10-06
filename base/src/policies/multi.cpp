@@ -36,12 +36,12 @@ void MultiPolicy::request(ConfigurationRequest *config)
 {
   config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"policy_strategy_binning", "policy_strategy_density_based", "policy_strategy_data_center", "policy_strategy_mean", "policy_strategy_random", "policy_strategy_static", "policy_strategy_softmax"}));
   config->push_back(CRP("sampler", "sampler", "Sampler for value-based strategy", sampler_, true));
-  config->push_back(CRP("policy", "mapping/policy", "Sub-policies", &policy_));
-  config->push_back(CRP("value", "mapping", "Values of sub-policy actions", &value_, true));
-
   config->push_back(CRP("bins", "Binning Simple Discretization", bins_));
   config->push_back(CRP("static_policy", "Static Policy Chosen to Learning", static_policy_));
   config->push_back(CRP("r_distance_parameter", "R Distance Parameter", r_distance_parameter_));
+
+  config->push_back(CRP("policy", "mapping/policy", "Sub-policies", &policy_));
+  config->push_back(CRP("value", "mapping", "Values of sub-policy actions", &value_, true));
   
   config->push_back(CRP("output_min", "vector.action_min", "Lower limit on outputs", min_, CRP::System));
   config->push_back(CRP("output_max", "vector.action_max", "Upper limit on outputs", max_, CRP::System));
@@ -103,10 +103,11 @@ void MultiPolicy::act(const Observation &in, Action *out) const
   Action tmp_action;
   LargeVector dist;
   Vector dummy;
-  std::vector<Action> actions_actors(policy_.size());
+  std::vector<size_t> ii_max_density;
+  int n_policies = policy_.size();
+  std::vector<Action> actions_actors(n_policies);
   policy_[0]->act(in, &actions_actors[0]);
   int n_dimension = actions_actors[0].v.size();
-  int n_policies = policy_.size();
   Vector send_actions(n_policies);
   double* result_np = new double[n_policies];
   double* result_nd = new double[n_dimension];
@@ -179,7 +180,6 @@ void MultiPolicy::act(const Observation &in, Action *out) const
 
       std::vector<Action> aa_normalized(n_policies);
       std::vector<double> density(n_policies);
-      std::vector<size_t> ii_max_density;
       
       std::vector<Action>::iterator it_norm = aa_normalized.begin();
       ii = 0;
@@ -242,10 +242,12 @@ void MultiPolicy::act(const Observation &in, Action *out) const
         
     case csDataCenter:
     {
+      CRAWL("MultiPolicy::csDataCenter::starting");
       std::deque<Action> actions_actors2(policy_.size());
       LargeVector mean;
       bool first = true;
       ii = 0;
+      
       for(std::deque<Action>::iterator it = actions_actors2.begin(); it != actions_actors2.end(); ++it, ++ii)
       {
         policy_[ii]->act(in, &*it);
@@ -253,9 +255,11 @@ void MultiPolicy::act(const Observation &in, Action *out) const
           mean = it->v;
         else
           mean = mean + it->v;
+        CRAWL("MultiPolicy::csDataCenter::collecting actions_actors[ii:" << ii << "]->v: " << it->v);
         first = false;
       }
-      mean = mean / policy_.size();
+      mean = mean / actions_actors2.size();
+      CRAWL("MultiPolicy::csDataCenter::collecting mean: " << mean);
       
       while(actions_actors2.size() > 2)
       {
@@ -268,43 +272,58 @@ void MultiPolicy::act(const Observation &in, Action *out) const
         //EUCLIDIAN DISTANCE
         double max = 0;
         std::deque <Action> :: iterator i_max, it;
-        for( it=actions_actors2.begin(); it != actions_actors2.end(); ++it)
+        ii = 0;
+        size_t ii_max = 0;
+        for( it=actions_actors2.begin(); it < actions_actors2.end(); ++it, ++ii)
         { 
           double dist = sum(pow(actions_actors2.at(ii).v - mean, 2));
+          CRAWL("MultiPolicy::csDataCenter::euclidian distance:dist: " << dist);
           if (dist > max)
           {
             max = dist;
             i_max = it;
-          }
+            ii_max = ii;
+            ii_max_density.clear();
+            ii_max_density.push_back(ii);
+            CRAWL("MultiPolicy::csDataCenter::euclidian distance:max: " << max << " ii_max: " << ii_max);
+          } else if (dist == max)
+            ii_max_density.push_back(ii);
         }
-        
-        CRAWL("MultiPolicy:: after euclidian distance \n");
 
+        int aleatorio = rand();
+        size_t index = ii_max_density.at(aleatorio%ii_max_density.size());
+        CRAWL("MultiPolicy::ii_max_density.size(): " << ii_max_density.size() << " aleatorio: " << aleatorio << " index: " << index);
+          
+        CRAWL("MultiPolicy::csDataCenter::remove outlier");
         //retirando apenas o elemento que está no index i_max
-        actions_actors2.erase (i_max);
+        actions_actors2.erase(actions_actors2.begin()+index);
 
         //PRINTLN
-        //for(size_t ii=0; ii < actions_actors2.size(); ++ii)
-        //  CRAWL("MultiPolicy:: after remove the i_max actions_actors2: " << actions_actors2[ii]);
+        for(size_t ii=0; ii < actions_actors2.size(); ++ii)
+          CRAWL("MultiPolicy::after remove the i_max actions_actors2: " << actions_actors2[ii]);
 
         for (size_t ii=0; ii < mean.size(); ++ii)
           mean[ii] = 0;
         
+        CRAWL("MultiPolicy::csDataCenter::starting new mean");
+      
         bool first = true;
-        for(std::deque<Action>::iterator it = actions_actors2.begin(); it != actions_actors2.end(); ++it)
+        std::vector<size_t> ii_max_density;
+        for(it = actions_actors2.begin(); it < actions_actors2.end(); ++it)
         {
           if (first)
             mean = it->v;
           else
             mean = mean + it->v;
           first = false;
-          CRAWL("MultiPolicy::actions_actors2[ii="<< ii <<"].v: " << actions_actors2[ii].v << " mean: " << mean  << "\n");
+          CRAWL("MultiPolicy::csDataCenter::actions_actors2.v: " << it->v << " mean: " << mean  << "\n");
         }
         mean = mean / actions_actors2.size();
-        CRAWL("MultiPolicy::(mean / actions_actors2.size()): " << mean << "\n");
+        CRAWL("MultiPolicy::csDataCenter::(mean / actions_actors2.size()): " << mean << "\n");
       }
 
       dist = mean;
+      //actions_actors2[(rand()%2)];
     }
     break;
         
