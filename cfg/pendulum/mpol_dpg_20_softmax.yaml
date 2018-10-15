@@ -23,7 +23,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_softmax
+      strategy: value_based
       sampler: 
         type: sampler/softmax
         tau: 1

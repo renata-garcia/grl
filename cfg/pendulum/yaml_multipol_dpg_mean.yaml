@@ -23,7 +23,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_mean
+      strategy: mean
       policy: 
         - 
           type: mapping/policy/action
@@ -183,7 +183,7 @@ experiment:
     type: agent/fixed
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_mean
+      strategy: mean
       policy: 
         - 
           type: mapping/policy/action

@@ -42,7 +42,7 @@ class MultiPolicy : public Policy
   public:
     TYPEINFO("mapping/policy/multi", "Combines multiple policies")
     
-    enum CombinationStrategy {csBinning, csDensityBased, csDataCenter, csMean, csRandom, csStatic, csSoftmax};
+    enum CombinationStrategy {csBinning, csDensityBased, csDataCenter, csMean, csRandom, csStatic, csValueBased};
 
   protected:
     std::string strategy_str_;
@@ -71,9 +71,6 @@ class MultiPolicy : public Policy
 
     // From Policy
     virtual void act(const Observation &in, Action *out) const;
-  protected:
-    virtual void softmax(const LargeVector &values, LargeVector *distribution) const;
-    //virtual size_t sample(const LargeVector &values, ActionType *at) const;
 };
 
 /// Policy that combines two or more sub-policies using different strategies

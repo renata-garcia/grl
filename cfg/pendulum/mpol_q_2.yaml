@@ -23,7 +23,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_random
+      strategy: random
       sampler: 
         type: sampler/greedy
       policy: 
@@ -120,7 +120,7 @@ experiment:
     type: agent/fixed
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_static
+      strategy: static
       sampler: experiment/agent/policy/sampler
       policy: 
         - 

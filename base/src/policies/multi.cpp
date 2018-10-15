@@ -34,7 +34,7 @@ REGISTER_CONFIGURABLE(MultiPolicy)
 
 void MultiPolicy::request(ConfigurationRequest *config)
 {
-  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"policy_strategy_binning", "policy_strategy_density_based", "policy_strategy_data_center", "policy_strategy_mean", "policy_strategy_random", "policy_strategy_static", "policy_strategy_softmax"}));
+  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"binning", "density_based", "data_center", "mean", "random", "static", "value_based"}));
   config->push_back(CRP("sampler", "sampler", "Sampler for value-based strategy", sampler_, true));
   config->push_back(CRP("bins", "Binning Simple Discretization", bins_));
   config->push_back(CRP("static_policy", "Static Policy Chosen to Learning", static_policy_));
@@ -52,20 +52,20 @@ void MultiPolicy::request(ConfigurationRequest *config)
 void MultiPolicy::configure(Configuration &config)
 {
   strategy_str_ = config["strategy"].str();
-  if (strategy_str_ == "policy_strategy_binning")
+  if (strategy_str_ == "binning")
     strategy_ = csBinning;
-  else if (strategy_str_ == "policy_strategy_density_based")
+  else if (strategy_str_ == "density_based")
     strategy_ = csDensityBased;
-  else if (strategy_str_ == "policy_strategy_data_center")
+  else if (strategy_str_ == "data_center")
     strategy_ = csDataCenter;
-  else if (strategy_str_ == "policy_strategy_mean")
+  else if (strategy_str_ == "mean")
     strategy_ = csMean;
-  else if (strategy_str_ == "policy_strategy_random")
+  else if (strategy_str_ == "random")
     strategy_ = csRandom;
-  else if (strategy_str_ == "policy_strategy_static")
+  else if (strategy_str_ == "static")
     strategy_ = csStatic;
-  else if (strategy_str_ == "policy_strategy_softmax")
-    strategy_ = csSoftmax;
+  else if (strategy_str_ == "value_based")
+    strategy_ = csValueBased;
   else
     throw bad_param("mapping/policy/multi:strategy");
 
@@ -365,7 +365,7 @@ void MultiPolicy::act(const Observation &in, Action *out) const
     }
     break;
 
-    case csSoftmax:
+    case csValueBased:
     {
       ii = 0;
       //double* values = new double[n_policies];
@@ -411,51 +411,3 @@ void MultiPolicy::act(const Observation &in, Action *out) const
   
 }
 
-
-
-void MultiPolicy::softmax(const LargeVector &values, LargeVector *distribution) const
-{
-  LargeVector v = LargeVector::Zero(values.size());
-  for (size_t ii=0; ii < values.size(); ++ii)
-    if (std::isnan(values[ii]))
-      ERROR("SoftmaxSampler: NaN value in Boltzmann distribution 1");
-
-  distribution->resize(values.size());
-  const double threshold = -100;
-
-  // Find max_power and min_power, and center of feasible powers
-  double max_power = -DBL_MAX;
-  for (size_t ii=0; ii < values.size(); ++ii)
-  {
-    double p = values[ii]/r_distance_parameter_;
-    max_power = (max_power < p) ? p : max_power;
-  }
-  double min_power = max_power + threshold;
-  double center = (max_power+min_power)/2.0;
-
-  // Discard powers from interval [0.0; threshold] * max_power
-  double sum = 0;
-  for (size_t ii=0; ii < values.size(); ++ii)
-  {
-    double p = values[ii]/r_distance_parameter_;
-    if (p > min_power)
-    {
-      p -= center;
-      v[ii] = exp(p);
-      sum += v[ii];
-      (*distribution)[ii] = 1;
-
-      if (std::isnan(v[ii]))
-        ERROR("SoftmaxSampler: NaN value in Boltzmann distribution 2");
-    }
-    else
-      (*distribution)[ii] = 0;
-  }
-
-  for (size_t ii=0; ii < values.size(); ++ii)
-  {
-    (*distribution)[ii] *= v[ii]/sum;
-    if (std::isnan((*distribution)[ii]))
-      ERROR("SoftmaxSampler: NaN value in Boltzmann distribution 4");
-  }
-}

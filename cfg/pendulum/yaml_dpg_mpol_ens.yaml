@@ -22,7 +22,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_data_center
+      strategy: data_center
       policy: 
         - 
           type: mapping/policy/action
@@ -141,7 +141,7 @@ experiment:
     type: agent/fixed
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_data_center
+      strategy: data_center
       policy:
         - 
           type: mapping/policy/action

@@ -23,8 +23,8 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: policy_strategy_softmax
-#      strategy: policy_strategy_random
+      strategy: value_based
+#      strategy: random
       sampler: 
         type: sampler/greedy
       policy: 
@@ -156,7 +156,7 @@ experiment:
     policy: 
       type: mapping/policy/multi
 #      strategy: experiment/agent/policy/strategy
-      strategy: policy_strategy_static
+      strategy: static
       sampler: experiment/agent/policy/sampler
       policy: 
         - 
