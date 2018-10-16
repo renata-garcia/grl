@@ -6,10 +6,10 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_13_data_center_data
+  output: mpol_dpg_13_mean_data
   environment: 
     type: environment/modeled
-    model: 
+    model:
       type: model/dynamical
       control_step: 0.03
       integration_steps: 5
@@ -23,7 +23,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: data_center
+      strategy: mean
       sampler: 
         type: sampler/greedy
       policy: 
@@ -483,7 +483,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
-      bins: 3
+      bins: 100
       static_policy: 0
       r_distance_parameter: 0.001
       output_min: experiment/environment/task/action_min
