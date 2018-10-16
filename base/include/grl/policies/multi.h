@@ -42,7 +42,7 @@ class MultiPolicy : public Policy
   public:
     TYPEINFO("mapping/policy/multi", "Combines multiple policies")
     
-    enum CombinationStrategy {csBinning, csDensityBased, csDataCenter, csMean, csRandom, csStatic, csValueBased};
+    enum CombinationStrategy {csBinning, csDensityBased, csDataCenter, csMean, csMeanNoOutlier, csRandom, csStatic, csValueBased};
 
   protected:
     std::string strategy_str_;

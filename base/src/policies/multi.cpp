@@ -34,7 +34,7 @@ REGISTER_CONFIGURABLE(MultiPolicy)
 
 void MultiPolicy::request(ConfigurationRequest *config)
 {
-  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"binning", "density_based", "data_center", "mean", "random", "static", "value_based"}));
+  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"binning", "density_based", "data_center", "mean", "meannooutlier", "random", "static", "value_based"}));
   config->push_back(CRP("sampler", "sampler", "Sampler for value-based strategy", sampler_, true));
   config->push_back(CRP("bins", "Binning Simple Discretization", bins_));
   config->push_back(CRP("static_policy", "Static Policy Chosen to Learning", static_policy_));
@@ -60,6 +60,8 @@ void MultiPolicy::configure(Configuration &config)
     strategy_ = csDataCenter;
   else if (strategy_str_ == "mean")
     strategy_ = csMean;
+  else if (strategy_str_ == "meannooutlier")
+    strategy_ = csMeanNoOutlier;
   else if (strategy_str_ == "random")
     strategy_ = csRandom;
   else if (strategy_str_ == "static")
@@ -344,6 +346,37 @@ void MultiPolicy::act(const Observation &in, Action *out) const
       dist = mean / n_policies;
     }
     break;
+
+    case csMeanNoOutlier:
+    {
+      LargeVector mean;
+      bool first = true;
+      ii = 0;
+      for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
+      {
+        policy_[ii]->act(in, &*it);
+        if (first)
+          mean = it->v;
+        else
+          mean = mean + it->v;
+        first = false;
+      }
+
+      // actions_actors.sort()
+      // std::sort(actions_actors, a + n); 
+      // int mid_index = median(a, 0, n); 
+    
+      // // Median of first half 
+      // int Q1 = a[median(a, 0, mid_index)]; 
+    
+      // // Median of second half 
+      // int Q3 = a[median(a, mid_index + 1, n)]; 
+    
+      // // IQR calculation 
+      // return (Q3 - Q1); 
+
+      // dist = mean / n_policies;
+    }
 
     case csRandom:
     {
