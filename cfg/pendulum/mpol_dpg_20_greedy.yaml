@@ -23,7 +23,9 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: density_based
+      strategy: value_based
+      sampler:
+        type: sampler/greedy
       policy: 
         - 
           type: mapping/policy/action

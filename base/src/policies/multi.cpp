@@ -263,7 +263,7 @@ void MultiPolicy::act(const Observation &in, Action *out) const
       mean = mean / actions_actors2.size();
       CRAWL("MultiPolicy::csDataCenter::collecting mean: " << mean);
       
-      while(actions_actors2.size() > 2)
+      while(actions_actors2.size() > bins_)
       {
         //PRINTLN
         //for (std::deque <Action> :: iterator it = actions_actors2.begin(); it != actions_actors2.end(); ++it)
