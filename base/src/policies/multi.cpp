@@ -34,7 +34,7 @@ REGISTER_CONFIGURABLE(MultiPolicy)
 
 void MultiPolicy::request(ConfigurationRequest *config)
 {
-  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"binning", "density_based", "data_center", "mean", "meannooutlier", "random", "static", "value_based"}));
+  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"binning", "density_based", "data_center", "mean", "meanmov", "random", "static", "value_based"}));
   config->push_back(CRP("sampler", "sampler", "Sampler for value-based strategy", sampler_, true));
   config->push_back(CRP("bins", "Binning Simple Discretization", bins_));
   config->push_back(CRP("static_policy", "Static Policy Chosen to Learning", static_policy_));
@@ -60,8 +60,8 @@ void MultiPolicy::configure(Configuration &config)
     strategy_ = csDataCenter;
   else if (strategy_str_ == "mean")
     strategy_ = csMean;
-  else if (strategy_str_ == "meannooutlier")
-    strategy_ = csMeanNoOutlier;
+  else if (strategy_str_ == "meanmov")
+    strategy_ = csMeanMov;
   else if (strategy_str_ == "random")
     strategy_ = csRandom;
   else if (strategy_str_ == "static")
@@ -347,7 +347,7 @@ void MultiPolicy::act(const Observation &in, Action *out) const
     }
     break;
 
-    case csMeanNoOutlier:
+    case csMeanMov:
     {
       LargeVector mean;
       bool first = true;
@@ -361,21 +361,32 @@ void MultiPolicy::act(const Observation &in, Action *out) const
           mean = mean + it->v;
         first = false;
       }
+      //mean = mean / n_policies;
+      
+      //EUCLIDIAN DISTANCE
+      double max = 0;
+      std::vector<Action> :: iterator i_max, it;
+      ii = 0;
+      size_t ii_max = 0;
+      for( it=actions_actors.begin(); it < actions_actors.end(); ++it, ++ii)
+      {
+        double dist = sum(pow(actions_actors2.at(ii).v - mean, 2));
+        CRAWL("MultiPolicy::csDataCenter::euclidian distance:dist: " << dist);
+        if (dist > max)
+        {
+          max = dist;
+          i_max = it;
+          ii_max = ii;
+          ii_max_density.clear();
+          ii_max_density.push_back(ii);
+          CRAWL("MultiPolicy::csDataCenter::euclidian distance:max: " << max << " ii_max: " << ii_max);
+        } else if (dist == max)
+          ii_max_density.push_back(ii);
+      }
 
-      // actions_actors.sort()
-      // std::sort(actions_actors, a + n); 
-      // int mid_index = median(a, 0, n); 
-    
-      // // Median of first half 
-      // int Q1 = a[median(a, 0, mid_index)]; 
-    
-      // // Median of second half 
-      // int Q3 = a[median(a, mid_index + 1, n)]; 
-    
-      // // IQR calculation 
-      // return (Q3 - Q1); 
-
-      // dist = mean / n_policies;
+      dist = (mean + *mean_mov_)/2;
+      *mean_mov_ = mean;
+	
     }
 
     case csRandom:

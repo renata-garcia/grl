@@ -32,6 +32,7 @@
 #include <grl/discretizer.h>
 #include <grl/sampler.h>
 #include <grl/signal.h>
+#include <grl/vector.h>
 
 namespace grl
 {
@@ -42,7 +43,7 @@ class MultiPolicy : public Policy
   public:
     TYPEINFO("mapping/policy/multi", "Combines multiple policies")
     
-    enum CombinationStrategy {csBinning, csDensityBased, csDataCenter, csMean, csMeanNoOutlier, csRandom, csStatic, csValueBased};
+    enum CombinationStrategy {csBinning, csDensityBased, csDataCenter, csMean, csMeanMov, csRandom, csStatic, csValueBased};
 
   protected:
     std::string strategy_str_;
@@ -57,6 +58,7 @@ class MultiPolicy : public Policy
     double r_distance_parameter_;
     VectorSignal *action_;
     Sampler *sampler_;
+    std:<vector>(LargeVector) mean_mov_;
 
   public:
     MultiPolicy() : bins_(10), static_policy_(), r_distance_parameter_(0.001)
