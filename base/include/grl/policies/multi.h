@@ -58,10 +58,12 @@ class MultiPolicy : public Policy
     double r_distance_parameter_;
     VectorSignal *action_;
     Sampler *sampler_;
-    std:<vector>(LargeVector) mean_mov_;
+    std::vector<double> *mean_mov_;
+    size_t iterations_;
+    size_t *pt_iterations_;
 
   public:
-    MultiPolicy() : bins_(10), static_policy_(), r_distance_parameter_(0.001)
+    MultiPolicy() : bins_(10), static_policy_(), r_distance_parameter_(0.001), iterations_(0), pt_iterations_(&iterations_)
     {
       srand(time(0));
     }

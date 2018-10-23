@@ -34,7 +34,7 @@ REGISTER_CONFIGURABLE(MultiPolicy)
 
 void MultiPolicy::request(ConfigurationRequest *config)
 {
-  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"binning", "density_based", "data_center", "mean", "meanmov", "random", "static", "value_based"}));
+  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"binning", "density_based", "data_center", "meanmov", "meanmovmov", "random", "static", "value_based"}));
   config->push_back(CRP("sampler", "sampler", "Sampler for value-based strategy", sampler_, true));
   config->push_back(CRP("bins", "Binning Simple Discretization", bins_));
   config->push_back(CRP("static_policy", "Static Policy Chosen to Learning", static_policy_));
@@ -58,9 +58,9 @@ void MultiPolicy::configure(Configuration &config)
     strategy_ = csDensityBased;
   else if (strategy_str_ == "data_center")
     strategy_ = csDataCenter;
-  else if (strategy_str_ == "mean")
-    strategy_ = csMean;
   else if (strategy_str_ == "meanmov")
+    strategy_ = csMean;
+  else if (strategy_str_ == "meanmovmov")
     strategy_ = csMeanMov;
   else if (strategy_str_ == "random")
     strategy_ = csRandom;
@@ -94,6 +94,8 @@ void MultiPolicy::configure(Configuration &config)
   
   action_ = new VectorSignal();  
   config.set("actions", action_);
+
+  *pt_iterations_ = 0;
 }
 
 void MultiPolicy::reconfigure(const Configuration &config)
@@ -246,7 +248,7 @@ void MultiPolicy::act(const Observation &in, Action *out) const
     {
       CRAWL("MultiPolicy::csDataCenter::starting");
       std::deque<Action> actions_actors2(policy_.size());
-      LargeVector mean;
+      LargeVector meanmov;
       bool first = true;
       ii = 0;
       
@@ -254,14 +256,14 @@ void MultiPolicy::act(const Observation &in, Action *out) const
       {
         policy_[ii]->act(in, &*it);
         if (first)
-          mean = it->v;
+          meanmov = it->v;
         else
-          mean = mean + it->v;
+          meanmov = meanmov + it->v;
         CRAWL("MultiPolicy::csDataCenter::collecting actions_actors[ii:" << ii << "]->v: " << it->v);
         first = false;
       }
-      mean = mean / actions_actors2.size();
-      CRAWL("MultiPolicy::csDataCenter::collecting mean: " << mean);
+      meanmov = meanmov / actions_actors2.size();
+      CRAWL("MultiPolicy::csDataCenter::collecting meanmov: " << meanmov);
       
       while(actions_actors2.size() > bins_)
       {
@@ -278,7 +280,7 @@ void MultiPolicy::act(const Observation &in, Action *out) const
         size_t ii_max = 0;
         for( it=actions_actors2.begin(); it < actions_actors2.end(); ++it, ++ii)
         { 
-          double dist = sum(pow(actions_actors2.at(ii).v - mean, 2));
+          double dist = sum(pow(actions_actors2.at(ii).v - meanmov, 2));
           CRAWL("MultiPolicy::csDataCenter::euclidian distance:dist: " << dist);
           if (dist > max)
           {
@@ -304,89 +306,96 @@ void MultiPolicy::act(const Observation &in, Action *out) const
         for(size_t ii=0; ii < actions_actors2.size(); ++ii)
           CRAWL("MultiPolicy::after remove the i_max actions_actors2: " << actions_actors2[ii]);
 
-        for (size_t ii=0; ii < mean.size(); ++ii)
-          mean[ii] = 0;
+        for (size_t ii=0; ii < meanmov.size(); ++ii)
+          meanmov[ii] = 0;
         
-        CRAWL("MultiPolicy::csDataCenter::starting new mean");
+        CRAWL("MultiPolicy::csDataCenter::starting new meanmov");
       
         bool first = true;
         std::vector<size_t> ii_max_density;
         for(it = actions_actors2.begin(); it < actions_actors2.end(); ++it)
         {
           if (first)
-            mean = it->v;
+            meanmov = it->v;
           else
-            mean = mean + it->v;
+            meanmov = meanmov + it->v;
           first = false;
-          CRAWL("MultiPolicy::csDataCenter::actions_actors2.v: " << it->v << " mean: " << mean  << "\n");
+          CRAWL("MultiPolicy::csDataCenter::actions_actors2.v: " << it->v << " meanmov: " << meanmov  << "\n");
         }
-        mean = mean / actions_actors2.size();
-        CRAWL("MultiPolicy::csDataCenter::(mean / actions_actors2.size()): " << mean << "\n");
+        meanmov = meanmov / actions_actors2.size();
+        CRAWL("MultiPolicy::csDataCenter::(meanmov / actions_actors2.size()): " << meanmov << "\n");
       }
 
-      dist = mean;
+      dist = meanmov;
       //actions_actors2[(rand()%2)];
     }
     break;
         
     case csMean:
     {
-      LargeVector mean;
+      LargeVector meanmov;
       bool first = true;
       ii = 0;
       for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
       {
         policy_[ii]->act(in, &*it);
         if (first)
-          mean = it->v;
+          meanmov = it->v;
         else
-          mean = mean + it->v;
+          meanmov = meanmov + it->v;
         first = false;
       }
-      dist = mean / n_policies;
+      dist = meanmov / n_policies;
     }
     break;
 
     case csMeanMov:
     {
-      LargeVector mean;
+      LargeVector meanmov;
       bool first = true;
+      bool firstList = false;
+      if (mean_mov_->size() < 1)
+        firstList = true;
       ii = 0;
       for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
       {
         policy_[ii]->act(in, &*it);
         if (first)
-          mean = it->v;
+          meanmov = it->v;
         else
-          mean = mean + it->v;
+          meanmov = meanmov + it->v;
         first = false;
       }
-      //mean = mean / n_policies;
+      //meanmov = meanmov / n_policies;
       
       //EUCLIDIAN DISTANCE
-      double max = 0;
-      std::vector<Action> :: iterator i_max, it;
+      double euclidian_dist = 0;
+      std::vector<Action>::iterator i_max, it;
       ii = 0;
       size_t ii_max = 0;
       for( it=actions_actors.begin(); it < actions_actors.end(); ++it, ++ii)
       {
-        double dist = sum(pow(actions_actors2.at(ii).v - mean, 2));
-        CRAWL("MultiPolicy::csDataCenter::euclidian distance:dist: " << dist);
-        if (dist > max)
-        {
-          max = dist;
-          i_max = it;
-          ii_max = ii;
-          ii_max_density.clear();
-          ii_max_density.push_back(ii);
-          CRAWL("MultiPolicy::csDataCenter::euclidian distance:max: " << max << " ii_max: " << ii_max);
-        } else if (dist == max)
-          ii_max_density.push_back(ii);
+	euclidian_dist = sum(pow((*it).v - meanmov, 2));
+	if (firstList)
+	  mean_mov_->push_back( euclidian_dist );     
+	else
+          mean_mov_->at(ii) = r_distance_parameter_ * mean_mov_->at(ii) + (1-r_distance_parameter_)*euclidian_dist;
+        CRAWL("MultiPolicy::csMeanMov::euclidian distance:dist: " << euclidian_dist);
       }
 
-      dist = (mean + *mean_mov_)/2;
-      *mean_mov_ = mean;
-	
+      CRAWL("MultiPolicy::*pt_iterations_: " << *pt_iterations_);
+      if (*pt_iterations_ > 1)
+      {
+	ii = 0;
+        std::vector<double>::iterator itv;
+        for(itv = mean_mov_->begin(); itv < mean_mov_->end(); ++itv, ++ii)
+        {
+	  CRAWL("MultiPolicy::("<< *pt_iterations_ << ")csMeanMov[ii:" << ii << "]: " << (*itv));
+        } 
+      } else {
+	*pt_iterations_ = *pt_iterations_ + 1;
+      }
+      dist = meanmov;
     }
 
     case csRandom:
