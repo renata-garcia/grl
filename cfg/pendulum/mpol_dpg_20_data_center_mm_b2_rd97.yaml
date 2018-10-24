@@ -23,7 +23,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: data_center
+      strategy: data_center_mean_mov
       policy: 
         - 
           type: mapping/policy/action
