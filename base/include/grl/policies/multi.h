@@ -43,7 +43,7 @@ class MultiPolicy : public Policy
   public:
     TYPEINFO("mapping/policy/multi", "Combines multiple policies")
     
-    enum CombinationStrategy {csBinning, csDensityBased, csDataCenter, csDataCenterMeanMov, csMean, csMeanMov, csRandom, csStatic, csValueBased};
+    enum CombinationStrategy {csBinning, csDensityBased, csDensityBasedMeanMov, csDataCenter, csDataCenterMeanMov, csMean, csMeanMov, csRandom, csStatic, csValueBased};
 
   protected:
     std::string strategy_str_;
@@ -56,6 +56,7 @@ class MultiPolicy : public Policy
     int bins_;
     int static_policy_;
     double r_distance_parameter_;
+    double alpha_mov_mean_;
     VectorSignal *action_;
     Sampler *sampler_;
     std::vector<double> *mean_mov_;
@@ -63,7 +64,7 @@ class MultiPolicy : public Policy
     size_t *pt_iterations_;
 
   public:
-    MultiPolicy() : bins_(10), static_policy_(), r_distance_parameter_(0.001), iterations_(0), pt_iterations_(&iterations_)
+    MultiPolicy() : bins_(10), static_policy_(), r_distance_parameter_(0.001), alpha_mov_mean_(0.75), iterations_(0), pt_iterations_(&iterations_)
     {
       srand(time(0));
     }
