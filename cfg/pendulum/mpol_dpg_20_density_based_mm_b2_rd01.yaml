@@ -6,7 +6,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_20_greedy_data
+  output: mpol_dpg_20_density_based_mm_b2_rd01_data
   environment: 
     type: environment/modeled
     model: 
@@ -23,9 +23,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: value_based
-      sampler: 
-        type: sampler/greedy
+      strategy: density_based_mean_mov
       policy: 
         - 
           type: mapping/policy/action
