@@ -87,7 +87,7 @@ legend(leg,'Location','SouthEast');
 
 %%
 
-name = "mpol_dpg_13_density_based_mm_b2_rd01_data";
+name = "mpol_dpg_13_density_based_mm_b2_rd10_data";
 file = "/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/" + name;
 array = [strrep(name,'_','.'), file];
 
@@ -166,7 +166,7 @@ legend(leg,'Location','SouthEast');
 %strcat('Location:... ',num2str(maximum))
 
 %%
-name = "mpol_dpg_13_density_based_mm_b2_rd01_data";
+name = "mpol_dpg_13_density_based_mm_b2_rd10_data";
 file = "/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/" + name;
 array = [strrep(name,'_','.'), file];
 
@@ -288,6 +288,14 @@ file = "/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/" + name;
 array = [array;strrep(name,'_','.'), file];
 
 name = "mpol_dpg_20_data_center_5_data";
+file = "/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/" + name;
+array = [array; strrep(name,'_','.'), file];
+
+name = "mpol_dpg_20_data_center_mm_b2_rd01_data";
+file = "/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/" + name;
+array = [array; strrep(name,'_','.'), file];
+
+name = "mpol_dpg_20_data_center_mm_b2_rd75_data";
 file = "/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/" + name;
 array = [array; strrep(name,'_','.'), file];
 
