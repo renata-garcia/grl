@@ -73,16 +73,20 @@ void PendulumSwingupTask::request(ConfigurationRequest *config)
 
   config->push_back(CRP("timeout", "Episode timeout", T_, CRP::Configuration, 0., DBL_MAX));
   config->push_back(CRP("randomization", "Level of start state randomization", randomization_, CRP::Configuration, 0., 1.));
+  
+  config->push_back(CRP("sincos", "Use sine-cosine representation of angle", sincos_, CRP::Configuration, 0., 1.));
 }
 
 void PendulumSwingupTask::configure(Configuration &config)
 {
   T_ = config["timeout"];
   randomization_ = config["randomization"];
+  sincos_ = config["sincos"];
 
   config.set("observation_dims", 2);
   config.set("observation_min", VectorConstructor(0., -12*M_PI));
   config.set("observation_max", VectorConstructor(2*M_PI, 12*M_PI));
+  
   config.set("action_dims", 1);
   config.set("action_min", VectorConstructor(-3));
   config.set("action_max", VectorConstructor(3));
@@ -110,9 +114,20 @@ void PendulumSwingupTask::observe(const Vector &state, Observation *obs, int *te
   double a = fmod(state[0]+M_PI, 2*M_PI);
   if (a < 0) a += 2*M_PI;
   
-  obs->v.resize(2);
-  (*obs)[0] = a;
-  (*obs)[1] = state[1];
+  if (sincos_)
+  {
+    obs->v.resize(3);
+    (*obs)[0] = cos(a);
+    (*obs)[1] = sin(a);
+    (*obs)[2] = state[1];
+  }
+  else
+  {
+    obs->v.resize(2);
+    (*obs)[0] = a;
+    (*obs)[1] = state[1];
+  }
+  
   obs->absorbing = false;
   
   if (state[2] > T_)
