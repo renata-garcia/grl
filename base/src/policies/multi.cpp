@@ -528,7 +528,7 @@ void MultiPolicy::act(const Observation &in, Action *out) const
 
       //#############################################################
       //SAVE BETWEEN FIRST AND THIRD QUANTILE
-      
+
       //EUCLIDIAN DISTANCE
       double euclidian_dist = 0;
       ii = 0;
@@ -841,3 +841,7 @@ void MultiPolicy::act(const Observation &in, Action *out) const
   
 }
 
+void MultiPolicy::moving_mean(const Vector &in, Vector *out) const
+{
+  CRAWL("MultiPolicy::in: " << in);
+}

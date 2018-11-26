@@ -74,6 +74,7 @@ void PendulumSwingupTask::request(ConfigurationRequest *config)
   config->push_back(CRP("timeout", "Episode timeout", T_, CRP::Configuration, 0., DBL_MAX));
   config->push_back(CRP("randomization", "Level of start state randomization", randomization_, CRP::Configuration, 0., 1.));
   
+  //config->push_back(CRP("sincos", "Use sine-cosine representation of angle", sincos_, CRP::Configuration, {"sin, cos and speed", "angle and speed"}));
   config->push_back(CRP("sincos", "Use sine-cosine representation of angle", sincos_, CRP::Configuration, 0., 1.));
 }
 
@@ -83,9 +84,35 @@ void PendulumSwingupTask::configure(Configuration &config)
   randomization_ = config["randomization"];
   sincos_ = config["sincos"];
 
-  config.set("observation_dims", 2);
-  config.set("observation_min", VectorConstructor(0., -12*M_PI));
-  config.set("observation_max", VectorConstructor(2*M_PI, 12*M_PI));
+  // if (sincos_.compare("angle and speed"))
+  // {
+  //   config.set("observation_dims", 2);
+  //   config.set("observation_min", VectorConstructor(0., -12*M_PI));
+  //   config.set("observation_max", VectorConstructor(2*M_PI, 12*M_PI));
+  // }
+  // else if(sincos_.compare("sin, cos and speed"))
+  // {
+  //   config.set("observation_dims", 3);
+  //   config.set("observation_min", VectorConstructor(-1., -1., -12*M_PI));
+  //   config.set("observation_max", VectorConstructor(1., 1., 12*M_PI));
+  // }
+  // else
+  //   throw bad_param("pendulum/sincos:none type was choosen");
+
+  if (sincos_ == 0)
+  {
+    config.set("observation_dims", 2);
+    config.set("observation_min", VectorConstructor(0., -12*M_PI));
+    config.set("observation_max", VectorConstructor(2*M_PI, 12*M_PI));
+  }
+  else if(sincos_ == 1)
+  {
+    config.set("observation_dims", 3);
+    config.set("observation_min", VectorConstructor(-1., -1., -12*M_PI));
+    config.set("observation_max", VectorConstructor(1., 1., 12*M_PI));
+  }
+  else
+    throw bad_param("pendulum/sincos:none type was choosen");
   
   config.set("action_dims", 1);
   config.set("action_min", VectorConstructor(-3));
@@ -114,7 +141,7 @@ void PendulumSwingupTask::observe(const Vector &state, Observation *obs, int *te
   double a = fmod(state[0]+M_PI, 2*M_PI);
   if (a < 0) a += 2*M_PI;
   
-  if (sincos_)
+  if (sincos_ == 1)
   {
     obs->v.resize(3);
     (*obs)[0] = cos(a);

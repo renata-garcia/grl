@@ -60,9 +60,11 @@ class PendulumSwingupTask : public Task
   
   public:
     double T_, randomization_;
+    double sincos_;
+    //std::string sincos_;
   
   public:
-    PendulumSwingupTask() : T_(2.99), randomization_(0.) { }
+    PendulumSwingupTask() : T_(2.99), randomization_(0.), sincos_(0) { }
   
     // From Configurable
     virtual void request(ConfigurationRequest *config);

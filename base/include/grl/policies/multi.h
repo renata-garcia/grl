@@ -76,6 +76,10 @@ class MultiPolicy : public Policy
 
     // From Policy
     virtual void act(const Observation &in, Action *out) const;
+
+    // From Multi Policy
+    virtual void moving_mean(const Vector &in, Vector *out) const;
+
 };
 
 /// Policy that combines two or more sub-policies using different strategies
