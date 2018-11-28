@@ -206,6 +206,46 @@ ylabel('y');
 legend(leg,'Location','SouthEast');
 %strcat('Location:... ',num2str(maximum))
 
+%% COMPARE DPG 13 DENSITY BASED
+
+name = "mpol_dpg_13_density_based_rd01_data";
+file = folder + name;
+array = [strrep(name,'_','.'), file];
+
+name = "mpol_dpg_13_density_based_rd05_data";
+file = folder + name;
+array = [array; strrep(name,'_','.'), file];
+
+name = "mpol_dpg_13_density_based_rd10_data";
+file = folder + name;
+array = [array; strrep(name,'_','.'), file];
+
+name = "mpol_dpg_13_density_based_rd75_data";
+file = folder + name;
+array = [array; strrep(name,'_','.'), file];
+
+name = "mpol_dpg_13_density_based_rd001_data";
+file = folder + name;
+array = [array; strrep(name,'_','.'), file];
+
+figure;
+leg = [];
+for j=1:length(array)
+    mean = load_mean(array(j,2), n);
+    maximum = max(mean);
+    x = 1:length(mean);
+    h = plot(x, mean);
+    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
+    hold on;
+end
+
+grid;
+title('COMPARE DPG 13 DENSITY BASED');
+xlabel('n');
+ylabel('y');
+legend(leg,'Location','SouthEast');
+%strcat('Location:... ',num2str(maximum))
+
 %%
 name = "pendulum_ac_tc";
 file = folder + name;
