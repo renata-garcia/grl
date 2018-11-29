@@ -60,8 +60,8 @@ class MultiPolicy : public Policy
     VectorSignal *action_;
     Sampler *sampler_;
     std::vector<double> *mean_mov_;
-    size_t iterations_;
-    size_t *pt_iterations_;
+    uint32_t iterations_;
+    uint32_t *pt_iterations_;
 
   public:
     MultiPolicy() : bins_(10), static_policy_(), r_distance_parameter_(0.001), alpha_mov_mean_(0.75), iterations_(0), pt_iterations_(&iterations_)
@@ -78,7 +78,7 @@ class MultiPolicy : public Policy
     virtual void act(const Observation &in, Action *out) const;
 
     // From Multi Policy
-    virtual void moving_mean(const Vector &in, Vector *out) const;
+    virtual void moving_mean(const std::vector<Action> &in, std::vector<Action> *out) const;
 
 };
 
