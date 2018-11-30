@@ -578,28 +578,26 @@ void MultiPolicy::act(const Observation &in, Action *out) const
 
         trd = (1.0 - h) * qs + h * quantile[hi];
         
-        CRAWL("MultiPolicy::fst:" << fst << " quantile(fst):" << quantile[fst]);
-        CRAWL("MultiPolicy::trd:" << trd << " quantile(trd):" << quantile[trd]);
+        CRAWL("MultiPolicy::fst:" << fst);
+        CRAWL("MultiPolicy::trd:" << trd);
 
         ii = 0;
-        mean = 0;
         for(it = actions_actors2.begin(), itd = mean_mov_->begin(); it != actions_actors2.end(); ++it, ++itd, ++ii)
         {
-          // if ( (*itd >= fst) && (*itd <= trd))
           if ( (*itd < fst) || (*itd > trd))
-          {
             v_id.push_back(ii);
-            mean = mean + it->v;
-          }
         }
-        mean = mean / ii;
 
         size_t size_v_id = v_id.size();
         for(ii=0; ii < size_v_id; ++ii)
           actions_actors2.erase(actions_actors2.begin()+v_id[ii]-ii);
 
-        for(itd = mean_mov_->begin(); itd < mean_mov_->end(); ++itd, ++ii)
-          CRAWL("MultiPolicy::("<< *pt_iterations_ << ")csMeanMov[ii:" << ii << "]: " << (*itd));
+      	//ii = 0;
+        //for(itd = mean_mov_->begin(); itd < mean_mov_->end(); ++itd, ++ii)
+        //  CRAWL("MultiPolicy::("<< *pt_iterations_ << ")csMeanMov[ii:" << ii << "]: " << (*itd));
+        ii = 0;
+        for(it = actions_actors2.begin(); it < actions_actors.end(); ++it, ++ii)
+          CRAWL("MultiPolicy::("<< *pt_iterations_ << ")actions_actors2[ii:" << ii << "]: " << (*it));
       // } //if (*pt_iterations_ > bins_)
       //############################################################
       
