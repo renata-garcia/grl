@@ -196,7 +196,6 @@ void MultiPolicy::act(const Observation &in, Action *out) const
       std::vector<double> density(n_policies);
       
       std::vector<Action>::iterator it_norm = aa_normalized.begin();
-      ii = 0;
       for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
       {
         policy_[ii]->act(in, &*it);
@@ -264,30 +263,23 @@ void MultiPolicy::act(const Observation &in, Action *out) const
 
       std::vector<Action> aa_normalized(n_policies);
       std::vector<double> density(n_policies);
-      
-      std::vector<Action>::iterator it_norm;
-      std::vector<Action>::iterator it;
-      std::vector<double>::iterator itd;
-      std::vector<size_t> v_id(0);
-      LargeVector mean;
-      bool first = true;
 
-      it_norm = aa_normalized.begin();
-      ii=0;
+      std::vector<Action>::iterator it_norm = aa_normalized.begin();
+      std::vector<Action>::iterator it;
+      size_t ii = 0;
       for(it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
       {
         policy_[ii]->act(in, &*it);
-        if(debug)
-          it->v[0] = ii;
-        CRAWL("actions_actors: " << (*it).v);
+        if (debug)
+          it->v[0] = 0;
+        tmp_action.v = -1 + 2*( ((*it).v - min_) / (max_ - min_) );
+        (*it_norm) = tmp_action;
+        ++it_norm;
+        CRAWL("ii: " << ii << " actions_actors: " << (*it).v << " normalized: " << tmp_action.v);
+
         send_actions[ii] = it->v[0];
-        if(first)
-          mean = (*it).v;
-        else
-          mean = mean + (*it).v;
-        first = false;
       }
-      mean = mean/actions_actors.size();
+
       action_->set(send_actions);
       
       //#############################################################
@@ -298,8 +290,8 @@ void MultiPolicy::act(const Observation &in, Action *out) const
       ii = 0;
       for( it=actions_actors.begin(); it < actions_actors.end(); ++it, ++ii)
       {
-	      euclidian_dist = sum(pow((*it).v - mean, 2));
-	      mean_mov_->at(ii) = (alpha_mov_mean_)*euclidian_dist + (1-alpha_mov_mean_)*mean_mov_->at(ii);
+        //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+	      mean_mov_->at(ii) = (alpha_mov_mean_)*(*it).v [0]+ (1-alpha_mov_mean_)*mean_mov_->at(ii);
         CRAWL("MultiPolicy::csMeanMov::a(ii= " << ii << "): "<<(*it).v<<" euclidian distance:dist: " << euclidian_dist);
       }
 
@@ -318,10 +310,10 @@ void MultiPolicy::act(const Observation &in, Action *out) const
         double fst;
         double trd;
 
-        size_t side_length = (size_t) size/2;
+        // size_t side_length = (size_t) size/2;
 
-        fst = quantile[(size_t) side_length/2];
-        trd = quantile[side_length + (size_t)side_length/2];
+        // fst = quantile[(size_t) side_length/2];
+        // trd = quantile[side_length + (size_t)side_length/2];
         
         for(size_t jj = 0; jj < quantile.size(); ++jj)
           CRAWL("MultiPolicy::ordered - quantile[jj:"<< jj <<"]: " << quantile[jj]);
@@ -345,28 +337,30 @@ void MultiPolicy::act(const Observation &in, Action *out) const
 
         trd = (1.0 - h) * qs + h * quantile[hi];
         
-        CRAWL("MultiPolicy::fst:" << fst << " ((size_t) side_length/2):"  << ((size_t) side_length/2) << " quantile(fst):" << quantile[fst]);
-        CRAWL("MultiPolicy::trd:" << trd << " side_length + (size_t)side_length/2: " << (side_length + (size_t)side_length/2) << " quantile(trd):" << quantile[trd]);
+        CRAWL("MultiPolicy::fst:" << fst << " quantile(fst):" << quantile[fst]);
+        CRAWL("MultiPolicy::trd:" << trd << " quantile(trd):" << quantile[trd]);
 
         //
+        std::vector<double>::iterator itd;
+        std::vector<size_t> v_id(0);
         ii = 0;
-        // mean = 0;
         for(it = actions_actors.begin(), itd = mean_mov_->begin(); it != actions_actors.end(); ++it, ++itd, ++ii)
         {
-          // if ( (*itd >= fst) && (*itd <= trd))
           if ( (*itd < fst) || (*itd > trd))
           {
             v_id.push_back(ii);
-            // mean = mean + it->v;
             CRAWL("MultiPolicy::v_id: " << ii << " *itd: " << *itd << " fst: " << fst << " trd: " << trd);
           }
         }
-        // CRAWL("MultiPolicy::mean + it_>v [v_id]: mean: " << mean << " ii: " << ii << " mean/ii: " << (mean / ii));
-        // mean = mean / ii;
 
         size_t size_v_id = v_id.size();
-        for(ii=0; ii < size_v_id; ++ii)
-          actions_actors.erase(actions_actors.begin()+v_id[ii]-ii);
+        it = actions_actors.begin();
+        for(ii=0; ii < size_v_id; ++ii) {
+          actions_actors.erase(it+v_id[ii]-ii);
+          aa_normalized.erase(aa_normalized.begin()+v_id[ii]-ii);
+        }
+
+      	CRAWL("MultiPolicy::removed ");
 
         for(it = actions_actors.begin(); it!=actions_actors.end(); ++it)
           CRAWL("MultiPolicy::actions_actors<after remove>:: " << it->v[0]);
@@ -375,18 +369,6 @@ void MultiPolicy::act(const Observation &in, Action *out) const
         //   CRAWL("MultiPolicy::("<< *pt_iterations_ << ")csMeanMov[ii:" << ii << "]: " << (*itd));
       // } //if (*pt_iterations_ > bins_)
       //############################################################
-
-
-      ii = 0;
-      it_norm = aa_normalized.begin();
-      for(it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii, ++it_norm)
-      {
-        // if(debug)
-        //   it->v[0] = ii;
-        tmp_action.v = -1 + 2*( ((*it).v - min_) / (max_ - min_) );
-        (*it_norm) = tmp_action;
-        CRAWL("ii: " << ii << " actions_actors: " << (*it).v << " normalized: " << tmp_action.v);
-      }
 
       double max = -1 * std::numeric_limits<double>::infinity();
       std::vector<Action>::iterator it2, i_max;
@@ -401,15 +383,13 @@ void MultiPolicy::act(const Observation &in, Action *out) const
           for(size_t jj = 0; jj != n_dimension; ++jj)
           {
             expoent += pow((*it).v[jj] - (*it2).v[jj], 2);
-            strtmp += strspace + "expoent(jj:" + std::to_string(jj) + "): " +  std::to_string(expoent) + " (1): " + std::to_string((*it).v[jj]) + " (2): " + std::to_string((*it2).v[jj]) + "\n";
+            //strtmp += strspace + "expoent(jj:" + std::to_string(jj) + "): " +  std::to_string(expoent) + " (1): " + std::to_string((*it).v[jj]) + " (2): " + std::to_string((*it2).v[jj]) + "\n";
           }
-          strtmp += strspace + strspace + "r_dist(before): " + std::to_string(r_dist) + " expoent: " + std::to_string((-1 * expoent / pow(r_distance_parameter_, 2))) + " exp: " + std::to_string(exp( -1 * expoent / pow(r_distance_parameter_, 2))) + "\n";
+          //strtmp += strspace + strspace + "r_dist(before): " + std::to_string(r_dist) + " expoent: " + std::to_string((-1 * expoent / pow(r_distance_parameter_, 2))) + " exp: " + std::to_string(exp( -1 * expoent / pow(r_distance_parameter_, 2))) + "\n";
           r_dist = r_dist + exp( -1 * expoent / pow(r_distance_parameter_, 2) );
-          CRAWL("MultiPolicy::aa_normalized(it2): " << it2->v[0] << " expoent: " << expoent << " pow(r_distance_parameter_=" << r_distance_parameter_ << ", 2): " << (pow(r_distance_parameter_, 2)));
         }
         density.push_back( r_dist );
-        CRAWL("MultiPolicy::aa_normalized: " << it->v[0] << " r_dist(ii:" << ii << "): " << r_dist);
-        CRAWL(strtmp << strspace << "sum(expo) - density[ii:" << ii << "]: " << r_dist );
+        //CRAWL(strtmp << strspace << "sum(expo) - density[ii:" << ii << "]: " << r_dist );
         if (r_dist > max)
         {
           max = r_dist;
@@ -563,18 +543,18 @@ void MultiPolicy::act(const Observation &in, Action *out) const
       for (std::vector<double>::iterator it=mean_mov_->begin(); it!=mean_mov_->end(); ++it)
         quantile.push_back(*it);
       
-      if (*pt_iterations_ > bins_)
-      {
+      // if (*pt_iterations_ > bins_)
+      // {
         std::sort(quantile.begin(), quantile.end());
         size_t size = quantile.size();
       
         double fst;
         double trd;
 
-        size_t side_length = (size_t) size/2;
+        // size_t side_length = (size_t) size/2;
 
-        fst = quantile[(size_t) side_length/2];
-        trd = quantile[side_length + (size_t)side_length/2];
+        // fst = quantile[(size_t) side_length/2];
+        // trd = quantile[side_length + (size_t)side_length/2];
         
         for(size_t jj = 0; jj < quantile.size(); ++jj)
           CRAWL("MultiPolicy::quantile[jj:"<< jj <<"]" << quantile[jj]);
@@ -598,14 +578,15 @@ void MultiPolicy::act(const Observation &in, Action *out) const
 
         trd = (1.0 - h) * qs + h * quantile[hi];
         
-        CRAWL("MultiPolicy::fst:" << fst << " ((size_t) side_length/2):"  << ((size_t) side_length/2) << " quantile(fst):" << quantile[fst]);
-        CRAWL("MultiPolicy::trd:" << trd << " side_length + (size_t)side_length/2: " << (side_length + (size_t)side_length/2) << " quantile(trd):" << quantile[trd]);
+        CRAWL("MultiPolicy::fst:" << fst << " quantile(fst):" << quantile[fst]);
+        CRAWL("MultiPolicy::trd:" << trd << " quantile(trd):" << quantile[trd]);
 
         ii = 0;
         mean = 0;
         for(it = actions_actors2.begin(), itd = mean_mov_->begin(); it != actions_actors2.end(); ++it, ++itd, ++ii)
         {
-          if ( (*itd >= fst) && (*itd <= trd))
+          // if ( (*itd >= fst) && (*itd <= trd))
+          if ( (*itd < fst) || (*itd > trd))
           {
             v_id.push_back(ii);
             mean = mean + it->v;
@@ -619,7 +600,7 @@ void MultiPolicy::act(const Observation &in, Action *out) const
 
         for(itd = mean_mov_->begin(); itd < mean_mov_->end(); ++itd, ++ii)
           CRAWL("MultiPolicy::("<< *pt_iterations_ << ")csMeanMov[ii:" << ii << "]: " << (*itd));
-      } //if (*pt_iterations_ > bins_)
+      // } //if (*pt_iterations_ > bins_)
       //############################################################
       
       while(actions_actors2.size() > bins_)
