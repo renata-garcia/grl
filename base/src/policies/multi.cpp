@@ -34,7 +34,7 @@ REGISTER_CONFIGURABLE(MultiPolicy)
 
 void MultiPolicy::request(ConfigurationRequest *config)
 {
-  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"binning", "density_based", "density_based_mean_mov", "data_center", "data_center_mean_mov", "mean", "meanmov", "random", "static", "value_based"}));
+  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"binning", "density_based", "density_based_mean_mov", "data_center", "data_center_mean_mov", "mean", "mean_mov", "random", "static", "value_based"}));
   config->push_back(CRP("sampler", "sampler", "Sampler for value-based strategy", sampler_, true));
   config->push_back(CRP("bins", "Binning Simple Discretization", bins_));
   config->push_back(CRP("static_policy", "Static Policy Chosen to Learning", static_policy_));
@@ -98,7 +98,12 @@ void MultiPolicy::configure(Configuration &config)
   if (policy_.empty())
     throw bad_param("mapping/policy/multi:policy is empty");
 
+  //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+  //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+  //init with zeros
   mean_mov_ = new std::vector<double>(policy_.size());
+  //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+  //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
   
   action_ = new VectorSignal();  
   config.set("actions", action_);
@@ -626,73 +631,16 @@ void MultiPolicy::act(const Observation &in, Action *out) const
         first = false;
       }
       mean = mean / n_policies;
-      
-      //EUCLIDIAN DISTANCE
-      double euclidian_dist = 0;
-      ii = 0;
-      for( it=actions_actors.begin(); it < actions_actors.end(); ++it, ++ii)
-      {
-	      euclidian_dist = sum(pow((*it).v - mean, 2));
-	      mean_mov_->at(ii) = (alpha_mov_mean_)*euclidian_dist + (1-alpha_mov_mean_)*mean_mov_->at(ii);
-        CRAWL("MultiPolicy::csMeanMov::a(ii= " << ii << "): "<<(*it).v<<" euclidian distance:dist: " << euclidian_dist);
-      }
 
-      std::vector<double> quantile(0);
-      for (std::vector<double>::iterator it=mean_mov_->begin(); it!=mean_mov_->end(); ++it)
-        quantile.push_back(*it);
-      
-      if (*pt_iterations_ > bins_)
-      {
-        std::sort(quantile.begin(), quantile.end());
-        size_t size = quantile.size();
-      
-        double fst;
-        double trd;
+      euclidian_distance_moving_mean(actions_actors, mean);
+      moving_mean(actions_actors);
 
-        size_t side_length = (size_t) size/2;
+      mean = 0;
+      for(size_t i = 0; i < actions_actors.size(); ++i)
+        mean = mean + actions_actors[i].v;
+      mean = mean / actions_actors.size();
 
-        fst = quantile[(size_t) side_length/2];
-        trd = quantile[side_length + (size_t)side_length/2];
-        
-        for(size_t jj = 0; jj < quantile.size(); ++jj)
-          CRAWL("MultiPolicy::quantile[jj:"<< jj <<"]" << quantile[jj]);
-        
-        double q = 0.25;
-        size_t n  = quantile.size();
-        double id = (n - 1) * q;
-        size_t lo = floor(id);
-        size_t hi = ceil(id);
-        double qs = quantile[lo];
-        double h  = (id - lo);
-        fst = (1.0 - h) * qs + h * quantile[hi];
-
-        q = 0.75;
-        n  = quantile.size();
-        id = (n - 1) * q;
-        lo = floor(id);
-        hi = ceil(id);
-        qs = quantile[lo];
-        h  = (id - lo);
-
-        trd = (1.0 - h) * qs + h * quantile[hi];
-        
-        CRAWL("MultiPolicy::fst:" << fst << " ((size_t) side_length/2):"  << ((size_t) side_length/2) << " quantile(fst):" << quantile[fst]);
-        CRAWL("MultiPolicy::trd:" << trd << " side_length + (size_t)side_length/2: " << (side_length + (size_t)side_length/2) << " quantile(trd):" << quantile[trd]);
-
-        ii = 0;
-        mean = 0;
-        for(it = actions_actors.begin(), itd = mean_mov_->begin(); it != actions_actors.end(); ++it, ++itd, ++ii)
-        {
-          if ( (*itd >= fst) && (*itd <= trd))
-            mean = mean + it->v;
-        }
-        mean = mean / ii;
-
-        for(itd = mean_mov_->begin(); itd < mean_mov_->end(); ++itd, ++ii)
-          CRAWL("MultiPolicy::("<< *pt_iterations_ << ")csMeanMov[ii:" << ii << "]: " << (*itd));
-      } //if (*pt_iterations_ > bins_)
-
-	    *pt_iterations_ = *pt_iterations_ + 1;
+	    // *pt_iterations_ = *pt_iterations_ + 1;
       dist = mean;
       
     }
@@ -794,11 +742,6 @@ void MultiPolicy::moving_mean(std::vector<Action> &in) const
     double fst;
     double trd;
 
-    // size_t side_length = (size_t) size/2;
-
-    // fst = quantile[(size_t) side_length/2];
-    // trd = quantile[side_length + (size_t)side_length/2];
-    
     for(size_t jj = 0; jj < quantile.size(); ++jj)
       CRAWL("MultiPolicy::quantile[jj:"<< jj <<"]" << quantile[jj]);
     
@@ -826,22 +769,13 @@ void MultiPolicy::moving_mean(std::vector<Action> &in) const
 
     std::vector<double>::iterator itd = mean_mov_->begin();
     std::vector<size_t> v_id(0);
-    for (size_t i; i < in.size(); ++i, ++itd)
-    {
+    for (size_t i=0; i < in.size(); ++i, ++itd)
       if ( (*itd < fst) || (*itd > trd))
         v_id.push_back(i);
-    }
 
     size_t size_v_id = v_id.size();
     for(size_t i=0; i < size_v_id; ++i)
       in.erase(in.begin()+v_id[i]-i);
-
-  	//ii = 0;
-    //for(itd = mean_mov_->begin(); itd < mean_mov_->end(); ++itd, ++ii)
-    //  CRAWL("MultiPolicy::("<< *pt_iterations_ << ")csMeanMov[ii:" << ii << "]: " << (*itd));
-    
-    // for(size_t i = 0; i < in.size(); ++i)
-    //   CRAWL("MultiPolicy::("<< *pt_iterations_ << ")in[i:" << i << "]: " << in[i]);
   // } //if (*pt_iterations_ > bins_)
   //############################################################
 }
