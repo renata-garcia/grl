@@ -78,8 +78,10 @@ class MultiPolicy : public Policy
     virtual void act(const Observation &in, Action *out) const;
 
     // From Multi Policy
-    virtual void moving_mean(std::vector<Action> &in) const;
     virtual void euclidian_distance_moving_mean(const std::vector<Action> &in, LargeVector mean) const;
+    virtual LargeVector get_mean(const std::vector<Action> &policies_aa) const;
+    virtual LargeVector get_policy_mean(const Observation &in, std::vector<Action> &policies_aa) const;
+    virtual void moving_mean(std::vector<Action> &in) const;
 
 };
 

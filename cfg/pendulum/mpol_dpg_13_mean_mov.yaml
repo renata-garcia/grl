@@ -6,7 +6,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_13_meanmov_data
+  output: mpol_dpg_13_mean_mov_data
   environment: 
     type: environment/modeled
     model:
@@ -23,7 +23,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: meanmov
+      strategy: mean_mov
       sampler: 
         type: sampler/greedy
       policy: 

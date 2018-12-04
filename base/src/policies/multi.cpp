@@ -616,33 +616,10 @@ void MultiPolicy::act(const Observation &in, Action *out) const
 
     case csMeanMov:
     {
-      LargeVector mean;
-      std::vector<Action>::iterator it;
-      std::vector<double>::iterator itd;
-      bool first = true;
-      ii = 0;
-      for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++ii)
-      {
-        policy_[ii]->act(in, &*it);
-        if (first)
-          mean = it->v;
-        else
-          mean = mean + it->v;
-        first = false;
-      }
-      mean = mean / n_policies;
-
-      euclidian_distance_moving_mean(actions_actors, mean);
+      euclidian_distance_moving_mean(actions_actors, get_policy_mean(in, actions_actors));
       moving_mean(actions_actors);
-
-      mean = 0;
-      for(size_t i = 0; i < actions_actors.size(); ++i)
-        mean = mean + actions_actors[i].v;
-      mean = mean / actions_actors.size();
-
-	    // *pt_iterations_ = *pt_iterations_ + 1;
-      dist = mean;
       
+      dist = get_mean(actions_actors);
     }
     break;
 
@@ -724,6 +701,41 @@ void MultiPolicy::euclidian_distance_moving_mean(const std::vector<Action> &in, 
   }
 }
 
+
+LargeVector MultiPolicy::get_mean(const std::vector<Action> &policies_aa) const
+{
+  LargeVector mean;
+  bool first = true;
+  for(size_t i = 0; i < policies_aa.size(); ++i)
+  {
+    if(first)
+      mean = policies_aa[i].v;
+    else
+      mean = mean + policies_aa[i].v;
+    first = false;
+  }
+  CRAWL("MultiPolicy::get_mean:policies_aa.size(): " << policies_aa.size());
+  return (mean / policies_aa.size());
+}
+
+LargeVector MultiPolicy::get_policy_mean(const Observation &in, std::vector<Action> &policies_aa) const
+{
+  size_t i = 0;
+  bool first = true;
+  LargeVector mean;
+  for(std::vector<Action>::iterator it = policies_aa.begin(); it < policies_aa.end(); ++it)
+  {
+    policy_[i]->act(in, &*it);
+    if (first)
+      mean = it->v;
+    else
+      mean = mean + it->v;
+    first = false;
+  }
+  mean = mean / policies_aa.size();
+  return mean;
+}
+
 void MultiPolicy::moving_mean(std::vector<Action> &in) const
 {
   CRAWL("MultiPolicy:: " << in);
@@ -776,6 +788,7 @@ void MultiPolicy::moving_mean(std::vector<Action> &in) const
     size_t size_v_id = v_id.size();
     for(size_t i=0; i < size_v_id; ++i)
       in.erase(in.begin()+v_id[i]-i);
+    
   // } //if (*pt_iterations_ > bins_)
   //############################################################
 }
