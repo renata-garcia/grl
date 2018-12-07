@@ -1,0 +1,17 @@
+file: mpol_dpg_13_data_center.yaml
+algorithm: random
+repetitions: 2
+regret: simple
+rounds: 2
+#output: $@-gamma$0-lambda$1-sres$2-ares$3-epsilon$4-alpha$5
+#output: $@-bins$0
+parameters:
+  - name: /experiment/agent/policy/bins
+    values:
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
