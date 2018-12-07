@@ -45,7 +45,7 @@
 #include <grl/configurable.h>
 #include <grl/experiment.h>
 
-#define BUFSIZE (16*1024)
+#define BUFSIZE (64*1024)
 
 #define SETSOCKOPT(s, level, optname, optval)\
 do {\
@@ -160,8 +160,6 @@ class Worker: public itc::Thread
 
           try
           {
-            std::cout << "Got config:\n" << yaml << std::endl;
-          
             temp = loadYAML("", "", nullptr, YAML::Load(yaml));
           }
           catch (std::exception &e)
