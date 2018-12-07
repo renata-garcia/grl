@@ -57,6 +57,8 @@ class MultiPolicy : public Policy
     int static_policy_;
     double r_distance_parameter_;
     double alpha_mov_mean_;
+    double minor_remove_bound_;
+    double major_remove_bound_;
     VectorSignal *action_;
     Sampler *sampler_;
     std::vector<double> *mean_mov_;
@@ -64,7 +66,14 @@ class MultiPolicy : public Policy
     uint32_t *pt_iterations_;
 
   public:
-    MultiPolicy() : bins_(10), static_policy_(), r_distance_parameter_(0.001), alpha_mov_mean_(0.75), iterations_(0), pt_iterations_(&iterations_)
+    MultiPolicy() : bins_(10),
+                    static_policy_(),
+                    r_distance_parameter_(0.001),
+                    alpha_mov_mean_(0.75),
+                    minor_remove_bound_(0.25),
+                    major_remove_bound_(0.75),
+                    iterations_(0),
+                    pt_iterations_(&iterations_)
     {
       srand(time(0));
     }
