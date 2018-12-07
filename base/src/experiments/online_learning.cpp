@@ -51,6 +51,7 @@ void OnlineLearningExperiment::request(ConfigurationRequest *config)
   
   config->push_back(CRP("state", "signal/vector.observation", "Current observed state of the environment", CRP::Provided));
   config->push_back(CRP("action", "signal/vector.action", "Last action applied to the environment", CRP::Provided));
+  config->push_back(CRP("test_action", "signal/vector.action", "Last action applied to the test environment", CRP::Provided));
   config->push_back(CRP("curve", "signal/vector", "Learning curve", CRP::Provided));
 
   config->push_back(CRP("load_file", "Load policy filename", load_file_));
@@ -75,10 +76,12 @@ void OnlineLearningExperiment::configure(Configuration &config)
   
   state_ = new VectorSignal();
   action_ = new VectorSignal();
+  test_action_ = new VectorSignal();
   curve_ = new VectorSignal();
   
   config.set("state", state_);
   config.set("action", action_);
+  config.set("test_action", test_action_);
   config.set("curve", curve_);
 
   if (test_interval_ >= 0 && !test_agent_)
@@ -146,6 +149,9 @@ LargeVector OnlineLearningExperiment::run()
       agent->start(obs, &action);
       state_->set(obs.v);
       action_->set(action.v);
+      if (test)
+        test_action_->set(action.v);
+
 
       do
       {
@@ -172,6 +178,9 @@ LargeVector OnlineLearningExperiment::run()
 
           state_->set(obs.v);
           action_->set(action.v);
+          if (test)
+            test_action_->set(action.v);
+
           
           if (!test) ss++;
         }

@@ -44,7 +44,7 @@ class OnlineLearningExperiment : public Experiment
   protected:
     Agent *agent_, *test_agent_;
     Environment *environment_;
-    VectorSignal *state_, *action_, *curve_;
+    VectorSignal *state_, *action_, *test_action_, *curve_;
 
     size_t runs_, run_offset_, trials_, steps_;
     int test_interval_;

@@ -541,8 +541,8 @@ std::vector<size_t> MultiPolicy::moving_mean(std::vector<Action> &in) const
 
   trd = (1.0 - h) * qs + h * quantile[hi];
   
-  CRAWL("MultiPolicy::fst:" << fst);
-  CRAWL("MultiPolicy::trd:" << trd);
+  CRAWL("MultiPolicy::fst:" << fst << ", bound_quantile[0]: " << bound_quantile[0]);
+  CRAWL("MultiPolicy::trd:" << trd << ", bound_quantile[1]: " << bound_quantile[1]);
 
   std::vector<double>::iterator itd = mean_mov_->begin();
   std::vector<size_t> v_id(0);

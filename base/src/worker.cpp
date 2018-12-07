@@ -160,6 +160,8 @@ class Worker: public itc::Thread
 
           try
           {
+            std::cout << "Got config:\n" << yaml << std::endl;
+          
             temp = loadYAML("", "", nullptr, YAML::Load(yaml));
           }
           catch (std::exception &e)
