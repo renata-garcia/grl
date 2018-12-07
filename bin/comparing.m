@@ -442,3 +442,100 @@ ylabel('y');
 legend(leg,'Location','SouthEast');
 %strcat('Location:... ',num2str(maximum))
 
+%% MPOL DPG 26 DATA_CENTER 1
+title_fig = 'MPOL DPG 26 DATA_CENTER 1';
+%name = "mpol_dpg_26_data_center_data";
+%file = folder + name;
+%array = [strrep(name,'_','.'), file];
+
+name = "pendulum_ac_tc";
+file = folder + name;
+array = [strrep(name,'_','.'), file];
+
+%name = "pendulum_dpg.dat";
+%file = folder + name;
+%array = [array; strrep(name,'_','.'), file];
+
+name = "mpol_dpg_26_data_center_mean_mov_a001_data";
+file = folder + name;
+array = [array; strrep(name,'_','.'), file];
+
+name = "mpol_dpg_26_data_center_mean_mov_a01_data";
+file = folder + name;
+array = [array; strrep(name,'_','.'), file];
+
+name = "mpol_dpg_26_data_center_mean_mov_a10_data";
+file = folder + name;
+array = [array; strrep(name,'_','.'), file];
+
+name = "mpol_dpg_26_data_center_mean_mov_a20_data";
+file = folder + name;
+array = [array; strrep(name,'_','.'), file];
+
+figure;
+leg = [];
+for j=1:length(array)
+    mean = load_mean(array(j,2), n);
+    maximum = max(mean);
+    x = 1:length(mean);
+    h = plot(x, mean);
+    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
+    hold on;
+end
+
+grid;
+title(title_fig);
+xlabel('n');
+ylabel('y');
+legend(leg,'Location','SouthEast');
+%strcat('Location:... ',num2str(maximum))
+
+
+%% MPOL DPG 26 DATA_CENTER 2
+title_fig = 'MPOL DPG 26 DATA_CENTER 2';
+%name = "mpol_dpg_26_data_center_data";
+%file = folder + name;
+%array = [strrep(name,'_','.'), file];
+
+name = "pendulum_ac_tc";
+file = folder + name;
+array = [strrep(name,'_','.'), file];
+
+%name = "pendulum_dpg.dat";
+%file = folder + name;
+%array = [array; strrep(name,'_','.'), file];
+
+name = "mpol_dpg_26_data_center_mean_mov_a75_data";
+file = folder + name;
+array = [array; strrep(name,'_','.'), file];
+
+name = "mpol_dpg_26_data_center_mean_mov_a80_data";
+file = folder + name;
+array = [array; strrep(name,'_','.'), file];
+
+name = "mpol_dpg_26_data_center_mean_mov_a90_data";
+file = folder + name;
+array = [array; strrep(name,'_','.'), file];
+
+name = "mpol_dpg_26_data_center_mean_mov_a98_data";
+file = folder + name;
+array = [array; strrep(name,'_','.'), file];
+
+figure;
+leg = [];
+for j=1:length(array)
+    mean = load_mean(array(j,2), n);
+    maximum = max(mean);
+    x = 1:length(mean);
+    h = plot(x, mean);
+    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
+    hold on;
+end
+
+grid;
+title(title_fig);
+xlabel('n');
+ylabel('y');
+legend(leg,'Location','SouthEast');
+%strcat('Location:... ',num2str(maximum))
+
