@@ -40,6 +40,8 @@ void MultiPolicy::request(ConfigurationRequest *config)
   config->push_back(CRP("static_policy", "Static Policy Chosen to Learning", static_policy_));
   config->push_back(CRP("r_distance_parameter", "R Distance Parameter", r_distance_parameter_));
   config->push_back(CRP("alpha", "Alpha Moving Mean", alpha_mov_mean_));
+  config->push_back(CRP("minor_remove_bound", "Minor Remove Bound", minor_remove_bound_));
+  config->push_back(CRP("major_remove_bound", "Major Remove Bound", major_remove_bound_));
 
   config->push_back(CRP("policy", "mapping/policy", "Sub-policies", &policy_));
   config->push_back(CRP("value", "mapping", "Values of sub-policy actions", &value_, true));
@@ -86,6 +88,8 @@ void MultiPolicy::configure(Configuration &config)
 
   r_distance_parameter_ = config["r_distance_parameter"];
   alpha_mov_mean_ = config["alpha"];
+  minor_remove_bound_ = config["minor_remove_bound"];
+  major_remove_bound_ = config["major_remove_bound"];
 
   min_ = config["output_min"].v();
   max_ = config["output_max"].v();
@@ -504,7 +508,7 @@ inline LargeVector MultiPolicy::get_policy_mean(const Observation &in, std::vect
 std::vector<size_t> MultiPolicy::moving_mean(std::vector<Action> &in) const
 {
   CRAWL("MultiPolicy:: " << in);
-  double bound_quantile[] = {0.25, 0.75};
+  double bound_quantile[] = {minor_remove_bound_, major_remove_bound_};
 
   std::vector<double> quantile(0);
   for (std::vector<double>::iterator it=mean_mov_->begin(); it!=mean_mov_->end(); ++it)
