@@ -6,7 +6,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_26_data_center_data
+  output: mpol_dpg_26_data_center_mean_mov_a90_irb40_jrb60_data
   environment: 
     type: environment/modeled
     model: 
@@ -23,7 +23,11 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: data_center
+      strategy: data_center_mean_mov
+      static_policy: 0
+      alpha: 0.90
+      minor_remove_bound: 0.36
+      major_remove_bound: 0.64
       policy: 
         - 
           type: mapping/policy/action
@@ -971,9 +975,6 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
-      bins: 2
-      static_policy: 0
-      r_distance_parameter: 0.001
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
     predictor: 
@@ -1856,8 +1857,8 @@ experiment:
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
   save_every: never
-visualizer: 
-  type: visualizer/glut
+#visualizer: 
+#  type: visualizer/glut
 critic_visual0: 
   type: visualization/field/value
   field_dims: [0, 1]
@@ -1940,13 +1941,6 @@ actions:
   input_max: [ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
   memory: 256
   state: experiment/test_agent/policy/actions
-action: 
-  type: visualization/state
-  input_dims: []
-  input_min: [-3]
-  input_max: [ 3]
-  memory: 256
-  state: experiment/test_action
 state: 
   type: visualization/state
   input_dims: []

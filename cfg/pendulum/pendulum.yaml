@@ -9,8 +9,8 @@ environment:
   task: 
     type: task/pendulum/swingup
     timeout: 2.99
-    randomization: 0
-    sincos: 0
+    randomization: 1
+    sincos: 1
 visualizer:
   type: visualizer/glut
 visualization:
