@@ -11,531 +11,77 @@ folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
 
 
 %%
-name = "pendulum_ac_tc";
-file = folder + name;
-array = [strrep(name,'_','.'), file];
 
-name = "mpol_dpg_13_data_center_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_random_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_greedy_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_density_based_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_mean_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-figure;
-leg = [];
-for j=1:length(array)
-    mean = load_mean(array(j,2), n);
-    maximum = max(mean);
-    x = 1:length(mean);
-    h = plot(x, mean);
-    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
-    hold on;
-end
-
-grid;
-title('asd');
-xlabel('n');
-ylabel('y');
-legend(leg,'Location','SouthEast');
-%strcat('Location:... ',num2str(maximum))
-
+compare_executions(n, folder, 'MPOL DPG 13 benchmark',...
+    "pendulum_ac_tc", "mpol_dpg_13_data_center_data", ... %rever
+    "mpol_dpg_13_random_data", "mpol_dpg_13_greedy_data", ...
+    "mpol_dpg_13_density_based_data", "mpol_dpg_13_mean_data");
 
 %%
-name = "pendulum_ac_tc";
-file = folder + name;
-array = [strrep(name,'_','.'), file];
-
-name = "pendulum_dpg.dat";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_data_center_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_random_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-figure;
-leg = [];
-for j=1:length(array)
-    mean = load_mean(array(j,2), n);
-    maximum = max(mean);
-    x = 1:length(mean);
-    h = plot(x, mean);
-    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
-    hold on;
-end
-
-grid;
-title('asd');
-xlabel('n');
-ylabel('y');
-legend(leg,'Location','SouthEast');
-%strcat('Location:... ',num2str(maximum))
-
-
+compare_executions(n, folder, 'MPOL DPG 13 benchmark',...
+    "pendulum_ac_tc", "pendulum_dpg.dat", ...
+    "mpol_dpg_13_data_center_data", "mpol_dpg_13_random_data"); %rever
 
 %%
-
-name = "mpol_dpg_13_density_based_mm_b2_rd10_data";
-file = folder + name;
-array = [strrep(name,'_','.'), file];
-
-name = "pendulum_ac_tc";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "pendulum_dpg.dat";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_data_center_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_random_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-figure;
-leg = [];
-for j=1:length(array)
-    mean = load_mean(array(j,2), n);
-    maximum = max(mean);
-    x = 1:length(mean);
-    h = plot(x, mean);
-    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
-    hold on;
-end
-
-grid;
-title('asd');
-xlabel('n');
-ylabel('y');
-legend(leg,'Location','SouthEast');
-%strcat('Location:... ',num2str(maximum))
-
+compare_executions(n, folder, 'MPOL DPG 13 benchmark',...
+    "mpol_dpg_13_density_based_mm_b2_rd10_data", "pendulum_ac_tc",...
+    "pendulum_dpg.dat", "mpol_dpg_13_data_center_data", ... %rever
+    "mpol_dpg_13_random_data");
 
 %%
-name = "mpol_dpg_13_data_center_mm_b2_rd90_data";
-file = folder + name;
-array = [strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_data_center_mm_b2_rd75_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_data_center_mm_b2_rd01_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_data_center_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_data_center_mm_b2_rd98_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-figure;
-leg = [];
-for j=1:length(array)
-    mean = load_mean(array(j,2), n);
-    maximum = max(mean);
-    x = 1:length(mean);
-    h = plot(x, mean);
-    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
-    hold on;
-end
-
-grid;
-title('asd');
-xlabel('n');
-ylabel('y');
-legend(leg,'Location','SouthEast');
-%strcat('Location:... ',num2str(maximum))
+compare_executions(n, folder, 'MPOL DPG 13 data_center bm',...
+    'mpol_dpg_13_data_center_mm_b2_a01_data', 'mpol_dpg_13_data_center_mm_b2_a75_data',...
+    'mpol_dpg_13_data_center_mm_b2_a90_data', 'mpol_dpg_13_density_based_mm_a01_data');
+    %"mpol_dpg_13_data_center_data", ... %rever
 
 %%
-name = "mpol_dpg_13_density_based_mm_b2_rd10_data";
-file = folder + name;
-array = [strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_density_based_mm_b2_rd01_data";
-file = folder + name;
-array = [strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_density_based_mm_b2_rd75_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_density_based_mm_b2_rd90_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-figure;
-leg = [];
-for j=1:length(array)
-    mean = load_mean(array(j,2), n);
-    maximum = max(mean);
-    x = 1:length(mean);
-    h = plot(x, mean);
-    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
-    hold on;
-end
-
-grid;
-title('asd');
-xlabel('n');
-ylabel('y');
-legend(leg,'Location','SouthEast');
-%strcat('Location:... ',num2str(maximum))
+compare_executions(n, folder, 'MPOL DPG 13 density_based bm',...
+    "mpol_dpg_13_density_based_mm_b2_rd10_data", "mpol_dpg_13_density_based_mm_b2_rd01_data",...
+    "mpol_dpg_13_density_based_mm_b2_rd75_data", "mpol_dpg_13_density_based_mm_b2_rd90_data");
 
 %% COMPARE DPG 13 DENSITY BASED
-
-name = "mpol_dpg_13_density_based_rd01_data";
-file = folder + name;
-array = [strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_density_based_rd05_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_density_based_rd10_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_density_based_rd75_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_13_density_based_rd001_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-figure;
-leg = [];
-for j=1:length(array)
-    mean = load_mean(array(j,2), n);
-    maximum = max(mean);
-    x = 1:length(mean);
-    h = plot(x, mean);
-    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
-    hold on;
-end
-
-grid;
-title('COMPARE DPG 13 DENSITY BASED');
-xlabel('n');
-ylabel('y');
-legend(leg,'Location','SouthEast');
-%strcat('Location:... ',num2str(maximum))
+compare_executions(n, folder, 'MPOL DPG 13 density_based bm',...
+    "mpol_dpg_13_density_based_rd01_data", "mpol_dpg_13_density_based_rd05_data",...
+    "mpol_dpg_13_density_based_rd10_data", "mpol_dpg_13_density_based_rd75_data", ...
+    "mpol_dpg_13_density_based_rd001_data");
 
 %%
-name = "pendulum_ac_tc";
-file = folder + name;
-array = [ strrep(name,'_','.'), file];
-
-name = "pendulum_dpg.dat";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_density_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_density_based_rd01_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_density_based_rd001_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-figure;
-leg = [];
-for j=1:length(array)
-    mean = load_mean(array(j,2), n);
-    maximum = max(mean);
-    x = 1:length(mean);
-    h = plot(x, mean);
-    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
-    hold on;
-end
-
-grid;
-title('asd');
-xlabel('n');
-ylabel('y');
-legend(leg,'Location','SouthEast');
-%strcat('Location:... ',num2str(maximum))
+compare_executions(n, folder, 'MPOL DPG 20 density_based',...
+    "pendulum_ac_tc", "pendulum_dpg.dat",...
+    "mpol_dpg_20_density_data", "mpol_dpg_20_density_based_rd01_data",...
+    "mpol_dpg_20_density_based_rd001_data");
 
 %%
-name = "pendulum_ac_tc";
-file = folder + name;
-array = [ strrep(name,'_','.'), file];
-
-name = "pendulum_dpg.dat";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_density_based_mm_b2_rd01_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_density_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_density_based_mm_b2_rd75_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_density_based_mm_b2_rd90_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-figure;
-leg = [];
-for j=1:length(array)
-    mean = load_mean(array(j,2), n);
-    maximum = max(mean);
-    x = 1:length(mean);
-    h = plot(x, mean);
-    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
-    hold on;
-end
-
-grid;
-title('asd');
-xlabel('n');
-ylabel('y');
-legend(leg,'Location','SouthEast');
-%strcat('Location:... ',num2str(maximum))
+compare_executions(n, folder, 'MPOL DPG 20 density_based',...
+    "pendulum_ac_tc", "pendulum_dpg.dat", ...
+    "mpol_dpg_20_density_based_mm_b2_rd01_data", "mpol_dpg_20_density_data", ...
+    "mpol_dpg_20_density_based_mm_b2_rd75_data", "mpol_dpg_20_density_based_mm_b2_rd90_data");
 
 %%
-name = "pendulum_ac_tc";
-file = folder + name;
-array = [ strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_data_center_data";
-file = folder + name;
-array = [array;strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_data_center_5_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_data_center_mm_b2_rd01_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_data_center_mm_b2_rd75_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_data_center_mm_b2_rd90_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-figure;
-leg = [];
-for j=1:length(array)
-    mean = load_mean(array(j,2), n);
-    maximum = max(mean);
-    x = 1:length(mean);
-    h = plot(x, mean);
-    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
-    hold on;
-end
-
-grid;
-title('asd');
-xlabel('n');
-ylabel('y');
-legend(leg,'Location','SouthEast');
-%strcat('Location:... ',num2str(maximum))
+compare_executions(n, folder, 'MPOL DPG 20 data_center',...
+    "pendulum_ac_tc", "mpol_dpg_20_data_center_data", ...
+    "mpol_dpg_20_data_center_5_data", "mpol_dpg_20_data_center_mm_b2_rd01_data", ...
+    "mpol_dpg_20_data_center_mm_b2_rd75_data", "mpol_dpg_20_data_center_mm_b2_rd90_data");
 
 %%
-name = "mpol_dpg_20_density_data";
-file = folder + name;
-array = [strrep(name,'_','.'), file];
-
-name = "pendulum_ac_tc";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "pendulum_dpg.dat";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_data_center_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_data_center_5_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_data_center_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_data_center_mm_b2_rd90_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_density_based_mm_b2_rd01_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_density_based_mm_b2_rd75_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_density_based_mm_b2_rd90_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_density_based_rd001_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_density_based_rd01_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_20_data_center_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-figure;
-leg = [];
-for j=1:length(array)
-    mean = load_mean(array(j,2), n);
-    maximum = max(mean);
-    x = 1:length(mean);
-    h = plot(x, mean);
-    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
-    hold on;
-end
-
-grid;
-title('asd');
-xlabel('n');
-ylabel('y');
-legend(leg,'Location','SouthEast');
-%strcat('Location:... ',num2str(maximum))
+compare_executions(n, folder, 'MPOL DPG 20 all',...
+    "mpol_dpg_20_density_data", "pendulum_ac_tc",...
+    "pendulum_dpg.dat", "mpol_dpg_20_data_center_data",...
+    "mpol_dpg_20_data_center_5_data", "mpol_dpg_20_data_center_data",...
+    "mpol_dpg_20_data_center_mm_b2_rd90_data", "mpol_dpg_20_density_based_mm_b2_rd01_data",...
+    "mpol_dpg_20_density_based_mm_b2_rd75_data", "mpol_dpg_20_density_based_mm_b2_rd90_data",...
+    "mpol_dpg_20_density_based_rd001_data", "mpol_dpg_20_density_based_rd01_data",...
+    "mpol_dpg_20_data_center_data");
 
 %% MPOL DPG 26 DATA_CENTER 1
-title_fig = 'MPOL DPG 26 DATA_CENTER 1';
-%name = "mpol_dpg_26_data_center_data";
-%file = folder + name;
-%array = [strrep(name,'_','.'), file];
-
-name = "pendulum_ac_tc";
-file = folder + name;
-array = [strrep(name,'_','.'), file];
-
-%name = "pendulum_dpg.dat";
-%file = folder + name;
-%array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_26_data_center_mean_mov_a001_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_26_data_center_mean_mov_a01_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_26_data_center_mean_mov_a10_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_26_data_center_mean_mov_a20_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-figure;
-leg = [];
-for j=1:length(array)
-    mean = load_mean(array(j,2), n);
-    maximum = max(mean);
-    x = 1:length(mean);
-    h = plot(x, mean);
-    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
-    hold on;
-end
-
-grid;
-title(title_fig);
-xlabel('n');
-ylabel('y');
-legend(leg,'Location','SouthEast');
-%strcat('Location:... ',num2str(maximum))
-
+compare_executions(n, folder, 'MPOL DPG 26 DATA_CENTER 1',...
+    "mpol_dpg_26_data_center_mean_mov_a001_data", "mpol_dpg_26_data_center_mean_mov_a01_data",...
+    "pendulum_ac_tc", "mpol_dpg_26_data_center_mean_mov_a001_data",...
+    "mpol_dpg_26_data_center_mean_mov_a01_data", "mpol_dpg_26_data_center_mean_mov_a10_data",...
+    "mpol_dpg_26_data_center_mean_mov_a20_data");
 
 %% MPOL DPG 26 DATA_CENTER 2
-title_fig = 'MPOL DPG 26 DATA_CENTER 2';
-%name = "mpol_dpg_26_data_center_data";
-%file = folder + name;
-%array = [strrep(name,'_','.'), file];
-
-name = "pendulum_ac_tc";
-file = folder + name;
-array = [strrep(name,'_','.'), file];
-
-%name = "pendulum_dpg.dat";
-%file = folder + name;
-%array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_26_data_center_mean_mov_a75_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_26_data_center_mean_mov_a80_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_26_data_center_mean_mov_a90_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-name = "mpol_dpg_26_data_center_mean_mov_a98_data";
-file = folder + name;
-array = [array; strrep(name,'_','.'), file];
-
-figure;
-leg = [];
-for j=1:length(array)
-    mean = load_mean(array(j,2), n);
-    maximum = max(mean);
-    x = 1:length(mean);
-    h = plot(x, mean);
-    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
-    hold on;
-end
-
-grid;
-title(title_fig);
-xlabel('n');
-ylabel('y');
-legend(leg,'Location','SouthEast');
-%strcat('Location:... ',num2str(maximum))
-
+compare_executions(n, folder, 'MPOL DPG 26 DATA_CENTER 2',...
+    "pendulum_ac_tc", "mpol_dpg_26_data_center_mean_mov_a75_data",...
+    "mpol_dpg_26_data_center_mean_mov_a80_data", "mpol_dpg_26_data_center_mean_mov_a90_data",...
+    "mpol_dpg_26_data_center_mean_mov_a98_data");

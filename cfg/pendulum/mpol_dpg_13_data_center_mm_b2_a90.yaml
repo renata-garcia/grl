@@ -914,6 +914,7 @@ experiment:
       bins: experiment/agent/policy/bins
       static_policy: experiment/agent/policy/static_policy
       r_distance_parameter: experiment/agent/policy/r_distance_parameter
+      alpha: experiment/agent/policy/alpha
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
   save_every: never
