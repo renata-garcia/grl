@@ -6,7 +6,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_2_data_center_equals_data
+  output: mpol_dpg_2_roulette_data
   environment: 
     type: environment/modeled
     model: 
@@ -23,7 +23,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: data_center
+      strategy: roulette
       policy: 
         - 
           type: mapping/policy/action
@@ -104,7 +104,7 @@ experiment:
         - 
           type: predictor/dpg
           alpha: 0.01
-          beta_v: 0.1
+          beta_v: 0.05
           beta_a: 0.01
           gamma: 0.97
           lambda: 0.65
@@ -125,8 +125,8 @@ experiment:
           actor_representation: experiment/agent/policy/policy/0/representation
         - 
           type: predictor/dpg
-          alpha: 0.01
-          beta_v: 0.1
+          alpha: 0.02
+          beta_v: 0.05
           beta_a: 0.01
           gamma: 0.97
           lambda: 0.65
@@ -175,8 +175,8 @@ experiment:
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
   save_every: never
-#visualizer: 
-#  type: visualizer/glut
+visualizer: 
+  type: visualizer/glut
 critic_visual0: 
   type: visualization/slice
   field_dims: [0, 1]

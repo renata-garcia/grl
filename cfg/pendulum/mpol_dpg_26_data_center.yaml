@@ -1856,8 +1856,8 @@ experiment:
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
   save_every: never
-visualizer: 
-  type: visualizer/glut
+#visualizer: 
+#  type: visualizer/glut
 critic_visual0: 
   type: visualization/field/value
   field_dims: [0, 1]

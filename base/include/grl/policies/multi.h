@@ -43,7 +43,7 @@ class MultiPolicy : public Policy
   public:
     TYPEINFO("mapping/policy/multi", "Combines multiple policies")
     
-    enum CombinationStrategy {csBinning, csDensityBased, csDensityBasedMeanMov, csDataCenter, csDataCenterMeanMov, csMean, csMeanMov, csRandom, csStatic, csValueBased};
+    enum CombinationStrategy {csBinning, csDensityBased, csDensityBasedMeanMov, csDataCenter, csDataCenterMeanMov, csMean, csMeanMov, csRandom, csStatic, csValueBased, csRoulette};
 
   protected:
     std::string strategy_str_;
@@ -62,6 +62,7 @@ class MultiPolicy : public Policy
     VectorSignal *action_;
     Sampler *sampler_;
     std::vector<double> *mean_mov_;
+    double iRoulette_;
     uint32_t iterations_;
     uint32_t *pt_iterations_;
 
@@ -72,6 +73,7 @@ class MultiPolicy : public Policy
                     alpha_mov_mean_(0.75),
                     minor_remove_bound_(0.25),
                     major_remove_bound_(0.75),
+                    iRoulette_(0.01),
                     iterations_(0),
                     pt_iterations_(&iterations_)
     {
@@ -87,14 +89,14 @@ class MultiPolicy : public Policy
     virtual void act(const Observation &in, Action *out) const;
 
     // From Multi Policy
-    virtual inline void euclidian_distance_moving_mean(const std::vector<Action> &in, LargeVector mean) const;
-    virtual inline size_t get_max_index_by_density_based(const std::vector<Action> &policies_aa, LargeVector mean) const;
-    virtual inline size_t get_max_index_by_euclidian_distance(const std::vector<Action> &policies_aa, LargeVector mean) const;
-    virtual inline void get_max_index(double dist, size_t i, double &max, std::vector<size_t> &i_max_density) const;
-    virtual inline size_t get_random_index(const std::vector<size_t> &i_max_density) const;
-    virtual inline LargeVector get_mean(const std::vector<Action> &policies_aa) const;
-    virtual inline LargeVector get_policy_mean(const Observation &in, std::vector<Action> &policies_aa, LargeVector &values) const;
-    virtual inline std::vector<size_t> moving_mean(std::vector<Action> &in) const;
+    virtual void euclidian_distance_moving_mean(const std::vector<Action> &in, LargeVector mean) const;
+    virtual size_t get_max_index_by_density_based(const std::vector<Action> &policies_aa, LargeVector mean) const;
+    virtual size_t get_max_index_by_euclidian_distance(const std::vector<Action> &policies_aa, LargeVector mean) const;
+    virtual void get_max_index(double dist, size_t i, double &max, std::vector<size_t> &i_max_density) const;
+    virtual size_t get_random_index(const std::vector<size_t> &i_max_density) const;
+    virtual LargeVector get_mean(const std::vector<Action> &policies_aa) const;
+    virtual LargeVector get_policy_mean(const Observation &in, std::vector<Action> &policies_aa, LargeVector &values) const;
+    virtual std::vector<size_t> moving_mean(std::vector<Action> &in) const;
 
 };
 

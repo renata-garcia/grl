@@ -24,6 +24,7 @@ experiment:
     policy: 
       type: mapping/policy/multi
       strategy: density_based_mean_mov
+      r_distance_parameter: 0.01
       alpha: 0.01
       policy: 
         - 
@@ -778,7 +779,7 @@ experiment:
     policy: 
       type: mapping/policy/multi
       strategy: experiment/agent/policy/strategy
-      sampler: experiment/agent/policy/sampler
+      r_distance_parameter: experiment/agent/policy/r_distance_parameter
       policy:
         - 
           type: mapping/policy/action
@@ -911,9 +912,6 @@ experiment:
         - experiment/agent/policy/value/10
         - experiment/agent/policy/value/11
         - experiment/agent/policy/value/12
-      bins: experiment/agent/policy/bins
-      static_policy: experiment/agent/policy/static_policy
-      r_distance_parameter: experiment/agent/policy/r_distance_parameter
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
   save_every: never
