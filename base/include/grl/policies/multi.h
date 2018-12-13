@@ -62,7 +62,8 @@ class MultiPolicy : public Policy
     VectorSignal *action_;
     Sampler *sampler_;
     std::vector<double> *mean_mov_;
-    LargeVector last_action_;
+    std::vector<double> *voting_policies_;
+    // LargeVector last_action_;
     double iRoulette_;
     uint32_t iterations_;
     uint32_t *pt_iterations_;

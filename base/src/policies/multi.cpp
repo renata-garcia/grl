@@ -136,8 +136,8 @@ void MultiPolicy::act(const Observation &in, Action *out) const
   std::vector<Action> aa_dist();
   policy_[0]->act(in, &actions_actors[0]);
   int n_dimension = actions_actors[0].v.size();
-  if(*pt_iterations_ == 1)
-    last_action_ = LargeVector::Zero(n_dimension);
+  // if(*pt_iterations_ == 1)
+  //   last_action_ = LargeVector::Zero(n_dimension);
   Vector send_actions(n_policies);
   
   switch (strategy_)
@@ -236,7 +236,8 @@ void MultiPolicy::act(const Observation &in, Action *out) const
       for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++it_norm)
         (*it_norm).v = -1 + 2*( ((*it).v - min_) / (max_ - min_) );
 
-      euclidian_distance_moving_mean(actions_actors, last_action_);
+      euclidian_distance_moving_mean(actions_actors, mean);
+      // euclidian_distance_moving_mean(actions_actors, last_action_);
       std::vector<size_t> v_id = moving_mean(actions_actors);
       for(size_t i = 0; i < actions_actors.size(); ++i)
         CRAWL("MultiPolicy::csDensityBasedMeanMov::actions_actors after euclidian_distance_moving_mean: " << actions_actors[i]);
@@ -249,7 +250,7 @@ void MultiPolicy::act(const Observation &in, Action *out) const
 
       size_t index = get_max_index_by_density_based(aa_normalized, mean);
 
-      last_action_ = actions_actors[index].v;
+      // last_action_ = actions_actors[index].v;
       dist = actions_actors[index].v;
     }
     break;
@@ -424,7 +425,19 @@ void MultiPolicy::act(const Observation &in, Action *out) const
   CRAWL("MultiPolicy::(*out): " << (*out) << "\n");
 }
 
-inline void MultiPolicy::euclidian_distance_moving_mean(const std::vector<Action> &in, LargeVector mean) const
+void MultiPolicy::euclidian_distance_moving_mean(const std::vector<Action> &in, LargeVector mean) const
+{
+  double euclidian_dist = 0;
+  for(size_t i = 0; i < in.size(); ++i)
+  {
+    CRAWL("MultiPolicy::euclidian_distance_moving_mean::a(ii= " << i << "): " << in[i].v << ", mean_mov_->at(i): " << mean_mov_->at(i));
+    euclidian_dist = sum(pow((in[i]).v - mean, 2));
+    mean_mov_->at(i) = (alpha_mov_mean_)*euclidian_dist + (1-alpha_mov_mean_)*mean_mov_->at(i);
+    CRAWL("MultiPolicy::euclidian_distance_moving_mean::a(ii= " << i << "): "<<in[i].v<<" euclidian distance:dist: " << euclidian_dist << ", mean_mov_->at(i): " << mean_mov_->at(i));
+  }
+}
+
+void MultiPolicy::voting_moving_mean(const std::vector<Action> &in, LargeVector mean) const
 {
   double euclidian_dist = 0;
   for(size_t i = 0; i < in.size(); ++i)
