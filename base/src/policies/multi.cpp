@@ -110,28 +110,23 @@ void MultiPolicy::configure(Configuration &config)
 
   mean_mov_ = new std::vector<double>(policy_.size());
   voting_policies_ = new std::vector<double>(policy_.size());
-  if (strategy_str_ == "roulette")
-  {
-    for(size_t i = 0; i < voting_policies_->size(); ++i)
-    {
-      voting_policies_->at(i) = 1;
-    }
-  }
+  for(size_t i = 0; i < voting_policies_->size(); ++i)
+    voting_policies_->at(i) = 1;
 
   action_ = new VectorSignal();  
   config.set("actions", action_);
 
-  *pt_iterations_ = 0;
+  iterations_ = 0;
 }
 
 void MultiPolicy::reconfigure(const Configuration &config)
 {
 }
 
-void MultiPolicy::act(const Observation &in, Action *out) const
+void MultiPolicy::act(double time, const Observation &in, Action *out)
 {
-  *pt_iterations_ = *pt_iterations_ + 1;
-  CRAWL("MultiPolicy::act::in::pt_iterations_: " << *pt_iterations_);
+  iterations_++;
+  CRAWL("MultiPolicy::act::in::pt_iterations_: " << iterations_);
   Action tmp_action;
   LargeVector dist;
   int n_policies = policy_.size();
@@ -139,8 +134,8 @@ void MultiPolicy::act(const Observation &in, Action *out) const
   std::vector<Action> aa_dist();
   policy_[0]->act(in, &actions_actors[0]);
   int n_dimension = actions_actors[0].v.size();
-  // if(*pt_iterations_ == 1)
-  //   last_action_ = LargeVector::Zero(n_dimension);
+  if (iterations_ == 1)
+    last_action_ = LargeVector::Zero(n_dimension);
   Vector send_actions(n_policies);
   
   switch (strategy_)
@@ -471,7 +466,7 @@ void MultiPolicy::voting_moving_mean(const std::vector<Action> &in, size_t ind) 
   for(size_t i = 0; i < voting_policies_->size(); ++i)
   {
     CRAWL("MultiPolicy::csRoulette::before::mean_mov(i:" << i << "): " << voting_policies_->at(i));
-    if ((i != ind) && (voting_policies_->at(i) > 0))
+    if ((i != ind) && (voting_policies_->at(i) > 0.65))
     {
       voting_policies_->at(ind) = voting_policies_->at(ind) + iRoulette_;
       voting_policies_->at(i) = voting_policies_->at(i) - iRoulette_;

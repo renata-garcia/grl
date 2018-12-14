@@ -63,10 +63,9 @@ class MultiPolicy : public Policy
     Sampler *sampler_;
     std::vector<double> *mean_mov_;
     std::vector<double> *voting_policies_;
-    // LargeVector last_action_;
+    LargeVector last_action_;
     double iRoulette_;
     uint32_t iterations_;
-    uint32_t *pt_iterations_;
 
   public:
     MultiPolicy() : bins_(10),
@@ -76,8 +75,7 @@ class MultiPolicy : public Policy
                     minor_remove_bound_(0.25),
                     major_remove_bound_(0.75),
                     iRoulette_(0.01),
-                    iterations_(0),
-                    pt_iterations_(&iterations_)
+                    iterations_(0)
     {
       srand(time(0));
     }
@@ -88,7 +86,7 @@ class MultiPolicy : public Policy
     virtual void reconfigure(const Configuration &config);
 
     // From Policy
-    virtual void act(const Observation &in, Action *out) const;
+    virtual void act(double time, const Observation &in, Action *out);
 
     // From Multi Policy
     virtual void euclidian_distance_moving_mean(const std::vector<Action> &in, LargeVector mean) const;

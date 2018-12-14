@@ -24,7 +24,7 @@ experiment:
     policy: 
       type: mapping/policy/multi
       strategy: density_based_mean_mov
-      r_distance_parameter: 0.01
+      r_distance_parameter: 0.05
       alpha: 0.9
       policy: 
         - 
@@ -780,6 +780,7 @@ experiment:
       type: mapping/policy/multi
       strategy: experiment/agent/policy/strategy
       r_distance_parameter: experiment/agent/policy/r_distance_parameter
+      alpha: experiment/agent/policy/alpha
       policy:
         - 
           type: mapping/policy/action

@@ -30,5 +30,15 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld ../cfg/pendulum/mpol_dpg_13_density_based_mm_a75.yaml
 ./grld ../cfg/pendulum/mpol_dpg_13_density_based_mm_a90.yaml
 
-./grld 
-./grld 
+./grld ../cfg/pendulum/mpol_dpg_26_density_based.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_density_based_mm_a001.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_density_based_mm_a01.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_density_based_mm_a75.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_density_based_mm_a90.yaml
+
+./grld ../cfg/pendulum/mpol_dpg_20_density_based_mm_a001.yaml
+./grld ../cfg/pendulum/mpol_dpg_20_density_based_mm_a01.yaml
+./grld ../cfg/pendulum/mpol_dpg_20_density_based_mm_a75.yaml
+./grld ../cfg/pendulum/mpol_dpg_20_density_based_mm_a90.yaml
+
+./grld ../cfg/pendulum/mpol_dpg_13_density_based_voting_mov.yaml
