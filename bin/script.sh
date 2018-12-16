@@ -41,5 +41,7 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld ../cfg/pendulum/mpol_dpg_20_density_based_mm_a90.yaml
 
 ./grld ../cfg/pendulum/mpol_dpg_13_density_based_voting_mov.yaml
-'
 ./grld ../cfg/pendulum/mpol_1_replay_ddpg_tensorflow_rand.yaml
+'
+./grld ../cfg/pendulum/mpol_dpg_26_density_based_voting_mov.yaml
+./grld ../cfg/pendulum/mpol_dpg_20_density.yaml
