@@ -34,7 +34,7 @@ REGISTER_CONFIGURABLE(MultiPolicy)
 
 void MultiPolicy::request(ConfigurationRequest *config)
 {
-  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"binning", "density_based", "density_based_mean_mov", "density_based_voting_mov", "data_center", "data_center_mean_mov", "mean", "mean_mov", "random", "static", "value_based", "roulette"}));
+  config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration, {"binning", "density_based", "density_based_mean_mov", "density_based_voting_mov", "data_center", "data_center_mean_mov", "data_center_voting_mov", "mean", "mean_mov", "random", "static", "value_based", "roulette"}));
   config->push_back(CRP("sampler", "sampler", "Sampler for value-based strategy", sampler_, true));
   config->push_back(CRP("bins", "Binning Simple Discretization", bins_));
   config->push_back(CRP("static_policy", "Static Policy Chosen to Learning", static_policy_));
@@ -68,6 +68,8 @@ void MultiPolicy::configure(Configuration &config)
     strategy_ = csDataCenter;
   else if (strategy_str_ == "data_center_mean_mov")
     strategy_ = csDataCenterMeanMov;
+  else if (strategy_str_ == "data_center_voting_mov")
+  	strategy_ = csDataCenterVotingMov;
   else if (strategy_str_ == "mean")
     strategy_ = csMean;
   else if (strategy_str_ == "mean_mov")
@@ -267,7 +269,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
         (*it_norm).v = -1 + 2*( ((*it).v - min_) / (max_ - min_) );
 
       size_t index = get_max_index_by_density_based(aa_normalized, mean);
-      voting_moving_mean(aa_normalized, index);
+      update_voting_preferences_ofchoosen_mean_mov(aa_normalized, index);
 
       std::vector<size_t> v_id = moving_mean(actions_actors);
       for(size_t i = 0; i < actions_actors.size(); ++i)
@@ -338,6 +340,66 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
         mean = get_mean(actions_actors);
         CRAWL("MultiPolicy::csDataCenterMeanMov::mean...........: " << mean);
       }
+
+      dist = mean;
+    }
+    break;
+        
+    case csDataCenterVotingMov:
+    {
+    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+      CRAWL("MultiPolicy::csDataCenterVotingMov::starting********************************************************************************");
+      std::vector<double>::iterator itd;     
+      LargeVector mean, vals;
+	  std::vector<double> voting_weights;
+	  std::vector<size_t> voting_weights_id(n_policies);
+
+      mean = get_policy_mean(in, actions_actors, vals);
+      CRAWL("MultiPolicy::csDataCenterVotingMov::collecting mean: " << mean);
+
+      // update_voting_preferences_ofchoosen_mean_mov(&actions_actors);
+      // euclidian_distance_moving_mean(actions_actors, mean);
+      std::vector<size_t> v_id = moving_mean(actions_actors);
+      size_t k = 0;
+      for (size_t i = 0; i < voting_weights_id.size(); ++i)
+      	if (i == v_id[k]) 
+      	{
+      	  voting_weights_id[i] = -1;
+      	  ++k;
+      	}
+      	else
+      	  voting_weights_id[i] = voting_weights_id[i] - k;
+      // for(size_t i = 0; i < actions_actors.size(); ++i)
+      //   CRAWL("MultiPolicy::actions_actors after euclidian_distance_moving_mean: " << actions_actors[i]);
+      
+      k = 1;
+      while(actions_actors.size() > bins_)
+      {
+  	    size_t index = get_max_index_by_euclidian_distance(actions_actors, mean);
+        CRAWL("MultiPolicy::csDataCenterVotingMov::remove outlier");
+        actions_actors.erase(actions_actors.begin()+index); //retirando apenas o elemento que está no index i_max
+
+        for(size_t i=0; i < actions_actors.size(); ++i)  //PRINTLN
+          CRAWL("MultiPolicy::after remove the i_max actions_actors: " << actions_actors[i]);
+
+      	for(size_t i =0; i < voting_weights.size(); ++i)
+      	  if(voting_weights[i] == index)
+      	  
+      	  else
+
+        	voting_weights[index] = k*iRoulette_;
+        
+        CRAWL("MultiPolicy::csDataCenterVotingMov::starting new mean");
+        mean = get_mean(actions_actors);
+        CRAWL("MultiPolicy::csDataCenterVotingMov::mean...........: " << mean);
+      }
+      update_voting_weights_mean_mov(voting_weights);
 
       dist = mean;
     }
@@ -460,25 +522,38 @@ void MultiPolicy::euclidian_distance_moving_mean(const std::vector<Action> &in, 
   }
 }
 
-void MultiPolicy::voting_moving_mean(const std::vector<Action> &in, size_t ind) const
+void MultiPolicy::update_voting_weights_mean_mov(const std::vector<double> &in) const
+{
+  for(size_t i = 0; i < voting_policies_->size(); ++i)
+    voting_policies_->at(i) = in[i];
+
+  for(size_t i = 0; i < in.size(); ++i)
+  {
+    CRAWL("MultiPolicy::update_voting_weights_mean_mov::a(ii= " << i << "): " << in[i].v << ", mean_mov_->at(i): " << mean_mov_->at(i));
+    mean_mov_->at(i) = (alpha_mov_mean_)*voting_policies_->at(i) + (1-alpha_mov_mean_)*mean_mov_->at(i);
+    CRAWL("MultiPolicy::update_voting_weights_mean_mov::a(ii= " << i << "): "<<in[i].v<<" voting_policies_->at(i): " << voting_policies_->at(i) << ", mean_mov_->at(i): " << mean_mov_->at(i));
+  }
+}
+
+void MultiPolicy::update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const
 {
   CRAWL("MultiPolicy::csRoulette::updating voting_policies_::ind: " << ind);
   for(size_t i = 0; i < voting_policies_->size(); ++i)
   {
-    CRAWL("MultiPolicy::csRoulette::before::mean_mov(i:" << i << "): " << voting_policies_->at(i));
+    CRAWL("MultiPolicy::csRoulette::before::voting_policies_(i:" << i << "): " << voting_policies_->at(i));
     if ((i != ind) && (voting_policies_->at(i) > 0.65))
     {
       voting_policies_->at(ind) = voting_policies_->at(ind) + iRoulette_;
       voting_policies_->at(i) = voting_policies_->at(i) - iRoulette_;
     }
-    CRAWL("MultiPolicy::csRoulette::after for::mean_mov(i:" << i << "): " << voting_policies_->at(i));
+    CRAWL("MultiPolicy::csRoulette::after for::voting_policies_(i:" << i << "): " << voting_policies_->at(i));
   }
 
   for(size_t i = 0; i < in.size(); ++i)
   {
-    CRAWL("MultiPolicy::voting_moving_mean::a(ii= " << i << "): " << in[i].v << ", mean_mov_->at(i): " << mean_mov_->at(i));
+    CRAWL("MultiPolicy::update_voting_preferences_ofchoosen_mean_mov::a(ii= " << i << "): " << in[i].v << ", mean_mov_->at(i): " << mean_mov_->at(i));
     mean_mov_->at(i) = (alpha_mov_mean_)*voting_policies_->at(i) + (1-alpha_mov_mean_)*mean_mov_->at(i);
-    CRAWL("MultiPolicy::voting_moving_mean::a(ii= " << i << "): "<<in[i].v<<" voting_policies_->at(i): " << voting_policies_->at(i) << ", mean_mov_->at(i): " << mean_mov_->at(i));
+    CRAWL("MultiPolicy::update_voting_preferences_ofchoosen_mean_mov::a(ii= " << i << "): "<<in[i].v<<" voting_policies_->at(i): " << voting_policies_->at(i) << ", mean_mov_->at(i): " << mean_mov_->at(i));
   }
 }
 
