@@ -90,7 +90,7 @@ class MultiPolicy : public Policy
 
     // From Multi Policy
     virtual void euclidian_distance_moving_mean(const std::vector<Action> &in, LargeVector mean) const;
-    virtual void update_voting_weights_mean_mov(const std::vector<Action> &in) const;
+    virtual void update_voting_weights_mean_mov(const std::vector<double> &in) const;
     virtual void update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const;
     virtual size_t get_max_index_by_density_based(const std::vector<Action> &policies_aa, LargeVector mean) const;
     virtual size_t get_max_index_by_euclidian_distance(const std::vector<Action> &policies_aa, LargeVector mean) const;
