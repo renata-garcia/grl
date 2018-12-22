@@ -24,6 +24,7 @@ experiment:
     policy: 
       type: mapping/policy/multi
       strategy: data_center_voting_mov
+      bins: 2
       policy: 
         - 
           type: mapping/policy/action
@@ -150,6 +151,7 @@ experiment:
     policy: 
       type: mapping/policy/multi
       strategy: experiment/agent/policy/strategy
+      bins: experiment/agent/policy/bins
       policy: 
         - 
           type: mapping/policy/action
