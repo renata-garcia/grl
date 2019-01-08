@@ -358,22 +358,37 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       std::vector<double>::iterator itd;     
       LargeVector mean, vals;
 	    std::vector<double> voting_weights;
-	    std::vector<size_t> voting_weights_id(n_policies);
+	    std::vector<double> voting_weights_id(n_policies);
+      for(size_t i = 0; i < n_policies; ++i)
+        voting_weights_id[i] = i;
 
       mean = get_policy_mean(in, actions_actors, vals);
       CRAWL("MultiPolicy::csdcvm::collecting mean: " << mean);
 
+      //for debug 888888888888888888888888888888888888888888888888888888888888888888888
+      bool first = true;
+      for(size_t i = 0; i < n_policies; ++i)
+      {
+        actions_actors[i].v[0] = i;
+        if (first) 
+          mean = actions_actors[i].v;
+        else 
+          mean = mean + actions_actors[i].v;
+        first = false;
+        CRAWL("MultiPolicy::csDataCenterVotingMov:policy_[i:" << i << "][0]:" <<  actions_actors[i].v[0]);
+      }//for debug 888888888888888888888888888888888888888888888888888888888888888888888
+ 
       // update_voting_preferences_ofchoosen_mean_mov(&actions_actors);
       // euclidian_distance_moving_mean(actions_actors, mean);
       std::vector<size_t> v_id = moving_mean(actions_actors);
       size_t k = 0;
       CRAWL("MultiPolicy::csdcvm::updating voting weights");
-      CRAWL("MultiPolicy::csdcvm::voting_weights_id.size():" << voting_weights_id.size() << ", v_id.size(): " << v_id.size());
+      CRAWL("MultiPolicy::csdcvm::voting_weights_id.size():" << voting_weights_id.size());
       for (size_t i = 0; i < voting_weights_id.size(); ++i)
       {
-        CRAWL("MultiPolicy::csdcvm::a::voting_weights_id[i:" << i << "]: " << voting_weights_id[i]);
+        CRAWL("MultiPolicy::csdcvm::a::voting_weights_id[i:" << i << "]: " << voting_weights_id[i]); // << ", v_id.size(): " << v_id.size()
         // CRAWL("MultiPolicy::csdcvm::a::v_id[k:" << k << "]: " << v_id[k]);
-        if ( (i == v_id[k]) || (size_t (rand()*100) > 75) )
+        if ( (size_t (rand()%100) > 75) || (v_id.size() > 0 && (i == v_id[k])) )
         {
           CRAWL("MultiPolicy::csdcvm**++::(i:" << i << " == v_id[k])");
           voting_weights_id[i] = -1;
@@ -537,7 +552,10 @@ void MultiPolicy::update_voting_weights_mean_mov(const std::vector<double> &in) 
 {
   CRAWL("MultiPolicy::update_voting_weights_mean_mov::voting_policies_->size();::in.size(): " << in.size());
   for(size_t i = 0; i < in.size(); ++i)
+  {
     voting_policies_->at(i) = in[i];
+    CRAWL("MultiPolicy::update_voting_weights_mean_mov::atualizado::voting_policies_->at(i): " << voting_policies_->at(i));
+  }
 
   CRAWL("MultiPolicy::update_voting_weights_mean_mov::for i < in.size()");  
   for(size_t i = 0; i < in.size(); ++i)
@@ -546,6 +564,7 @@ void MultiPolicy::update_voting_weights_mean_mov(const std::vector<double> &in) 
     mean_mov_->at(i) = (alpha_mov_mean_)*voting_policies_->at(i) + (1-alpha_mov_mean_)*mean_mov_->at(i);
     CRAWL("MultiPolicy::update_voting_weights_mean_mov::a(ii= " << i << "): "<< in[i] <<" voting_policies_->at(i): " << voting_policies_->at(i) << ", mean_mov_->at(i): " << mean_mov_->at(i));
   }
+  CRAWL("MultiPolicy::update_voting_weights_mean_mov::ending...");
 }
 
 void MultiPolicy::update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const
@@ -701,7 +720,10 @@ std::vector<size_t> MultiPolicy::moving_mean(std::vector<Action> &in) const
 
   std::vector<double> quantile(0);
   for (std::vector<double>::iterator it=mean_mov_->begin(); it!=mean_mov_->end(); ++it)
+  {
     quantile.push_back(*it);
+    CRAWL("MultiPolicy::moving_mean::*it: " << *it);
+  }
 
   std::sort(quantile.begin(), quantile.end());
 
