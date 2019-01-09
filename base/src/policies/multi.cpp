@@ -445,9 +445,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
 	    std::vector<double> voting_weights_id_kepper(n_policies);
       LargeVector mean, vals;
       for(size_t i=0; i < voting_weights.size(); ++i)
-        voting_weights[i] = 1 + iRoulette_*n_policies;
-      for(size_t i=0; i < voting_weights_id_kepper.size(); ++i)
-        voting_weights_id_kepper[i] = i;
+        voting_weights[i] = 1 + iRoulette_*(n_policies-1);
 
       for(size_t i=0; i < voting_weights.size(); ++i)
         CRAWL("MultiPolicy::csDataCenterVotingMov::voting_weights[i:" << i << "]: " << voting_weights[i]);
@@ -456,22 +454,26 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       CRAWL("MultiPolicy::csDataCenterVotingMov::collecting mean: " << mean);
 
       euclidian_distance_moving_mean(actions_actors, mean);
+    
       std::vector<size_t> v_id = moving_mean(actions_actors);
+      for(size_t i=0; i < v_id.size(); ++i)
+        CRAWL("MultiPolicy::csDataCenterVotingMov::v_id[i:" << i << "]: " << v_id[i]);
+
       for(size_t k = 0; k < v_id.size(); ++k)
       {
-        bool found = false;
-        for(size_t i = 0; i < n_policies; ++i)
-        {
-          if(voting_weights_id_kepper[i] == v_id[k]){
-            voting_weights_id_kepper[i] = -1;
-            found = true;
-          } else if(found)
-            voting_weights_id_kepper[i]--;
-        }
-        for(size_t i = 0; i < voting_weights.size(); ++i)
-          if(voting_weights_id_kepper[i] < 0)
-            voting_weights[i] = voting_weights[i] - iRoulette_;
+        voting_weights_id_kepper[v_id[k]] = -1;
+        voting_weights[v_id[k]] = voting_weights[v_id[k]] - (v_id.size() - k)*iRoulette_;
       }
+
+      for(size_t i=0, k=0; i < voting_weights_id_kepper.size(); ++i)
+        if(voting_weights_id_kepper[i] >= 0)
+          voting_weights_id_kepper[i] = k++;
+
+      for(size_t i=0; i < voting_weights_id_kepper.size(); ++i)
+        CRAWL("MultiPolicy::csDataCenterVotingMov::voting_weights_id_kepper[i:" << i << "]: " << voting_weights_id_kepper[i]);
+
+      for(size_t i=0; i < voting_weights.size(); ++i)
+        CRAWL("MultiPolicy::csDataCenterVotingMov::voting_weights[i:" << i << "]: " << voting_weights[i]);
 
       while(actions_actors.size() > bins_)
       {
