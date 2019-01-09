@@ -19,12 +19,19 @@ experiment:
       type: task/pendulum/swingup
       timeout: 2.99
       randomization: 0
+      sincos: 0
   agent: 
     type: agent/td
     policy: 
       type: mapping/policy/multi
       strategy: data_center_voting_mov
       bins: 2
+      static_policy: 0
+      r_distance_parameter: 0.001
+      alpha: 0.1
+      iroulette: 0.15
+      minor_remove_bound: 0.25
+      major_remove_bound: 0.75
       policy: 
         - 
           type: mapping/policy/action
@@ -647,7 +654,7 @@ experiment:
           beta_v: 0.01
           beta_a: 0.01
           gamma: 0.97
-          lambda: 0.60
+          lambda: 0.6
           target: off-policy
           projector: experiment/agent/policy/policy/7/projector
           critic_representation: experiment/agent/policy/value/7/representation
@@ -669,7 +676,7 @@ experiment:
           beta_v: 0.1
           beta_a: 0.01
           gamma: 0.97
-          lambda: 0.60
+          lambda: 0.6
           target: off-policy
           projector: experiment/agent/policy/policy/8/projector
           critic_representation: experiment/agent/policy/value/8/representation
@@ -691,7 +698,7 @@ experiment:
           beta_v: 0.01
           beta_a: 0.01
           gamma: 0.97
-          lambda: 0.60
+          lambda: 0.6
           target: off-policy
           projector: experiment/agent/policy/policy/9/projector
           critic_representation: experiment/agent/policy/value/9/representation
@@ -713,7 +720,7 @@ experiment:
           beta_v: 0.1
           beta_a: 0.01
           gamma: 0.98
-          lambda: 0.70
+          lambda: 0.7
           target: off-policy
           projector: experiment/agent/policy/policy/10/projector
           critic_representation: experiment/agent/policy/value/10/representation
@@ -735,7 +742,7 @@ experiment:
           beta_v: 0.01
           beta_a: 0.01
           gamma: 0.98
-          lambda: 0.70
+          lambda: 0.7
           target: off-policy
           projector: experiment/agent/policy/policy/11/projector
           critic_representation: experiment/agent/policy/value/11/representation
@@ -779,7 +786,13 @@ experiment:
       type: mapping/policy/multi
       strategy: experiment/agent/policy/strategy
       bins: experiment/agent/policy/bins
-      policy:
+      static_policy: experiment/agent/policy/static_policy
+      r_distance_parameter: experiment/agent/policy/r_distance_parameter
+      alpha: experiment/agent/policy/alpha
+      iroulette: experiment/agent/policy/iroulette
+      minor_remove_bound: experiment/agent/policy/minor_remove_bound
+      major_remove_bound: experiment/agent/policy/major_remove_bound
+      policy: 
         - 
           type: mapping/policy/action
           sigma: []
@@ -914,8 +927,6 @@ experiment:
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
   save_every: never
-#visualizer: 
-#  type: visualizer/glut
 critic_visual0: 
   type: visualization/field/value
   field_dims: [0, 1]
