@@ -118,6 +118,12 @@ void MultiPolicy::configure(Configuration &config)
   action_ = new VectorSignal();  
   config.set("actions", action_);
 
+  if (strategy_str_ == "data_center_voting_mov")
+  {
+    for(size_t i=0; i < policy_.size(); ++i)
+      mean_mov_->at(i) = 0.1;
+  }
+
   iterations_ = 0;
 }
 
@@ -345,88 +351,164 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
     }
     break;
 
+    // case csDataCenterVotingMov:
+    // {
+    // //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    // //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    // //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    // //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    // //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    // //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    // //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+    //   CRAWL("MultiPolicy::csDataCenterVotingMov::csdcvm::starting********************************************************************************");
+    //   std::vector<double>::iterator itd;     
+    //   LargeVector mean, vals;
+	  //   std::vector<double> voting_weights;
+	  //   std::vector<double> voting_weights_id(n_policies);
+    //   for(size_t i = 0; i < n_policies; ++i)
+    //     voting_weights_id[i] = i;
+
+    //   mean = get_policy_mean(in, actions_actors, vals);
+    //   CRAWL("MultiPolicy::csdcvm::collecting mean: " << mean);
+
+    //   //for debug 888888888888888888888888888888888888888888888888888888888888888888888
+    //   bool first = true;
+    //   for(size_t i = 0; i < n_policies; ++i)
+    //   {
+    //     actions_actors[i].v[0] = i;
+    //     if (first) 
+    //       mean = actions_actors[i].v;
+    //     else 
+    //       mean = mean + actions_actors[i].v;
+    //     first = false;
+    //     CRAWL("MultiPolicy::csDataCenterVotingMov:policy_[i:" << i << "][0]:" <<  actions_actors[i].v[0]);
+    //   }//for debug 888888888888888888888888888888888888888888888888888888888888888888888
+ 
+    //   // update_voting_preferences_ofchoosen_mean_mov(&actions_actors);
+    //   // euclidian_distance_moving_mean(actions_actors, mean);
+    //   std::vector<size_t> v_id = moving_mean(actions_actors);
+    //   size_t k = 0;
+    //   CRAWL("MultiPolicy::csdcvm::updating voting weights");
+    //   CRAWL("MultiPolicy::csdcvm::voting_weights_id.size():" << voting_weights_id.size());
+    //   for (size_t i = 0; i < voting_weights_id.size(); ++i)
+    //   {
+    //     CRAWL("MultiPolicy::csdcvm::a::voting_weights_id[i:" << i << "]: " << voting_weights_id[i]); // << ", v_id.size(): " << v_id.size()
+    //     // CRAWL("MultiPolicy::csdcvm::a::v_id[k:" << k << "]: " << v_id[k]);
+    //     if ( (size_t (rand()%100) > 75) || (v_id.size() > 0 && (i == v_id[k])) )
+    //     {
+    //       CRAWL("MultiPolicy::csdcvm**++::(i:" << i << " == v_id[k])");
+    //       voting_weights_id[i] = -1;
+    //       ++k;
+    //     }
+    //     else
+    //     {
+    //       voting_weights_id[i] = voting_weights_id[i] - k;
+    //       CRAWL("MultiPolicy::csdcvm**--::(i:" << i << " == v_id[k:" << k << "])");
+    //     }
+    //     CRAWL("MultiPolicy::csdcvm::updated::voting_weights_id[i]: " << voting_weights_id[i]);
+    //   }
+    //   CRAWL("MultiPolicy::csdcvm::while(actions_actors.size(): " << actions_actors.size() << ": > bins_: " << bins_ << ":)");
+      
+    //   while(actions_actors.size() > bins_)
+    //   {
+    //     CRAWL("MultiPolicy::csdcvm::get_max_index_by_euclidian_distance... voting_weights.size(): " << voting_weights.size());
+  	//     size_t index = get_max_index_by_euclidian_distance(actions_actors, mean);
+    //     CRAWL("MultiPolicy::csdcvm::remove outlier::index: " << index);
+    //     actions_actors.erase(actions_actors.begin()+index); //retirando apenas o elemento que está no index i_max
+
+    //     for(size_t i = 0; i < actions_actors.size(); ++i)  //PRINTLN
+    //       CRAWL("MultiPolicy::after remove the i_max actions_actors: " << actions_actors[i]);
+
+    //   	for(size_t i = 0; i < voting_weights.size(); ++i)
+    //   	  if(voting_weights[i] == index)
+    //   	    voting_weights[i] = iRoulette_ * index;
+    //   	  else if (voting_weights[i] > index)
+    //   	  	voting_weights[i]--;
+
+    //     CRAWL("MultiPolicy::csdcvm::starting new mean");
+    //     mean = get_mean(actions_actors);
+    //     CRAWL("MultiPolicy::csdcvm::mean...........: " << mean);
+    //   }
+    //   CRAWL("MultiPolicy::csdcvm::update_voting_weights_mean_mov(voting_weights.size());" << voting_weights.size());
+    //   update_voting_weights_mean_mov(voting_weights);
+
+    //   CRAWL("MultiPolicy::csdcvm::dist = mean;");
+    //   dist = mean;
+    // }
+    // break;
+
     case csDataCenterVotingMov:
     {
-    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-    //8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-      CRAWL("MultiPolicy::csDataCenterVotingMov::csdcvm::starting********************************************************************************");
-      std::vector<double>::iterator itd;     
+      CRAWL("MultiPolicy::csDataCenterVotingMov::starting********************************************************************************");      
+      std::vector<double>::iterator itd;
+	    std::vector<double> voting_weights(n_policies);
+	    std::vector<double> voting_weights_id_kepper(n_policies);
       LargeVector mean, vals;
-	    std::vector<double> voting_weights;
-	    std::vector<double> voting_weights_id(n_policies);
-      for(size_t i = 0; i < n_policies; ++i)
-        voting_weights_id[i] = i;
+      for(size_t i=0; i < voting_weights.size(); ++i)
+        voting_weights[i] = 1 + iRoulette_*n_policies;
+      for(size_t i=0; i < voting_weights_id_kepper.size(); ++i)
+        voting_weights_id_kepper[i] = i;
+
+      for(size_t i=0; i < voting_weights.size(); ++i)
+        CRAWL("MultiPolicy::csDataCenterVotingMov::voting_weights[i:" << i << "]: " << voting_weights[i]);
 
       mean = get_policy_mean(in, actions_actors, vals);
-      CRAWL("MultiPolicy::csdcvm::collecting mean: " << mean);
+      CRAWL("MultiPolicy::csDataCenterVotingMov::collecting mean: " << mean);
 
-      //for debug 888888888888888888888888888888888888888888888888888888888888888888888
-      bool first = true;
-      for(size_t i = 0; i < n_policies; ++i)
-      {
-        actions_actors[i].v[0] = i;
-        if (first) 
-          mean = actions_actors[i].v;
-        else 
-          mean = mean + actions_actors[i].v;
-        first = false;
-        CRAWL("MultiPolicy::csDataCenterVotingMov:policy_[i:" << i << "][0]:" <<  actions_actors[i].v[0]);
-      }//for debug 888888888888888888888888888888888888888888888888888888888888888888888
- 
-      // update_voting_preferences_ofchoosen_mean_mov(&actions_actors);
-      // euclidian_distance_moving_mean(actions_actors, mean);
+      euclidian_distance_moving_mean(actions_actors, mean);
       std::vector<size_t> v_id = moving_mean(actions_actors);
-      size_t k = 0;
-      CRAWL("MultiPolicy::csdcvm::updating voting weights");
-      CRAWL("MultiPolicy::csdcvm::voting_weights_id.size():" << voting_weights_id.size());
-      for (size_t i = 0; i < voting_weights_id.size(); ++i)
+      for(size_t k = 0; k < v_id.size(); ++k)
       {
-        CRAWL("MultiPolicy::csdcvm::a::voting_weights_id[i:" << i << "]: " << voting_weights_id[i]); // << ", v_id.size(): " << v_id.size()
-        // CRAWL("MultiPolicy::csdcvm::a::v_id[k:" << k << "]: " << v_id[k]);
-        if ( (size_t (rand()%100) > 75) || (v_id.size() > 0 && (i == v_id[k])) )
+        bool found = false;
+        for(size_t i = 0; i < n_policies; ++i)
         {
-          CRAWL("MultiPolicy::csdcvm**++::(i:" << i << " == v_id[k])");
-          voting_weights_id[i] = -1;
-          ++k;
+          if(voting_weights_id_kepper[i] == v_id[k]){
+            voting_weights_id_kepper[i] = -1;
+            found = true;
+          } else if(found)
+            voting_weights_id_kepper[i]--;
         }
-        else
-        {
-          voting_weights_id[i] = voting_weights_id[i] - k;
-          CRAWL("MultiPolicy::csdcvm**--::(i:" << i << " == v_id[k:" << k << "])");
-        }
-        CRAWL("MultiPolicy::csdcvm::updated::voting_weights_id[i]: " << voting_weights_id[i]);
+        for(size_t i = 0; i < voting_weights.size(); ++i)
+          if(voting_weights_id_kepper[i] < 0)
+            voting_weights[i] = voting_weights[i] - iRoulette_;
       }
-      CRAWL("MultiPolicy::csdcvm::while(actions_actors.size(): " << actions_actors.size() << ": > bins_: " << bins_ << ":)");
-      
+
       while(actions_actors.size() > bins_)
       {
-        CRAWL("MultiPolicy::csdcvm::get_max_index_by_euclidian_distance... voting_weights.size(): " << voting_weights.size());
   	    size_t index = get_max_index_by_euclidian_distance(actions_actors, mean);
-        CRAWL("MultiPolicy::csdcvm::remove outlier::index: " << index);
+        CRAWL("MultiPolicy::csDataCenterVotingMov::remove outlier::index: " << index);
         actions_actors.erase(actions_actors.begin()+index); //retirando apenas o elemento que está no index i_max
+        //atualizando o vetor de voting_weights conforme escolha de retirada
+        bool found = false;
+        for(size_t i = 0; i < n_policies; ++i)
+        {
+          if(voting_weights_id_kepper[i] == index){
+            voting_weights_id_kepper[i] = -1;
+            found = true;
+          } else if(found)
+            voting_weights_id_kepper[i]--;
+        }
+        for(size_t i = 0; i < voting_weights.size(); ++i)
+          if(voting_weights_id_kepper[i] < 0)
+            voting_weights[i] = voting_weights[i] - iRoulette_;
 
-        for(size_t i = 0; i < actions_actors.size(); ++i)  //PRINTLN
-          CRAWL("MultiPolicy::after remove the i_max actions_actors: " << actions_actors[i]);
+      for(size_t i=0; i < voting_weights_id_kepper.size(); ++i)
+        CRAWL("MultiPolicy::csDataCenterVotingMov::voting_weights_id_kepper[i:" << i << "]: " << voting_weights_id_kepper[i]);
 
-      	for(size_t i = 0; i < voting_weights.size(); ++i)
-      	  if(voting_weights[i] == index)
-      	    voting_weights[i] = iRoulette_ * index;
-      	  else if (voting_weights[i] > index)
-      	  	voting_weights[i]--;
+      for(size_t i=0; i < voting_weights.size(); ++i)
+        CRAWL("MultiPolicy::csDataCenterVotingMov::voting_weights[i:" << i << "]: " << voting_weights[i]);
 
-        CRAWL("MultiPolicy::csdcvm::starting new mean");
+        for(size_t ii=0; ii < actions_actors.size(); ++ii)  //PRINTLN
+          CRAWL("MultiPolicy::after remove the i_max actions_actors: " << actions_actors[ii]);
+
+        CRAWL("MultiPolicy::csDataCenterVotingMov::starting new mean");
         mean = get_mean(actions_actors);
-        CRAWL("MultiPolicy::csdcvm::mean...........: " << mean);
+        CRAWL("MultiPolicy::csDataCenterVotingMov::mean...........: " << mean);
       }
-      CRAWL("MultiPolicy::csdcvm::update_voting_weights_mean_mov(voting_weights.size());" << voting_weights.size());
-      update_voting_weights_mean_mov(voting_weights);
+      for(size_t i=0; i < voting_weights.size(); ++i)
+        CRAWL("MultiPolicy::csDataCenterVotingMov::voting_weights[i:" << i << "]: " << voting_weights[i]);
 
-      CRAWL("MultiPolicy::csdcvm::dist = mean;");
+      update_voting_weights_mean_mov(voting_weights);      
       dist = mean;
     }
     break;
@@ -550,19 +632,19 @@ void MultiPolicy::euclidian_distance_moving_mean(const std::vector<Action> &in, 
 
 void MultiPolicy::update_voting_weights_mean_mov(const std::vector<double> &in) const
 {
-  CRAWL("MultiPolicy::update_voting_weights_mean_mov::voting_policies_->size();::in.size(): " << in.size());
-  for(size_t i = 0; i < in.size(); ++i)
-  {
-    voting_policies_->at(i) = in[i];
-    CRAWL("MultiPolicy::update_voting_weights_mean_mov::atualizado::voting_policies_->at(i): " << voting_policies_->at(i));
-  }
+  // CRAWL("MultiPolicy::update_voting_weights_mean_mov::voting_policies_->size();::in.size(): " << in.size());
+  // for(size_t i = 0; i < in.size(); ++i)
+  // {
+  //   voting_policies_->at(i) = in[i];
+  //   CRAWL("MultiPolicy::update_voting_weights_mean_mov::atualizado::voting_policies_->at(i): " << voting_policies_->at(i));
+  // }
 
   CRAWL("MultiPolicy::update_voting_weights_mean_mov::for i < in.size()");  
   for(size_t i = 0; i < in.size(); ++i)
   {
-    CRAWL("MultiPolicy::update_voting_weights_mean_mov::a(ii= " << i << "): " << in[i] << ", mean_mov_->at(i): " << mean_mov_->at(i));
-    mean_mov_->at(i) = (alpha_mov_mean_)*voting_policies_->at(i) + (1-alpha_mov_mean_)*mean_mov_->at(i);
-    CRAWL("MultiPolicy::update_voting_weights_mean_mov::a(ii= " << i << "): "<< in[i] <<" voting_policies_->at(i): " << voting_policies_->at(i) << ", mean_mov_->at(i): " << mean_mov_->at(i));
+    CRAWL("MultiPolicy::update_voting_weights_mean_mov::in(i= " << i << "): " << in[i] << ", mean_mov_->at(i): " << mean_mov_->at(i));
+    mean_mov_->at(i) = (alpha_mov_mean_)*in[i] + (1-alpha_mov_mean_)*mean_mov_->at(i);
+    CRAWL("MultiPolicy::update_voting_weights_mean_mov::in(i= " << i << "): " << in[i] << ", mean_mov_->at(i): " << mean_mov_->at(i));
   }
   CRAWL("MultiPolicy::update_voting_weights_mean_mov::ending...");
 }
