@@ -507,6 +507,8 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
         mean = get_mean(actions_actors);
         CRAWL("MultiPolicy::csDataCenterVotingMov::mean...........: " << mean);
       }
+      for(size_t k = 0; k < v_id.size(); ++k)
+        voting_weights[v_id[k]] = 1;
       for(size_t i=0; i < voting_weights.size(); ++i)
         CRAWL("MultiPolicy::csDataCenterVotingMov::voting_weights[i:" << i << "]: " << voting_weights[i]);
 
