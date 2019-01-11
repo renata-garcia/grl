@@ -6,7 +6,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_ddpg_2_data_center_data
+  output: mpol_ddpg_2_data_center_voting_mov_data
   environment: 
     type: environment/modeled
     model: 
@@ -29,10 +29,10 @@ experiment:
     threads: 0
     policy: 
       type: mapping/policy/multi
-      strategy: data_center
+      strategy: data_center_voting_mov
       sampler: 
         type: sampler/greedy
-      bins: 10
+      bins: 2
       static_policy: 0
       r_distance_parameter: 0.001
       alpha: 0.05
