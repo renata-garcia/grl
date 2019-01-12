@@ -43,7 +43,7 @@ class MultiPolicy : public Policy
   public:
     TYPEINFO("mapping/policy/multi", "Combines multiple policies")
     
-    enum CombinationStrategy {csBinning, csDensityBased, csDensityBasedMeanMov,
+    enum CombinationStrategy {csBinning, csDensityBased, csDensityBasedMeanMov, csDensityBasedBestMov,
     csDensityBasedVotingMov, csDataCenter, csDataCenterMeanMov, csDataCenterVotingMov,
     csMean, csMeanMov, csRandom, csStatic, csValueBased, csRoulette};
 
@@ -100,7 +100,8 @@ class MultiPolicy : public Policy
     virtual size_t get_random_index(const std::vector<size_t> &i_max_density) const;
     virtual LargeVector get_mean(const std::vector<Action> &policies_aa) const;
     virtual LargeVector get_policy_mean(const Observation &in, std::vector<Action> &policies_aa, LargeVector &values) const;
-    virtual std::vector<size_t> moving_mean(std::vector<Action> &in) const;
+    virtual std::vector<size_t> choosing_quartile_of_mean_mov(std::vector<Action> &in) const;
+    virtual std::vector<size_t> choosing_bests_of_mean_mov(std::vector<Action> &in) const;
 
 };
 
