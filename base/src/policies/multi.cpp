@@ -548,6 +548,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
 
       update_voting_weights_mean_mov(voting_weights);      
       dist = mean;
+      //actions_actors2[(rand()%2)];
     }
     break;
         
@@ -905,3 +906,4 @@ std::vector<size_t> MultiPolicy::choosing_quartile_of_mean_mov(std::vector<Actio
 
   return v_id;
 }
+
