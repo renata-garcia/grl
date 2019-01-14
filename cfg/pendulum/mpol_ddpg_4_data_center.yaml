@@ -6,7 +6,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_ddpg_4_density_based_data
+  output: mpol_ddpg_4_data_center_data
   environment: 
     type: environment/modeled
     model: 
@@ -29,10 +29,10 @@ experiment:
     threads: 0
     policy: 
       type: mapping/policy/multi
-      strategy: density_based
+      strategy: data_center
       sampler: 
         type: sampler/greedy
-      bins: 10
+      bins: 2
       static_policy: 0
       r_distance_parameter: 0.005
       alpha: 0.75
