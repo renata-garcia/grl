@@ -44,7 +44,7 @@ class MultiPolicy : public Policy
     TYPEINFO("mapping/policy/multi", "Combines multiple policies")
     
     enum CombinationStrategy {csBinning, csDensityBased, csDensityBasedMeanMov, csDensityBasedBestMov,
-    csDensityBasedVotingMov, csDataCenter, csDataCenterMeanMov, csDataCenterVotingMov,
+    csDensityBasedVotingMov, csDataCenter, csDataCenterMeanMov, csDataCenterBestMov, csDataCenterVotingMov,
     csMean, csMeanMov, csRandom, csStatic, csValueBased, csRoulette};
 
   protected:
@@ -56,6 +56,7 @@ class MultiPolicy : public Policy
     TypedConfigurableList<Policy> policy_;
     TypedConfigurableList<Mapping> value_;
     int bins_;
+    int data_center_mean_size_;
     int static_policy_;
     double r_distance_parameter_;
     double alpha_mov_mean_;
@@ -71,8 +72,9 @@ class MultiPolicy : public Policy
 
   public:
     MultiPolicy() : bins_(10),
+                    data_center_mean_size_(2),
                     static_policy_(),
-                    r_distance_parameter_(0.001),
+                    r_distance_parameter_(0.005),
                     alpha_mov_mean_(0.75),
                     minor_remove_bound_(0.25),
                     major_remove_bound_(0.75),

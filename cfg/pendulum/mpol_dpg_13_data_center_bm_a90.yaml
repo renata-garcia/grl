@@ -1,12 +1,12 @@
 experiment: 
   type: experiment/online_learning
-  runs: 35
+  runs: 10
   run_offset: 0
-  trials: 5000
+  trials: 10000
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_13_density_based_bm_a75_data
+  output: mpol_dpg_13_data_center_bm_a90_data
   environment: 
     type: environment/modeled
     model:
@@ -23,9 +23,9 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: density_based_best_mov
-      r_distance_parameter: 0.05
-      alpha: 0.75
+      strategy: data_center_best_mov
+      bins: 2
+      alpha: 0.9
       policy: 
         - 
           type: mapping/policy/action
@@ -779,6 +779,8 @@ experiment:
     policy: 
       type: mapping/policy/multi
       strategy: experiment/agent/policy/strategy
+      bins: experiment/agent/policy/bins
+      static_policy: experiment/agent/policy/static_policy
       r_distance_parameter: experiment/agent/policy/r_distance_parameter
       alpha: experiment/agent/policy/alpha
       policy:
