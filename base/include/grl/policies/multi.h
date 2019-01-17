@@ -69,6 +69,10 @@ class MultiPolicy : public Policy
     LargeVector last_action_;
     double iRoulette_;
     uint32_t iterations_;
+    struct data {
+      LargeVector value;
+      size_t id;
+	};
 
   public:
     MultiPolicy() : bins_(10),
@@ -93,6 +97,7 @@ class MultiPolicy : public Policy
     virtual void act(double time, const Observation &in, Action *out);
 
     // From Multi Policy
+    virtual bool compare_value_with_id(const data &a, const data &b) const;
     virtual void euclidian_distance_moving_mean(const std::vector<Action> &in, LargeVector mean) const;
     virtual void update_voting_weights_mean_mov(const std::vector<double> &in) const;
     virtual void update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const;
@@ -104,7 +109,6 @@ class MultiPolicy : public Policy
     virtual LargeVector get_policy_mean(const Observation &in, std::vector<Action> &policies_aa, LargeVector &values) const;
     virtual std::vector<size_t> choosing_quartile_of_mean_mov(std::vector<Action> &in) const;
     virtual std::vector<size_t> choosing_bests_of_mean_mov(std::vector<Action> &in) const;
-
 };
 
 /// Policy that combines two or more sub-policies using different strategies
