@@ -20,7 +20,7 @@ agent/communicator:
     type: communicator
     description: Comunicator which exchanges messages with an actual/virtual environment
     mutability: configuration
-    default: 0x13cc130
+    default: 0x21ae810
     optional: 0
   observation_dims:
     type: int.observation_dims
@@ -204,7 +204,7 @@ agent/master/exclusive:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x13ee418
+    default: 0x21cab38
     optional: 0
 agent/master/predicated:
   description: Master agent in which execution is predicated on preceding agent confidence
@@ -234,7 +234,7 @@ agent/master/predicated:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x13ee418
+    default: 0x21cab38
     optional: 0
 agent/master/random:
   description: Master agent that chooses sub-agents randomly
@@ -264,7 +264,7 @@ agent/master/random:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x13ee418
+    default: 0x21cab38
     optional: 0
 agent/master/sequential:
   description: Master agent that executes sub-agents sequentially
@@ -724,6 +724,28 @@ environment/communicator:
     optional: 1
     min: 0
     max: 2147483647
+environment/gym:
+  description: OpenAI Gym environment
+  id:
+    type: string
+    description: OpenAI Gym environment Id
+    mutability: configuration
+    default: Pendulum-v0
+    optional: 1
+  render:
+    type: int
+    description: Render interval (0=no rendering)
+    mutability: configuration
+    default: 100
+    optional: 1
+    min: 0
+    max: 2147483647
+  exporter:
+    type: exporter
+    description: Optional exporter for transition log (supports observation, action, reward, terminal)
+    mutability: configuration
+    default: 0
+    optional: 1
 environment/modeled:
   description: Environment that uses a state transition model internally
   model:
@@ -1321,6 +1343,60 @@ mapping/policy/discrete/action_probability:
     mutability: configuration
     default: 0
     optional: 0
+mapping/policy/discrete/multi:
+  description: Combines multiple discrete policies
+  strategy:
+    type: string
+    description: Combination strategy
+    mutability: configuration
+    default: ""
+    optional: 1
+    options:
+      - policy_strategy_add_prob
+      - policy_strategy_multiply_prob
+      - policy_strategy_majority_voting_prob
+      - policy_strategy_rank_voting_prob
+      - policy_strategy_density_based
+  tau:
+    type: double
+    description: Temperature of Boltzmann distribution
+    mutability: configuration
+    default: 0.1
+    optional: 1
+    min: 0
+    max: 1
+  discretizer:
+    type: discretizer.action
+    description: Action discretizer
+    mutability: configuration
+    default: 0
+    optional: 0
+  policy:
+    type: "[mapping/policy/discrete]"
+    description: Sub-policies
+    mutability: configuration
+    default: 0x2303ad0
+    optional: 0
+  r_distance_parameter:
+    type: double
+    description: R Distance Parameter
+    mutability: configuration
+    default: 0.001
+    optional: 1
+    min: 0
+    max: 1
+  output_min:
+    type: vector.action_min
+    description: Lower limit on outputs
+    mutability: system
+    default: "[  ]"
+    optional: 1
+  output_max:
+    type: vector.action_max
+    description: Upper limit on outputs
+    mutability: system
+    default: "[  ]"
+    optional: 1
 mapping/policy/discrete/random:
   description: Policy that chooses discrete random actions
   discretizer:
@@ -1551,10 +1627,13 @@ mapping/policy/multi:
       - binning
       - density_based
       - density_based_mean_mov
+      - density_based_best_mov
       - density_based_voting_mov
       - data_center
       - data_center_mean_mov
+      - data_center_best_mov
       - data_center_voting_mov
+      - data_center_voting_mov_two_steps
       - mean
       - mean_mov
       - random
@@ -1565,7 +1644,7 @@ mapping/policy/multi:
     type: sampler
     description: Sampler for value-based strategy
     mutability: configuration
-    default: 0
+    default: 0x1
     optional: 1
   bins:
     type: int
@@ -1587,7 +1666,7 @@ mapping/policy/multi:
     type: double
     description: R Distance Parameter
     mutability: configuration
-    default: 0.001
+    default: 0.005
     optional: 1
     min: 0
     max: 1
@@ -1627,13 +1706,13 @@ mapping/policy/multi:
     type: "[mapping/policy]"
     description: Sub-policies
     mutability: configuration
-    default: 0x15604c0
+    default: 0x2350860
     optional: 0
   value:
     type: "[mapping]"
     description: Values of sub-policy actions
     mutability: configuration
-    default: 0x15604d8
+    default: 0x2350878
     optional: 1
   output_min:
     type: vector.action_min
@@ -1903,6 +1982,22 @@ mapping/policy/sample_feedback:
     mutability: system
     default: "[  ]"
     optional: 1
+mapping/policy/solver:
+  description: Policy that uses a solver to calculate the action
+  interval:
+    type: int
+    description: Episodes between successive solutions (0=asynchronous)
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 1
+    max: 2147483647
+  solver:
+    type: solver/policy
+    description: Solver that calculates the policy
+    mutability: configuration
+    default: 0
+    optional: 0
 mapping/policy/uct:
   description: Monte-Carlo Tree Search policy using UCB1 action selection
   model:
@@ -3526,7 +3621,7 @@ predictor/multi:
     type: "[predictor]"
     description: First downstream predictor
     mutability: configuration
-    default: 0x1753960
+    default: 0x2548920
     optional: 0
 predictor/naf:
   description: Value function predictor using Normalized Advantage Features
@@ -3775,7 +3870,7 @@ projector/multi:
     type: "[projector.]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x17bb090
+    default: 0x25b0050
     optional: 0
   memories:
     type: vector.memory
@@ -4183,7 +4278,7 @@ representation/additive:
     type: "[representation.]"
     description: Downstream representations
     mutability: configuration
-    default: 0x1818470
+    default: 0x260d430
     optional: 0
 representation/communicator:
   description: Interface to an out-of-process representation
@@ -4751,6 +4846,24 @@ sampler/softmax:
     optional: 1
     min: 1e-06
     max: 100
+sandbox_model/breakout:
+  description: Breakout sandbox
+  control_step:
+    type: double.control_step
+    description: Control step time
+    mutability: configuration
+    default: 0.05
+    optional: 1
+    min: 0.05
+    max: 1.797693134862316e+308
+  integration_steps:
+    type: int
+    description: Number of integration steps per control step
+    mutability: configuration
+    default: 6
+    optional: 1
+    min: 2
+    max: 2147483647
 sandbox_model/compass_walker:
   description: Simplest walker model from Garcia et al. with a sequential evaluation
   control_step:
@@ -4835,7 +4948,7 @@ solver/agent:
     type: state
     description: Current observed state of planning
     mutability: provided
-solver/ilqg:
+solver/policy/ilqg:
   description: Iterative Linear Quadratic Gaussian trajectory optimizer
   horizon:
     type: int
@@ -4885,7 +4998,7 @@ solver/ilqg:
     type: signal/matrix
     description: Predicted trajectory
     mutability: provided
-solver/lqr:
+solver/policy/lqr:
   description: Linear Quadratic Regulator solver
   operating_state:
     type: vector
@@ -5064,6 +5177,56 @@ task/acrobot/regulator:
     description: Cost function smoothing parameter
     mutability: configuration
     default: 0.01
+    optional: 1
+    min: 0
+    max: 1
+task/breakout/targeting:
+  description: Target a single point
+  observation_dims:
+    type: int.observation_dims
+    description: Number of observation dimensions
+    mutability: provided
+  observation_min:
+    type: vector.observation_min
+    description: Lower limit on observations
+    mutability: provided
+  observation_max:
+    type: vector.observation_max
+    description: Upper limit on observations
+    mutability: provided
+  action_dims:
+    type: int.action_dims
+    description: Number of action dimensions
+    mutability: provided
+  action_min:
+    type: vector.action_min
+    description: Lower limit on actions
+    mutability: provided
+  action_max:
+    type: vector.action_max
+    description: Upper limit on actions
+    mutability: provided
+  reward_min:
+    type: double.reward_min
+    description: Lower limit on immediate reward
+    mutability: provided
+  reward_max:
+    type: double.reward_max
+    description: Upper limit on immediate reward
+    mutability: provided
+  timeout:
+    type: double
+    description: Episode timeout
+    mutability: configuration
+    default: 10
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
+  randomization:
+    type: double
+    description: Level of start state randomization
+    mutability: configuration
+    default: 0
     optional: 1
     min: 0
     max: 1
@@ -6575,6 +6738,14 @@ visualization/acrobot:
     mutability: configuration
     default: 0
     optional: 0
+visualization/breakout:
+  description: Breakout visualization
+  state:
+    type: signal/vector
+    description: Breakout state to visualize
+    mutability: configuration
+    default: 0
+    optional: 0
 visualization/cart_double_pole:
   description: Cart-double-pole visualization
   state:
@@ -7240,7 +7411,7 @@ projector/multi.observation:
     type: "[projector.observation]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x1b61d90
+    default: 0x296b010
     optional: 0
   memories:
     type: vector.memory
@@ -7576,7 +7747,7 @@ representation/additive.action:
     type: "[representation.action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x1bb1350
+    default: 0x29bab00
     optional: 0
 representation/communicator.action:
   description: Interface to an out-of-process representation
@@ -7963,7 +8134,7 @@ projector/multi.pair:
     type: "[projector.pair]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x1c24b10
+    default: 0x2a2e2f0
     optional: 0
   memories:
     type: vector.memory
@@ -8299,7 +8470,7 @@ representation/additive.value/action:
     type: "[representation.value/action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x1c74650
+    default: 0x2a7de00
     optional: 0
 representation/communicator.value/action:
   description: Interface to an out-of-process representation
@@ -8605,7 +8776,7 @@ representation/additive.value/state:
     type: "[representation.value/state]"
     description: Downstream representations
     mutability: configuration
-    default: 0x1caae60
+    default: 0x2ab45e0
     optional: 0
 representation/communicator.value/state:
   description: Interface to an out-of-process representation
@@ -8925,7 +9096,7 @@ representation/additive.transition:
     type: "[representation.transition]"
     description: Downstream representations
     mutability: configuration
-    default: 0x1d30d10
+    default: 0x2b3b550
     optional: 0
 representation/communicator.transition:
   description: Interface to an out-of-process representation
@@ -9326,7 +9497,7 @@ projector/multi.action:
     type: "[projector.action]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x1d96480
+    default: 0x2b9f8b0
     optional: 0
   memories:
     type: vector.memory
