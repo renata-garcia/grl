@@ -25,7 +25,8 @@ experiment:
       type: mapping/policy/multi
       strategy: density_based_best_mov
       r_distance_parameter: 0.05
-      alpha: 0.90
+      alpha: 0.01
+      iRoulette: 0.1
       policy: 
         - 
           type: mapping/policy/action
@@ -781,6 +782,7 @@ experiment:
       strategy: experiment/agent/policy/strategy
       r_distance_parameter: experiment/agent/policy/r_distance_parameter
       alpha: experiment/agent/policy/alpha
+      iRoulette: experiment/agent/policy/iRoulette
       policy:
         - 
           type: mapping/policy/action

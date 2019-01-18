@@ -25,7 +25,8 @@ experiment:
       type: mapping/policy/multi
       strategy: data_center_best_mov
       bins: 2
-      alpha: 0.9
+      alpha: 0.01
+      iRoulette_: 0.1
       policy: 
         - 
           type: mapping/policy/action
@@ -782,6 +783,7 @@ experiment:
       bins: experiment/agent/policy/bins
       static_policy: experiment/agent/policy/static_policy
       r_distance_parameter: experiment/agent/policy/r_distance_parameter
+      iRoulette_: experiment/agent/policy/iRoulette_
       alpha: experiment/agent/policy/alpha
       policy:
         - 

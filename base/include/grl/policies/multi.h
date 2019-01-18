@@ -70,7 +70,7 @@ class MultiPolicy : public Policy
     double iRoulette_;
     uint32_t iterations_;
     struct data {
-      LargeVector value;
+      double value;
       size_t id;
 	};
 
@@ -79,10 +79,10 @@ class MultiPolicy : public Policy
                     data_center_mean_size_(2),
                     static_policy_(0),
                     r_distance_parameter_(0.005),
-                    alpha_mov_mean_(0.75),
+                    alpha_mov_mean_(0.01),
                     minor_remove_bound_(0.25),
                     major_remove_bound_(0.75),
-                    iRoulette_(0.01),
+                    iRoulette_(0.1),
                     iterations_(0)
     {
       srand(time(0));
@@ -97,7 +97,7 @@ class MultiPolicy : public Policy
     virtual void act(double time, const Observation &in, Action *out);
 
     // From Multi Policy
-    virtual bool compare_value_with_id(const data &a, const data &b) const;
+    static bool compare_value_with_id(const data &a, const data &b);
     virtual void euclidian_distance_moving_mean(const std::vector<Action> &in, LargeVector mean) const;
     virtual void update_voting_weights_mean_mov(const std::vector<double> &in) const;
     virtual void update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const;

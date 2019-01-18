@@ -23,7 +23,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: data_center_best_mov
+      strategy: data_center_voting_mov_two_steps
       bins: 2
       static_policy: 0
       alpha: 0.01

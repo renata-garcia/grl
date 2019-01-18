@@ -25,7 +25,8 @@ experiment:
       type: mapping/policy/multi
       strategy: density_based_best_mov
       r_distance_parameter: 0.05
-      alpha: 0.90
+      alpha: 0.01
+      alpha: 0.1
       policy: 
         - 
           type: mapping/policy/action
