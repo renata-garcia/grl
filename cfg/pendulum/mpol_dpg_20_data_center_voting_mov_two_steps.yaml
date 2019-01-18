@@ -6,7 +6,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_20_data_center_bm_a90_data
+  output: mpol_dpg_20_data_center_voting_mov_two_steps_data
   environment: 
     type: environment/modeled
     model: 
@@ -27,7 +27,7 @@ experiment:
       bins: 2
       static_policy: 0
       alpha: 0.01
-      iRoulette_: 0.1
+      iRoulette_: 0.5
       policy: 
         - 
           type: mapping/policy/action
