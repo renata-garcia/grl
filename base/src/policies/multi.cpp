@@ -502,6 +502,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       update_voting_weights_mean_mov(voting_weights);      
       dist = mean;
     }
+    break;
 
     case csDataCenterVotingMovTwoSteps:
     {
