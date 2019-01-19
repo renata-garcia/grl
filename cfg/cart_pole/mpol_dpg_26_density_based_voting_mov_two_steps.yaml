@@ -6,27 +6,33 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_26_data_center_bm_a90_data
+  output: cartpole_mpol_dpg_26_density_based_voting_mov_two_steps_data
   environment: 
     type: environment/modeled
     model: 
       type: model/dynamical
-      control_step: 0.03
+      control_step: 0.05
       integration_steps: 5
       dynamics: 
-        type: dynamics/pendulum
+        type: dynamics/cart_pole
     task: 
-      type: task/pendulum/swingup
-      timeout: 2.99
+      type: task/cart_pole/swingup
+      timeout: 9.99
       randomization: 0
+      shapping: 0
+      gamma: 1
   agent: 
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: data_center_best_mov
+      strategy: density_based_voting_mov_two_steps
+      bins: 2
       static_policy: 0
+      r_distance_parameter: 0.005
       alpha: 0.01
-      iRoulette_: 0.1
+      iroulette: 0.3
+      minor_remove_bound: 0.25
+      major_remove_bound: 0.75
       policy: 
         - 
           type: mapping/policy/action
@@ -40,13 +46,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/0/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -63,13 +69,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/1/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -86,13 +92,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/2/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -109,13 +115,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/3/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -132,13 +138,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/4/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -155,13 +161,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/5/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -178,13 +184,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/6/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -201,13 +207,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/7/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -224,13 +230,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/8/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -247,13 +253,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/9/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -270,13 +276,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/10/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -293,13 +299,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/11/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -316,13 +322,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/12/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -339,13 +345,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/13/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -362,13 +368,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/14/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -385,13 +391,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/15/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -408,13 +414,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/16/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -431,13 +437,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/17/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -454,13 +460,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/18/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -477,13 +483,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/19/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -500,13 +506,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/20/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -523,13 +529,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/21/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -546,13 +552,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/22/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -569,13 +575,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/23/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -592,13 +598,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/24/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -615,13 +621,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/25/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -638,13 +644,13 @@ experiment:
             tilings: 16
             memory: 8388608
             safe: 0
-            resolution: [0.31415, 3.1415]
-            wrapping: [6.283, 0]
+            resolution: [2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
           representation: 
             type: representation/parameterized/linear
             interval: 0
             init_min: [0]
-            init_max: [1]
+            init_max: [0]
             memory: experiment/agent/policy/policy/26/projector/memory
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
@@ -1581,8 +1587,10 @@ experiment:
       bins: experiment/agent/policy/bins
       static_policy: experiment/agent/policy/static_policy
       r_distance_parameter: experiment/agent/policy/r_distance_parameter
-      iRoulette: experiment/agent/policy/iRoulette
       alpha: experiment/agent/policy/alpha
+      iroulette: experiment/agent/policy/iroulette
+      minor_remove_bound: experiment/agent/policy/minor_remove_bound
+      major_remove_bound: experiment/agent/policy/major_remove_bound
       policy:
         - 
           type: mapping/policy/action
@@ -1942,6 +1950,13 @@ actions:
   input_max: [ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
   memory: 256
   state: experiment/test_agent/policy/actions
+action: 
+  type: visualization/state
+  input_dims: []
+  input_min: [-3]
+  input_max: [ 3]
+  memory: 256
+  state: experiment/test_action
 state: 
   type: visualization/state
   input_dims: []

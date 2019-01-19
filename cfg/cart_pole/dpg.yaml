@@ -1,10 +1,12 @@
 experiment: 
   type: experiment/online_learning
-  runs: 1
-  trials: 0
+  runs: 10
+  run_offset: 0
+  trials: 10000
   steps: 0
   rate: 0
   test_interval: 10
+  output: cart_pole_dpg_data
   environment: 
     type: environment/modeled
     model: 
@@ -13,27 +15,34 @@ experiment:
       integration_steps: 5
       dynamics: 
         type: dynamics/cart_pole
+        end_stop: 1
     task: 
       type: task/cart_pole/swingup
       timeout: 9.99
       randomization: 0
       shaping: 0
       gamma: 1
+      end_stop_penalty: 1
+      action_penalty: 0
   agent: 
     type: agent/td
     policy: 
       type: mapping/policy/action
       sigma: [5]
+      decay_rate: 1
+      decay_min: 0
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
       projector: 
         type: projector/tile_coding
         tilings: 16
         memory: 8388608
-        resolution: [2.5, 0.157075, 2.5, 1.57075 ]
-        wrapping: [ 0, 6.283, 0, 0 ]
+        safe: 0
+        resolution: [2.5, 0.157075, 2.5, 1.57075]
+        wrapping: [0, 6.283, 0, 0]
       representation: 
         type: representation/parameterized/linear
+        interval: 0
         init_min: [0]
         init_max: [0]
         memory: experiment/agent/policy/projector/memory
@@ -47,39 +56,50 @@ experiment:
       beta_a: 0.01
       gamma: 0.97
       lambda: 0.65
+      target: on-policy
       projector: experiment/agent/policy/projector
-      advantage_representation: 
-        type: representation/parameterized/linear
-        init_min: [0]
-        init_max: [0]
-        memory: experiment/agent/predictor/projector/memory
-        outputs: experiment/environment/task/action_dims
       critic_representation: 
         type: representation/parameterized/linear
+        interval: 0
         init_min: [0]
         init_max: [0]
         memory: experiment/agent/predictor/projector/memory
         outputs: 1
-      critic_trace:
+        output_min: [  ]
+        output_max: [  ]
+      critic_trace: 
         type: trace/enumerated/replacing
+      advantage_representation: 
+        type: representation/parameterized/linear
+        interval: 0
+        init_min: [0]
+        init_max: [0]
+        memory: experiment/agent/predictor/projector/memory
+        outputs: experiment/environment/task/action_dims
+        output_min: [  ]
+        output_max: [  ]
       actor_representation: experiment/agent/policy/representation
   test_agent: 
     type: agent/fixed
     policy: 
       type: mapping/policy/action
       sigma: []
+      decay_rate: 1
+      decay_min: 0
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
       projector: experiment/agent/policy/projector
       representation: experiment/agent/policy/representation
+  save_every: never
 visualizer: 
   type: visualizer/glut
 policy_visualization: 
   type: visualization/field/mapping
-  field_dims: [ 0, 1 ]
+  field_dims: [0, 1]
   input_min: experiment/environment/task/observation_min
   input_max: experiment/environment/task/observation_max
   points: 65536
+  savepoints: 1048576
   projection: mean
   mapping: experiment/test_agent/policy
   output_dim: 0
@@ -89,6 +109,7 @@ critic_visualization:
   input_min: experiment/environment/task/observation_min
   input_max: experiment/environment/task/observation_max
   points: 65536
+  savepoints: 1048576
   projection: mean
   output_dim: 0
   projector: experiment/agent/predictor/projector
@@ -99,6 +120,7 @@ advantage_visualization:
   input_min: experiment/environment/task/observation_min
   input_max: experiment/environment/task/observation_max
   points: 65536
+  savepoints: 1048576
   projection: mean
   output_dim: 0
   projector: experiment/agent/predictor/projector
