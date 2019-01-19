@@ -9,7 +9,7 @@ function compare_executions(n, folder, title_fig, varargin)
         end
     end   
 
-    figure('units','normalized','outerposition',[0 0 0.5 0.5]);
+    figure('units','normalized','outerposition',[0 0 1 1]);
     leg = [];
     for j=1:length(array)
         mean = load_mean(array(j,2), n);

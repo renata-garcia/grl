@@ -503,7 +503,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       dist = mean;
     }
 
-    // break;
+     break;
 
     // case csDataCenterVotingMovTwoSteps:
     // {
@@ -820,7 +820,8 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
      
       dist = mean2;
     }
-
+    break;
+    
     case csMean:
     { 
       LargeVector vals;
@@ -1124,6 +1125,9 @@ std::vector<size_t> MultiPolicy::choosing_bests_of_mean_mov(std::vector<Action> 
   }
 
   std::sort(mean_mov_sorted.begin(), mean_mov_sorted.end(), compare_value_with_id);
+
+  for(size_t i = 0; i < mean_mov_sorted.size(); ++i)
+    CRAWL( "MultiPolicy::choosing_bests_of_mean_mov::(mean_mov_sorted[i:" << i << "].value: " << mean_mov_sorted[i].value << ", i: " << mean_mov_sorted[i].id);
 
   std::vector<size_t> v_id(0);
   size_t i_kept = (size_t) in.size()/2;
