@@ -2,7 +2,7 @@ clc;
 clear all;
 close all;
 
-n = 8;
+n = 10;
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
 
 %%
@@ -26,6 +26,7 @@ compare_executions(n, folder, 'MPOL DDPG benchmark',...
 compare_executions(n, folder, 'MPOL DDPG benchmark',...
     "mpol_1_replay_ddpg_tensorflow_random_data",...
     "mpol_ddpg_4_data_center_voting_mov_data",...
+    "mpol_ddpg_4_density_based_bm_a90_data",...
     "mpol_ddpg_4_data_center_data");
 
 %%

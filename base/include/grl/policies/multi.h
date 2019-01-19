@@ -82,7 +82,7 @@ class MultiPolicy : public Policy
                     alpha_mov_mean_(0.01),
                     minor_remove_bound_(0.25),
                     major_remove_bound_(0.75),
-                    iRoulette_(0.1),
+                    iRoulette_(0.3),
                     iterations_(0)
     {
       srand(time(0));

@@ -27,7 +27,7 @@ experiment:
       bins: 2
       static_policy: 0
       alpha: 0.01
-      iRoulette_: 0.5
+      iRoulette_: 0.3
       policy: 
         - 
           type: mapping/policy/action

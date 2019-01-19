@@ -20,7 +20,7 @@ agent/communicator:
     type: communicator
     description: Comunicator which exchanges messages with an actual/virtual environment
     mutability: configuration
-    default: 0x1f20810
+    default: 0x1d50810
     optional: 0
   observation_dims:
     type: int.observation_dims
@@ -204,7 +204,7 @@ agent/master/exclusive:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x1f3cb38
+    default: 0x1d6cb38
     optional: 0
 agent/master/predicated:
   description: Master agent in which execution is predicated on preceding agent confidence
@@ -234,7 +234,7 @@ agent/master/predicated:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x1f3cb38
+    default: 0x1d6cb38
     optional: 0
 agent/master/random:
   description: Master agent that chooses sub-agents randomly
@@ -264,7 +264,7 @@ agent/master/random:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x1f3cb38
+    default: 0x1d6cb38
     optional: 0
 agent/master/sequential:
   description: Master agent that executes sub-agents sequentially
@@ -1375,7 +1375,7 @@ mapping/policy/discrete/multi:
     type: "[mapping/policy/discrete]"
     description: Sub-policies
     mutability: configuration
-    default: 0x2075ad0
+    default: 0x1ea5ad0
     optional: 0
   r_distance_parameter:
     type: double
@@ -1674,7 +1674,7 @@ mapping/policy/multi:
     type: double
     description: Alpha Moving Mean
     mutability: configuration
-    default: 0.75
+    default: 0.01
     optional: 1
     min: 0
     max: 1
@@ -1682,7 +1682,7 @@ mapping/policy/multi:
     type: double
     description: Increment of Roulette Strategy
     mutability: configuration
-    default: 0.01
+    default: 0.3
     optional: 1
     min: 0
     max: 1
@@ -1706,13 +1706,13 @@ mapping/policy/multi:
     type: "[mapping/policy]"
     description: Sub-policies
     mutability: configuration
-    default: 0x20c2860
+    default: 0x1ef2860
     optional: 0
   value:
     type: "[mapping]"
     description: Values of sub-policy actions
     mutability: configuration
-    default: 0x20c2878
+    default: 0x1ef2878
     optional: 1
   output_min:
     type: vector.action_min
@@ -3621,7 +3621,7 @@ predictor/multi:
     type: "[predictor]"
     description: First downstream predictor
     mutability: configuration
-    default: 0x22ba920
+    default: 0x20ea920
     optional: 0
 predictor/naf:
   description: Value function predictor using Normalized Advantage Features
@@ -3870,7 +3870,7 @@ projector/multi:
     type: "[projector.]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x2322050
+    default: 0x2152050
     optional: 0
   memories:
     type: vector.memory
@@ -4278,7 +4278,7 @@ representation/additive:
     type: "[representation.]"
     description: Downstream representations
     mutability: configuration
-    default: 0x237f430
+    default: 0x21af430
     optional: 0
 representation/communicator:
   description: Interface to an out-of-process representation
@@ -7411,7 +7411,7 @@ projector/multi.observation:
     type: "[projector.observation]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x26dd010
+    default: 0x250d010
     optional: 0
   memories:
     type: vector.memory
@@ -7747,7 +7747,7 @@ representation/additive.action:
     type: "[representation.action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x272cb00
+    default: 0x255cb00
     optional: 0
 representation/communicator.action:
   description: Interface to an out-of-process representation
@@ -8134,7 +8134,7 @@ projector/multi.pair:
     type: "[projector.pair]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x27a02f0
+    default: 0x25d02f0
     optional: 0
   memories:
     type: vector.memory
@@ -8470,7 +8470,7 @@ representation/additive.value/action:
     type: "[representation.value/action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x27efe00
+    default: 0x261fe00
     optional: 0
 representation/communicator.value/action:
   description: Interface to an out-of-process representation
@@ -8776,7 +8776,7 @@ representation/additive.value/state:
     type: "[representation.value/state]"
     description: Downstream representations
     mutability: configuration
-    default: 0x28265e0
+    default: 0x26565e0
     optional: 0
 representation/communicator.value/state:
   description: Interface to an out-of-process representation
@@ -9096,7 +9096,7 @@ representation/additive.transition:
     type: "[representation.transition]"
     description: Downstream representations
     mutability: configuration
-    default: 0x28ad550
+    default: 0x26dd550
     optional: 0
 representation/communicator.transition:
   description: Interface to an out-of-process representation
@@ -9497,7 +9497,7 @@ projector/multi.action:
     type: "[projector.action]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x29118b0
+    default: 0x27418b0
     optional: 0
   memories:
     type: vector.memory
