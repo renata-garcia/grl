@@ -43,7 +43,7 @@ class MultiPolicy : public Policy
   public:
     TYPEINFO("mapping/policy/multi", "Combines multiple policies")
     
-    enum CombinationStrategy {csBinning, csDensityBased, csDensityBasedMeanMov, csDensityBasedBestMov, csDensityBasedVotingMov,
+    enum CombinationStrategy {csBinning, csDensityBased, csDensityBasedMeanMov, csDensityBasedBestMov, csDensityBasedVotingMov,csDensityBasedHistoricChoosing,
     csDataCenter, csDataCenterMeanMov, csDataCenterBestMov, csDataCenterVotingMov, csDataCenterVotingMovTwoSteps,
     csMean, csMeanMov, csRandom, csStatic, csValueBased, csRoulette};
 
@@ -97,18 +97,18 @@ class MultiPolicy : public Policy
     virtual void act(double time, const Observation &in, Action *out);
 
     // From Multi Policy
+    virtual std::vector<size_t> choosing_bests_of_mean_mov(std::vector<Action> &in) const;
+    virtual std::vector<size_t> choosing_quartile_of_mean_mov(std::vector<Action> &in) const;
     static bool compare_value_with_id(const data &a, const data &b);
-    virtual void euclidian_distance_moving_mean(const std::vector<Action> &in, LargeVector mean) const;
-    virtual void update_voting_weights_mean_mov(const std::vector<double> &in) const;
-    virtual void update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const;
-    virtual size_t get_max_index_by_density_based(const std::vector<Action> &policies_aa, LargeVector mean) const;
-    virtual size_t get_max_index_by_euclidian_distance(const std::vector<Action> &policies_aa, LargeVector mean) const;
     virtual void get_max_index(double dist, size_t i, double &max, std::vector<size_t> &i_max_density) const;
-    virtual size_t get_random_index(const std::vector<size_t> &i_max_density) const;
+    virtual size_t get_max_index_by_density_based(const std::vector<Action> &policies_aa) const;
+    virtual size_t get_max_index_by_euclidian_distance(const std::vector<Action> &policies_aa, LargeVector mean) const;
     virtual LargeVector get_mean(const std::vector<Action> &policies_aa) const;
     virtual LargeVector get_policy_mean(const Observation &in, std::vector<Action> &policies_aa, LargeVector &values) const;
-    virtual std::vector<size_t> choosing_quartile_of_mean_mov(std::vector<Action> &in) const;
-    virtual std::vector<size_t> choosing_bests_of_mean_mov(std::vector<Action> &in) const;
+    virtual size_t get_random_index(const std::vector<size_t> &i_max_density) const;
+    virtual void update_mean_mov_with_euclidian(const std::vector<Action> &in, LargeVector mean) const;
+    virtual void update_voting_weights_mean_mov(const std::vector<double> &in) const;
+    virtual void update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const;
 };
 
 /// Policy that combines two or more sub-policies using different strategies
