@@ -35,7 +35,8 @@ REGISTER_CONFIGURABLE(MultiPolicy)
 void MultiPolicy::request(ConfigurationRequest *config)
 {
   config->push_back(CRP("strategy", "Combination strategy", strategy_str_, CRP::Configuration,
-  {"binning", "density_based", "density_based_mean_mov", "density_based_best_mov", "density_based_voting_mov", "density_based_historic",
+  {"binning",
+  "density_based", "density_based_mean_mov", "density_based_best_mov", "density_based_voting_mov", "density_based_historic", "density_based_historic_dens",
   "data_center", "data_center_mean_mov", "data_center_best_mov", "data_center_voting_mov", "data_center_voting_mov_two_steps",
   "mean", "mean_mov", "random", "static", "value_based", "roulette"}));
   config->push_back(CRP("sampler", "sampler", "Sampler for value-based strategy", sampler_, true));
@@ -71,6 +72,8 @@ void MultiPolicy::configure(Configuration &config)
     strategy_ = csDensityBasedVotingMov;
   else if (strategy_str_ == "density_based_historic")
     strategy_ = csDensityBasedHistoric;
+  else if (strategy_str_ == "density_based_historic_dens")
+    strategy_ = csDensityBasedHistoricDens;
   else if (strategy_str_ == "data_center")
     strategy_ = csDataCenter;
   else if (strategy_str_ == "data_center_mean_mov")
@@ -366,6 +369,39 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
 
       dist = actions_actors[index].v;
 	  CRAWL("MultiPolicy::csDensityBasedHistoric::dist: " << dist);
+    }
+    break;
+        
+    case csDensityBasedHistoricDens:
+    {
+      std::vector<size_t> ii_max_density;
+      std::vector<Action> aa_normalized(n_policies);
+      std::vector<double> density(n_policies);
+      LargeVector mean, vals;
+      
+      mean = get_policy_mean(in, actions_actors, vals);
+      
+      std::vector<Action>::iterator it_norm = aa_normalized.begin();
+      for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++it_norm)
+        (*it_norm).v = -1 + 2*( ((*it).v - min_) / (max_ - min_) );
+
+      for(size_t i = 0; i < aa_normalized.size(); ++i)
+        CRAWL("MultiPolicy::csDensityBasedHistoricDens::aa_normalized: " << aa_normalized[i]);
+
+      size_t index = get_max_index_by_density_based(aa_normalized);
+      CRAWL("MultiPolicy::csDensityBasedHistoricDens::get_max_index_by_density_based(aa_normalized)::index: " << index);
+
+      update_mean_mov_with_euclidian(actions_actors, actions_actors[index].v);
+
+      double min = std::numeric_limits<double>::infinity();
+	  std::vector<size_t> i_min_density;
+	  for(size_t i = 0; i < mean_mov_->size(); ++i)
+	    get_min_index(mean_mov_->at(i), i, min, i_min_density);
+	  index = get_random_index(i_min_density);
+	  CRAWL("MultiPolicy::csDensityBasedHistoricDens::index minimum value: " << index);
+
+      dist = actions_actors[index].v;
+	  CRAWL("MultiPolicy::csDensityBasedHistoricDens::dist: " << dist);
     }
     break;
 
