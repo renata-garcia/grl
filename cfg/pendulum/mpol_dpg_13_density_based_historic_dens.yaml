@@ -1,4 +1,4 @@
- experiment: 
+experiment: 
   type: experiment/online_learning
   runs: 10
   run_offset: 0
@@ -9,7 +9,7 @@
   output: mpol_dpg_13_density_based_historic_dens_data
   environment: 
     type: environment/modeled
-    model:
+    model: 
       type: model/dynamical
       control_step: 0.03
       integration_steps: 5
@@ -19,13 +19,19 @@
       type: task/pendulum/swingup
       timeout: 2.99
       randomization: 0
+      sincos: 0
   agent: 
     type: agent/td
     policy: 
       type: mapping/policy/multi
       strategy: density_based_historic_dens
+      bins: 10
+      static_policy: 0
       r_distance_parameter: 0.05
       alpha: 0.01
+      iroulette: 0.3
+      minor_remove_bound: 0.25
+      major_remove_bound: 0.75
       policy: 
         - 
           type: mapping/policy/action
@@ -648,7 +654,7 @@
           beta_v: 0.01
           beta_a: 0.01
           gamma: 0.97
-          lambda: 0.60
+          lambda: 0.6
           target: off-policy
           projector: experiment/agent/policy/policy/7/projector
           critic_representation: experiment/agent/policy/value/7/representation
@@ -670,7 +676,7 @@
           beta_v: 0.1
           beta_a: 0.01
           gamma: 0.97
-          lambda: 0.60
+          lambda: 0.6
           target: off-policy
           projector: experiment/agent/policy/policy/8/projector
           critic_representation: experiment/agent/policy/value/8/representation
@@ -692,7 +698,7 @@
           beta_v: 0.01
           beta_a: 0.01
           gamma: 0.97
-          lambda: 0.60
+          lambda: 0.6
           target: off-policy
           projector: experiment/agent/policy/policy/9/projector
           critic_representation: experiment/agent/policy/value/9/representation
@@ -714,7 +720,7 @@
           beta_v: 0.1
           beta_a: 0.01
           gamma: 0.98
-          lambda: 0.70
+          lambda: 0.7
           target: off-policy
           projector: experiment/agent/policy/policy/10/projector
           critic_representation: experiment/agent/policy/value/10/representation
@@ -736,7 +742,7 @@
           beta_v: 0.01
           beta_a: 0.01
           gamma: 0.98
-          lambda: 0.70
+          lambda: 0.7
           target: off-policy
           projector: experiment/agent/policy/policy/11/projector
           critic_representation: experiment/agent/policy/value/11/representation
@@ -779,9 +785,14 @@
     policy: 
       type: mapping/policy/multi
       strategy: experiment/agent/policy/strategy
+      bins: 10
+      static_policy: 0
       r_distance_parameter: experiment/agent/policy/r_distance_parameter
       alpha: experiment/agent/policy/alpha
-      policy:
+      iroulette: 0.3
+      minor_remove_bound: 0.25
+      major_remove_bound: 0.75
+      policy: 
         - 
           type: mapping/policy/action
           sigma: []
@@ -916,11 +927,11 @@
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
   save_every: never
-visualizer: 
+visualizer:
   type: visualizer/glut
-critic_visual0: 
+critic_visual_0: 
   type: visualization/field/value
-  field_dims: [0, 1]
+  field_dims: [ 0, 1 ]
   input_min: experiment/environment/task/observation_min
   input_max: experiment/environment/task/observation_max
   points: 65536
@@ -929,9 +940,9 @@ critic_visual0:
   output_dim: 0
   projector: experiment/agent/policy/policy/0/projector
   representation: experiment/agent/policy/policy/0/representation
-critic_visual1: 
+critic_visual_1: 
   type: visualization/field/value
-  field_dims: [0, 1]
+  field_dims: [ 0, 1 ]
   input_min: experiment/environment/task/observation_min
   input_max: experiment/environment/task/observation_max
   points: 65536
@@ -940,77 +951,34 @@ critic_visual1:
   output_dim: 0
   projector: experiment/agent/policy/policy/1/projector
   representation: experiment/agent/policy/policy/1/representation
-critic_visual2: 
-  type: visualization/field/value
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  projection: mean
-  output_dim: 0
-  projector: experiment/agent/policy/policy/2/projector
-  representation: experiment/agent/policy/policy/2/representation
-critic_visual3: 
-  type: visualization/field/value
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  projection: mean
-  output_dim: 0
-  projector: experiment/agent/policy/policy/3/projector
-  representation: experiment/agent/policy/policy/3/representation
-critic_visual4: 
-  type: visualization/field/value
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  projection: mean
-  output_dim: 0
-  projector: experiment/agent/policy/policy/4/projector
-  representation: experiment/agent/policy/policy/4/representation
 policy_visualization0: 
   type: visualization/field/mapping
-  field_dims: [0, 1]
+  field_dims: [ 0, 1 ]
   input_min: experiment/environment/task/observation_min
   input_max: experiment/environment/task/observation_max
   points: 65536
   savepoints: 1048576
   projection: mean
-  mapping: experiment/test_agent/policy/policy/2
-  output_dim: 0
-policy_visualization1: 
-  type: visualization/field/mapping
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  projection: mean
-  mapping: experiment/test_agent/policy/policy/3
+  mapping: experiment/test_agent/policy/policy/0
   output_dim: 0
 actions: 
   type: visualization/state
-  input_dims: []
-  input_min: [-3, -3]
-  input_max: [3, 3]
+  input_dims: [  ]
+  input_min: [-3, -3, -3, -3, -3,-3, -3, -3, -3, -3,-3, -3, -3]
+  input_max: [3,   3,  3,  3,  3, 3,  3,  3,  3,  3, 3,  3,  3]
   memory: 256
-  state: experiment/test_agent/policy/actions
+  state: experiment/agent/policy/actions
 state: 
   type: visualization/state
-  input_dims: []
+  input_dims: [  ]
   input_min: experiment/environment/task/observation_min
   input_max: experiment/environment/task/observation_max
   memory: 256
   state: experiment/state
 actions2: 
   type: visualization/state
-  input_dims: []
-  input_min: [-3, -3]
-  input_max: [3, 3]
+  input_dims: [  ]
+  input_min: [-3, -3, -3, -3, -3,-3, -3, -3, -3, -3,-3, -3, -3]
+  input_max: [3,   3,  3,  3,  3, 3,  3,  3,  3,  3, 3,  3,  3]
   memory: 256
   state: experiment/action

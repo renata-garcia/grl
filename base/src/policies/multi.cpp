@@ -306,32 +306,33 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
         
     case csDensityBasedVotingMov:
     {
-      std::vector<size_t> ii_max_density;
-      std::vector<Action> aa_normalized(n_policies);
-      LargeVector mean, vals;
+      // std::vector<size_t> ii_max_density;
+      // std::vector<Action> aa_normalized(n_policies);
+      // LargeVector mean, vals;
       
-      mean = get_policy_mean(in, actions_actors, vals);
+      // mean = get_policy_mean(in, actions_actors, vals);
 
-      std::vector<Action>::iterator it_norm = aa_normalized.begin();
-      for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++it_norm)
-        (*it_norm).v = -1 + 2*( ((*it).v - min_) / (max_ - min_) );
+      // std::vector<Action>::iterator it_norm = aa_normalized.begin();
+      // for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++it_norm)
+      //   (*it_norm).v = -1 + 2*( ((*it).v - min_) / (max_ - min_) );
 
-      size_t index = get_max_index_by_density_based(aa_normalized);
-      update_voting_preferences_ofchoosen_mean_mov(aa_normalized, index);
+      // size_t index = get_max_index_by_density_based(aa_normalized);
+      // update_voting_preferences_ofchoosen_mean_mov(aa_normalized, index);
 
-      std::vector<size_t> v_id = choosing_quartile_of_mean_mov(actions_actors);
-      for(size_t i = 0; i < actions_actors.size(); ++i)
-        CRAWL("MultiPolicy::csDensityBasedMeanMov::actions_actors after euclidian_distance_choosing_quartile_of_mean_mov: " << actions_actors[i]);
+      // std::vector<size_t> v_id = choosing_quartile_of_mean_mov(actions_actors);
+      // for(size_t i = 0; i < actions_actors.size(); ++i)
+      //   CRAWL("MultiPolicy::csDensityBasedMeanMov::actions_actors after euclidian_distance_choosing_quartile_of_mean_mov: " << actions_actors[i]);
 
-      for(size_t i=0; i < v_id.size(); ++i)
-        aa_normalized.erase(aa_normalized.begin()+v_id[i]-i);
-      CRAWL("MultiPolicy::csDensityBasedMeanMov::removed ");
-      for(std::vector<Action>::iterator it = aa_normalized.begin(); it!=aa_normalized.end(); ++it)
-        CRAWL("MultiPolicy::csDensityBasedMeanMov::aa_normalized<after remove>:: " << it->v[0]);
+      // for(size_t i=0; i < v_id.size(); ++i)
+      //   aa_normalized.erase(aa_normalized.begin()+v_id[i]-i);
+      // CRAWL("MultiPolicy::csDensityBasedMeanMov::removed ");
+      // for(std::vector<Action>::iterator it = aa_normalized.begin(); it!=aa_normalized.end(); ++it)
+      //   CRAWL("MultiPolicy::csDensityBasedMeanMov::aa_normalized<after remove>:: " << it->v[0]);
 
-      index = get_max_index_by_density_based(aa_normalized);
+      // index = get_max_index_by_density_based(aa_normalized);
 
-      dist = actions_actors[index].v;
+      // dist = actions_actors[index].v;
+      throw "csDensityBasedVotingMov needs refactory";
     }
     break;
         
