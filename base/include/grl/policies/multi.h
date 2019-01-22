@@ -109,10 +109,9 @@ class MultiPolicy : public Policy
     virtual void get_min_index(double dist, size_t i, double &min, std::vector<size_t> &i_min_density) const;
     virtual LargeVector get_policy_mean(const Observation &in, std::vector<Action> &policies_aa, LargeVector &values) const;
     virtual size_t get_random_index(const std::vector<size_t> &i_max_density) const;
-    virtual void update_mean_mov(const std::vector<Action> &in, const std::vector<double> &v) const;
+    virtual void update_mean_mov(const std::vector<double> &in) const;
     virtual void update_mean_mov_with_euclidian(const std::vector<Action> &in, LargeVector center) const;
     virtual void update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const;
-    virtual void update_voting_weights_mean_mov(const std::vector<double> &in) const;
 };
 
 /// Policy that combines two or more sub-policies using different strategies

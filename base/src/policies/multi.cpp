@@ -386,14 +386,14 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       for(size_t i = 0; i < aa_normalized.size(); ++i)
         CRAWL("MultiPolicy::csDensityBasedHistoricDens::aa_normalized: " << aa_normalized[i]);
 
-      std::vector<double> density(0);
+      std::vector<double> density(n_policies);
       size_t index = get_max_index_by_density_based(aa_normalized, density);
       CRAWL("MultiPolicy::csDensityBasedHistoricDens::get_max_index_by_density_based(aa_normalized)::index: " << index);
 
       for(size_t i = 0; i < density.size(); ++i)
         CRAWL("MultiPolicy::csDensityBasedHistoricDens::density[i:" << i << "]: " << density[i]);
 
-      update_mean_mov(actions_actors, density);
+      update_mean_mov(density);
 
       double max = -1 * std::numeric_limits<double>::infinity();
       std::vector<size_t> i_max_density;
@@ -575,7 +575,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       for(size_t i=0; i < voting_weights.size(); ++i)
         CRAWL("MultiPolicy::csDataCenterVotingMov::voting_weights[i:" << i << "]: " << voting_weights[i]);
 
-      update_voting_weights_mean_mov(voting_weights);      
+      update_mean_mov(voting_weights);      
       dist = mean;
     }
     break;
@@ -652,7 +652,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       for(size_t i=0; i < voting_weights.size(); ++i)
         CRAWL("MultiPolicy::csDataCenterVotingMovTwoSteps::voting_weights[i:" << i << "]: " << voting_weights[i]);
 
-      update_voting_weights_mean_mov(voting_weights); 
+      update_mean_mov(voting_weights); 
 
       //PART 2
       //aa_copied      mean2
@@ -947,7 +947,7 @@ void MultiPolicy::get_max_index(double dist, size_t i, double &max, std::vector<
 
 size_t MultiPolicy::get_max_index_by_density_based(const std::vector<Action> &policies_aa) const
 {
-  std::vector<double> _dummy_density(0);
+  std::vector<double> _dummy_density(policies_aa.size());
   return get_max_index_by_density_based(policies_aa, _dummy_density);
 }
 
@@ -975,7 +975,7 @@ size_t MultiPolicy::get_max_index_by_density_based(const std::vector<Action> &po
     get_max_index(r_dist, i, max, i_max_density);
     CRAWL("******************************************************************max(ii:" << i << ") = " << max);
 
-    density.push_back(r_dist);
+    density[i] = r_dist;
   }
   size_t index = get_random_index(i_max_density);
   return index;
@@ -1060,14 +1060,16 @@ size_t MultiPolicy::get_random_index(const std::vector<size_t> &i_max_density) c
   return index;
 }
 
-void MultiPolicy::update_mean_mov(const std::vector<Action> &in, const std::vector<double> &v) const
+void MultiPolicy::update_mean_mov(const std::vector<double> &in) const
 {
+  CRAWL("MultiPolicy::update_mean_mov::for i < in.size()");  
   for(size_t i = 0; i < in.size(); ++i)
   {
-    CRAWL("MultiPolicy::update_mean_mov::a(ii= " << i << "): " << in[i].v << ", mean_mov_->at(i): " << mean_mov_->at(i));
-    mean_mov_->at(i) = (alpha_mov_mean_)*v[i] + (1-alpha_mov_mean_)*mean_mov_->at(i);
-    CRAWL("MultiPolicy::update_mean_mov::a(ii= " << i << "): " << in[i].v << " , mean_mov_->at(i): " << mean_mov_->at(i));
+    CRAWL("MultiPolicy::update_mean_mov::in(i= " << i << "): " << in[i] << ", mean_mov_->at(i): " << mean_mov_->at(i));
+    mean_mov_->at(i) = (alpha_mov_mean_)*in[i] + (1-alpha_mov_mean_)*mean_mov_->at(i);
+    CRAWL("MultiPolicy::update_mean_mov::in(i= " << i << "): " << in[i] << ", mean_mov_->at(i): " << mean_mov_->at(i));
   }
+  CRAWL("MultiPolicy::update_mean_mov::ending...");
 }
 
 void MultiPolicy::update_mean_mov_with_euclidian(const std::vector<Action> &in, LargeVector mean) const
@@ -1108,16 +1110,4 @@ void MultiPolicy::update_voting_preferences_ofchoosen_mean_mov(const std::vector
   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-}
-
-void MultiPolicy::update_voting_weights_mean_mov(const std::vector<double> &in) const
-{
-  CRAWL("MultiPolicy::update_voting_weights_mean_mov::for i < in.size()");  
-  for(size_t i = 0; i < in.size(); ++i)
-  {
-    CRAWL("MultiPolicy::update_voting_weights_mean_mov::in(i= " << i << "): " << in[i] << ", mean_mov_->at(i): " << mean_mov_->at(i));
-    mean_mov_->at(i) = (alpha_mov_mean_)*in[i] + (1-alpha_mov_mean_)*mean_mov_->at(i);
-    CRAWL("MultiPolicy::update_voting_weights_mean_mov::in(i= " << i << "): " << in[i] << ", mean_mov_->at(i): " << mean_mov_->at(i));
-  }
-  CRAWL("MultiPolicy::update_voting_weights_mean_mov::ending...");
 }
