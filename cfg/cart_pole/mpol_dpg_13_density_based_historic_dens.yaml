@@ -6,7 +6,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: cartpole_mpol_dpg_13_density_based_data
+  output: cartpole_mpol_dpg_13_density_based_historic_dens_data
   environment: 
     type: environment/modeled
     model: 
@@ -28,7 +28,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: density_based
+      strategy: density_based_historic_dens
       bins: 10
       static_policy: 0
       r_distance_parameter: 0.05
