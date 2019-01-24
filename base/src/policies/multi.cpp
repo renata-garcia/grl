@@ -772,7 +772,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
     case csValueBased:
     {
       Vector dummy;
-      LargeVector values = LargeVector::Zero(n_policies);
+      LargeVector values;
       dist = LargeVector::Zero(n_dimension);
       
       get_policy_mean(in, actions_actors, values);
