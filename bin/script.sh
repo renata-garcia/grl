@@ -93,8 +93,6 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_historic.yaml
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_historic_a001.yaml
 
-'
-
 ./grld ../cfg/pendulum/mpol_dpg_13_density_based_historic_dens.yaml
 ./grld ../cfg/pendulum/mpol_dpg_20_density_based_historic_dens.yaml
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_historic_dens.yaml
@@ -103,3 +101,8 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld ../cfg/pendulum/mpol_dpg_20_density_based_historic_a10.yaml
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_historic_a10.yaml
 
+
+'
+
+./grld ../cfg/cart_pole/mpol_dpg_26_density_based_dens.yaml
+./grld ../cfg/cart_pole/mpol_dpg_13_density_based.yaml
