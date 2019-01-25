@@ -246,6 +246,9 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
 
     case csDensityBasedBestMov:
     {
+      //8888888888888888888888888888888888888888888888888888888888888888888888888888888
+      //8888888888888888888888888888888888888888888888888888888888888888888888888888888
+      //8888888888888888888888888888888888888888888888888888888888888888888888888888888
       std::vector<size_t> ii_max_density;
       std::vector<Action> aa_normalized(n_policies);
       LargeVector mean, vals;
@@ -272,6 +275,9 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
 
       // last_action_ = actions_actors[index].v;
       dist = actions_actors[index].v;
+      //8888888888888888888888888888888888888888888888888888888888888888888888888888888
+      //8888888888888888888888888888888888888888888888888888888888888888888888888888888
+      //8888888888888888888888888888888888888888888888888888888888888888888888888888888
     }
     break;
         
@@ -437,16 +443,15 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       std::vector<size_t> v_id = choosing_bests_of_mean_mov(actions_actors);
       for(size_t i = 0; i < actions_actors.size(); ++i)
         CRAWL("MultiPolicy::csDensityBasedBestMov::actions_actors after euclidian_distance_choosing_quartile_of_mean_mov: " << actions_actors[i]);
+ 
+      for(size_t i=0; i < v_id.size(); ++i)
+        aa_normalized.erase(aa_normalized.begin()+v_id[i]-i);
+      CRAWL("MultiPolicy::csDensityBasedMeanMov::removed ");
+      
+      for(std::vector<Action>::iterator it = aa_normalized.begin(); it!=aa_normalized.end(); ++it)
+        CRAWL("MultiPolicy::csDensityBasedMeanMov::aa_normalized<after remove>:: " << it->v[0]);
 
-      aa_normalized.empty();
-      std::vector<Action>::iterator it_norm = aa_normalized.begin();
-      for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++it_norm)
-        (*it_norm).v = -1 + 2*( ((*it).v - min_) / (max_ - min_) );
-
-      for(size_t i = 0; i < aa_normalized.size(); ++i)
-        CRAWL("MultiPolicy::csDensityBasedHistoric::aa_normalized: " << aa_normalized[i]);
-
-      size_t index = get_max_index_by_density_based(aa_normalized);
+      index = get_max_index_by_density_based(aa_normalized);
 
       dist = actions_actors[index].v;
       CRAWL("MultiPolicy::csDensityBasedHistoricDens::dist: " << dist);

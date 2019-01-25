@@ -29,7 +29,7 @@ if (GRL_BUILD_ODESIM)
   ADD_DEFINITIONS(-DdDOUBLE -DODESIM_TEXTURE_DIR="${SRC}/../textures")
 
   include(${QT_USE_FILE})
-  INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${TINYXML_INCLUDE_DIRS} ${MUPARSER_INCLUDE_DIRS})
+  INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${QT_INCLUDE_DIR}/QtGui ${TINYXML_INCLUDE_DIRS} ${MUPARSER_INCLUDE_DIRS})
 
   SET(QT_FORMS_UI ${SRC}/../ui/odesim_dialog.ui)
   SET(QT_MOC_HDRS ${SRC}/../include/grl/environments/odesim/dialog.h ${SRC}/../include/grl/environments/odesim/environment.h)

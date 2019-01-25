@@ -34,10 +34,10 @@ set(MODULES base
             addons/glut
             #addons/ros
             #addons/matlab
-            #addons/odesim
+            addons/odesim
             #addons/rbdl
             #addons/muscod
-            #addons/leo
+            addons/leo
             #addons/leo2
             addons/tlm
             addons/lqr

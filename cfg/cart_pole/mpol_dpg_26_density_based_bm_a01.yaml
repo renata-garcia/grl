@@ -15,11 +15,14 @@ experiment:
       integration_steps: 5
       dynamics: 
         type: dynamics/cart_pole
+        end_stop: 1
     task: 
       type: task/cart_pole/swingup
       timeout: 9.99
       randomization: 0
       shapping: 0
+      end_stop_penalty: 0
+      action_penalty: 0
       gamma: 1
   agent: 
     type: agent/td
@@ -1934,17 +1937,17 @@ policy_visualization1:
 actions: 
   type: visualization/state
   input_dims: []
-  input_min: [-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3]
-  input_max: [ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+  input_min: [-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15]
+  input_max: [ 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15]
   memory: 256
   state: experiment/test_agent/policy/actions
 action: 
   type: visualization/state
   input_dims: []
-  input_min: [-3]
-  input_max: [ 3]
+  input_min: [-15]
+  input_max: [ 15]
   memory: 256
-  state: experiment/test_action
+  state: experiment/action
 state: 
   type: visualization/state
   input_dims: []

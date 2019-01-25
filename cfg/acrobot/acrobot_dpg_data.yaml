@@ -1,0 +1,104 @@
+experiment:
+  runs: 10
+  run_offset: 0
+  trials: 10000
+  steps: 0
+  rate: 0
+  test_interval: 1
+  output: acrobot_dpg_data
+  environment:
+    model:
+      control_step: 0.05
+      integration_steps: 5
+      dynamics:
+        type: dynamics/acrobot
+      type: model/dynamical
+    task:
+      start: [ 3.14159, 0, 0, 0 ]
+      goal: [ 3.14159, 0, 0, 0 ]
+      stddev: [ 0.005, 0.005, 0, 0 ]
+      q: [ 1, 1, 0, 0 ]
+      r: [ 0.01 ]
+      function: quadratic
+      r_function: quadratic
+      smoothing: 0.01
+      type: task/acrobot/regulator
+    exporter: 0
+    type: environment/modeled
+  agent:
+    policy:
+      sigma: [ 5 ]
+      decay_rate: 1
+      decay_min: 0
+      output_min: ../../../environment/task/action_min
+      output_max: ../../../environment/task/action_max
+      projector:
+        samples: 1000
+        neighbors: 64
+        locality: 0.5
+        interval: 10
+        incremental: 1
+        bucket_size: 10
+        error_bound: 0.01
+        inputs: ../../../../environment/task/observation_dims+../../../../environment/task/action_dims
+        type: projector/sample/ann
+      representation:
+        ridge: 1e-05
+        order: 1
+        input_nominals: [  ]
+        output_nominals: [  ]
+        outputs: ../../../../environment/task/observation_dims+2
+        output_min: [  ]
+        output_max: [  ]
+        projector: ../../projector
+        type: representation/llr
+      type: mapping/policy/action
+    predictor:
+      alpha: 0.2
+      beta_v: 0.1
+      beta_a: 0.01
+      gamma: 0.97
+      lambda: 0.65
+      target: on-policy
+      projector: ../../policy/projector
+      critic_representation:
+        ridge: 1e-05
+        order: 1
+        input_nominals: [  ]
+        output_nominals: [  ]
+        outputs: ../../../../environment/task/observation_dims+2
+        output_min: [  ]
+        output_max: [  ]
+        projector: ../../../policy/projector
+        type: representation/llr
+      critic_trace:
+        type: trace/enumerated/replacing
+      advantage_representation:
+        ridge: 1e-05
+        order: 1
+        input_nominals: [  ]
+        output_nominals: [  ]
+        outputs: ../../../../environment/task/observation_dims+2
+        output_min: [  ]
+        output_max: [  ]
+        projector: ../../../policy/projector
+        type: representation/llr
+      actor_representation: ../../policy/representation
+      importer: 0
+      exporter: 0
+      type: predictor/dpg
+    type: agent/td
+  test_agent:
+    policy:
+      sigma: [  ]
+      decay_rate: 1
+      decay_min: 0
+      output_min: ../../../environment/task/action_min
+      output_max: ../../../environment/task/action_max
+      projector: ../../../agent/policy/projector
+      representation: ../../../agent/policy/representation
+      type: mapping/policy/action
+    type: agent/fixed
+  save_every: never
+  load_file: ""
+  type: experiment/online_learning

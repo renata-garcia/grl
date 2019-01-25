@@ -1,0 +1,134 @@
+experiment:
+  runs: 10
+  run_offset: 0
+  trials: 10000
+  steps: 0
+  rate: 0
+  test_interval: 10
+  output: cart_pole_dpg_data
+  environment:
+    model:
+      control_step: 0.05
+      integration_steps: 5
+      dynamics:
+        end_stop: 1
+        type: dynamics/cart_pole
+      type: model/dynamical
+    task:
+      timeout: 9.99
+      randomization: 0
+      shaping: 0
+      gamma: 1
+      end_stop_penalty: 0
+      action_penalty: 0
+      type: task/cart_pole/swingup
+    exporter: 0
+    type: environment/modeled
+  agent:
+    policy:
+      sigma: [ 5 ]
+      decay_rate: 1
+      decay_min: 0
+      output_min: ../../../environment/task/action_min
+      output_max: ../../../environment/task/action_max
+      projector:
+        tilings: 16
+        memory: 8388608
+        safe: 0
+        resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+        wrapping: [ 0, 6.283, 0, 0 ]
+        type: projector/tile_coding
+      representation:
+        interval: 0
+        init_min: [ 0 ]
+        init_max: [ 0 ]
+        memory: ../../projector/memory
+        outputs: ../../../../environment/task/action_dims
+        output_min: ../../../../environment/task/action_min
+        output_max: ../../../../environment/task/action_max
+        type: representation/parameterized/linear
+      type: mapping/policy/action
+    predictor:
+      alpha: 0.01
+      beta_v: 0.1
+      beta_a: 0.01
+      gamma: 0.97
+      lambda: 0.65
+      target: on-policy
+      projector: ../../policy/projector
+      critic_representation:
+        interval: 0
+        init_min: [ 0 ]
+        init_max: [ 0 ]
+        memory: ../../../policy/projector/memory
+        outputs: 1
+        output_min: [  ]
+        output_max: [  ]
+        type: representation/parameterized/linear
+      critic_trace:
+        type: trace/enumerated/replacing
+      advantage_representation:
+        interval: 0
+        init_min: [ 0 ]
+        init_max: [ 0 ]
+        memory: ../../../policy/projector/memory
+        outputs: ../../../../environment/task/action_dims
+        output_min: [  ]
+        output_max: [  ]
+        type: representation/parameterized/linear
+      actor_representation: ../../policy/representation
+      importer: 0
+      exporter: 0
+      type: predictor/dpg
+    type: agent/td
+  test_agent:
+    policy:
+      sigma: [  ]
+      decay_rate: 1
+      decay_min: 0
+      output_min: ../../../environment/task/action_min
+      output_max: ../../../environment/task/action_max
+      projector: ../../../agent/policy/projector
+      representation: ../../../agent/policy/representation
+      type: mapping/policy/action
+    type: agent/fixed
+  save_every: never
+  load_file: ""
+  type: experiment/online_learning
+visualizer:
+  type: visualizer/glut
+policy_visualization:
+  field_dims: [ 0, 1 ]
+  input_min: ../../experiment/environment/task/observation_min
+  input_max: ../../experiment/environment/task/observation_max
+  points: 65536
+  savepoints: 1048576
+  projection: mean
+  mapping: ../../experiment/test_agent/policy
+  output_dim: 0
+  state: 0
+  type: visualization/field/mapping
+critic_visualization:
+  field_dims: [ 0, 1 ]
+  input_min: ../../experiment/environment/task/observation_min
+  input_max: ../../experiment/environment/task/observation_max
+  points: 65536
+  savepoints: 1048576
+  projection: mean
+  output_dim: 0
+  projector: ../../experiment/agent/policy/projector
+  representation: ../../experiment/agent/predictor/critic_representation
+  state: 0
+  type: visualization/field/value
+advantage_visualization:
+  field_dims: [ 0, 1 ]
+  input_min: ../../experiment/environment/task/observation_min
+  input_max: ../../experiment/environment/task/observation_max
+  points: 65536
+  savepoints: 1048576
+  projection: mean
+  output_dim: 0
+  projector: ../../experiment/agent/policy/projector
+  representation: ../../experiment/agent/predictor/advantage_representation
+  state: 0
+  type: visualization/field/value
