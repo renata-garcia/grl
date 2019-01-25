@@ -44,7 +44,7 @@ class MultiPolicy : public Policy
     TYPEINFO("mapping/policy/multi", "Combines multiple policies")
     
     enum CombinationStrategy {csBinning,
-    csDensityBased, csDensityBasedMeanMov, csDensityBasedBestMov, csDensityBasedVotingMov, csDensityBasedHistoric, csDensityBasedHistoricDens,
+    csDensityBased, csDensityBasedMeanMov, csDensityBasedBestMov, csDensityBasedVotingMov, csDensityBasedHistoric, csDensityBasedHistoricDens, csDensityBasedDensBest,
     csDataCenter, csDataCenterMeanMov, csDataCenterBestMov, csDataCenterVotingMov, csDataCenterVotingMovTwoSteps,
     csMean, csMeanMov, csRandom, csStatic, csValueBased, csRoulette};
 
