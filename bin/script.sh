@@ -101,10 +101,11 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld ../cfg/pendulum/mpol_dpg_20_density_based_historic_a10.yaml
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_historic_a10.yaml
 
-
-'
-
 ./grld ../cfg/cart_pole/mpol_dpg_26_density_based_dens.yaml
 ./grld ../cfg/cart_pole/mpol_dpg_13_density_based.yaml
 ./grld ../cfg/cart_pole/mpol_dpg_13_density_based_historic_dens.yaml
 ../bin/grlc ../cfg/pendulum/mpol_dpg_26_data_center.yaml
+'
+
+./grld ../cfg/cart_pole/q.yaml
+./grld ../cfg/cart_pole/dpg.yaml

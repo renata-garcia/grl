@@ -1854,8 +1854,8 @@ experiment:
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
   save_every: never
-#visualizer: 
-#  type: visualizer/glut
+visualizer: 
+  type: visualizer/glut
 critic_visual0: 
   type: visualization/field/value
   field_dims: [0, 1]
@@ -1934,17 +1934,17 @@ policy_visualization1:
 actions: 
   type: visualization/state
   input_dims: []
-  input_min: [-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3,-3]
-  input_max: [ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+  input_min: [-15, -15,-15,-15, -15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15,-15]
+  input_max: [ 15,  15, 15, 15,  15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15]
   memory: 256
   state: experiment/test_agent/policy/actions
 action: 
   type: visualization/state
   input_dims: []
-  input_min: [-3]
-  input_max: [ 3]
+  input_min: [-15]
+  input_max: [ 15]
   memory: 256
-  state: experiment/test_action
+  state: experiment/action
 state: 
   type: visualization/state
   input_dims: []

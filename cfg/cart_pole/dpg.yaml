@@ -91,8 +91,8 @@ experiment:
       projector: experiment/agent/policy/projector
       representation: experiment/agent/policy/representation
   save_every: never
-visualizer: 
-  type: visualizer/glut
+#visualizer: 
+#  type: visualizer/glut
 policy_visualization: 
   type: visualization/field/mapping
   field_dims: [0, 1]
