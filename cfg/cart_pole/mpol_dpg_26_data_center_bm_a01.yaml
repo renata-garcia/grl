@@ -1,8 +1,8 @@
 experiment: 
   type: experiment/online_learning
-  runs: 10
+  runs: 1
   run_offset: 0
-  trials: 10000
+  trials: 20000
   steps: 0
   rate: 0
   test_interval: 10
@@ -15,12 +15,15 @@ experiment:
       integration_steps: 5
       dynamics: 
         type: dynamics/cart_pole
+        end_stop: 1
     task: 
       type: task/cart_pole/swingup
       timeout: 9.99
       randomization: 0
       shapping: 0
       gamma: 1
+      end_stop_penalty: 0
+      action_penalty: 0
   agent: 
     type: agent/td
     policy: 
@@ -32,7 +35,7 @@ experiment:
       policy: 
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -55,7 +58,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -78,7 +81,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -101,7 +104,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -124,7 +127,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -147,7 +150,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -170,7 +173,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -193,7 +196,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -216,7 +219,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -239,7 +242,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -262,7 +265,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -285,7 +288,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -308,7 +311,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -331,7 +334,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -354,7 +357,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -377,7 +380,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -400,7 +403,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -423,7 +426,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -446,7 +449,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -469,7 +472,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -492,7 +495,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -515,7 +518,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -538,7 +541,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -561,7 +564,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -584,7 +587,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -607,7 +610,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -630,7 +633,7 @@ experiment:
             output_max: experiment/environment/task/action_max
         - 
           type: mapping/policy/action
-          sigma: [1]
+          sigma: [5]
           decay_rate: 1
           decay_min: 0
           output_min: experiment/environment/task/action_min
@@ -661,7 +664,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/0/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -673,7 +676,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/1/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -685,7 +688,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/2/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -697,7 +700,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/3/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -709,7 +712,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/4/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -721,7 +724,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/5/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -733,7 +736,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/6/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -745,7 +748,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/7/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -757,7 +760,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/8/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -769,7 +772,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/9/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -781,7 +784,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/10/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -793,7 +796,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/11/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -805,7 +808,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/12/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -817,7 +820,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/13/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -829,7 +832,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/14/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -841,7 +844,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/15/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -853,7 +856,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/16/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -865,7 +868,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/17/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -877,7 +880,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/18/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -889,7 +892,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/19/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -901,7 +904,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/20/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -913,7 +916,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/21/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -925,7 +928,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/22/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -937,7 +940,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/23/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -949,7 +952,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/24/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -961,7 +964,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/25/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
         - 
@@ -973,7 +976,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/26/projector/memory
-            outputs: 1
+            outputs: experiment/environment/task/action_dims
             output_min: []
             output_max: []
       output_min: experiment/environment/task/action_min
@@ -1021,7 +1024,7 @@ experiment:
             init_min: [0]
             init_max: [0]
             memory: experiment/agent/policy/policy/1/projector/memory
-            outputs: 1
+            outputs: 1  
             output_min: []
             output_max: []
           actor_representation: experiment/agent/policy/policy/1/representation

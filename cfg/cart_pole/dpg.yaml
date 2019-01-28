@@ -56,7 +56,7 @@ experiment:
       beta_a: 0.01
       gamma: 0.97
       lambda: 0.65
-      target: on-policy
+      target: off-policy
       projector: experiment/agent/policy/projector
       critic_representation: 
         type: representation/parameterized/linear
@@ -65,8 +65,8 @@ experiment:
         init_max: [0]
         memory: experiment/agent/predictor/projector/memory
         outputs: 1
-        output_min: [  ]
-        output_max: [  ]
+        output_min: []
+        output_max: []
       critic_trace: 
         type: trace/enumerated/replacing
       advantage_representation: 
@@ -76,8 +76,8 @@ experiment:
         init_max: [0]
         memory: experiment/agent/predictor/projector/memory
         outputs: experiment/environment/task/action_dims
-        output_min: [  ]
-        output_max: [  ]
+        output_min: []
+        output_max: []
       actor_representation: experiment/agent/policy/representation
   test_agent: 
     type: agent/fixed
@@ -91,8 +91,6 @@ experiment:
       projector: experiment/agent/policy/projector
       representation: experiment/agent/policy/representation
   save_every: never
-#visualizer: 
-#  type: visualizer/glut
 policy_visualization: 
   type: visualization/field/mapping
   field_dims: [0, 1]
