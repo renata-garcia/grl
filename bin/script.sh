@@ -17,7 +17,6 @@
 ./grld ../cfg/pendulum/mpol_dpg_2_data_center.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_2_data_center.yaml
 
-python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld ../cfg/pendulum/mpol_1_replay_ddpg_tensorflow.yaml
 
 ./grld ../cfg/pendulum/mpol_dpg_2_data_center_equals.yaml
@@ -101,7 +100,6 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld ../cfg/pendulum/mpol_dpg_20_density_based_historic_a10.yaml
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_historic_a10.yaml
 
-./grld ../cfg/cart_pole/mpol_dpg_26_density_based_dens.yaml
 ./grld ../cfg/cart_pole/mpol_dpg_13_density_based.yaml
 ./grld ../cfg/cart_pole/mpol_dpg_13_density_based_historic_dens.yaml
 ../bin/grlc ../cfg/pendulum/mpol_dpg_26_data_center.yaml
@@ -109,3 +107,13 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 
 ./grld ../cfg/cart_pole/q.yaml
 ./grld ../cfg/cart_pole/dpg.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_density_based_historic_dens.yaml
+
+./grld ../cfg/pendulum/mpol_dpg_13_density_based_dens_best.yaml
+./grld ../cfg/pendulum/mpol_dpg_20_density_based_dens_best.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_density_based_dens_best.yaml
+
+
+python3 ../addons/tensorflow/share/pendulum_ddpg.py
+./grld ../cfg/pendulum/mpol_ddpg_4_density_based_dens_best.yaml
+./grld ../cfg/pendulum/mpol_ddpg_4_density_based_historic_dens.yaml

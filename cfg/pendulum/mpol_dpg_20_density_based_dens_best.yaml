@@ -6,7 +6,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_20_density_based_historic_dens_data
+  output: mpol_dpg_20_density_based_dens_best_data
   environment: 
     type: environment/modeled
     model: 
@@ -23,7 +23,7 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: density_based_historic_dens
+      strategy: density_based_dens_best
       bins: 2
       static_policy: 0
       r_distance_parameter: 0.05

@@ -1,10 +1,11 @@
 experiment: 
   type: experiment/online_learning
-  runs: 1
-  trials: 0
+  runs: 10
+  trials: 10000
   steps: 0
   rate: 0
   test_interval: 10
+  output: cartpole_q_data
   environment: 
     type: environment/modeled
     model: 

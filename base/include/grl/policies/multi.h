@@ -34,6 +34,9 @@
 #include <grl/signal.h>
 #include <grl/vector.h>
 
+#define ASC 0
+#define DESC 1
+
 namespace grl
 {
 
@@ -98,8 +101,9 @@ class MultiPolicy : public Policy
     virtual void act(double time, const Observation &in, Action *out);
 
     // From Multi Policy
-    virtual std::vector<size_t> choosing_bests_of_mean_mov(std::vector<Action> &in) const;
+    virtual std::vector<size_t> choosing_bests_of_mean_mov(std::vector<Action> &in, int asc_desc) const;
     virtual std::vector<size_t> choosing_quartile_of_mean_mov(std::vector<Action> &in) const;
+    static bool compare_asc_value_with_id(const data &a, const data &b);
     static bool compare_desc_value_with_id(const data &a, const data &b);
     virtual void get_max_index(double dist, size_t i, double &max, std::vector<size_t> &i_max_density) const;
     virtual size_t get_max_index_by_density_based(const std::vector<Action> &policies_aa) const;
