@@ -8,7 +8,7 @@ from keras.layers.merge import Concatenate
 from keras.layers.normalization import BatchNormalization
 from keras.backend import get_session
 
-obs = 2
+obs = 3
 actions = 1
 action_max = 3
 normalization = False
