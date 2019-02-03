@@ -37,6 +37,90 @@
 #define ASC 0
 #define DESC 1
 
+// score_distance_ = config["score_distance"].str();
+// if (score_distance_str_ == "density_based")
+//   score_distance_ = sdDensityBased;
+// else if(score_distance_ == "data_center")
+//   score_distance_ = sdDataCenter;
+// else if(score_distance_ == "mean")
+//   score_distance_ = sdMean;
+
+// update_history_str_ = config["update_history"].str();
+// if (update_history_str_ == "euclidian_distance")
+//   update_history_ = uhEuclidianDistance;
+// else if (update_history_str_ == "density")
+//   update_history_ = uhDensity;  
+// else if (update_history_str_ == "voting")
+//   update_history_ = uhVoting;
+
+// choose_actions_str_ = config["choose_actions"].str();
+// if (choose_actions_str_ == "best")
+//   choose_actions_ = caBest;
+// else if (choose_actions_str_ == "50perc")
+//   choose_actions_ = ca50Perc;
+// else if (choose_actions_str_ == "25perc")
+//   choose_actions_ = ca25Perc;
+// else if (choose_actions_str_ == "10perc")
+//   choose_actions_ = ca10Perc;
+
+// select_by_distance_str_ = config["select_by_distance"].str();
+// if(select_by_distance_ = "density_based")
+//   select_by_distance_ = sdDensityBased;
+// else if(select_by_distance_ = "data_center")
+//   select_by_distance_ = sdDataCenter;
+// else if(select_by_distance_ = "mean")
+//   select_by_distance_ = sdMean;
+
+// case csAlg4Steps:
+// {
+//   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+//   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+//   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+//   std::vector<size_t> ii_max_density;
+//   std::vector<Action> aa_normalized(n_policies);
+//   //std::vector<double> density(n_policies);
+//   LargeVector mean, vals;
+  
+//   mean = get_policy_mean(in, actions_actors, vals);
+
+
+  
+//   std::vector<Action>::iterator it_norm = aa_normalized.begin();
+//   for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++it_norm)
+//     (*it_norm).v = -1 + 2*( ((*it).v - min_) / (max_ - min_) );
+
+//   for(size_t i = 0; i < aa_normalized.size(); ++i)
+//     CRAWL("MultiPolicy::csDensityBasedDensBest::aa_normalized: " << aa_normalized[i]);
+
+//   std::vector<double> density(n_policies);
+//   size_t index = get_max_index_by_density_based(aa_normalized, density);
+//   CRAWL("MultiPolicy::csDensityBasedDensBest::get_max_index_by_density_based(aa_normalized)::index: " << index);
+
+//   for(size_t i = 0; i < density.size(); ++i)
+//     CRAWL("MultiPolicy::csDensityBasedDensBest::density[i:" << i << "]: " << density[i]);
+
+//   update_mean_mov(density);
+
+//   std::vector<size_t> v_id = choosing_bests_of_mean_mov(actions_actors,DESC);
+//   for(size_t i = 0; i < actions_actors.size(); ++i)
+//     CRAWL("MultiPolicy::csDensityBasedDensBest::actions_actors after euclidian_distance_choosing_quartile_of_mean_mov: " << actions_actors[i]);
+
+//   for(size_t i=0; i < v_id.size(); ++i)
+//     aa_normalized.erase(aa_normalized.begin()+v_id[i]-i);
+//   CRAWL("MultiPolicy::csDensityBasedDensBest::removed ");
+  
+//   for(std::vector<Action>::iterator it = aa_normalized.begin(); it!=aa_normalized.end(); ++it)
+//     CRAWL("MultiPolicy::csDensityBasedDensBest::aa_normalized<after remove>:: " << it->v[0]);
+
+//   index = get_max_index_by_density_based(aa_normalized);
+
+//   dist = actions_actors[index].v;
+//   CRAWL("MultiPolicy::csDensityBasedDensBest::dist: " << dist);
+//   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+//   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+//   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
+// }
+
 namespace grl
 {
 
@@ -49,11 +133,23 @@ class MultiPolicy : public Policy
     enum CombinationStrategy {csBinning,
     csDensityBased, csDensityBasedMeanMov, csDensityBasedBestMov, csDensityBasedVotingMov, csDensityBasedHistoric, csDensityBasedHistoricDens, csDensityBasedDensBest,
     csDataCenter, csDataCenterMeanMov, csDataCenterBestMov, csDataCenterVotingMov, csDataCenterVotingMovTwoSteps,
+    csAlg4Steps,
     csMean, csMeanMov, csRandom, csStatic, csValueBased, csRoulette};
+    enum ScoreDistance {sdDensityBased, sdDataCenter, sdMean};
+    enum UpdateHistory {uhEuclidianDistance, uhDensity, uhVoting};
+    enum ChooseActions {caBest, ca50Perc, ca25Perc, ca10Perc};
 
   protected:
     std::string strategy_str_;
+    std::string score_distance_str_;
+    std::string update_history_str_;
+    std::string choose_actions_str_;
+    std::string select_by_distance_str_;
     CombinationStrategy strategy_;
+    ScoreDistance score_distance_;
+    UpdateHistory update_history_;
+    ChooseActions choose_actions_;
+    ScoreDistance select_by_distance_;
     Projector *projector_;
     Representation *representation_;
     Vector min_, max_;
@@ -76,7 +172,12 @@ class MultiPolicy : public Policy
     struct data {
       double value;
       size_t id;
-	};
+	  };
+    struct node {
+      LargeVector action;
+      double score;
+      size_t id;
+	  };
 
   public:
     MultiPolicy() : bins_(10),
@@ -112,6 +213,7 @@ class MultiPolicy : public Policy
     virtual LargeVector get_mean(const std::vector<Action> &policies_aa) const;
     virtual void get_min_index(double dist, size_t i, double &min, std::vector<size_t> &i_min_density) const;
     virtual LargeVector get_policy_mean(const Observation &in, std::vector<Action> &policies_aa, LargeVector &values) const;
+    virtual LargeVector get_policy_mean(const Observation &in, std::vector<data> &policies_aa, LargeVector &values) const;
     virtual size_t get_random_index(const std::vector<size_t> &i_max_density) const;
     virtual void update_mean_mov(const std::vector<double> &in) const;
     virtual void update_mean_mov_with_euclidian(const std::vector<Action> &in, LargeVector center) const;
