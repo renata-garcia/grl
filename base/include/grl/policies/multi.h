@@ -213,7 +213,7 @@ class MultiPolicy : public Policy
     virtual LargeVector get_mean(const std::vector<Action> &policies_aa) const;
     virtual void get_min_index(double dist, size_t i, double &min, std::vector<size_t> &i_min_density) const;
     virtual LargeVector get_policy_mean(const Observation &in, std::vector<Action> &policies_aa, LargeVector &values) const;
-    virtual LargeVector get_policy_mean(const Observation &in, std::vector<data> &policies_aa, LargeVector &values) const;
+    virtual LargeVector get_policy_mean(const Observation &in, std::vector<node> &policies_aa, LargeVector &values) const;
     virtual size_t get_random_index(const std::vector<size_t> &i_max_density) const;
     virtual void update_mean_mov(const std::vector<double> &in) const;
     virtual void update_mean_mov_with_euclidian(const std::vector<Action> &in, LargeVector center) const;
