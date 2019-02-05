@@ -218,6 +218,7 @@ class MultiPolicy : public Policy
     virtual void update_mean_mov(const std::vector<double> &in) const;
     virtual void update_mean_mov_with_euclidian(const std::vector<Action> &in, LargeVector center) const;
     virtual void update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const;
+    virtual std::vector<double> score_distance_density_based() const;
 };
 
 /// Policy that combines two or more sub-policies using different strategies

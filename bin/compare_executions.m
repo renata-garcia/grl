@@ -11,7 +11,7 @@ function compare_executions(n, folder, nstd, title_fig, varargin)
 
     figure('units','normalized','outerposition',[0 0 1 1]);
     leg = [];
-    color = ['r', 'm', 'b', 'y', 'k', 'g', 'c'];
+    color = ['y', 'm', 'b', 'r', 'k', 'g', 'c'];
     num_alg = length(array);
     h = zeros(1, num_alg);
     for j=1:length(array)
@@ -19,7 +19,7 @@ function compare_executions(n, folder, nstd, title_fig, varargin)
         errstd_d = std_d/sqrt(n);
         maximum = max(mean_d);
         x = 1:length(mean_d);
-        n_color = color(rem(j, length(color)));
+        n_color = color(1 + rem(j, length(color)));
         h(j) = plot(x, mean_d, 'Color', n_color, 'LineWidth', 1.3, 'LineStyle','-', 'DisplayName', strcat(array(j,1), ':... ', num2str(maximum)));
         leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
         hold on;
