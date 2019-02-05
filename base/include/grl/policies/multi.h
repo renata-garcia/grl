@@ -37,31 +37,6 @@
 #define ASC 0
 #define DESC 1
 
-// score_distance_ = config["score_distance"].str();
-// if (score_distance_str_ == "density_based")
-//   score_distance_ = sdDensityBased;
-// else if(score_distance_ == "data_center")
-//   score_distance_ = sdDataCenter;
-// else if(score_distance_ == "mean")
-//   score_distance_ = sdMean;
-
-// update_history_str_ = config["update_history"].str();
-// if (update_history_str_ == "euclidian_distance")
-//   update_history_ = uhEuclidianDistance;
-// else if (update_history_str_ == "density")
-//   update_history_ = uhDensity;  
-// else if (update_history_str_ == "voting")
-//   update_history_ = uhVoting;
-
-// choose_actions_str_ = config["choose_actions"].str();
-// if (choose_actions_str_ == "best")
-//   choose_actions_ = caBest;
-// else if (choose_actions_str_ == "50perc")
-//   choose_actions_ = ca50Perc;
-// else if (choose_actions_str_ == "25perc")
-//   choose_actions_ = ca25Perc;
-// else if (choose_actions_str_ == "10perc")
-//   choose_actions_ = ca10Perc;
 
 // select_by_distance_str_ = config["select_by_distance"].str();
 // if(select_by_distance_ = "density_based")
@@ -175,6 +150,7 @@ class MultiPolicy : public Policy
 	  };
     struct node {
       LargeVector action;
+      LargeVector normalized;
       double score;
       size_t id;
 	  };
@@ -208,19 +184,21 @@ class MultiPolicy : public Policy
     static bool compare_desc_value_with_id(const data &a, const data &b);
     virtual void get_max_index(double dist, size_t i, double &max, std::vector<size_t> &i_max_density) const;
     virtual size_t get_max_index_by_density_based(const std::vector<Action> &policies_aa) const;
-    virtual size_t get_max_index_by_density_based(const std::vector<Action> &policies_aa, std::vector<double> &density) const;
+    virtual size_t get_max_index_by_density_based(const std::vector<Action> &policies_aa, std::vector<double> *density) const;
     virtual size_t get_max_index_by_euclidian_distance(const std::vector<Action> &policies_aa, LargeVector mean) const;
     virtual LargeVector get_mean(const std::vector<Action> &policies_aa) const;
     virtual void get_min_index(double dist, size_t i, double &min, std::vector<size_t> &i_min_density) const;
     virtual LargeVector get_policy_mean(const Observation &in, std::vector<Action> &policies_aa, LargeVector &values) const;
-    virtual LargeVector get_policy_mean(const Observation &in, std::vector<node> &policies_aa, LargeVector &values) const;
+    virtual LargeVector get_policy_mean(const Observation &in, std::vector<node> *policies_aa, LargeVector *values) const;
     virtual size_t get_random_index(const std::vector<size_t> &i_max_density) const;
     virtual void update_mean_mov(const std::vector<double> &in) const;
     virtual void update_mean_mov_with_euclidian(const std::vector<Action> &in, LargeVector center) const;
     virtual void update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const;
-    virtual std::vector<double> score_distance_density_based() const;
+    virtual size_t score_distance_density_based(std::vector<node> *action_actors) const;
+    virtual size_t get_max_index_by_density_based(std::vector<node> *policies_aa) const;
+    virtual void update_mean_mov(const std::vector<node> &in) const;
+  
 };
-
 /// Policy that combines two or more sub-policies using different strategies
 class DiscreteMultiPolicy : public DiscretePolicy
 {

@@ -432,8 +432,8 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       for(size_t i = 0; i < aa_normalized.size(); ++i)
         CRAWL("MultiPolicy::csDensityBasedHistoricDens::aa_normalized: " << aa_normalized[i]);
 
-      std::vector<double> density(n_policies);
-      size_t index = get_max_index_by_density_based(aa_normalized, density);
+      std::vector<double> density(0);
+      size_t index = get_max_index_by_density_based(aa_normalized, &density);
       CRAWL("MultiPolicy::csDensityBasedHistoricDens::get_max_index_by_density_based(aa_normalized)::index: " << index);
 
       for(size_t i = 0; i < density.size(); ++i)
@@ -469,8 +469,8 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       for(size_t i = 0; i < aa_normalized.size(); ++i)
         CRAWL("MultiPolicy::csDensityBasedDensBest::aa_normalized: " << aa_normalized[i]);
 
-      std::vector<double> density(n_policies);
-      size_t index = get_max_index_by_density_based(aa_normalized, density);
+      std::vector<double> density(0);
+      size_t index = get_max_index_by_density_based(aa_normalized, &density);
       CRAWL("MultiPolicy::csDensityBasedDensBest::get_max_index_by_density_based(aa_normalized)::index: " << index);
 
       for(size_t i = 0; i < density.size(); ++i)
@@ -826,46 +826,71 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       std::vector<Action> aa_normalized(n_policies);
       std::vector<double> density(n_policies);
       LargeVector mean, vals;
-      
-      mean = get_policy_mean(in, action_actors, vals);
+      std::vector<double> score(0);
+      size_t score_index = 0;
+
+      mean = get_policy_mean(in, &action_actors, &vals);
       //https://en.wikibooks.org/wiki/C%2B%2B_Programming/Code/Design_Patterns
       switch (score_distance_)
       {
         case sdDensityBased:
-          score_distance = 
+          score_index = score_distance_density_based(&action_actors);
         break;
+      
         case sdDataCenter:
-          
+          throw Exception("MultiPolicy sdDataCenter not implemented!");
         break;
+      
         case sdMean:
-          
+          throw Exception("MultiPolicy sdMean not implemented!");
         break;
       }
-      //score_distance
       
+      switch(update_history_)
+      {
+        case uhEuclidianDistance:
+          throw Exception("MultiPolicy uhEuclidianDistance not implemented!");
+        break;
+        
+        case uhDensity:
+          update_mean_mov(action_actors);
+        break;
+
+        case uhVoting:
+          throw Exception("MultiPolicy uhVoting not implemented!");
+        break;
+      }
       
-      //update_history
-      update_mean_mov(density);
-
-
-      //choose_actions_
-      std::vector<size_t> v_id = choosing_bests_of_mean_mov(actions_actors,DESC);
-      for(size_t i = 0; i < actions_actors.size(); ++i)
-        CRAWL("MultiPolicy::csDensityBasedDensBest::actions_actors after euclidian_distance_choosing_quartile_of_mean_mov: " << actions_actors[i]);
- 
-      for(size_t i=0; i < v_id.size(); ++i)
-        aa_normalized.erase(aa_normalized.begin()+v_id[i]-i);
-      CRAWL("MultiPolicy::csDensityBasedDensBest::removed ");
-      
-      for(std::vector<Action>::iterator it = aa_normalized.begin(); it!=aa_normalized.end(); ++it)
-        CRAWL("MultiPolicy::csDensityBasedDensBest::aa_normalized<after remove>:: " << it->v[0]);
-
+      switch(choose_actions_)
+      {
+        case caBest:
+          std::vector<size_t> v_id = choosing_bests_of_mean_mov(actions_actors,DESC);
+          for(size_t i = 0; i < actions_actors.size(); ++i)
+            CRAWL("MultiPolicy::csDensityBasedDensBest::actions_actors after euclidian_distance_choosing_quartile_of_mean_mov: " << actions_actors[i]);
+     
+          for(size_t i=0; i < v_id.size(); ++i)
+            aa_normalized.erase(aa_normalized.begin()+v_id[i]-i);
+          CRAWL("MultiPolicy::csDensityBasedDensBest::removed ");
+          
+          for(std::vector<Action>::iterator it = aa_normalized.begin(); it!=aa_normalized.end(); ++it)
+            CRAWL("MultiPolicy::csDensityBasedDensBest::aa_normalized<after remove>:: " << it->v[0]);
+        break;
+        case ca50Perc:
+          throw Exception("MultiPolicy ca50Perc not implemented!");
+        break;
+        case ca25Perc:
+          throw Exception("MultiPolicy ca25Perc not implemented!");
+        break;
+        case ca10Perc:
+          throw Exception("MultiPolicy ca10Perc not implemented!");
+        break;
+      }
 
       //select_by_distance_
-      index = get_max_index_by_density_based(aa_normalized);
+          // index = get_max_index_by_density_based(aa_normalized);
 
-      dist = actions_actors[index].v;
-      CRAWL("MultiPolicy::csDensityBasedDensBest::dist: " << dist);
+          // dist = actions_actors[index].v;
+          // CRAWL("MultiPolicy::csDensityBasedDensBest::dist: " << dist);
       //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
       //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
       //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
@@ -1097,12 +1122,13 @@ void MultiPolicy::get_max_index(double dist, size_t i, double &max, std::vector<
 
 size_t MultiPolicy::get_max_index_by_density_based(const std::vector<Action> &policies_aa) const
 {
-  std::vector<double> _dummy_density(policies_aa.size());
-  return get_max_index_by_density_based(policies_aa, _dummy_density);
+  std::vector<double> _dummy_density(0);
+  return get_max_index_by_density_based(policies_aa, &_dummy_density);
 }
 
-size_t MultiPolicy::get_max_index_by_density_based(const std::vector<Action> &policies_aa, std::vector<double> &density) const
+size_t MultiPolicy::get_max_index_by_density_based(const std::vector<Action> &policies_aa, std::vector<double> *density) const
 {
+  density->empty();
   double max = -1 * std::numeric_limits<double>::infinity();
   std::vector<size_t> i_max_density;
   int n_dimension = policies_aa[0].v.size();
@@ -1125,7 +1151,7 @@ size_t MultiPolicy::get_max_index_by_density_based(const std::vector<Action> &po
     get_max_index(r_dist, i, max, i_max_density);
     CRAWL("******************************************************************max(ii:" << i << ") = " << max);
 
-    density[i] = r_dist;
+    density->push_back(r_dist);
   }
   size_t index = get_random_index(i_max_density);
   return index;
@@ -1205,34 +1231,36 @@ LargeVector MultiPolicy::get_policy_mean(const Observation &in, std::vector<Acti
 //888888888888888888888888888888888888888888888888888888888888888888888888888
 //888888888888888888888888888888888888888888888888888888888888888888888888888
 //888888888888888888888888888888888888888888888888888888888888888888888888888
-LargeVector MultiPolicy::get_policy_mean(const Observation &in, std::vector<node> &action_actors, LargeVector &values) const
+LargeVector MultiPolicy::get_policy_mean(const Observation &in, std::vector<node> *action_actors, LargeVector *values) const
 {
   bool first = true;
   Vector dummy;
   LargeVector mean;
-  values = LargeVector::Zero(action_actors.size());
-  Vector send_actions(action_actors.size());
-  CRAWL("MultiPolicy::get_policy_mean:action_actors.size(): " << action_actors.size());
+  *values = LargeVector::Zero(action_actors->size());
+  Vector send_actions(action_actors->size());
+  CRAWL("MultiPolicy::get_policy_mean:action_actors->size(): " << action_actors->size());
   //for(std::vector<node>::iterator it = action_actors.begin(); it != action_actors.end(); ++it, ++i)
-  for(size_t i = 0; i < action_actors.size(); ++i)
+  for(size_t i = 0; i < action_actors->size(); ++i)
   {
     Action tmp;
     policy_[i]->act(in, &tmp);
-    values[i] = value_[i]->read(in, &dummy);
-    action_actors[i].action = tmp.v;
-    action_actors[i].score = 0;
-    action_actors[i].id = i;
+    // *values[i] = *value_[i]->read(in, &dummy);
+    (action_actors->at(i)).action = tmp.v;
+    (action_actors->at(i)).normalized = -1 + 2*( ((action_actors->at(i)).action - min_) / (max_ - min_) );
+    (action_actors->at(i)).score = 0;
+    (action_actors->at(i)).id = i;
     if (first)
-      mean = tmp.v;
+      mean = (action_actors->at(i)).action;
     else 
-      mean = mean + tmp.v;
+      mean = mean + (action_actors->at(i)).action;
     first = false;
     send_actions[i] = tmp.v[0];
-    CRAWL("MultiPolicy::get_policy_mean:policy_[i:" << i << "][0]:" << tmp.v[0] << ", values[i:" << i << "]" << values[i]);
+    //CRAWL("MultiPolicy::get_policy_mean:policy_[i:" << i << "][0]:" << tmp.v[0] << ", values[i:" << i << "]" << values[i]);
+    CRAWL("MultiPolicy::get_policy_mean:policy_[i:" << i << "][0]:" << (action_actors->at(i)).action[0]);
   }
 
   action_->set(send_actions);
-  return (mean / action_actors.size());
+  return (mean / action_actors->size());
 }
 //888888888888888888888888888888888888888888888888888888888888888888888888888
 //888888888888888888888888888888888888888888888888888888888888888888888888888
@@ -1300,22 +1328,65 @@ void MultiPolicy::update_voting_preferences_ofchoosen_mean_mov(const std::vector
   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
 }
 
-std::vector<double> MultiPolicy::score_distance_density_based() const
+size_t MultiPolicy::score_distance_density_based(std::vector<node> *action_actors) const
 {
-  std::vector<double> score;
+  std::vector<Action> aa_normalized((*action_actors).size());
   std::vector<Action>::iterator it_norm = aa_normalized.begin();
-  for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++it_norm)
-    (*it_norm).v = -1 + 2*( ((*it).v - min_) / (max_ - min_) );
-
-  for(size_t i = 0; i < aa_normalized.size(); ++i)
-    CRAWL("MultiPolicy::csDensityBasedDensBest::aa_normalized: " << aa_normalized[i]);
-
-  std::vector<double> density(n_policies);
-  size_t index = get_max_index_by_density_based(aa_normalized, density);
-  CRAWL("MultiPolicy::csDensityBasedDensBest::get_max_index_by_density_based(aa_normalized)::index: " << index);
-
-  for(size_t i = 0; i < density.size(); ++i)
-    CRAWL("MultiPolicy::csDensityBasedDensBest::density[i:" << i << "]: " << density[i]);
+  std::vector<node>::iterator it;
   
-  return score;
+  // for(it = action_actors.begin(); it != action_actors.end(); ++it, ++it_norm)
+  //   (*it_norm).v = -1 + 2*( ((*it).action - min_) / (max_ - min_) );
+
+  for(size_t i = 0; i < (*action_actors).size(); ++i)
+    CRAWL("MultiPolicy::score_distance_density_based::normalized: " << (*action_actors)[i].normalized);
+
+  size_t score_index = get_max_index_by_density_based(action_actors);
+  CRAWL("MultiPolicy::score_distance_density_based::get_max_index_by_density_based(action_actors)::index: " << score_index);
+
+  for(size_t i = 0; i < (*action_actors).size(); ++i)
+    CRAWL("MultiPolicy::score_distance_density_based::score[i:" << i << "]: " << (*action_actors)[i].score);
+  
+  return score_index;
+}
+
+size_t MultiPolicy::get_max_index_by_density_based(std::vector<node> *policies_aa) const
+{
+  double max = -1 * std::numeric_limits<double>::infinity();
+  std::vector<size_t> i_max_density;
+  int n_dimension = (*policies_aa)[0].normalized.size();
+  for(size_t i = 0; i < (*policies_aa).size(); ++i)
+  {
+    std::string strtmp = "";
+    double r_dist = 0.0;
+    for(size_t j = 0; j < (*policies_aa).size(); ++j)
+    {
+      double expoent = 0.0;
+      for(size_t jj = 0; jj != n_dimension; ++jj)
+      {
+        expoent += pow((*policies_aa)[i].normalized[jj] - (*policies_aa)[j].normalized[jj], 2);
+        //strtmp += strspace + "expoent(jj:" + std::to_string(jj) + "): " +  std::to_string(expoent) + " (1): " + std::to_string((*it).v[jj]) + " (2): " + std::to_string((*it2).v[jj]) + "\n";
+      }
+      //strtmp += strspace + strspace + "r_dist(before): " + std::to_string(r_dist) + " expoent: " + std::to_string((-1 * expoent / pow(r_distance_parameter_, 2))) + " exp: " + std::to_string(exp( -1 * expoent / pow(r_distance_parameter_, 2))) + "\n";
+      r_dist = r_dist + exp( -1 * expoent / pow(r_distance_parameter_, 2) );
+    }
+    //CRAWL(strtmp << strspace << "sum(expo) - density[ii:" << ii << "]: " << r_dist );
+    get_max_index(r_dist, i, max, i_max_density);
+    CRAWL("******************************************************************max(ii:" << i << ") = " << max);
+
+    (*policies_aa)[i].score = r_dist;
+  }
+  size_t index = get_random_index(i_max_density);
+  return index;
+}
+
+void MultiPolicy::update_mean_mov(const std::vector<node> &in) const
+{
+  CRAWL("MultiPolicy::update_mean_mov::for i < in.size()");  
+  for(size_t i = 0; i < in.size(); ++i)
+  {
+    CRAWL("MultiPolicy::update_mean_mov::in(i= " << i << "): " << in[i].score << ", mean_mov_->at(i): " << mean_mov_->at(i));
+    mean_mov_->at(i) = (alpha_mov_mean_)*in[i].score + (1-alpha_mov_mean_)*mean_mov_->at(i);
+    CRAWL("MultiPolicy::update_mean_mov::in(i= " << i << "): " << in[i].score << ", mean_mov_->at(i): " << mean_mov_->at(i));
+  }
+  CRAWL("MultiPolicy::update_mean_mov::ending...");
 }
