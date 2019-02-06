@@ -38,14 +38,6 @@
 #define DESC 1
 
 
-// select_by_distance_str_ = config["select_by_distance"].str();
-// if(select_by_distance_ = "density_based")
-//   select_by_distance_ = sdDensityBased;
-// else if(select_by_distance_ = "data_center")
-//   select_by_distance_ = sdDataCenter;
-// else if(select_by_distance_ = "mean")
-//   select_by_distance_ = sdMean;
-
 // case csAlg4Steps:
 // {
 //   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
@@ -151,6 +143,7 @@ class MultiPolicy : public Policy
     struct node {
       LargeVector action;
       LargeVector normalized;
+      double mean_mov_i;
       double score;
       size_t id;
 	  };
@@ -196,7 +189,10 @@ class MultiPolicy : public Policy
     virtual void update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const;
     virtual size_t score_distance_density_based(std::vector<node> *action_actors) const;
     virtual size_t get_max_index_by_density_based(std::vector<node> *policies_aa) const;
-    virtual void update_mean_mov(const std::vector<node> &in) const;
+    virtual void update_mean_mov(std::vector<node> *in) const;
+    virtual void choosing_bests_of_mean_mov(std::vector<node> *in, int asc_desc) const;
+    static bool compare_asc_mean_mov_i(const node &a, const node &b);
+    static bool compare_desc_mean_mov_i(const node &a, const node &b);
   
 };
 /// Policy that combines two or more sub-policies using different strategies
