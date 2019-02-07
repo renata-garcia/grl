@@ -25,10 +25,10 @@ experiment:
     policy: 
       type: mapping/policy/multi
       strategy: alg4steps
-      score_distance: density_based
-      update_history: density
+      score_distance: none
+      update_history: euclidian_distance
       choose_actions: 50percAsc
-      select_by_distance: density_based
+      select_by_distance: data_center
       sampler: 
         type: sampler/greedy
       bins: 100

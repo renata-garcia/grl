@@ -187,17 +187,19 @@ class MultiPolicy : public Policy
     virtual void update_mean_mov(const std::vector<double> &in) const;
     virtual void update_mean_mov_with_euclidian(const std::vector<Action> &in, LargeVector center) const;
     virtual void update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const;
+
     virtual size_t score_distance_density_based(std::vector<node> *action_actors) const;
-    
+    virtual LargeVector score_distance_data_center(std::vector<node> *in, LargeVector center) const;
     virtual void choosing_quartile_of_mean_mov(std::vector<node> *in) const;
-    virtual LargeVector get_data_center(std::vector<node> *in, LargeVector center) const;
-    virtual size_t get_max_index_by_density_based(std::vector<node> *policies_aa) const;
+    virtual void set_density_based(std::vector<node> *in) const;
     virtual LargeVector get_mean(const std::vector<node> &in) const;
     virtual void update_mean_mov(std::vector<node> *in) const;
     virtual void update_mean_mov_with_euclidian(std::vector<node> *in, LargeVector center) const;
     virtual void choosing_first50perc_of_mean_mov(std::vector<node> *in, int asc_desc) const;
     static bool compare_asc_mean_mov_i(const node &a, const node &b);
     static bool compare_desc_mean_mov_i(const node &a, const node &b);
+    virtual void set_euclidian_distance(std::vector<node> *in, LargeVector mean) const;
+    virtual size_t get_max_index(const std::vector<node> &in) const;
   
 };
 /// Policy that combines two or more sub-policies using different strategies
