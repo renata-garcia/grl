@@ -188,7 +188,7 @@ class MultiPolicy : public Policy
     virtual void update_mean_mov_with_euclidian(const std::vector<Action> &in, LargeVector center) const;
     virtual void update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const;
 
-    virtual size_t score_distance_density_based(std::vector<node> *action_actors) const;
+    // virtual size_t score_distance_density_based(std::vector<node> *action_actors) const;
     virtual LargeVector score_distance_data_center(std::vector<node> *in, LargeVector center) const;
     virtual void choosing_quartile_of_mean_mov(std::vector<node> *in) const;
     virtual void set_density_based(std::vector<node> *in) const;
