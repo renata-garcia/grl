@@ -4,7 +4,10 @@
 ./grld ../cfg/pendulum/mpol_dpg_13_random.yaml 
 ./grld ../cfg/pendulum/mpol_dpg_13_greedy.yaml
 
-./grld ../cfg/pendulum/mpol_dpg_13_data_center_mm_b2_a01.yaml
+  ./grld ../cfg/pendulum/mpol_dpg_13_data_center.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_none_none_datacenter.yaml
+ ./grld ../cfg/pendulum/mpol_dpg_13_data_center_mm_b2_a01.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_eucl_quartMM_datacenter.yaml
 ./grld ../cfg/pendulum/mpol_dpg_13_data_center_mm_b2_a75.yaml
 ./grld ../cfg/pendulum/mpol_dpg_13_data_center_mm_b2_a90.yaml
 ./grld ../cfg/pendulum/mpol_dpg_13_data_center_mm_b2_a98.yaml
@@ -22,8 +25,10 @@
 ./grld ../cfg/pendulum/mpol_dpg_2_data_center_equals.yaml
 ./grld ../cfg/pendulum/mpol_dpg_2_data_center.yaml
 
-./grld ../cfg/pendulum/mpol_dpg_13_density_based.yaml
-./grld ../cfg/pendulum/mpol_dpg_13_density_based_mm_a001.yaml
+  ./grld ../cfg/pendulum/mpol_dpg_13_density_based.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_none_none_dens.yaml
+  ./grld ../cfg/pendulum/mpol_dpg_13_density_based_mm_a001.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_eucl_quartMM_dens.yaml
 ./grld ../cfg/pendulum/mpol_dpg_13_density_based_mm_a01.yaml
 ./grld ../cfg/pendulum/mpol_dpg_13_density_based_mm_a75.yaml
 ./grld ../cfg/pendulum/mpol_dpg_13_density_based_mm_a90.yaml
@@ -85,14 +90,17 @@
 ./grld ../cfg/cart_pole/mpol_dpg_26_density_based_voting_mov.yaml
 ./grld ../cfg/cart_pole/mpol_dpg_26_density_based_voting_mov_two_steps.yaml
 
-./grld ../cfg/pendulum/mpol_dpg_13_density_based_historic.yaml
+  ./grld ../cfg/pendulum/mpol_dpg_13_density_based_historic.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_dens_eucl_min_none.yaml
 ./grld ../cfg/pendulum/mpol_dpg_13_density_based_historic_a001.yaml
 ./grld ../cfg/pendulum/mpol_dpg_20_density_based_historic.yaml
 ./grld ../cfg/pendulum/mpol_dpg_20_density_based_historic_a001.yaml
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_historic.yaml
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_historic_a001.yaml
 
-./grld ../cfg/pendulum/mpol_dpg_13_density_based_historic_dens.yaml
+
+  ./grld ../cfg/pendulum/mpol_dpg_13_density_based_historic_dens.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_dens_dens_max_none.yaml
 ./grld ../cfg/pendulum/mpol_dpg_20_density_based_historic_dens.yaml
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_historic_dens.yaml
 
@@ -108,7 +116,10 @@
 ./grld ../cfg/cart_pole/dpg.yaml
 ./grld ../cfg/pendulum/mpol_dpg_13_density_based_historic_dens.yaml
 
-./grld ../cfg/pendulum/mpol_dpg_13_density_based_dens_best.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_eucl_50asc_dens.yaml
+  ./grld ../cfg/pendulum/mpol_dpg_13_density_based_dens_best.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_dens_50asc_datacenter.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_eucl_50asc_datacenter.yaml
 ./grld ../cfg/pendulum/mpol_dpg_20_density_based_dens_best.yaml
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_dens_best.yaml
 
@@ -116,7 +127,11 @@
 python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld ../cfg/pendulum/mpol_ddpg_4_density_based_dens_best.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_4_density_based_historic_dens.yaml
-'
 
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_historic_dens.yaml
+'
+
+
+
+
 

@@ -37,56 +37,165 @@
 #define ASC 0
 #define DESC 1
 
+/*
+mpol_dpg_13_alg4steps.yaml
 
-// case csAlg4Steps:
-// {
-//   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-//   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-//   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-//   std::vector<size_t> ii_max_density;
-//   std::vector<Action> aa_normalized(n_policies);
-//   //std::vector<double> density(n_policies);
-//   LargeVector mean, vals;
+case csDataCenterVotingMov:
+{
+  std::vector<double>::iterator itd;
+	std::vector<double> voting_weights(n_policies);
+	std::vector<double> voting_weights_id_kepper(n_policies);
+  LargeVector mean, vals;
+  for(size_t i=0; i < voting_weights.size(); ++i)
+	voting_weights[i] = 1 + iRoulette_*(n_policies-1);
+
+  mean = get_policy_mean(in, actions_actors, vals);
   
-//   mean = get_policy_mean(in, actions_actors, vals);
+  update_mean_mov_with_euclidian(actions_actors, mean);
 
-
+  std::vector<size_t> v_id = choosing_quartile_of_mean_mov(actions_actors);
   
-//   std::vector<Action>::iterator it_norm = aa_normalized.begin();
-//   for(std::vector<Action>::iterator it = actions_actors.begin(); it != actions_actors.end(); ++it, ++it_norm)
-//     (*it_norm).v = -1 + 2*( ((*it).v - min_) / (max_ - min_) );
+  for(size_t k = 0; k < v_id.size(); ++k)
+  {
+	voting_weights_id_kepper[v_id[k]] = -1;
+	voting_weights[v_id[k]] = voting_weights[v_id[k]] - (v_id.size() - k)*iRoulette_;
+  }
 
-//   for(size_t i = 0; i < aa_normalized.size(); ++i)
-//     CRAWL("MultiPolicy::csDensityBasedDensBest::aa_normalized: " << aa_normalized[i]);
+  for(size_t i=0, k=0; i < voting_weights_id_kepper.size(); ++i)
+	if(voting_weights_id_kepper[i] >= 0)
+	  voting_weights_id_kepper[i] = k++;
 
-//   std::vector<double> density(n_policies);
-//   size_t index = get_max_index_by_density_based(aa_normalized, density);
-//   CRAWL("MultiPolicy::csDensityBasedDensBest::get_max_index_by_density_based(aa_normalized)::index: " << index);
+  while(actions_actors.size() > data_center_mean_size_)
+  {
+	size_t index = get_max_index_by_euclidian_distance(actions_actors, mean);
+	actions_actors.erase(actions_actors.begin()+index); //retirando apenas o elemento que está no index i_max
+	//atualizando o vetor de voting_weights conforme escolha de retirada
+	bool found = false;
+	for(size_t i = 0; i < n_policies; ++i)
+	{
+	  if(voting_weights_id_kepper[i] == index){
+		voting_weights_id_kepper[i] = -1;
+		found = true;
+	  } else if(found)
+		voting_weights_id_kepper[i]--;
+	}
+	for(size_t i = 0; i < voting_weights.size(); ++i)
+	  if(voting_weights_id_kepper[i] < 0)
+		voting_weights[i] = voting_weights[i] - iRoulette_;
 
-//   for(size_t i = 0; i < density.size(); ++i)
-//     CRAWL("MultiPolicy::csDensityBasedDensBest::density[i:" << i << "]: " << density[i]);
+	mean = get_mean(actions_actors);
+  }
+  for(size_t k = 0; k < v_id.size(); ++k)
+	voting_weights[v_id[k]] = 1;
 
-//   update_mean_mov(density);
+  update_mean_mov(voting_weights);      
+  dist = mean;
+}
+break;
+case csDataCenterVotingMovTwoSteps:
+{
+  std::vector<double>::iterator itd;
+  std::vector<double> voting_weights(n_policies);
+  std::vector<double> voting_weights_id_kepper(n_policies);
+  LargeVector mean, vals, mean2;
+  std::vector<Action> aa_copied(n_policies);
+  for(size_t i=0; i < voting_weights.size(); ++i)
+  {
+	voting_weights[i] = 1 + iRoulette_*(n_policies-1);
+	voting_weights_id_kepper[i] = i;
+  }
 
-//   std::vector<size_t> v_id = choosing_bests_of_mean_mov(actions_actors,DESC);
-//   for(size_t i = 0; i < actions_actors.size(); ++i)
-//     CRAWL("MultiPolicy::csDensityBasedDensBest::actions_actors after euclidian_distance_choosing_quartile_of_mean_mov: " << actions_actors[i]);
-
-//   for(size_t i=0; i < v_id.size(); ++i)
-//     aa_normalized.erase(aa_normalized.begin()+v_id[i]-i);
-//   CRAWL("MultiPolicy::csDensityBasedDensBest::removed ");
+  mean = get_policy_mean(in, actions_actors, vals);
   
-//   for(std::vector<Action>::iterator it = aa_normalized.begin(); it!=aa_normalized.end(); ++it)
-//     CRAWL("MultiPolicy::csDensityBasedDensBest::aa_normalized<after remove>:: " << it->v[0]);
+  for(size_t i = 0; i < actions_actors.size(); ++i)
+  {
+	aa_copied[i].v.resize(actions_actors[i].v.size());
+	for (size_t ii = 0; ii < actions_actors[i].v.size(); ++ii)
+	  aa_copied[i].v[ii] = actions_actors[i].v[ii];
+  }
 
-//   index = get_max_index_by_density_based(aa_normalized);
+  mean2.resize(mean.size());
+  for (size_t ii = 0; ii < mean.size(); ++ii)
+	mean2[ii] = mean[ii];
 
-//   dist = actions_actors[index].v;
-//   CRAWL("MultiPolicy::csDensityBasedDensBest::dist: " << dist);
-//   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-//   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-//   //88888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
-// }
+  //PART 1
+  
+  while(actions_actors.size() > data_center_mean_size_)
+  {
+	size_t index = get_max_index_by_euclidian_distance(actions_actors, mean);
+	actions_actors.erase(actions_actors.begin()+index); //retirando apenas o elemento que está no index i_max
+
+	//atualizando o vetor de voting_weights conforme escolha de retirada
+	bool found = false;
+	for(size_t i = 0; i < n_policies; ++i)
+	{
+	  if(voting_weights_id_kepper[i] == index){
+		voting_weights_id_kepper[i] = -1;
+		found = true;
+	  } else if(found)
+		voting_weights_id_kepper[i]--;
+	}
+	for(size_t i = 0; i < voting_weights.size(); ++i)
+	  if(voting_weights_id_kepper[i] < 0)
+		voting_weights[i] = voting_weights[i] - iRoulette_;
+
+	mean = get_mean(actions_actors);
+  }
+
+  update_mean_mov(voting_weights); 
+
+  //PART 2
+  update_mean_mov_with_euclidian(actions_actors, mean);
+
+  std::vector<size_t> v_id = choosing_bests_of_mean_mov(aa_copied, ASC);
+
+  //initing voting vectors
+  for(size_t i = 0; i < voting_policies_->size(); ++i)
+  {
+	voting_policies_->at(i) = 1;
+	voting_weights_id_kepper[i] = i;
+  }
+
+  for(size_t i=0; i < voting_weights.size(); ++i)
+	voting_weights[i] = 1 + iRoulette_*(n_policies-1);
+
+  for(size_t k = 0; k < v_id.size(); ++k)
+  {
+	voting_weights_id_kepper[v_id[k]] = -1;
+	voting_weights[v_id[k]] = voting_weights[v_id[k]] - (v_id.size() - k)*iRoulette_;
+  }
+
+  for(size_t i=0, k=0; i < voting_weights_id_kepper.size(); ++i)
+	if(voting_weights_id_kepper[i] >= 0)
+	  voting_weights_id_kepper[i] = k++;
+
+  while(aa_copied.size() > data_center_mean_size_)
+  {
+	size_t index = get_max_index_by_euclidian_distance(aa_copied, mean2);
+	aa_copied.erase(aa_copied.begin()+index); //retirando apenas o elemento que está no index i_max
+	//atualizando o vetor de voting_weights conforme escolha de retirada
+	bool found = false;
+	for(size_t i = 0; i < n_policies; ++i)
+	{
+	  if(voting_weights_id_kepper[i] == index){
+		voting_weights_id_kepper[i] = -1;
+		found = true;
+	  } else if(found)
+		voting_weights_id_kepper[i]--;
+	}
+	for(size_t i = 0; i < voting_weights.size(); ++i)
+	  if(voting_weights_id_kepper[i] < 0)
+		voting_weights[i] = voting_weights[i] - iRoulette_;
+
+	mean2 = get_mean(aa_copied);
+  }
+  for(size_t k = 0; k < v_id.size(); ++k)
+	voting_weights[v_id[k]] = 1;
+
+  dist = mean2;
+}
+break;
+*/
 
 namespace grl
 {
@@ -103,8 +212,8 @@ class MultiPolicy : public Policy
     csAlg4Steps,
     csMean, csMeanMov, csRandom, csStatic, csValueBased, csRoulette};
     enum ScoreDistance {sdNone, sdDensityBased, sdDataCenter, sdMean};
-    enum UpdateHistory {uhEuclidianDistance, uhDensity, uhVoting};
-    enum ChooseActions {caBest, ca50PercAsc, ca50PercDesc, ca25Perc, ca10Perc, caQuartileOfMeanMov};
+    enum UpdateHistory {uhNone, uhEuclidianDistance, uhDensity, uhVoting};
+    enum ChooseActions {caNone, caMax, caMin, ca50PercAsc, ca50PercDesc, ca25Perc, ca10Perc, caQuartileOfMeanMov};
 
   protected:
     std::string strategy_str_;
@@ -200,6 +309,7 @@ class MultiPolicy : public Policy
     static bool compare_desc_mean_mov_i(const node &a, const node &b);
     virtual void set_euclidian_distance(std::vector<node> *in, LargeVector mean) const;
     virtual size_t get_max_index(const std::vector<node> &in) const;
+    virtual size_t get_min_index(const std::vector<node> &in) const;
   
 };
 /// Policy that combines two or more sub-policies using different strategies

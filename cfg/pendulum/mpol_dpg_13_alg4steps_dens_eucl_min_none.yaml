@@ -1,12 +1,12 @@
  experiment: 
   type: experiment/online_learning
-  runs: 10
+  runs: 1
   run_offset: 0
   trials: 10000
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_13_alg4steps_dens_dens_50desc_dens_data
+  output: mpol_dpg_13_alg4steps_dens_eucl_min_none_data
   environment: 
     type: environment/modeled
     model:
@@ -25,16 +25,16 @@
       type: mapping/policy/multi
       strategy: alg4steps
       score_distance: density_based
-      update_history: density
-      choose_actions: 50percDesc
-      select_by_distance: density_based
+      update_history: euclidian_distance
+      choose_actions: min
+      select_by_distance: none
       sampler: 
         type: sampler/greedy
       bins: 100
       static_policy: 0
       r_distance_parameter: 0.05
       alpha: 0.01
-      iroulette: 0.3
+      iroulette: 0.1
       minor_remove_bound: 0.25
       major_remove_bound: 0.75
       policy: 
