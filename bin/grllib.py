@@ -2,6 +2,8 @@ import yaml
 import itertools
 import threading
 import socket
+import select
+import os
 
 try:
     # included in standard lib from Python 2.7
@@ -30,11 +32,13 @@ class Worker():
   def __init__(self, socket, output=""):
     self.socket = socket
     self.output = output
+    self.dead = False
 
   def read(self, regret='simple'):
     """Read worker result, returning either simple or cumulative regret"""
     data = [float(v) for v in self.socket.makefile().readlines()]
     self.socket.close()
+    self.dead = True
     
     if self.output:
       stream = open(self.output + ".txt", 'w')
@@ -51,6 +55,22 @@ class Worker():
       return sum(data)
     else:
       raise Exception("Unknown regret type " + regret)
+
+  # DELETES DATA FROM QUEUE! ONLY USE IF YOU DON'T
+  # CARE ABOUT THE RETURN VALUE OF READ!
+  def alive(self):
+    if self.dead:
+      return False
+  
+    while True:
+      r, w, e = select.select([self.socket], [], [], 0)
+      if r:
+        buf = self.socket.recv(4096, socket.MSG_DONTWAIT)
+        if len(buf) == 0:
+          self.dead = True
+          return False
+      else:
+        return True
 
 class Server():
   def __init__(self, port=3373):
@@ -206,3 +226,30 @@ def mergeconf(base, new):
         base[k] = merge(base[k],v)
 
   return base
+
+def readconf(path):
+  """Reads configuration, resolving file references"""
+  stream = file(path)
+  conf = yaml.load(stream)
+  stream.close()
+  
+  return _readconf(conf, path)
+
+def _readconf(conf, path):
+  if isinstance(conf, dict):
+    iterfun = lambda c: c.iteritems()
+  elif isinstance(conf, list):
+    iterfun = lambda c: enumerate(c)
+  else:
+    return conf
+  
+  for k,v in iterfun(conf):
+    if isinstance(v, str) and v[-5:] == ".yaml":
+      ref = os.path.join(os.path.dirname(path), v)
+      if os.path.isfile(ref):
+        conf[k] = readconf(ref)
+    else:
+      conf[k] = _readconf(v, path)
+    
+  return conf
+  

@@ -73,9 +73,7 @@ void PendulumSwingupTask::request(ConfigurationRequest *config)
 
   config->push_back(CRP("timeout", "Episode timeout", T_, CRP::Configuration, 0., DBL_MAX));
   config->push_back(CRP("randomization", "Level of start state randomization", randomization_, CRP::Configuration, 0., 1.));
-  
-  //config->push_back(CRP("sincos", "Use sine-cosine representation of angle", sincos_, CRP::Configuration, {"sin, cos and speed", "angle and speed"}));
-  config->push_back(CRP("sincos", "Use sine-cosine representation of angle", sincos_, CRP::Configuration, 0., 1.));
+  config->push_back(CRP("sincos", "Use sine-cosine representation for observations", sincos_, CRP::Configuration, 0, 1));
 }
 
 void PendulumSwingupTask::configure(Configuration &config)
@@ -84,36 +82,18 @@ void PendulumSwingupTask::configure(Configuration &config)
   randomization_ = config["randomization"];
   sincos_ = config["sincos"];
 
-  // if (sincos_.compare("angle and speed"))
-  // {
-  //   config.set("observation_dims", 2);
-  //   config.set("observation_min", VectorConstructor(0., -12*M_PI));
-  //   config.set("observation_max", VectorConstructor(2*M_PI, 12*M_PI));
-  // }
-  // else if(sincos_.compare("sin, cos and speed"))
-  // {
-  //   config.set("observation_dims", 3);
-  //   config.set("observation_min", VectorConstructor(-1., -1., -12*M_PI));
-  //   config.set("observation_max", VectorConstructor(1., 1., 12*M_PI));
-  // }
-  // else
-  //   throw bad_param("pendulum/sincos:none type was choosen");
-
-  if (sincos_ == 0)
+  if (sincos_)
+  {
+    config.set("observation_dims", 3);
+    config.set("observation_min", VectorConstructor(-1., -1., -12*M_PI));
+    config.set("observation_max", VectorConstructor( 1.,  1.,  12*M_PI));
+  }
+  else
   {
     config.set("observation_dims", 2);
     config.set("observation_min", VectorConstructor(0., -12*M_PI));
     config.set("observation_max", VectorConstructor(2*M_PI, 12*M_PI));
   }
-  else if(sincos_ == 1)
-  {
-    config.set("observation_dims", 3);
-    config.set("observation_min", VectorConstructor(-1., -1., -12*M_PI));
-    config.set("observation_max", VectorConstructor(1., 1., 12*M_PI));
-  }
-  else
-    throw bad_param("pendulum/sincos:none type was choosen");
-  
   config.set("action_dims", 1);
   config.set("action_min", VectorConstructor(-3));
   config.set("action_max", VectorConstructor(3));
@@ -147,11 +127,11 @@ void PendulumSwingupTask::observe(const Vector &state, Observation *obs, int *te
   double a = fmod(state[0]+M_PI, 2*M_PI);
   if (a < 0) a += 2*M_PI;
   
-  if (sincos_ == 1)
+  if (sincos_)
   {
     obs->v.resize(3);
-    (*obs)[0] = cos(a);
-    (*obs)[1] = sin(a);
+    (*obs)[0] = sin(state[0]);
+    (*obs)[1] = cos(state[0]);
     (*obs)[2] = state[1];
   }
   else
@@ -160,7 +140,7 @@ void PendulumSwingupTask::observe(const Vector &state, Observation *obs, int *te
     (*obs)[0] = a;
     (*obs)[1] = state[1];
   }
-  
+
   obs->absorbing = false;
   
   if (state[2] > T_)
@@ -180,16 +160,25 @@ void PendulumSwingupTask::evaluate(const Vector &state, const Action &action, co
   *reward = -5*pow(a, 2) - 0.1*pow(next[1], 2) - 1*pow(action[0], 2);
   
   // Normalize reward per timestep.
-  // TODO: make this work for inverted states
-  if (state[2] != next[2])
+  // TODO: Better way of detecting discrete timesteps
+  if ((next[2] - state[2]) != 1)
     *reward *= (next[2]-state[2])/0.03;
 }
 
-bool PendulumSwingupTask::invert(const Observation &obs, Vector *state) const
+bool PendulumSwingupTask::invert(const Observation &obs, Vector *state, double time) const
 {
-  *state = obs;
-  (*state)[0] -= M_PI;
-  *state = extend(*state, VectorConstructor(0.));
+  state->resize(3);
+  if (sincos_)
+  {
+    (*state)[0] = atan2(obs[0], obs[1]);
+    (*state)[1] = obs[2];
+  }
+  else
+  {
+    (*state)[0] = obs[0]-M_PI;
+    (*state)[1] = obs[1];
+  }
+  (*state)[2] = time;
   
   return true;
 }
@@ -223,6 +212,8 @@ void PendulumRegulatorTask::reconfigure(const Configuration &config)
 
 void PendulumRegulatorTask::observe(const Vector &state, Observation *obs, int *terminal) const
 {
+  RegulatorTask::observe(state, obs, terminal);
+
   if (state.size() != 3)
     throw Exception("task/pendulum/regulator requires dynamics/pendulum");
     
@@ -230,13 +221,11 @@ void PendulumRegulatorTask::observe(const Vector &state, Observation *obs, int *
   for (size_t ii=0; ii < 2; ++ii)
     (*obs)[ii] = state[ii];
   obs->absorbing = false;
-
-  *terminal = state[2] > 3;
 }
 
-bool PendulumRegulatorTask::invert(const Observation &obs, Vector *state) const
+bool PendulumRegulatorTask::invert(const Observation &obs, Vector *state, double time) const
 {
-  *state = extend(obs, VectorConstructor(0.));
+  *state = extend(obs, VectorConstructor(time));
   
   return true;
 }

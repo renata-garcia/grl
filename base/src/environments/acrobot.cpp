@@ -133,13 +133,13 @@ void AcrobotBalancingTask::evaluate(const Vector &state, const Action &action, c
   *reward = !failed(next);
 }
 
-bool AcrobotBalancingTask::invert(const Observation &obs, Vector *state) const
+bool AcrobotBalancingTask::invert(const Observation &obs, Vector *state, double time) const
 {
   *state = VectorConstructor(obs[AcrobotDynamics::siAngle1],
                              obs[AcrobotDynamics::siAngle2],
                              obs[AcrobotDynamics::siAngleRate1],
                              obs[AcrobotDynamics::siAngleRate2],
-                             0.);
+                             time);
 
   return true;
 }
@@ -179,6 +179,8 @@ void AcrobotRegulatorTask::reconfigure(const Configuration &config)
 
 void AcrobotRegulatorTask::observe(const Vector &state, Observation *obs, int *terminal) const
 {
+  RegulatorTask::observe(state, obs, terminal);
+
   if (state.size() != 5)
     throw Exception("task/acrobot/regulator requires dynamics/acrobot");
     
@@ -186,17 +188,15 @@ void AcrobotRegulatorTask::observe(const Vector &state, Observation *obs, int *t
   for (size_t ii=0; ii < 4; ++ii)
     (*obs)[ii] = state[ii];
   obs->absorbing = false;
-
-  *terminal = state[AcrobotDynamics::siTime] > 20;
 }
 
-bool AcrobotRegulatorTask::invert(const Observation &obs, Vector *state) const
+bool AcrobotRegulatorTask::invert(const Observation &obs, Vector *state, double time) const
 {
   *state = VectorConstructor(obs[AcrobotDynamics::siAngle1],
                              obs[AcrobotDynamics::siAngle2],
                              obs[AcrobotDynamics::siAngleRate1],
                              obs[AcrobotDynamics::siAngleRate2],
-                             0.);
+                             time);
 
   return true;
 }

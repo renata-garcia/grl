@@ -70,7 +70,7 @@ class AcrobotBalancingTask : public Task
     virtual void start(int test, Vector *state) const;
     virtual void observe(const Vector &state, Observation *obs, int *terminal) const;
     virtual void evaluate(const Vector &state, const Action &action, const Vector &next, double *reward) const;
-    virtual bool invert(const Observation &obs, Vector *state) const;
+    virtual bool invert(const Observation &obs, Vector *state, double time=0.) const;
 
   protected:
     bool failed(const Vector &state) const;
@@ -90,6 +90,7 @@ class AcrobotRegulatorTask : public RegulatorTask
       stddev_ = VectorConstructor(0.005, 0.005, 0, 0);
       q_ = VectorConstructor(1, 1, 0, 0);
       r_ = VectorConstructor(0.01);
+      timeout_ = 20;
     }
   
     // From Configurable
@@ -99,7 +100,7 @@ class AcrobotRegulatorTask : public RegulatorTask
 
     // From Task
     virtual void observe(const Vector &state, Observation *obs, int *terminal) const;
-    virtual bool invert(const Observation &obs, Vector *state) const;
+    virtual bool invert(const Observation &obs, Vector *state, double time=0.) const;
 };
 
 }

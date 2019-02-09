@@ -205,11 +205,11 @@ void CartDoublePoleSwingupTask::evaluate(const Vector &state, const Action &acti
   *reward = -2*pow(state[0], 2) - 0.1*pow(state[3], 2) -pow(a, 2) - 0.1*pow(state[4], 2) - pow(a2, 2) - 0.1*pow(state[5], 2);
 }
 
-bool CartDoublePoleSwingupTask::invert(const Observation &obs, Vector *state) const
+bool CartDoublePoleSwingupTask::invert(const Observation &obs, Vector *state, double time) const
 {
   *state = obs;
   (*state)[1] -= M_PI;
-  *state = extend(*state, VectorConstructor(0.));
+  *state = extend(*state, VectorConstructor(time));
   
   return true;
 }
@@ -296,10 +296,10 @@ void CartDoublePoleBalancingTask::evaluate(const Vector &state, const Action &ac
     *reward = 6.2 - fabs(state[0]) - fabs(state[1]) - fabs(state[2]);
 }
 
-bool CartDoublePoleBalancingTask::invert(const Observation &obs, Vector *state) const
+bool CartDoublePoleBalancingTask::invert(const Observation &obs, Vector *state, double time) const
 {
   *state = obs;
-  *state = extend(*state, VectorConstructor(0.));
+  *state = extend(*state, VectorConstructor(time));
   
   return true;
 }
@@ -314,16 +314,12 @@ bool CartDoublePoleBalancingTask::failed(const Vector &state) const
 void CartDoublePoleRegulatorTask::request(ConfigurationRequest *config)
 {
   RegulatorTask::request(config);
-
-  config->push_back(CRP("timeout", "Episode timeout", T_, CRP::Configuration, 0., DBL_MAX));
 }
 
 void CartDoublePoleRegulatorTask::configure(Configuration &config)
 {
   RegulatorTask::configure(config);
   
-  T_ = config["timeout"];
-
   config.set("observation_min", VectorConstructor(-2.4, -M_PI, -M_PI, -10.0, -5*M_PI, -5*M_PI));
   config.set("observation_max", VectorConstructor( 2.4,  M_PI,  M_PI,  10.0,  5*M_PI,  5*M_PI));
   config.set("action_min", VectorConstructor(-20.));
@@ -337,6 +333,8 @@ void CartDoublePoleRegulatorTask::reconfigure(const Configuration &config)
 
 void CartDoublePoleRegulatorTask::observe(const Vector &state, Observation *obs, int *terminal) const
 {
+  RegulatorTask::observe(state, obs, terminal);
+
   if (state.size() != 7)
     throw Exception("task/cart_double_pole/regulator requires dynamics/cart_double_pole");
 
@@ -348,17 +346,12 @@ void CartDoublePoleRegulatorTask::observe(const Vector &state, Observation *obs,
   (*obs)[4] = state[4];
   (*obs)[5] = state[5];
   obs->absorbing = false;
-
-  if (state[6] > T_)
-    *terminal = 1;
-  else
-    *terminal = 0;
 }
 
-bool CartDoublePoleRegulatorTask::invert(const Observation &obs, Vector *state) const
+bool CartDoublePoleRegulatorTask::invert(const Observation &obs, Vector *state, double time) const
 {
   *state = obs;
-  *state = extend(*state, VectorConstructor(0.));
+  *state = extend(*state, VectorConstructor(time));
   
   return true;
 }

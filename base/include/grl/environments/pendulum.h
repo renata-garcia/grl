@@ -60,8 +60,7 @@ class PendulumSwingupTask : public Task
   
   public:
     double T_, randomization_;
-    double sincos_;
-    //std::string sincos_;
+    int sincos_;
   
   public:
     PendulumSwingupTask() : T_(2.99), randomization_(0.), sincos_(0) { }
@@ -76,7 +75,7 @@ class PendulumSwingupTask : public Task
     virtual bool actuate(const Vector &prev, const Vector &state, const Action &action, Vector *actuation) const;
     virtual void observe(const Vector &state, Observation *obs, int *terminal) const;
     virtual void evaluate(const Vector &state, const Action &action, const Vector &next, double *reward) const;
-    virtual bool invert(const Observation &obs, Vector *state) const;
+    virtual bool invert(const Observation &obs, Vector *state, double time=0.) const;
 };
 
 /// Pendulum balancing task with quadratic costs
@@ -93,6 +92,7 @@ class PendulumRegulatorTask : public RegulatorTask
       stddev_ = VectorConstructor(0.1, 0);
       q_ = VectorConstructor(1, 0);
       r_ = VectorConstructor(0.01);
+      timeout_ = 3;
     }
   
     // From Configurable
@@ -102,7 +102,7 @@ class PendulumRegulatorTask : public RegulatorTask
 
     // From Task
     virtual void observe(const Vector &state, Observation *obs, int *terminal) const;
-    virtual bool invert(const Observation &obs, Vector *state) const;
+    virtual bool invert(const Observation &obs, Vector *state, double time=0.) const;
 };
 
 }

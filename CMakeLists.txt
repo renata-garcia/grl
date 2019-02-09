@@ -35,10 +35,11 @@ set(MODULES base
             #addons/ros
             #addons/matlab
             addons/odesim
-            #addons/rbdl
-            #addons/muscod
-            addons/leo
-            #addons/leo2
+            addons/rbdl
+            addons/muscod
+#            addons/leo
+            addons/leosim
+            addons/leo2
             addons/tlm
             addons/lqr
             #addons/zeromq
@@ -73,7 +74,7 @@ foreach(module ${MODULES})
   grl_build_library(${module})
 endforeach()
 
-install(PROGRAMS bin/grlc bin/grlcc bin/grlq bin/grlo bin/grllib.py bin/tooltip.py DESTINATION ${GRL_BIN_DESTINATION})
+install(PROGRAMS bin/grlc bin/grlcc bin/grlq bin/grlo bin/grlr bin/grllib.py bin/tooltip.py DESTINATION ${GRL_BIN_DESTINATION})
 install(DIRECTORY cfg/ DESTINATION ${GRL_SHARE_DESTINATION}/cfg FILES_MATCHING PATTERN "*.yaml")
 
 if (catkin_FOUND)

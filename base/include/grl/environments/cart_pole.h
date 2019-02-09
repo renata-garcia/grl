@@ -83,7 +83,7 @@ class CartPoleSwingupTask : public Task
     virtual void start(int test, Vector *state) const;
     virtual void observe(const Vector &state, Observation *obs, int *terminal) const;
     virtual void evaluate(const Vector &state, const Action &action, const Vector &next, double *reward) const;
-    virtual bool invert(const Observation &obs, Vector *state) const;
+    virtual bool invert(const Observation &obs, Vector *state, double time=0.) const;
     virtual Matrix rewardHessian(const Vector &state, const Action &action) const;
     
   protected:
@@ -113,7 +113,7 @@ class CartPoleBalancingTask : public Task
     virtual void start(int test, Vector *state) const;
     virtual void observe(const Vector &state, Observation *obs, int *terminal) const;
     virtual void evaluate(const Vector &state, const Action &action, const Vector &next, double *reward) const;
-    virtual bool invert(const Observation &obs, Vector *state) const;
+    virtual bool invert(const Observation &obs, Vector *state, double time=0.) const;
     
   protected:
     bool failed(const Vector &state) const;
@@ -126,16 +126,14 @@ class CartPoleRegulatorTask : public RegulatorTask
     TYPEINFO("task/cart_pole/regulator", "Cart-pole regulator task")
   
   public:
-    double T_;
-  
-  public:
-    CartPoleRegulatorTask() : T_(9.99)
+    CartPoleRegulatorTask()
     {
       start_ = VectorConstructor(0, 0, 0, 0);
       goal_ = VectorConstructor(0, 0, 0, 0);
       stddev_ = VectorConstructor(0.1, 0.1, 0, 0);
       q_ = VectorConstructor(1, 1, 0, 0);
       r_ = VectorConstructor(0.01);
+      timeout_ = 9.99;
     }
   
     // From Configurable
@@ -145,7 +143,7 @@ class CartPoleRegulatorTask : public RegulatorTask
 
     // From Task
     virtual void observe(const Vector &state, Observation *obs, int *terminal) const;
-    virtual bool invert(const Observation &obs, Vector *state) const;
+    virtual bool invert(const Observation &obs, Vector *state, double time=0.) const;
 };
 
 }

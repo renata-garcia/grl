@@ -92,6 +92,8 @@ void IntegratorRegulatorTask::reconfigure(const Configuration &config)
 
 void IntegratorRegulatorTask::observe(const Vector &state, Observation *obs, int *terminal) const
 {
+  RegulatorTask::observe(state, obs, terminal);
+
   if (state.size() != order_+1)
     throw Exception("task/integrator/regulator requires dynamics/integrator");
     
@@ -99,13 +101,11 @@ void IntegratorRegulatorTask::observe(const Vector &state, Observation *obs, int
   for (size_t ii=0; ii < order_; ++ii)
     (*obs)[ii] = state[ii];
   obs->absorbing = false;
-
-  *terminal = state[2] > 3;
 }
 
-bool IntegratorRegulatorTask::invert(const Observation &obs, Vector *state) const
+bool IntegratorRegulatorTask::invert(const Observation &obs, Vector *state, double time) const
 {
-  *state = extend(obs, VectorConstructor(0.));
+  *state = extend(obs, VectorConstructor(time));
   
   return true;
 }

@@ -20,7 +20,7 @@ experiment:
   agent: 
     type: agent/replay
     replay_steps: 64
-    batch_size: 64
+    batch_size: 16
     threads: 0
     policy: 
       type: mapping/policy/discrete/value/q
@@ -39,11 +39,10 @@ experiment:
         interval: 1000
         type: representation/parameterized/tensorflow
         inputs: experiment/environment/task/observation_dims+experiment/environment/task/action_dims
-        outputs: 1
-        file: pendulum_q.pb
+        file: ./4layer_linear.py
       sampler: 
         type: sampler/epsilon_greedy
-        epsilon: 0.5
+        epsilon: 0.05
     predictor: 
       type: predictor/critic/q
       alpha: 0.1
