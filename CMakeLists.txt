@@ -25,7 +25,7 @@ set(MODULES base
             #externals/cma
             externals/ics
             externals/itc
-            #externals/rbdl
+            externals/rbdl
             #externals/cppzmq
             externals/pybind11
             #addons/cma
