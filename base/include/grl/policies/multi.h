@@ -245,6 +245,7 @@ class MultiPolicy : public Policy
     LargeVector last_action_;
     double iRoulette_;
     uint32_t iterations_;
+    typedef std::vector<LargeVector> ActionArray;
     struct data {
       double value;
       size_t id;
@@ -303,14 +304,18 @@ class MultiPolicy : public Policy
     virtual void set_density_based(std::vector<node> *in) const;
     virtual LargeVector get_mean(const std::vector<node> &in) const;
     virtual void update_mean_mov(std::vector<node> *in) const;
-    virtual void update_mean_mov_with_euclidian(std::vector<node> *in, LargeVector center) const;
     virtual void choosing_first50perc_of_mean_mov(std::vector<node> *in, int asc_desc) const;
     static bool compare_asc_mean_mov_i(const node &a, const node &b);
     static bool compare_desc_mean_mov_i(const node &a, const node &b);
     virtual void set_euclidian_distance(std::vector<node> *in, LargeVector mean) const;
     virtual size_t get_max_index(const std::vector<node> &in) const;
     virtual size_t get_min_index(const std::vector<node> &in) const;
-  
+
+    //trying again
+    // virtual LargeVector mean(ActionArray const &array);
+    // virtual LargeVector score(ActionArray const &array, double mean);
+    // virtual ActionArray percentile(ActionArray const &array, LargeVector const &scores);
+ 
 };
 /// Policy that combines two or more sub-policies using different strategies
 class DiscreteMultiPolicy : public DiscretePolicy

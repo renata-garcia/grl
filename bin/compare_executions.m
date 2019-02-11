@@ -7,7 +7,7 @@ function compare_executions(n, folder, nstd, title_fig, varargin)
         else
             array = [array; strrep(name,'_','.'), file];
         end
-    end   
+    end
 
     figure('units','normalized','outerposition',[0 0 1 1]);
     leg = [];
@@ -38,4 +38,65 @@ function compare_executions(n, folder, nstd, title_fig, varargin)
     xlabel('step');
     ylabel('reward');
     legend(h,'Location','SouthEast');
+
+%   ------------------------------------------------------
+    
+    figure('units','normalized','outerposition',[0 0 1 1]);
+    leg = [];
+    color = ['y', 'm', 'b', 'r', 'k', 'g', 'c'];
+    num_alg = length(array);
+    h = zeros(1, num_alg);
+    for j=1:length(array)
+        [mean_d, std_d] = load_mean(array(j,2), n);
+        errstd_d = std_d/sqrt(n);
+        maximum = max(mean_d);
+        x = 1:length(mean_d);
+        n_color = color(1 + rem(j, length(color)));
+        h(j) = errorbaralpha(mean_d, std_d, 'color', n_color, 'linestyle', '--');
+        leg = [leg, ['errstd']];
+        leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
+        hold on;
+    end
+    
+    grid;
+    title(title_fig);
+    xlabel('step');
+    ylabel('reward');
+    legend(leg,'Location','SouthEast');
+
+%   ------------------------------------------------------
+
+    for j=1:length(array)
+        figure();
+        [mean_d, std_d] = load_mean(array(j,2), n);
+        errstd_d = std_d/sqrt(n);
+        maximum = max(mean_d);
+        x = 1:length(mean_d);
+        n_color = color(1 + rem(j, length(color)));
+        errorbaralpha(mean_d, errstd_d, 'color', n_color, 'linestyle', '--');
+        leg = [strcat('err: ', array(j,1), ':... ', num2str(maximum))];
+        grid;
+        title(title_fig);
+        xlabel('step');
+        ylabel('reward');
+        legend(leg,'Location','SouthEast');
+    end 
+
+%   ------------------------------------------------------
+
+    for j=1:length(array)
+        figure();
+        [mean_d, std_d] = load_mean(array(j,2), n);
+        errstd_d = std_d/sqrt(n);
+        maximum = max(mean_d);
+        x = 1:length(mean_d);
+        n_color = color(1 + rem(j, length(color)));
+        errorbaralpha(mean_d, std_d, 'color', n_color, 'linestyle', '--');
+        leg = [strcat('std: ', array(j,1), ':... ', num2str(maximum))];
+        grid;
+        title(title_fig);
+        xlabel('step');
+        ylabel('reward');
+        legend(leg,'Location','SouthEast');
+    end 
 end

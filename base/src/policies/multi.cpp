@@ -1482,10 +1482,10 @@ void MultiPolicy::set_density_based(std::vector<node> *in) const
     for(size_t j = 0; j < in->size(); ++j)
     {
       double expoent = 0.0;
-      for(size_t jj = 0; jj != n_dimension; ++jj)
+      for(size_t k = 0; k != n_dimension; ++k)
       {
-        expoent += pow(in->at(i).normalized[jj] - in->at(j).normalized[jj], 2);
-        //strtmp += strspace + "expoent(jj:" + std::to_string(jj) + "): " +  std::to_string(expoent) + " (1): " + std::to_string((*it).v[jj]) + " (2): " + std::to_string((*it2).v[jj]) + "\n";
+        expoent += pow(in->at(i).normalized[k] - in->at(j).normalized[k], 2);
+        //strtmp += strspace + "expoent(k:" + std::to_string(k) + "): " +  std::to_string(expoent) + " (1): " + std::to_string((*it).v[k]) + " (2): " + std::to_string((*it2).v[k]) + "\n";
       }
       //strtmp += strspace + strspace + "r_dist(before): " + std::to_string(r_dist) + " expoent: " + std::to_string((-1 * expoent / pow(r_distance_parameter_, 2))) + " exp: " + std::to_string(exp( -1 * expoent / pow(r_distance_parameter_, 2))) + "\n";
       r_dist = r_dist + exp( -1 * expoent / pow(r_distance_parameter_, 2) );
@@ -1522,19 +1522,6 @@ void MultiPolicy::update_mean_mov(std::vector<node> *in) const
     CRAWL("MultiPolicy::update_mean_mov::in(i= " << i << "): " << in->at(i).score << ", mean_mov_->at(i): " << mean_mov_->at(i));
   }
   CRAWL("MultiPolicy::update_mean_mov::ending...");
-}
-
-void MultiPolicy::update_mean_mov_with_euclidian(std::vector<node> *in, LargeVector mean) const
-{
-  double euclidian_dist = 0;
-  for(size_t i = 0; i < in->size(); ++i)
-  {
-    CRAWL("MultiPolicy::update_mean_mov_with_euclidian::a(ii= " << i << "): " << in->at(i).action << ", mean_mov_->at(i): " << mean_mov_->at(i));
-    euclidian_dist = sum(pow(in->at(i).action - mean, 2));
-    mean_mov_->at(i) = (alpha_mov_mean_)*euclidian_dist + (1-alpha_mov_mean_)*mean_mov_->at(i);
-    in->at(i).mean_mov_i = mean_mov_->at(i);
-    CRAWL("MultiPolicy::update_mean_mov_with_euclidian::a(ii= " << i << "): " << in->at(i).action << " euclidian distance:dist: " << euclidian_dist << ", mean_mov_->at(i): " << mean_mov_->at(i));
-  }
 }
 
 void MultiPolicy::choosing_first50perc_of_mean_mov(std::vector<node> *in, int asc_desc) const
