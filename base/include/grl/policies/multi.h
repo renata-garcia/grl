@@ -33,6 +33,7 @@
 #include <grl/sampler.h>
 #include <grl/signal.h>
 #include <grl/vector.h>
+#include <tuple>
 
 #define ASC 0
 #define DESC 1
@@ -203,6 +204,7 @@ namespace grl
 /// Policy that combines two or more sub-policies using different strategies
 class MultiPolicy : public Policy
 {
+
   public:
     TYPEINFO("mapping/policy/multi", "Combines multiple policies")
     
@@ -259,7 +261,6 @@ class MultiPolicy : public Policy
       size_t id;
 	  };
     //------------------------------------------------------
-    typedef std::vector<LargeVector> ActionArray;
     double percentile_[2];
 
   public:
@@ -318,7 +319,7 @@ class MultiPolicy : public Policy
     //trying again
     virtual LargeVector mean(ActionArray const &array) const;
     virtual LargeVector score(ActionArray const &array, double mean) const;
-    // virtual ActionArray percentile(ActionArray const &array, LargeVector const &scores, double const  percentile[]) const;
+    virtual ActionArray percentile(ActionArray const &array, LargeVector const &scores, double const  percentile[]) const;
  
 };
 /// Policy that combines two or more sub-policies using different strategies
