@@ -116,10 +116,6 @@
 ./grld ../cfg/cart_pole/dpg.yaml
 ./grld ../cfg/pendulum/mpol_dpg_13_density_based_historic_dens.yaml
 
-./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_eucl_50asc_dens.yaml
-  ./grld ../cfg/pendulum/mpol_dpg_13_density_based_dens_best.yaml
-./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_dens_50asc_datacenter.yaml
-./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_eucl_50asc_datacenter.yaml
 ./grld ../cfg/pendulum/mpol_dpg_20_density_based_dens_best.yaml
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_dens_best.yaml
 
@@ -130,8 +126,11 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_historic_dens.yaml
 '
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_eucl_50asc_dens.yaml
+  ./grld ../cfg/pendulum/mpol_dpg_13_density_based_dens_best.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_dens_50asc_datacenter.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_eucl_50asc_datacenter.yaml
 
-
-
-
-
+./grld ../cfg/pendulum/mpol_dpg_26_density_based_dens_best.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_alg4steps_dens_dens_max_none.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_density_based_bm_a01.yaml

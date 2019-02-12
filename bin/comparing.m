@@ -2,7 +2,7 @@ clc;
 clear all;
 close all;
 
-n = 10;
+n = 6;
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
 addpath("~/Dropbox/phd_grl_results/");
 
@@ -10,7 +10,8 @@ addpath("~/Dropbox/phd_grl_results/");
 compare_executions(n, folder, 1, 'Algoritmos Pendulum',...
     "pendulum_ac_tc", "pendulum_dpg.dat",...
     "mpol_1_replay_ddpg_tensorflow_random_data",...
-    "replay_ddpg_tensorflow_sincos_");
+    "replay_ddpg_tensorflow_sincos_",...
+    "replay_ddpg_tensorflow_lra3_");
 
 %%
 compare_executions(n, folder, 0, 'MPOL 2 DPG benchmark',...

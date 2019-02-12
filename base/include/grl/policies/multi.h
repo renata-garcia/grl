@@ -209,7 +209,7 @@ class MultiPolicy : public Policy
     enum CombinationStrategy {csBinning,
     csDensityBased, csDensityBasedMeanMov, csDensityBasedBestMov, csDensityBasedVotingMov, csDensityBasedHistoric, csDensityBasedHistoricDens, csDensityBasedDensBest,
     csDataCenter, csDataCenterMeanMov, csDataCenterBestMov, csDataCenterVotingMov, csDataCenterVotingMovTwoSteps,
-    csAlg4StepsOld, csAlg4Steps,
+    csAlg4StepsNew, csAlg4Steps,
     csMean, csMeanMov, csRandom, csStatic, csValueBased, csRoulette};
     enum ScoreDistance {sdNone, sdDensityBased, sdDataCenter, sdMean};
     enum UpdateHistory {uhNone, uhEuclidianDistance, uhDensity, uhVoting};
@@ -247,7 +247,6 @@ class MultiPolicy : public Policy
     LargeVector last_action_;
     double iRoulette_;
     uint32_t iterations_;
-    typedef std::vector<LargeVector> ActionArray;
     struct data {
       double value;
       size_t id;
@@ -259,6 +258,9 @@ class MultiPolicy : public Policy
       double score;
       size_t id;
 	  };
+    //------------------------------------------------------
+    typedef std::vector<LargeVector> ActionArray;
+    double percentile_[2];
 
   public:
     MultiPolicy() : bins_(10),
@@ -316,7 +318,7 @@ class MultiPolicy : public Policy
     //trying again
     virtual LargeVector mean(ActionArray const &array) const;
     virtual LargeVector score(ActionArray const &array, double mean) const;
-    // virtual ActionArray percentile(ActionArray const &array, LargeVector const &scores) const;
+    // virtual ActionArray percentile(ActionArray const &array, LargeVector const &scores, double const  percentile[]) const;
  
 };
 /// Policy that combines two or more sub-policies using different strategies
