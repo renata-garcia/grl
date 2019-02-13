@@ -1002,32 +1002,32 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       }
       
       // TODO setar em cima: score_
-      LargeVector score;
-      switch(score_)
-      {
-        case uhNone:
-          CRAWL("MultiPolicy::csAlg4Steps::score_: uhNone");
-          break;
+      // LargeVector score;
+      // switch(score_)
+      // {
+      //   case uhNone:
+      //     CRAWL("MultiPolicy::csAlg4Steps::score_: uhNone");
+      //     break;
 
-        case uhEuclidianDistance:
-          score = set_euclidian_distance(&action_actors, mean);
-          break;
+      //   case uhEuclidianDistance:
+      //     score = set_euclidian_distance(&action_actors, mean);
+      //     break;
         
-        case uhDensity:
-          score = set_density_based(&action_actors);
-          break;
+      //   case uhDensity:
+      //     score = set_density_based(&action_actors);
+      //     break;
 
-        case uhVoting:
-          throw Exception("MultiPolicy score_ uhVoting not implemented!");
-          break;
-      }
+      //   case uhVoting:
+      //     throw Exception("MultiPolicy score_ uhVoting not implemented!");
+      //     break;
+      // }
 
-      update_mean_mov(&action_actors);
+      //update_mean_mov(&action_actors);
       
-      ActionArray active_set = percentile(action_actors, scores, percentile_);
+      //ActionArray active_set = percentile(action_actors, scores, percentile_);
 
-      for(size_t i = 0; i < action_actors.size(); ++i)
-        CRAWL("MultiPolicy::csAlg4Steps::choosed action_actors[i:" << i << "]: " << action_actors[i].action[0] << ", normalized: " << action_actors[i].normalized[0]);
+     // for(size_t i = 0; i < action_actors.size(); ++i)
+     //   CRAWL("MultiPolicy::csAlg4Steps::choosed action_actors[i:" << i << "]: " << action_actors[i].action[0] << ", normalized: " << action_actors[i].normalized[0]);
 
       switch (select_by_distance_)
       {
