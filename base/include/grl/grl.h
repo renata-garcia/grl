@@ -41,8 +41,6 @@
 namespace grl
 {
 
-typedef std::vector<LargeVector> ActionArray;
-  
 enum ActionType { atUndefined, atExploratory, atGreedy };
 
 struct Observation

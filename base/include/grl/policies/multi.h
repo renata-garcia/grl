@@ -208,6 +208,8 @@ class MultiPolicy : public Policy
   public:
     TYPEINFO("mapping/policy/multi", "Combines multiple policies")
     
+    typedef std::vector<LargeVector> ActionArray;
+  
     enum CombinationStrategy {csBinning,
     csDensityBased, csDensityBasedMeanMov, csDensityBasedBestMov, csDensityBasedVotingMov, csDensityBasedHistoric, csDensityBasedHistoricDens, csDensityBasedDensBest,
     csDataCenter, csDataCenterMeanMov, csDataCenterBestMov, csDataCenterVotingMov, csDataCenterVotingMovTwoSteps,
