@@ -20,7 +20,7 @@ agent/communicator:
     type: communicator
     description: Comunicator which exchanges messages with an actual/virtual environment
     mutability: configuration
-    default: 0x2f175c0
+    default: 0x26049d0
     optional: 0
   observation_dims:
     type: int.observation_dims
@@ -176,132 +176,6 @@ agent/fixed:
     mutability: configuration
     default: 0
     optional: 0
-agent/leo/fixed:
-  description: Leo fixed agent
-  policy:
-    type: mapping/policy
-    description: Control policy
-    mutability: configuration
-    default: 0
-    optional: 0
-  pub_transition_type:
-    type: signal/vector
-    description: Publisher of the transition type
-    mutability: configuration
-    default: 0
-    optional: 1
-agent/leo/sma:
-  description: State-machine agent for Leo
-  agent_prepare:
-    type: agent
-    description: Prepare agent
-    mutability: configuration
-    default: 0
-    optional: 0
-  agent_standup:
-    type: agent
-    description: Safe standup agent
-    mutability: configuration
-    default: 0
-    optional: 0
-  agent_starter:
-    type: agent
-    description: Starting agent
-    mutability: configuration
-    default: 0
-    optional: 1
-  agent_main:
-    type: agent
-    description: Main agent
-    mutability: configuration
-    default: 0
-    optional: 0
-  upright_trigger:
-    type: trigger
-    description: Trigger which finishes stand-up phase and triggers preparation agent
-    mutability: configuration
-    default: 0
-    optional: 0
-  fc_trigger:
-    type: trigger
-    description: Trigger which checks for foot contact to ensure that robot is prepared to walk
-    mutability: configuration
-    default: 0
-    optional: 0
-  starter_trigger:
-    type: trigger
-    description: Trigger which initiates a preprogrammed walking at the beginning
-    mutability: configuration
-    default: 0
-    optional: 1
-  sub_ic_signal:
-    type: signal/vector
-    description: Subscriber to the contact signal
-    mutability: configuration
-    default: 0
-    optional: 1
-agent/leo/sym_wrapper:
-  description: Leo agent that symmetrically wraps angles and controls
-  agent:
-    type: agent
-    description: Target agent with reduced state-action space due to symmetry
-    mutability: configuration
-    default: 0
-    optional: 0
-  sub_ic_signal:
-    type: signal/vector
-    description: Publisher of the initialization and contact signal
-    mutability: configuration
-    default: 0
-    optional: 0
-agent/leo/td:
-  description: Leo agent that learns from observed state transitions
-  policy:
-    type: mapping/policy
-    description: Control policy
-    mutability: configuration
-    default: 0
-    optional: 0
-  predictor:
-    type: predictor
-    description: Value function predictor
-    mutability: configuration
-    default: 0
-    optional: 0
-  pub_transition_type:
-    type: signal/vector
-    description: Publisher of the transition type
-    mutability: configuration
-    default: 0
-    optional: 1
-agent/leo_preprogrammed:
-  description: Leo preprogrammed agent
-  rand_gen:
-    type: random_generator
-    description: Random generator for action pertubation
-    mutability: configuration
-    default: 0
-    optional: 0
-  epsilon:
-    type: double
-    description: Exploration rate
-    mutability: configuration
-    default: 0.05
-    optional: 1
-    min: 0
-    max: 1
-  output_min:
-    type: vector.action_min
-    description: Lower limit on outputs
-    mutability: system
-    default: "[  ]"
-    optional: 1
-  output_max:
-    type: vector.action_max
-    description: Upper limit on outputs
-    mutability: system
-    default: "[  ]"
-    optional: 1
 agent/master/exclusive:
   description: Master agent that selects one sub-agent to execute
   gamma:
@@ -309,14 +183,6 @@ agent/master/exclusive:
     description: Discount rate
     mutability: configuration
     default: 0.97
-    optional: 1
-    min: 0
-    max: 1
-  control_step:
-    type: double.control_step
-    description: Characteristic step time on which gamma is defined
-    mutability: system
-    default: 0.05
     optional: 1
     min: 0
     max: 1
@@ -330,7 +196,7 @@ agent/master/exclusive:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x2f678d8
+    default: 0x2620cc8
     optional: 0
 agent/master/predicated:
   description: Master agent in which execution is predicated on preceding agent confidence
@@ -342,14 +208,6 @@ agent/master/predicated:
     optional: 1
     min: 0
     max: 1
-  control_step:
-    type: double.control_step
-    description: Characteristic step time on which gamma is defined
-    mutability: system
-    default: 0.05
-    optional: 1
-    min: 0
-    max: 1
   predictor:
     type: predictor
     description: Optional (model) predictor
@@ -360,7 +218,7 @@ agent/master/predicated:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x2f678d8
+    default: 0x2620cc8
     optional: 0
 agent/master/random:
   description: Master agent that chooses sub-agents randomly
@@ -372,14 +230,6 @@ agent/master/random:
     optional: 1
     min: 0
     max: 1
-  control_step:
-    type: double.control_step
-    description: Characteristic step time on which gamma is defined
-    mutability: system
-    default: 0.05
-    optional: 1
-    min: 0
-    max: 1
   predictor:
     type: predictor
     description: Optional (model) predictor
@@ -390,7 +240,7 @@ agent/master/random:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x2f678d8
+    default: 0x2620cc8
     optional: 0
 agent/master/sequential:
   description: Master agent that executes sub-agents sequentially
@@ -630,12 +480,6 @@ agent/td:
     mutability: configuration
     default: 0
     optional: 0
-behavior/leo_squat_sym:
-  description: Leo squatting behavior with symmetrical switchers of observations
-behavior/leo_walk:
-  description: Leo walking behavior without symmetrical switchers of observations
-behavior/leo_walk_sym:
-  description: Leo walking behavior with symmetrical switchers of observations
 converter/state_action_converter:
   description: Configurable which is capable of remapping states and actions
   state_in:
@@ -806,6 +650,32 @@ dynamics/mountain:
     optional: 0
 dynamics/pendulum:
   description: Pendulum dynamics based on the DCSC MOPS
+dynamics/rbdl:
+  description: RBDL rigid body dynamics
+  file:
+    type: string
+    description: RBDL Lua model file
+    mutability: configuration
+    default: ""
+    optional: 1
+  options:
+    type: string
+    description: Lua string to execute when loading model
+    mutability: configuration
+    default: ""
+    optional: 1
+  points:
+    type: string
+    description: Points
+    mutability: configuration
+    default: ""
+    optional: 1
+  auxiliary:
+    type: string
+    description: Model mass(mm), Center of mass (com), Center of mass velocity (comv), Angular momentum (am)
+    mutability: configuration
+    default: ""
+    optional: 1
 dynamics/swimmer:
   description: Coulom's swimmer dynamics
   segments:
@@ -878,61 +748,27 @@ environment/gym:
     mutability: configuration
     default: 0
     optional: 1
-environment/leo_squat:
-  description: Leo squatting environment
-  behavior:
-    type: behavior
-    description: Behavior type
-    mutability: configuration
-    default: 0
-    optional: 0
+environment/leosim:
+  description: Leo simulation environment
   xml:
     type: string
     description: XML configuration filename
     mutability: configuration
-    default: ""
+    default: ../addons/odesim/cfg/robot.xml
     optional: 1
-  target_env:
-    type: environment
-    description: Interaction environment
-    mutability: configuration
-    default: 0
-    optional: 0
-  observe:
-    type: string
-    description: Comma-separated list of state elements observed by an agent
-    mutability: configuration
-    default: ""
-    optional: 1
-  actuate:
-    type: string
-    description: Comma-separated list of action elements provided by an agent
-    mutability: configuration
-    default: ""
-    optional: 1
-  exporter:
-    type: exporter
-    description: Optional exporter for transition log (supports time, state, observation, action, reward, terminal)
+  randomize:
+    type: int
+    description: Randomize initial state
     mutability: configuration
     default: 0
     optional: 1
-  sub_transition_type:
-    type: signal/vector
-    description: Subscriber to the transition type
+    min: 0
+    max: 2147483647
+  visualize:
+    type: int
+    description: Whether to display 3D visualization
     mutability: configuration
-    default: 0
-    optional: 1
-  pub_ic_signal:
-    type: signal/vector
-    description: Publisher of the initialization and contact signal
-    mutability: configuration
-    default: 0
-    optional: 1
-  measurement_noise:
-    type: double
-    description: Additive measurement noise
-    mutability: configuration
-    default: 0
+    default: 1
     optional: 1
     min: 0
     max: 1
@@ -960,90 +796,50 @@ environment/leo_squat:
     type: vector.action_max
     description: Upper limit on actions
     mutability: provided
-environment/leo_walk:
-  description: Leo walking environment
-  behavior:
-    type: behavior
-    description: Behavior type
-    mutability: configuration
-    default: 0
-    optional: 0
-  xml:
-    type: string
-    description: XML configuration filename
-    mutability: configuration
-    default: ""
-    optional: 1
-  target_env:
-    type: environment
-    description: Interaction environment
-    mutability: configuration
-    default: 0
-    optional: 0
+  reward_min:
+    type: double.reward_min
+    description: Lower limit on immediate reward
+    mutability: provided
+  reward_max:
+    type: double.reward_max
+    description: Upper limit on immediate reward
+    mutability: provided
   observe:
     type: string
-    description: Comma-separated list of state elements observed by an agent
+    description: string.observe_
     mutability: configuration
-    default: ""
+    default: Comma-separated list of state elements observed by an agent
     optional: 1
   actuate:
     type: string
-    description: Comma-separated list of action elements provided by an agent
+    description: string.actuate_
     mutability: configuration
-    default: ""
+    default: Comma-separated list of action elements provided by an agent
     optional: 1
+  learn_stance_knee:
+    type: int
+    description: Learn stance knee
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
   exporter:
     type: exporter
     description: Optional exporter for transition log (supports time, state, observation, action, reward, terminal)
     mutability: configuration
     default: 0
     optional: 1
-  sub_transition_type:
-    type: signal/vector
-    description: Subscriber to the transition type
-    mutability: configuration
-    default: 0
-    optional: 1
-  pub_ic_signal:
-    type: signal/vector
-    description: Publisher of the initialization and contact signal
-    mutability: configuration
-    default: 0
-    optional: 1
-  measurement_noise:
-    type: double
-    description: Additive measurement noise
-    mutability: configuration
-    default: 0
-    optional: 1
-    min: 0
-    max: 1
-  observation_dims:
-    type: int.observation_dims
-    description: Number of observation dimensions
-    mutability: provided
-  observation_min:
-    type: vector.observation_min
-    description: Lower limit on observations
-    mutability: provided
-  observation_max:
-    type: vector.observation_max
-    description: Upper limit on observations
-    mutability: provided
-  action_dims:
-    type: int.action_dims
-    description: Number of action dimensions
-    mutability: provided
-  action_min:
-    type: vector.action_min
-    description: Lower limit on actions
-    mutability: provided
-  action_max:
-    type: vector.action_max
-    description: Upper limit on actions
-    mutability: provided
 environment/modeled:
   description: Environment that uses a state transition model internally
+  discrete_time:
+    type: int
+    description: Always report unit step time
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
   model:
     type: model
     description: Environment model
@@ -1170,6 +966,14 @@ environment/pre/shaping:
     max: 1
 environment/sandbox:
   description: Non-Markov environment
+  discrete_time:
+    type: int
+    description: Always report unit step time
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
   model:
     type: sandbox_model
     description: Environment model
@@ -1727,7 +1531,7 @@ mapping/policy/discrete/multi:
     type: "[mapping/policy/discrete]"
     description: Sub-policies
     mutability: configuration
-    default: 0x30ca370
+    default: 0x2783290
     optional: 0
   r_distance_parameter:
     type: double
@@ -1990,6 +1794,7 @@ mapping/policy/multi:
       - data_center_voting_mov
       - data_center_voting_mov_two_steps
       - alg4steps
+      - alg4stepsNew
       - mean
       - mean_mov
       - random
@@ -2110,13 +1915,13 @@ mapping/policy/multi:
     type: "[mapping/policy]"
     description: Sub-policies
     mutability: configuration
-    default: 0x3117540
+    default: 0x27d00b0
     optional: 0
   value:
     type: "[mapping]"
     description: Values of sub-policy actions
     mutability: configuration
-    default: 0x3117558
+    default: 0x27d00c8
     optional: 1
   output_min:
     type: vector.action_min
@@ -2690,6 +2495,14 @@ observation_model/fixed:
     optional: 1
     min: 2.225073858507201e-308
     max: 1.797693134862316e+308
+  discrete_time:
+    type: int
+    description: Always report unit step time
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
   model:
     type: model
     description: Environment model
@@ -4025,7 +3838,7 @@ predictor/multi:
     type: "[predictor]"
     description: First downstream predictor
     mutability: configuration
-    default: 0x3319670
+    default: 0x298ca80
     optional: 0
 predictor/naf:
   description: Value function predictor using Normalized Advantage Features
@@ -4248,6 +4061,14 @@ projector/monomial:
     mutability: configuration
     default: "[  ]"
     optional: 1
+  homogeneous:
+    type: int
+    description: Use only monomials of the specified degree
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
   degree:
     type: int
     description: Maximum degree of monomials
@@ -4274,7 +4095,7 @@ projector/multi:
     type: "[projector.]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x3380d30
+    default: 0x2a3c650
     optional: 0
   memories:
     type: vector.memory
@@ -4682,7 +4503,7 @@ representation/additive:
     type: "[representation.]"
     description: Downstream representations
     mutability: configuration
-    default: 0x33de930
+    default: 0x2aa8030
     optional: 0
 representation/communicator:
   description: Interface to an out-of-process representation
@@ -4896,6 +4717,14 @@ representation/parameterized/linear:
     mutability: system
     default: "[  ]"
     optional: 1
+  limit:
+    type: int
+    description: Limit parameters to same range as outputs
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
 representation/parameterized/tensorflow:
   description: TensorFlow representation
   interval:
@@ -5122,26 +4951,6 @@ sampler/epsilon_pada:
     optional: 1
 sampler/greedy:
   description: Maximum search
-sampler/leo/action:
-  description: Wrapper for an action sampler for Leo (can modify memory of samplers with memory at contact events)
-  sampler:
-    type: sampler
-    description: Samples actions from action-values
-    mutability: configuration
-    default: 0
-    optional: 0
-  sub_ic_signal:
-    type: signal/vector
-    description: Subscrider to the initialization and contact signal
-    mutability: configuration
-    default: 0
-    optional: 1
-  pub_sub_sampler_state:
-    type: signal/vector
-    description: Publisher and subscriber of the sampler state with memory such as previous action, noise, etc.
-    mutability: configuration
-    default: 0
-    optional: 1
 sampler/ornstein_ohlenbeck:
   description: Maximum search with an Ornstein-Uhlenbeck random chance of non-maximums
   discretizer:
@@ -5328,6 +5137,70 @@ sandbox_model/compass_walker:
     optional: 1
     min: 0
     max: 1
+sandbox_model/leo_squatting:
+  description: State transition model that integrates equations of motion and augments state vector with additional elements
+  control_step:
+    type: double.control_step
+    description: Control step time
+    mutability: configuration
+    default: 0.05
+    optional: 1
+    min: 0.001
+    max: 1.797693134862316e+308
+  integration_steps:
+    type: int
+    description: Number of integration steps per control step
+    mutability: configuration
+    default: 5
+    optional: 1
+    min: 1
+    max: 2147483647
+  dynamics:
+    type: dynamics/rbdl
+    description: Equations of motion
+    mutability: configuration
+    default: 0
+    optional: 0
+  target_dof:
+    type: int.target_dof
+    description: Number of degrees of freedom of the target model
+    mutability: configuration
+    default: 4
+    optional: 1
+    min: 0
+    max: 2147483647
+  animation:
+    type: string
+    description: Save current state or full animation
+    mutability: configuration
+    default: ""
+    optional: 1
+    options:
+      - nope
+      - full
+      - immediate
+  target_env:
+    type: environment
+    description: Interaction environment
+    mutability: configuration
+    default: 0
+    optional: 1
+  lower_height:
+    type: double.lower_height
+    description: Lower bound of root height to switch direction
+    mutability: configuration
+    default: 0.28
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
+  upper_height:
+    type: double.upper_height
+    description: Upper bound of root height to switch direction
+    mutability: configuration
+    default: 0.35
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
 signal/matrix:
   description: Matrix-based signal (trajectory, etc.)
 signal/vector:
@@ -5576,6 +5449,26 @@ task/acrobot/regulator:
     mutability: configuration
     default: "[ 0.01 ]"
     optional: 1
+  min:
+    type: vector.state_min
+    description: Minimum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  max:
+    type: vector.state_max
+    description: Maximum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  timeout:
+    type: double
+    description: Episode timeout (0=no timeout)
+    mutability: configuration
+    default: 20
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
   function:
     type: string
     description: Cost function style
@@ -5760,6 +5653,26 @@ task/cart_double_pole/regulator:
     mutability: configuration
     default: "[ 0.01 ]"
     optional: 1
+  min:
+    type: vector.state_min
+    description: Minimum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  max:
+    type: vector.state_max
+    description: Maximum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  timeout:
+    type: double
+    description: Episode timeout (0=no timeout)
+    mutability: configuration
+    default: 9.99
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
   function:
     type: string
     description: Cost function style
@@ -5788,14 +5701,6 @@ task/cart_double_pole/regulator:
     optional: 1
     min: 0
     max: 1
-  timeout:
-    type: double
-    description: Episode timeout
-    mutability: configuration
-    default: 9.99
-    optional: 1
-    min: 0
-    max: 1.797693134862316e+308
 task/cart_double_pole/swingup:
   description: Cart-double-pole swing-up task
   observation_dims:
@@ -5944,6 +5849,26 @@ task/cart_pole/regulator:
     mutability: configuration
     default: "[ 0.01 ]"
     optional: 1
+  min:
+    type: vector.state_min
+    description: Minimum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  max:
+    type: vector.state_max
+    description: Maximum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  timeout:
+    type: double
+    description: Episode timeout (0=no timeout)
+    mutability: configuration
+    default: 9.99
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
   function:
     type: string
     description: Cost function style
@@ -5972,14 +5897,6 @@ task/cart_pole/regulator:
     optional: 1
     min: 0
     max: 1
-  timeout:
-    type: double
-    description: Episode timeout
-    mutability: configuration
-    default: 9.99
-    optional: 1
-    min: 0
-    max: 1.797693134862316e+308
 task/cart_pole/swingup:
   description: Cart-pole swing-up task
   observation_dims:
@@ -6398,6 +6315,26 @@ task/flyer2d/regulator:
     mutability: configuration
     default: "[ 0.01, 0.01 ]"
     optional: 1
+  min:
+    type: vector.state_min
+    description: Minimum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  max:
+    type: vector.state_max
+    description: Maximum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  timeout:
+    type: double
+    description: Episode timeout (0=no timeout)
+    mutability: configuration
+    default: 2.99
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
   function:
     type: string
     description: Cost function style
@@ -6434,14 +6371,6 @@ task/flyer2d/regulator:
     optional: 1
     min: 0
     max: 1
-  timeout:
-    type: double
-    description: Episode timeout
-    mutability: configuration
-    default: 2.99
-    optional: 1
-    min: 0
-    max: 1.797693134862316e+308
 task/integrator/regulator:
   description: Integrator regulator task
   order:
@@ -6514,6 +6443,26 @@ task/integrator/regulator:
     mutability: configuration
     default: "[ 0.01 ]"
     optional: 1
+  min:
+    type: vector.state_min
+    description: Minimum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  max:
+    type: vector.state_max
+    description: Maximum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  timeout:
+    type: double
+    description: Episode timeout (0=no timeout)
+    mutability: configuration
+    default: 3
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
   function:
     type: string
     description: Cost function style
@@ -6542,6 +6491,102 @@ task/integrator/regulator:
     optional: 1
     min: 0
     max: 1
+task/leo_squatting:
+  description: Task specification for Leo squatting with a fixed arm
+  observation_dims:
+    type: int.observation_dims
+    description: Number of observation dimensions
+    mutability: provided
+  observation_min:
+    type: vector.observation_min
+    description: Lower limit on observations
+    mutability: provided
+  observation_max:
+    type: vector.observation_max
+    description: Upper limit on observations
+    mutability: provided
+  action_dims:
+    type: int.action_dims
+    description: Number of action dimensions
+    mutability: provided
+  action_min:
+    type: vector.action_min
+    description: Lower limit on actions
+    mutability: provided
+  action_max:
+    type: vector.action_max
+    description: Upper limit on actions
+    mutability: provided
+  reward_min:
+    type: double.reward_min
+    description: Lower limit on immediate reward
+    mutability: provided
+  reward_max:
+    type: double.reward_max
+    description: Upper limit on immediate reward
+    mutability: provided
+  timeout:
+    type: double.timeout
+    description: Task timeout
+    mutability: system
+    default: 0
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
+  rand_init:
+    type: int.rand_init
+    description: Initialization from a random pose
+    mutability: system
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
+task/lua:
+  description: User-provided task specification in LUA
+  observation_dims:
+    type: int.observation_dims
+    description: Number of observation dimensions
+    mutability: provided
+  observation_min:
+    type: vector.observation_min
+    description: Lower limit on observations
+    mutability: provided
+  observation_max:
+    type: vector.observation_max
+    description: Upper limit on observations
+    mutability: provided
+  action_dims:
+    type: int.action_dims
+    description: Number of action dimensions
+    mutability: provided
+  action_min:
+    type: vector.action_min
+    description: Lower limit on actions
+    mutability: provided
+  action_max:
+    type: vector.action_max
+    description: Upper limit on actions
+    mutability: provided
+  reward_min:
+    type: double.reward_min
+    description: Lower limit on immediate reward
+    mutability: provided
+  reward_max:
+    type: double.reward_max
+    description: Upper limit on immediate reward
+    mutability: provided
+  file:
+    type: string
+    description: Lua task file
+    mutability: configuration
+    default: ""
+    optional: 1
+  options:
+    type: string
+    description: Lua string to execute when loading task
+    mutability: configuration
+    default: ""
+    optional: 1
 task/mountain/regulator:
   description: Mountain world regulator task
   observation_dims:
@@ -6606,6 +6651,26 @@ task/mountain/regulator:
     mutability: configuration
     default: "[ 0.01, 0.01 ]"
     optional: 1
+  min:
+    type: vector.state_min
+    description: Minimum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  max:
+    type: vector.state_max
+    description: Maximum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  timeout:
+    type: double
+    description: Episode timeout (0=no timeout)
+    mutability: configuration
+    default: 20
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
   function:
     type: string
     description: Cost function style
@@ -6698,6 +6763,26 @@ task/pendulum/regulator:
     mutability: configuration
     default: "[ 0.01 ]"
     optional: 1
+  min:
+    type: vector.state_min
+    description: Minimum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  max:
+    type: vector.state_max
+    description: Maximum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  timeout:
+    type: double
+    description: Episode timeout (0=no timeout)
+    mutability: configuration
+    default: 3
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
   function:
     type: string
     description: Cost function style
@@ -6777,8 +6862,8 @@ task/pendulum/swingup:
     min: 0
     max: 1
   sincos:
-    type: double
-    description: Use sine-cosine representation of angle
+    type: int
+    description: Use sine-cosine representation for observations
     mutability: configuration
     default: 0
     optional: 1
@@ -6890,6 +6975,26 @@ task/pinball/regulator:
     mutability: configuration
     default: "[ 0.01, 0.01 ]"
     optional: 1
+  min:
+    type: vector.state_min
+    description: Minimum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  max:
+    type: vector.state_max
+    description: Maximum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  timeout:
+    type: double
+    description: Episode timeout (0=no timeout)
+    mutability: configuration
+    default: 20
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
   function:
     type: string
     description: Cost function style
@@ -6982,6 +7087,26 @@ task/puddle/regulator:
     mutability: configuration
     default: "[ 0.01, 0.01 ]"
     optional: 1
+  min:
+    type: vector.state_min
+    description: Minimum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  max:
+    type: vector.state_max
+    description: Maximum bound of operating region
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  timeout:
+    type: double
+    description: Episode timeout (0=no timeout)
+    mutability: configuration
+    default: 20
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
   function:
     type: string
     description: Cost function style
@@ -7154,28 +7279,6 @@ trace/enumerated/accumulating:
   description: Accumulating eligibility trace using a queue of projections
 trace/enumerated/replacing:
   description: Replacing eligibility trace using a queue of projections
-trigger:
-  description: Event trigger
-  min:
-    type: vector.observation_min
-    description: Minimum of compartment bounding box
-    mutability: configuration
-    default: "[  ]"
-    optional: 1
-  max:
-    type: vector.observation_max
-    description: Maximum of compartment bounding box
-    mutability: configuration
-    default: "[  ]"
-    optional: 1
-  delay:
-    type: double
-    description: Settlement delay for which conditions are continuously fullfilled
-    mutability: system
-    default: 0
-    optional: 1
-    min: 0
-    max: 1.797693134862316e+308
 visualization/acrobot:
   description: Acrobot visualization
   state:
@@ -7831,6 +7934,14 @@ projector/monomial.observation:
     mutability: configuration
     default: "[  ]"
     optional: 1
+  homogeneous:
+    type: int
+    description: Use only monomials of the specified degree
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
   degree:
     type: int
     description: Maximum degree of monomials
@@ -7857,7 +7968,7 @@ projector/multi.observation:
     type: "[projector.observation]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x3747350
+    default: 0x2e4ff20
     optional: 0
   memories:
     type: vector.memory
@@ -8193,7 +8304,7 @@ representation/additive.action:
     type: "[representation.action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x3796e90
+    default: 0x2ea1d20
     optional: 0
 representation/communicator.action:
   description: Interface to an out-of-process representation
@@ -8407,6 +8518,14 @@ representation/parameterized/linear.action:
     mutability: system
     default: "[  ]"
     optional: 1
+  limit:
+    type: int
+    description: Limit parameters to same range as outputs
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
 representation/parameterized/tensorflow.action:
   description: TensorFlow representation
   interval:
@@ -8554,6 +8673,14 @@ projector/monomial.pair:
     mutability: configuration
     default: "[  ]"
     optional: 1
+  homogeneous:
+    type: int
+    description: Use only monomials of the specified degree
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
   degree:
     type: int
     description: Maximum degree of monomials
@@ -8580,7 +8707,7 @@ projector/multi.pair:
     type: "[projector.pair]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x380a680
+    default: 0x2f17880
     optional: 0
   memories:
     type: vector.memory
@@ -8916,7 +9043,7 @@ representation/additive.value/action:
     type: "[representation.value/action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x385a180
+    default: 0x2f69730
     optional: 0
 representation/communicator.value/action:
   description: Interface to an out-of-process representation
@@ -9130,6 +9257,14 @@ representation/parameterized/linear.value/action:
     mutability: system
     default: "[  ]"
     optional: 1
+  limit:
+    type: int
+    description: Limit parameters to same range as outputs
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
 representation/parameterized/tensorflow.value/action:
   description: TensorFlow representation
   interval:
@@ -9222,7 +9357,7 @@ representation/additive.value/state:
     type: "[representation.value/state]"
     description: Downstream representations
     mutability: configuration
-    default: 0x38919c0
+    default: 0x2f9fec0
     optional: 0
 representation/communicator.value/state:
   description: Interface to an out-of-process representation
@@ -9436,6 +9571,14 @@ representation/parameterized/linear.value/state:
     mutability: system
     default: "[  ]"
     optional: 1
+  limit:
+    type: int
+    description: Limit parameters to same range as outputs
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
 representation/parameterized/tensorflow.value/state:
   description: TensorFlow representation
   interval:
@@ -9542,7 +9685,7 @@ representation/additive.transition:
     type: "[representation.transition]"
     description: Downstream representations
     mutability: configuration
-    default: 0x39178a0
+    default: 0x302b470
     optional: 0
 representation/communicator.transition:
   description: Interface to an out-of-process representation
@@ -9756,6 +9899,14 @@ representation/parameterized/linear.transition:
     mutability: system
     default: "[  ]"
     optional: 1
+  limit:
+    type: int
+    description: Limit parameters to same range as outputs
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
 representation/parameterized/tensorflow.transition:
   description: TensorFlow representation
   interval:
@@ -9917,6 +10068,14 @@ projector/monomial.action:
     mutability: configuration
     default: "[  ]"
     optional: 1
+  homogeneous:
+    type: int
+    description: Use only monomials of the specified degree
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
   degree:
     type: int
     description: Maximum degree of monomials
@@ -9943,7 +10102,7 @@ projector/multi.action:
     type: "[projector.action]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x397bf50
+    default: 0x3091e10
     optional: 0
   memories:
     type: vector.memory
