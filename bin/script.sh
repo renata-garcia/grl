@@ -134,11 +134,33 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_dens_best.yaml
 ./grld ../cfg/pendulum/mpol_dpg_26_alg4steps_dens_dens_max_none.yaml
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based_bm_a01.yaml
-'
 
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_decay99_alg4steps_none_none_none_dens.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_decay99_alg4steps_none_none_none_dens_batchsize128.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_decay99_alg4steps_none_none_none_dens_memsize1e5.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_decay99_alg4steps_none_none_none_dens_memsize1e6.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_decay99_alg4steps_none_none_none_dens_obssteps1000.yaml
+
+
+'
+
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_dens_eucl_50asc_dens.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_dens_eucl_min_none.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_dens_50desc_dens.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_dens_max_none.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_eucl_quartileMM_datacenter.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_eucl_quartileMM_dens.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_none_none_datacenter.yaml
+./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_none_none_dens.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_alg4steps_dens_eucl_50asc_dens.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_alg4steps_dens_eucl_min_none.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_alg4steps_none_dens_50desc_dens.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_alg4steps_none_dens_max_none.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_alg4steps_none_eucl_50asc_datacenter.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_alg4steps_none_eucl_50asc_dens.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_alg4steps_none_eucl_quartileMM_datacenter.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_alg4steps_none_eucl_quartileMM_dens.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_alg4steps_none_none_none_datacenter.yaml
+./grld ../cfg/pendulum/mpol_dpg_26_alg4steps_none_none_none_dens.yaml
+
 

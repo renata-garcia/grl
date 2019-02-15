@@ -1,12 +1,12 @@
  experiment: 
   type: experiment/online_learning
-  runs: 1
+  runs: 10
   run_offset: 0
   trials: 10000
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_13_alg4steps_dens_eucl_min_none_data
+  output: mpol_dpg_13_alg4steps_dens_eucl_min_none_
   environment: 
     type: environment/modeled
     model:
