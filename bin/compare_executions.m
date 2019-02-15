@@ -15,7 +15,7 @@ function compare_executions(n, folder, nstd, title_fig, varargin)
 %     color = ['y', 'm', 'b', 'r', 'k', 'g', 'c'];
 %     num_alg = length(array);
 %     h = zeros(1, num_alg);
-%     for j=1:length(array)
+%     for j=1:size(array,1)
 %         [mean_d, std_d] = load_mean(array(j,2), n);
 %         errstd_d = std_d/sqrt(n);
 %         maximum = max(mean_d);
@@ -47,7 +47,7 @@ function compare_executions(n, folder, nstd, title_fig, varargin)
     color = ['y', 'm', 'b', 'r', 'k', 'g', 'c'];
     num_alg = length(array);
     h = zeros(1, num_alg);
-    for j=1:length(array)
+    for j=1:size(array,1)
         [mean_d, std_d] = load_mean(array(j,2), n);
         errstd_d = std_d/sqrt(n);
         maximum = max(mean_d);
@@ -67,7 +67,7 @@ function compare_executions(n, folder, nstd, title_fig, varargin)
 
 %   ------------------------------------------------------
 
-%     for j=1:length(array)
+%     for j=1:size(array,1)
 %         figure('units','normalized','outerposition',size_windows);
 %         [mean_d, std_d] = load_mean(array(j,2), n);
 %         errstd_d = std_d/sqrt(n);
@@ -85,7 +85,7 @@ function compare_executions(n, folder, nstd, title_fig, varargin)
 
 %   ------------------------------------------------------
 
-%     for j=1:length(array)
+%     for j=1:size(array,1)
 %         figure('units','normalized','outerposition',size_windows);
 %         [mean_d, std_d] = load_mean(array(j,2), n);
 %         errstd_d = std_d/sqrt(n);

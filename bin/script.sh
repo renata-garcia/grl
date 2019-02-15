@@ -164,3 +164,6 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld ../cfg/pendulum/mpol_dpg_26_alg4steps_none_none_none_dens.yaml
 
 
+./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_decay99_alg4steps_none_none_none_dens_obssteps500.yaml
+./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_decay99_alg4steps_none_none_none_dens_obssteps500_memsize1E6.yaml
+./grld mpol_ddpg_4_rand1_sincos_decay99_alg4steps_none_none_none_dens_obssteps500_memsize1E6_batchsize128.yaml
