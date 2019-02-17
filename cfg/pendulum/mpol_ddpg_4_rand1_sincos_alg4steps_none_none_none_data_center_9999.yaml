@@ -1,12 +1,12 @@
 experiment: 
   type: experiment/online_learning
-  runs: 1
+  runs: 4
   run_offset: 0
-  trials: 10000
+  trials: 1000
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_ddpg_4_rand1_sincos_decay99_alg4steps_none_none_none_dens_
+  output: mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_9999_
   environment: 
     type: environment/modeled
     discrete_time: 1
@@ -75,7 +75,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: pendulum_ddpg_sincos.pb
+                file: ./4layer_tanh_ddpg.py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -110,7 +110,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: pendulum_ddpg_sincos.pb
+                file: ./4layer_tanh_ddpg.py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -145,7 +145,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: pendulum_ddpg_sincos.pb
+                file: ./4layer_tanh_ddpg.py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -180,7 +180,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: pendulum_ddpg_sincos.pb
+                file: ./4layer_tanh_ddpg.py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -227,7 +227,7 @@ experiment:
           representation: experiment/agent/policy/policy/0/policy/policy/representation
         - 
           type: predictor/ddpg
-          gamma: 0.98
+          gamma: 0.99
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -363,7 +363,7 @@ visualizer:
   type: visualizer/glut
 visualization: 
   type: visualization/state
-  input_dims: [  ]
+  input_dims: []
   input_min: experiment/environment/task/observation_min
   input_max: experiment/environment/task/observation_max
   memory: 256
@@ -466,7 +466,7 @@ policy_visualization2:
     type: mapping/represented
     projector: experiment/agent/policy/policy/2/policy/policy/projector
     representation: experiment/agent/policy/policy/2/policy/policy/representation
-value_visualization2:
+value_visualization2: 
   type: visualization/slice
   field_dims: [0, 1]
   input_min: experiment/environment/task/observation_min
@@ -536,4 +536,3 @@ target_value_visualization3:
     type: mapping/represented
     projector: experiment/agent/policy/policy/3/policy/policy/projector
     representation: experiment/agent/policy/policy/3/policy/policy/representation/target
-

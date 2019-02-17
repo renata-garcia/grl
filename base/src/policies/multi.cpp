@@ -40,10 +40,22 @@ void MultiPolicy::request(ConfigurationRequest *config)
   "data_center", "data_center_mean_mov", "data_center_best_mov", "data_center_voting_mov", "data_center_voting_mov_two_steps",
   "alg4steps","alg4stepsNew",
   "mean", "mean_mov", "random", "static", "value_based", "roulette"}));
-  config->push_back(CRP("score_distance", "Score distance", score_distance_str_, CRP::Configuration, {"none", "density_based","data_center","mean"}));
-  config->push_back(CRP("update_history", "Update History", update_history_str_, CRP::Configuration, {"none", "euclidian_distance", "density", "voting"}));
-  config->push_back(CRP("choose_actions", "Choose Actions", choose_actions_str_, CRP::Configuration, {"none", "max", "min", "50percAsc", "50percDesc", "25perc", "10perc", "quartile_of_mean_mov"}));
-  config->push_back(CRP("select_by_distance", "Select by distance", select_by_distance_str_, CRP::Configuration,  {"none", "density_based","data_center","mean"}));
+  config->push_back(CRP("score_distance", "Score distance", score_distance_str_, CRP::Configuration,
+  
+  {"none", "density_based","data_center","mean"}));
+  
+  config->push_back(CRP("update_history", "Update History", update_history_str_, CRP::Configuration,
+  
+  {"none", "euclidian_distance", "density", "voting"}));
+  
+  config->push_back(CRP("choose_actions", "Choose Actions", choose_actions_str_, CRP::Configuration,
+  
+  {"none", "max", "min", "50percAsc", "50percDesc", "25perc", "10perc", "quartile_of_mean_mov"}));
+  
+  config->push_back(CRP("select_by_distance", "Select by distance", select_by_distance_str_, CRP::Configuration,
+  
+  {"none", "density_based","data_center","mean"}));
+  
   config->push_back(CRP("sampler", "sampler", "Sampler for value-based strategy", sampler_, true));
   config->push_back(CRP("bins", "Binning Simple Discretization", bins_));
   config->push_back(CRP("static_policy", "Static Policy Chosen to Learning", static_policy_));
@@ -1722,16 +1734,11 @@ size_t MultiPolicy::get_min_index(const std::vector<node> &in) const
 
 LargeVector MultiPolicy::mean(ActionArray const &array) const
 {
-  LargeVector mean;
-  bool first = true;
-  for(size_t i = 0; i < array.size(); ++i)
-  {
-    if(first)
-      mean = array[i];
-    else
+  LargeVector mean = array[0];
+  
+  for(size_t i = 1; i < array.size(); ++i)
       mean = mean + array[i];
-    first = false;
-  }
+
   return (mean / array.size());
 }
 
@@ -1741,7 +1748,7 @@ LargeVector MultiPolicy::score(ActionArray const &array, double mean) const
   return a;
 }
 
-ActionArray MultiPolicy::percentile(ActionArray const &array, LargeVector const &scores, double const percentile[]) const
+MultiPolicy::ActionArray MultiPolicy::percentile(ActionArray const &array, LargeVector const &scores, double const percentile[]) const
 {
   ActionArray retorno;
 
