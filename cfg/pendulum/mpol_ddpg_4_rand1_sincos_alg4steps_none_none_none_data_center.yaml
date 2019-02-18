@@ -263,7 +263,7 @@ experiment:
           representation: experiment/agent/policy/policy/2/policy/policy/representation
         - 
           type: predictor/ddpg
-          gamma: 0.99
+          gamma: 0.97
           observation: s_in
           action: a_in
           value: q/BiasAdd
