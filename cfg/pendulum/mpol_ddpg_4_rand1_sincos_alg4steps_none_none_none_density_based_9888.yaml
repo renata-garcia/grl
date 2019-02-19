@@ -197,11 +197,11 @@ experiment:
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/2/policy/policy/projector
-          representation: experiment/agent/policy/policy/1/policy/policy/representation
+          representation: experiment/agent/policy/policy/2/policy/policy/representation
         - 
           type: mapping/represented
-          projector: experiment/agent/policy/policy/2/policy/policy/projector
-          representation: experiment/agent/policy/policy/1/policy/policy/representation
+          projector: experiment/agent/policy/policy/3/policy/policy/projector
+          representation: experiment/agent/policy/policy/3/policy/policy/representation
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
     predictor: 

@@ -6,7 +6,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_9989_
+  output: mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_9876_
   environment: 
     type: environment/modeled
     discrete_time: 1
@@ -34,7 +34,7 @@ experiment:
       score_distance: none
       update_history: none
       choose_actions: none
-      select_by_distance: density_based
+      select_by_distance: data_center
       sampler: 
         type: sampler/greedy
       bins: 10
@@ -227,7 +227,7 @@ experiment:
           representation: experiment/agent/policy/policy/0/policy/policy/representation
         - 
           type: predictor/ddpg
-          gamma: 0.99
+          gamma: 0.98
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -245,7 +245,7 @@ experiment:
           representation: experiment/agent/policy/policy/1/policy/policy/representation
         - 
           type: predictor/ddpg
-          gamma: 0.98
+          gamma: 0.97
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -263,7 +263,7 @@ experiment:
           representation: experiment/agent/policy/policy/2/policy/policy/representation
         - 
           type: predictor/ddpg
-          gamma: 0.99
+          gamma: 0.96
           observation: s_in
           action: a_in
           value: q/BiasAdd
