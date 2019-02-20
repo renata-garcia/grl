@@ -183,9 +183,10 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld  ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_9876_3l8.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_8_3l8.yaml
 ./grld  ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_9876_3l8.yaml
-'
 
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_8_3l8.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_8_3l8.yaml
+'
 
+./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_density_max_none_8_3l8_mem10000.yaml
 
