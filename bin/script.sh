@@ -165,7 +165,6 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_decay99_alg4steps_none_none_none_dens_obssteps500_memsize1E6.yaml
 ./grld mpol_ddpg_4_rand1_sincos_decay99_alg4steps_none_none_none_dens_obssteps500_memsize1E6_batchsize128.yaml
 
-'
 
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_9876.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_9876_3l8.yaml
@@ -184,3 +183,9 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld  ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_9876_3l8.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_8_3l8.yaml
 ./grld  ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_9876_3l8.yaml
+'
+
+./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_8_3l8.yaml
+./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_8_3l8.yaml
+
+
