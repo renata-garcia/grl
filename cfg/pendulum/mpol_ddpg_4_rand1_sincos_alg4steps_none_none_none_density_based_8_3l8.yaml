@@ -23,7 +23,7 @@ experiment:
       sincos: 1
   agent: 
     type: agent/replay
-    memory_size: 100000
+    memory_size: 10000
     replay_steps: 64
     batch_size: 64
     observation_steps: 1000
@@ -494,7 +494,7 @@ experiment:
           representation: experiment/agent/policy/policy/4/policy/policy/representation
         - 
           type: predictor/ddpg
-          gamma: 0.99
+          gamma: 0.93
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -512,7 +512,7 @@ experiment:
           representation: experiment/agent/policy/policy/5/policy/policy/representation
         - 
           type: predictor/ddpg
-          gamma: 0.93
+          gamma: 0.92
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -530,7 +530,7 @@ experiment:
           representation: experiment/agent/policy/policy/6/policy/policy/representation
         - 
           type: predictor/ddpg
-          gamma: 0.92
+          gamma: 0.9
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -548,7 +548,7 @@ experiment:
           representation: experiment/agent/policy/policy/7/policy/policy/representation
         - 
           type: predictor/ddpg
-          gamma: 0.9
+          gamma: 0.99
           observation: s_in
           action: a_in
           value: q/BiasAdd
