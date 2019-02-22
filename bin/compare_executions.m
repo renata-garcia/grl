@@ -91,6 +91,30 @@ function compare_executions(n, folder, nstd, title_fig, varargin)
     legend(h, leg,'Location','SouthEast');
 
 %   ------------------------------------------------------
+%   PLOT INTERVALO
+    
+    figure('units','normalized','outerposition',size_windows);
+    leg = [];
+    color = ['y', 'm', 'b', 'r', 'k', 'g', 'c'];
+    num_alg = length(array);
+    h = zeros(1, num_alg);
+    for j=1:size(array,1)
+        [mean_d, std_d] = load_mean(array(j,2), n);
+        errstd_d = std_d/sqrt(n);
+        maximum = max(mean_d);
+        x = 1:length(mean_d);
+        n_color = color(1 + rem(j, length(color)));
+        h(j) = errorbaralpha(mean_d, (n + 1.96*(std_d/sqrt(n))), 'color', n_color, 'linestyle', '--');
+        leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
+        hold on;
+    end
+    
+    grid;
+    title([title_fig, ' (int val 95)']);
+    xlabel('step');
+    ylabel('reward');
+    legend(h, leg,'Location','SouthEast');
+%   ------------------------------------------------------
 
 %     for j=1:size(array,1)
 %         figure('units','normalized','outerposition',size_windows);

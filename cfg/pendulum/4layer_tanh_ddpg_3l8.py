@@ -13,7 +13,7 @@ from keras.layers.normalization import BatchNormalization
 from keras.backend import get_session
 
 from tensorflow.python.platform import gfile
-from IPython.display import clear_output, Image, display, HTML
+#from IPython.display import clear_output, Image, display, HTML
 import numpy as np
 import tensorflow as tf
 
@@ -140,20 +140,19 @@ for v in vars:
 
 tf.train.write_graph(get_session().graph.as_graph_def(), './', sys.argv[3], as_text=False)
 
-# Build your graph.
-#//-------------------------------------
-#tensorboard --logdir ./log --port=8008
-with tf.Session() as sess:
+# # Build your graph.
+# #//-------------------------------------
+# #tensorboard --logdir ./log --port=8008
+# with tf.Session() as sess:
 
-  with gfile.FastGFile('./pb.pb', 'rb') as f:
-    graph_def = tf.GraphDef()
-    graph_def.ParseFromString(f.read())
-    sess.graph.as_default()
-    g_in = tf.import_graph_def(graph_def)
-    f.close()
+#   with gfile.FastGFile('./pb.pb', 'rb') as f:
+#     graph_def = tf.GraphDef()
+#     graph_def.ParseFromString(f.read())
+#     sess.graph.as_default()
+#     g_in = tf.import_graph_def(graph_def)
+#     f.close()
 
-  writer = tf.summary.FileWriter('./log')
-  #summary_writer = tf.summary.FileWriter('./log', graph=tf.get_default_graph())
-  writer.add_graph(sess.graph)
-  writer.flush()
-  writer.close()
+#   writer = tf.summary.FileWriter('./log')
+#   writer.add_graph(sess.graph)
+#   writer.flush()
+#   writer.close()
