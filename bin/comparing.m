@@ -20,6 +20,10 @@ compare_executions(n, folder, 1, 'Algoritmos Pendulum',...
     "replay_ddpg_tensorflow_rand1_sincos_",...
     "replay_ddpg_tensorflow_sincos_");
 
+%%%% TODO:
+%%%%%%%% "replay_ddpg_tensorflow_rand1_sincos_",...
+%%%%%%%% "replay_ddpg_tensorflow_sincos_");
+
 %%
 n_old = n;
 n = 19;
@@ -109,10 +113,12 @@ n = n_old;
 n_old = n;
 n = 4;
 compare_executions(n, folder, 0, 'MPOL DDPG benchmark',...
+    "replay_ddpg_tensorflow_3l8_",...
+    "replay_ddpg_tensorflow_sincos_",...
     "mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_8_3l8_",...
-    "mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_8_3l8_",... %4
-    "replay_ddpg_tensorflow_3l8_");
-    %"mpol_ddpg_4_rand1_sincos_alg4steps_none_density_max_none_8_3l8_mem10000_"
+    "mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_8_3l8_",... %8
+    "mpol_ddpg_4_rand1_sincos_alg4steps_none_density_max_none_8_3l8_mem10000_",...
+    "mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_8_3l8_mem10000_"); %6
     %mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_8_3l8_mem10000.yaml
 n = n_old;
 

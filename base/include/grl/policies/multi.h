@@ -226,11 +226,15 @@ class MultiPolicy : public Policy
     std::string choose_actions_str_;
     std::string select_by_distance_str_;
     CombinationStrategy strategy_;
-    CombinationStrategy ensemble_mean_;
     ScoreDistance score_distance_;
     UpdateHistory update_history_;
     UpdateHistory score_;
     ChooseActions choose_actions_;
+    ///////////////////////////////
+    ScoreDistance ensemble_mean_;
+    UpdateHistory scores_;
+    ScoreDistance select_;
+    ///////////////////////////////
     ScoreDistance select_by_distance_;
     Projector *projector_;
     Representation *representation_;
