@@ -61,7 +61,7 @@ experiment:
             interval: 10000
             inputs: experiment/environment/task/observation_dims
             targets: experiment/environment/task/action_dims
-            file: pendulum_ddpg.pb
+            file: ./4layer_tanh_ddpg.py
             input_layer: s_in
             output_layer: a_out/mul, q/BiasAdd
             output_target: q_target
