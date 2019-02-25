@@ -208,7 +208,7 @@ class MultiPolicy : public Policy
   public:
     TYPEINFO("mapping/policy/multi", "Combines multiple policies")
     
-    typedef std::vector<LargeVector> ActionArray;
+    typedef std::vector<Action> ActionArray;
   
     enum CombinationStrategy {csBinning,
     csDensityBased, csDensityBasedMeanMov, csDensityBasedBestMov, csDensityBasedVotingMov, csDensityBasedHistoric, csDensityBasedHistoricDens, csDensityBasedDensBest,
@@ -267,7 +267,7 @@ class MultiPolicy : public Policy
       size_t id;
 	  };
     //------------------------------------------------------
-    double percentile_[2];
+    double percentile_;
 
   public:
     MultiPolicy() : bins_(10),
@@ -278,7 +278,8 @@ class MultiPolicy : public Policy
                     minor_remove_bound_(0.25),
                     major_remove_bound_(0.75),
                     iRoulette_(0.3),
-                    iterations_(0)
+                    iterations_(0),
+                    percentile_(1.)
     {
       srand(time(0));
     }
@@ -325,7 +326,9 @@ class MultiPolicy : public Policy
     //trying again
     virtual LargeVector mean(ActionArray const &array) const;
     virtual LargeVector score(ActionArray const &array, double mean) const;
-    virtual ActionArray percentile(ActionArray const &array, LargeVector const &scores, double const  percentile[]) const;
+    virtual ActionArray percentile(ActionArray const &array, double percentile) const;
+    virtual std::vector<double> set_density_based(ActionArray &actions_actors) const;
+    virtual size_t get_max_index(const std::vector<double> &in) const;
  
 };
 /// Policy that combines two or more sub-policies using different strategies
