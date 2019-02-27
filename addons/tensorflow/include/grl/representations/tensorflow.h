@@ -45,8 +45,10 @@ class TensorFlowRepresentation : public ParameterizedRepresentation
     typedef std::pair<Vector, Vector> Sample;
     
   protected:
-    int inputs_, targets_;
+    int inputs_, targets_, layer1_size_, layer2_size_;
+    double learning_rate_actor_, learning_rate_critic_;
     std::string file_, input_layer_, output_layer_, output_target_, sample_weights_, learning_phase_, init_node_, update_node_;
+    std::string activation_dl_, activation_end_critic_;
     std::vector<std::string> outputs_read_, weights_read_, weights_write_, weights_node_;
     mutable std::vector<TF::Shape> weights_shape_;
     
@@ -61,7 +63,8 @@ class TensorFlowRepresentation : public ParameterizedRepresentation
     pthread_mutex_t mutex_;
 
   public:
-    TensorFlowRepresentation() : inputs_(1), targets_(1), graph_(NULL), session_(NULL), counter_(0), mutex_(PTHREAD_MUTEX_INITIALIZER) { }
+    TensorFlowRepresentation() : inputs_(1), targets_(1), learning_rate_actor_(0.0001), learning_rate_critic_(0.001),
+    graph_(NULL), session_(NULL), counter_(0), mutex_(PTHREAD_MUTEX_INITIALIZER) { }
     ~TensorFlowRepresentation()
     {
       if (session_)

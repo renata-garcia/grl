@@ -12,9 +12,9 @@ from keras.layers.merge import Concatenate
 from keras.layers.normalization import BatchNormalization
 from keras.backend import get_session
 
-if len(sys.argv) != 4:
+if len(sys.argv) != 10:
   print("Usage:")
-  print(" ", sys.argv[0], "<inputs> <outputs> <output.pb>")
+  print(" ", sys.argv[0], "<inputs> <outputs> <lr_actor> <lr_critic> <output.pb> <activation_dl> <activation_end_critic> <layer1_size> <layer2_size>")
   sys.exit(1)
 
 if int(sys.argv[2]) != 1:
@@ -22,12 +22,16 @@ if int(sys.argv[2]) != 1:
   sys.exit(1)
 
 obs = int(sys.argv[1])
+lr_actor = float(sys.argv[3])
+lr_critic = float(sys.argv[4])
+activation_dl = sys.argv[6]
+activation_end_critic = sys.argv[7]
 actions = 1
 action_max = 3
 normalization = False
 share_weights = False
-layer1_size = 400
-layer2_size = 300
+layer1_size = int(sys.argv[8])
+layer2_size = int(sys.argv[9])
 
 # Actor network definition
 s_in = tf.placeholder(tf.float32, shape=(None,obs), name='s_in')
@@ -35,12 +39,12 @@ if normalization:
   sn = BatchNormalization()(s_in)
 else:
   sn = s_in
-hc = Dense(layer1_size, activation='relu', name='h_common')(sn)
+hc = Dense(layer1_size, activation=activation_dl, name='h_common')(sn)
 if normalization:
   hcn = BatchNormalization()(hc)
 else:
   hcn = hc
-ha = Dense(layer2_size, activation='relu', name='h_actor')(hcn)
+ha = Dense(layer2_size, activation=activation_dl, name='h_actor')(hcn)
 if normalization:
   han = BatchNormalization()(ha)
 else:
@@ -58,33 +62,32 @@ else:
 if share_weights:  
   ca = Concatenate()([hcn, an])
 else:
-  hc2 = Dense(layer1_size, activation='relu', name='h_common2')(sn)
+  hc2 = Dense(layer1_size, activation=activation_dl, name='h_common2')(sn)
   if normalization:
     hcn2 = BatchNormalization()(hc2)
   else:
     hcn2 = hc2
   ca = Concatenate()([hcn2, an])
-hq = Dense(layer2_size, activation='relu', name='h_critic')(ca)
+hq = Dense(layer2_size, activation=activation_dl, name='h_critic')(ca)
 if normalization:
   hqn = BatchNormalization()(hq)
 else:
   hqn = hq
-q = Dense(1, activation='linear', name='q')(hqn)
+q = Dense(1, activation=activation_end_critic, name='q')(hqn)
 
 # Critic network update
 q_target = tf.placeholder(tf.float32, shape=(None, 1), name='q_target')
 q_loss = tf.losses.mean_squared_error(q_target, q)
-q_update = tf.train.AdamOptimizer(0.001).minimize(q_loss, name='q_update')
+q_update = tf.train.AdamOptimizer(lr_critic).minimize(q_loss, name='q_update') #0.001
 
 # Actor network update
 dq_da = tf.gradients(q, a_in, name='dq_da')[0]
 dq_dtheta = tf.gradients(a_out, theta, -dq_da, name='dq_dtheta')
-
-a_update = tf.train.AdamOptimizer(0.0001).apply_gradients(zip(dq_dtheta, theta), name='a_update')
+a_update = tf.train.AdamOptimizer(lr_actor).apply_gradients(zip(dq_dtheta, theta), name='a_update') #0.0001
 
 # Create weight assign placeholders
 vars = tf.trainable_variables()
 for v in vars:
   tf.assign(v, tf.placeholder(tf.float32, shape=v.shape))
 
-tf.train.write_graph(get_session().graph.as_graph_def(), './', sys.argv[3], as_text=False)
+tf.train.write_graph(get_session().graph.as_graph_def(), './', sys.argv[5], as_text=False)

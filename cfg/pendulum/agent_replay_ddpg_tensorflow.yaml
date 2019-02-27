@@ -2,25 +2,11 @@ experiment:
   type: experiment/online_learning
   runs: 1
   run_offset: 0
-  trials: 0
+  trials: 1000
   steps: 0
   rate: 0
   test_interval: 10
   output: outfix
-  environment: 
-    type: environment/modeled
-    discrete_time: 1
-    model: 
-      type: model/dynamical
-      control_step: 0.03
-      integration_steps: 5
-      dynamics: 
-        type: dynamics/pendulum
-    task: 
-      type: task/pendulum/swingup
-      timeout: 2.99
-      randomization: 1
-      sincos: 1
   agent: 
     type: agent/replay
     memory_size: 100000
@@ -103,56 +89,3 @@ experiment:
         projector: experiment/agent/policy/policy/policy/projector
         representation: experiment/agent/policy/policy/policy/representation
   save_every: never
-visualizer: 
-  type: visualizer/glut
-points: 4096
-delay: 1
-policy_visualization: 
-  type: visualization/slice
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  operating_point: []
-  output_dim: 0
-  points: /points
-  delay: /delay
-  state: experiment/state
-  mapping: 
-    type: mapping/represented
-    projector: experiment/agent/policy/policy/policy/projector
-    representation: experiment/agent/policy/policy/policy/representation
-value_visualization: 
-  type: visualization/slice
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  operating_point: []
-  output_dim: 1
-  points: /points
-  delay: /delay
-  state: experiment/state
-  mapping: 
-    type: mapping/represented
-    projector: experiment/agent/policy/policy/policy/projector
-    representation: experiment/agent/policy/policy/policy/representation
-target_value_visualization: 
-  type: visualization/slice
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  operating_point: []
-  output_dim: 1
-  points: /points
-  delay: /delay
-  state: experiment/state
-  mapping: 
-    type: mapping/represented
-    projector: experiment/agent/policy/policy/policy/projector
-    representation: experiment/agent/policy/policy/policy/representation/target
-curve_visualization: 
-  type: visualization/state
-  input_dims: []
-  input_min: [-4000]
-  input_max: [0]
-  memory: 256
-  state: experiment/curve
