@@ -1,3 +1,6 @@
+config:
+  file_ddpg_py: ../cfg/cart_pole/4layer_tanh_ddpg.py
+  file_ddpg_3l8_py: ../cfg/cart_pole/4layer_tanh_ddpg_3l8.py
 experiment: 
   type: experiment/online_learning
   runs: 10
@@ -78,7 +81,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: ./4layer_tanh_ddpg.py
+                file: config/file_ddpg_py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -113,7 +116,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: ./4layer_tanh_ddpg.py
+                file: config/file_ddpg_py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -148,7 +151,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: ./4layer_tanh_ddpg.py
+                file: config/file_ddpg_py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -183,7 +186,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: ./4layer_tanh_ddpg.py
+                file: config/file_ddpg_py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -218,7 +221,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: ./4layer_tanh_ddpg.py
+                file: config/file_ddpg_py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -253,7 +256,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: ./4layer_tanh_ddpg.py
+                file: config/file_ddpg_py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -288,7 +291,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: ./4layer_tanh_ddpg.py
+                file: config/file_ddpg_py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -323,7 +326,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: ./4layer_tanh_ddpg.py
+                file: config/file_ddpg_py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -358,7 +361,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: ./4layer_tanh_ddpg_3l8.py
+                file: config/file_ddpg_3l8_py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
