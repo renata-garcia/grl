@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/home/renatargo/anaconda3/bin/python3
 
 from __future__ import print_function
 

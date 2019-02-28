@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/home/renatargo/anaconda3/bin/python3
 
 from __future__ import print_function
 
@@ -11,6 +11,8 @@ from keras.layers.core import Dense, Lambda
 from keras.layers.merge import Concatenate
 from keras.layers.normalization import BatchNormalization
 from keras.backend import get_session
+
+print(sys.argv)
 
 if len(sys.argv) != 4:
   print("Usage:")

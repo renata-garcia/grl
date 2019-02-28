@@ -13,6 +13,5 @@
     - 0.001
 
 #            activation_dl: relu
-#            activation_end_critic: linear
 #            layer1_size: 400
 #            layer2_size: 300
