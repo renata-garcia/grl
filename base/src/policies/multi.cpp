@@ -1745,7 +1745,7 @@ size_t MultiPolicy::get_max_index(const std::vector<node> &in) const
 
   int aleatorio = rand();
   size_t index = i_max_density.at(aleatorio%i_max_density.size());
-  ERROR("MultiPolicy::get_max_index::i_max_density.size(): " << i_max_density.size() << " aleatorio: " << aleatorio << " index: " << index);
+  CRAWL("MultiPolicy::get_max_index::i_max_density.size(): " << i_max_density.size() << " aleatorio: " << aleatorio << " index: " << index);
 
   return index;
 }
@@ -1811,15 +1811,7 @@ MultiPolicy::ActionArray MultiPolicy::percentile(ActionArray const &array, doubl
   
   for(size_t k = std::max(ind_cut - 1, 0); k < mean_mov_id.size(); ++k)
   {
-    std::cout << "MultiPolicy::get<0>(mean_mov_id[k:";
-    std::cout << k;
-    std::cout << "])";
-    std::cout << std::get<0>(mean_mov_id[k]);
-    std::cout << ", get<1>(mean_mov_id[k:";
-    std::cout << k;
-    std::cout << "])";
-    std::cout << std::get<1>(mean_mov_id[k]);
-    std::cout << "." << std::endl;
+    CRAWL("MultiPolicy::get<0>(mean_mov_id[k:" << k << "])" << std::get<0>(mean_mov_id[k]) << ", get<1>(mean_mov_id[k:" << k << "])" << std::get<1>(mean_mov_id[k]) << ".");
     size_t j = std::get<1>(mean_mov_id[k]);
     retorno.push_back( array[j] );
   }
