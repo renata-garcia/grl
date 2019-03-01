@@ -1,3 +1,11 @@
+config:
+  lr_actor: 0.001
+  lr_critic: 0.001
+  activation_dl: "relu"
+  activation_end_critic: "linear"
+  layer1_size: 400
+  layer2_size: 300
+  file_ddpg: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims experiment/environment/task/action_max lr_actor lr_critic activation_dl activation_end_critic layer1_size layer2_size
 experiment: 
   type: experiment/online_learning
   runs: 1
@@ -44,7 +52,7 @@ experiment:
             interval: 10000
             inputs: experiment/environment/task/observation_dims
             targets: experiment/environment/task/action_dims
-            file: ../cfg/pendulum/4layer_tanh_ddpg.py
+            file: config/file_ddpg
             input_layer: s_in
             output_layer: a_out/mul, q/BiasAdd
             output_target: q_target
