@@ -75,7 +75,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: ./4layer_tanh_ddpg.py
+                file: ../cfg/pendulum/4layer_tanh_ddpg.py experiment/environment/task/observation_dims 1 3
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -110,7 +110,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: ./4layer_tanh_ddpg.py
+                file: ../cfg/pendulum/4layer_tanh_ddpg.py experiment/environment/task/observation_dims 1 3
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -145,7 +145,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: ./4layer_tanh_ddpg.py
+                file: ../cfg/pendulum/4layer_tanh_ddpg.py experiment/environment/task/observation_dims 1 3
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
@@ -180,7 +180,7 @@ experiment:
                 interval: 10000
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: ./4layer_tanh_ddpg.py
+                file: ../cfg/pendulum/4layer_tanh_ddpg.py experiment/environment/task/observation_dims 1 3
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target

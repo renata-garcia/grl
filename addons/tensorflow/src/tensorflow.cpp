@@ -223,7 +223,7 @@ void TensorFlowRepresentation::configure(Configuration &config)
     char buf[PATH_MAX];
     (void)tmpnam_r(buf);
     std::stringstream ss;
-    ss << file_ << " " << inputs_ << " " << targets_ << " " << learning_rate_actor_ << " " << learning_rate_critic_ << " " << buf << " " << activation_dl_ << " " << activation_end_critic_ << " " << layer1_size_ << " " << layer2_size_;
+    ss << file_ << " " << buf;
     if (system(ss.str().c_str()))
       throw bad_param("representation/tensorflow:file");
     

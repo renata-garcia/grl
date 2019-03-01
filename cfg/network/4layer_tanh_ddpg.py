@@ -15,7 +15,7 @@ from keras.backend import get_session
 print(sys.argv)
 print(sys.argv[-1])
 
-if len(sys.argv) == 4:
+if len(sys.argv) == 5:
   lr_actor = 0.0001
   lr_critic = 0.001
   activation_dl = "relu"
@@ -24,7 +24,7 @@ if len(sys.argv) == 4:
   layer2_size = 300
 elif len(sys.argv) != 10:
   print("Usage:")
-  print(" ", sys.argv[0], "<inputs> <outputs> <output.pb> <lr_actor> <lr_critic> <activation_dl> <activation_end_critic> <layer1_size> <layer2_size>")
+  print(" ", sys.argv[0], "<inputs> <outputs> <lr_actor> <lr_critic> <activation_dl> <activation_end_critic> <layer1_size> <layer2_size> <output.pb>")
   sys.exit(1)
 else:
   lr_actor = float(sys.argv[4])
@@ -41,7 +41,7 @@ if int(sys.argv[2]) != 1:
 print("lr_actor: ",lr_actor, ", lr_critic: ", lr_critic, ", activation_dl: ", activation_dl, ", activation_end_critic: ", activation_end_critic, ", layer1_size: ", layer1_size, ", layer2_size: ", layer2_size)
 obs = int(sys.argv[1])
 actions = 1
-action_max = sys.argv[3]
+action_max = int(sys.argv[3])
 normalization = False
 share_weights = False
 
