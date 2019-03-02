@@ -1,5 +1,5 @@
-#!/usr/bin/python
-# #/home/renatargo/anaconda3/bin/python
+#!/home/renatargo/anaconda3/bin/python
+#/usr/bin/python
 
 from __future__ import print_function
 

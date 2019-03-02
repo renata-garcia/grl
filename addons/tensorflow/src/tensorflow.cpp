@@ -173,13 +173,7 @@ void TensorFlowRepresentation::request(const std::string &role, ConfigurationReq
   config->push_back(CRP("output_layer", "Name of output layer tensors", output_layer_));
   config->push_back(CRP("output_target", "Name of output layer target placeholders", output_target_));
   config->push_back(CRP("sample_weights", "Name of sample weights placeholder", sample_weights_));
-  config->push_back(CRP("learning_phase", "Name of learning phase placeholder", learning_phase_));
-  config->push_back(CRP("learning_rate_actor", "Value of Learning Rate Actor", learning_rate_actor_));
-  config->push_back(CRP("learning_rate_critic", "Value of Learning Rate Critic", learning_rate_critic_));
-  config->push_back(CRP("activation_dl", "Activation Deep Learning", activation_dl_));
-  config->push_back(CRP("activation_end_critic", "Activation at End of Critic", activation_end_critic_));
-  config->push_back(CRP("layer1_size", "Layer1 Size", layer1_size_));
-  config->push_back(CRP("layer2_size", "Layer2 Size", layer2_size_));
+  config->push_back(CRP("learning_phase", "Name of learning phase placeholder", learning_phase_));  
 
   config->push_back(CRP("init_node", "Name of node to run to initialize weights", init_node_));
   config->push_back(CRP("update_node", "Name of node to run to update weights", update_node_));
@@ -198,13 +192,6 @@ void TensorFlowRepresentation::configure(Configuration &config)
   output_target_ = config["output_target"].str();
   sample_weights_ = config["sample_weights"].str();
   learning_phase_ = config["learning_phase"].str();
-
-  learning_rate_actor_ = config["learning_rate_actor"];
-  learning_rate_critic_ = config["learning_rate_critic"];
-  activation_dl_ = config["activation_dl"].str();
-  activation_end_critic_ = config["activation_end_critic"].str();
-  layer1_size_ = config["layer1_size"];
-  layer2_size_ = config["layer2_size"];
 
   init_node_ = config["init_node"].str();
   update_node_ = config["update_node"].str();
