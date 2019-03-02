@@ -3,14 +3,14 @@
   - name: experiment/output
     value: $@_lr_actor$0_lr_critic$1
   parameters:
-  - name: config/lr_actor
+  - name: experiment/agent/replay_steps
     values:
-    - 0.0001
-    - 0.001
-  - name: config/lr_critic
+    - 64
+    - 128
+  - name: experiment/agent/batch_size
     values:
-    - 0.0001
-    - 0.001
+    - 64
+    - 128
 
 #  - name: activation_dl
 #    values:
