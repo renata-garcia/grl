@@ -29,8 +29,6 @@
     - 200
   - name: experiment/config/layer2_size
     values:
-    - 400
-    - 350
     - 300
     - 250
     - 200
