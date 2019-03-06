@@ -215,8 +215,8 @@ class MultiPolicy : public Policy
     csDataCenter, csDataCenterMeanMov, csDataCenterBestMov, csDataCenterVotingMov, csDataCenterVotingMovTwoSteps,
     csAlg4StepsNew, csAlg4Steps,
     csMean, csMeanMov, csRandom, csStatic, csValueBased, csRoulette};
-    enum ScoreDistance {sdNone, sdDensityBased, sdDataCenter, sdMean};
-    enum UpdateHistory {uhNone, uhEuclidianDistance, uhDensity, uhVoting};
+    enum ScoreDistance {sdNone, sdBest, sdDensityBased, sdDataCenter, sdMean};
+    enum UpdateHistory {uhEuclideanDistance, uhDensity, uhVoting};
     enum ChooseActions {caNone, caMax, caMin, ca50PercAsc, ca50PercDesc, ca25Perc, ca10Perc, caQuartileOfMeanMov};
 
   protected:
@@ -231,7 +231,7 @@ class MultiPolicy : public Policy
     UpdateHistory score_;
     ChooseActions choose_actions_;
     ///////////////////////////////
-    ScoreDistance ensemble_mean_;
+    ScoreDistance ensemble_center_;
     UpdateHistory scores_;
     ScoreDistance select_;
     ///////////////////////////////
@@ -268,6 +268,8 @@ class MultiPolicy : public Policy
 	  };
     //------------------------------------------------------
     double percentile_;
+    LargeVector moving_average_;
+    int score_postprocess_; // 0 or 1
 
   public:
     MultiPolicy() : bins_(10),
@@ -326,9 +328,10 @@ class MultiPolicy : public Policy
     //trying again
     virtual LargeVector mean(ActionArray const &array) const;
     virtual LargeVector score(ActionArray const &array, double mean) const;
-    virtual ActionArray percentile(ActionArray const &array, double percentile) const;
-    virtual std::vector<double> set_density_based(ActionArray &actions_actors) const;
+    virtual ActionArray percentile(ActionArray const &array, LargeVector moving_average_, double percentile) const;
+    virtual std::vector<double> density_based(ActionArray &actions_actors, LargeVector *center) const;
     virtual size_t get_max_index(const std::vector<double> &in) const;
+    virtual ActionArray run_policies(const Observation &in, LargeVector *values = NULL) const;
  
 };
 /// Policy that combines two or more sub-policies using different strategies

@@ -20,7 +20,7 @@ agent/communicator:
     type: communicator
     description: Comunicator which exchanges messages with an actual/virtual environment
     mutability: configuration
-    default: 0
+    default: 0x2189a10
     optional: 0
   observation_dims:
     type: int.observation_dims
@@ -196,7 +196,7 @@ agent/master/exclusive:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x56506e383728
+    default: 0x21a5d08
     optional: 0
 agent/master/predicated:
   description: Master agent in which execution is predicated on preceding agent confidence
@@ -218,7 +218,7 @@ agent/master/predicated:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x56506e383728
+    default: 0x21a5d08
     optional: 0
 agent/master/random:
   description: Master agent that chooses sub-agents randomly
@@ -240,7 +240,7 @@ agent/master/random:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x56506e383728
+    default: 0x21a5d08
     optional: 0
 agent/master/sequential:
   description: Master agent that executes sub-agents sequentially
@@ -650,6 +650,32 @@ dynamics/mountain:
     optional: 0
 dynamics/pendulum:
   description: Pendulum dynamics based on the DCSC MOPS
+dynamics/rbdl:
+  description: RBDL rigid body dynamics
+  file:
+    type: string
+    description: RBDL Lua model file
+    mutability: configuration
+    default: ""
+    optional: 1
+  options:
+    type: string
+    description: Lua string to execute when loading model
+    mutability: configuration
+    default: ""
+    optional: 1
+  points:
+    type: string
+    description: Points
+    mutability: configuration
+    default: ""
+    optional: 1
+  auxiliary:
+    type: string
+    description: Model mass(mm), Center of mass (com), Center of mass velocity (comv), Angular momentum (am)
+    mutability: configuration
+    default: ""
+    optional: 1
 dynamics/swimmer:
   description: Coulom's swimmer dynamics
   segments:
@@ -722,6 +748,88 @@ environment/gym:
     mutability: configuration
     default: 0
     optional: 1
+environment/leosim:
+  description: Leo simulation environment
+  xml:
+    type: string
+    description: XML configuration filename
+    mutability: configuration
+    default: ../addons/odesim/cfg/robot.xml
+    optional: 1
+  randomize:
+    type: int
+    description: Randomize initial state
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 2147483647
+  visualize:
+    type: int
+    description: Whether to display 3D visualization
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  observation_dims:
+    type: int.observation_dims
+    description: Number of observation dimensions
+    mutability: provided
+  observation_min:
+    type: vector.observation_min
+    description: Lower limit on observations
+    mutability: provided
+  observation_max:
+    type: vector.observation_max
+    description: Upper limit on observations
+    mutability: provided
+  action_dims:
+    type: int.action_dims
+    description: Number of action dimensions
+    mutability: provided
+  action_min:
+    type: vector.action_min
+    description: Lower limit on actions
+    mutability: provided
+  action_max:
+    type: vector.action_max
+    description: Upper limit on actions
+    mutability: provided
+  reward_min:
+    type: double.reward_min
+    description: Lower limit on immediate reward
+    mutability: provided
+  reward_max:
+    type: double.reward_max
+    description: Upper limit on immediate reward
+    mutability: provided
+  observe:
+    type: string
+    description: string.observe_
+    mutability: configuration
+    default: Comma-separated list of state elements observed by an agent
+    optional: 1
+  actuate:
+    type: string
+    description: string.actuate_
+    mutability: configuration
+    default: Comma-separated list of action elements provided by an agent
+    optional: 1
+  learn_stance_knee:
+    type: int
+    description: Learn stance knee
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
+  exporter:
+    type: exporter
+    description: Optional exporter for transition log (supports time, state, observation, action, reward, terminal)
+    mutability: configuration
+    default: 0
+    optional: 1
 environment/modeled:
   description: Environment that uses a state transition model internally
   discrete_time:
@@ -757,6 +865,62 @@ environment/modeled:
   action:
     type: signal/vector.action
     description: Last action applied to the model
+    mutability: provided
+environment/ode:
+  description: Open Dynamics Engine simulation environment
+  xml:
+    type: string
+    description: XML configuration filename
+    mutability: configuration
+    default: ../addons/odesim/cfg/robot.xml
+    optional: 1
+  randomize:
+    type: int
+    description: Randomize initial state
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 2147483647
+  visualize:
+    type: int
+    description: Whether to display 3D visualization
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  observation_dims:
+    type: int.observation_dims
+    description: Number of observation dimensions
+    mutability: provided
+  observation_min:
+    type: vector.observation_min
+    description: Lower limit on observations
+    mutability: provided
+  observation_max:
+    type: vector.observation_max
+    description: Upper limit on observations
+    mutability: provided
+  action_dims:
+    type: int.action_dims
+    description: Number of action dimensions
+    mutability: provided
+  action_min:
+    type: vector.action_min
+    description: Lower limit on actions
+    mutability: provided
+  action_max:
+    type: vector.action_max
+    description: Upper limit on actions
+    mutability: provided
+  reward_min:
+    type: double.reward_min
+    description: Lower limit on immediate reward
+    mutability: provided
+  reward_max:
+    type: double.reward_max
+    description: Upper limit on immediate reward
     mutability: provided
 environment/pre/noise:
   description: Injects noise into an environment
@@ -1367,7 +1531,7 @@ mapping/policy/discrete/multi:
     type: "[mapping/policy/discrete]"
     description: Sub-policies
     mutability: configuration
-    default: 0x56506e384c90
+    default: 0x2308350
     optional: 0
   r_distance_parameter:
     type: double
@@ -1655,7 +1819,6 @@ mapping/policy/multi:
     default: ""
     optional: 1
     options:
-      - none
       - euclidian_distance
       - density
       - voting
@@ -1690,9 +1853,18 @@ mapping/policy/multi:
     optional: 1
     options:
       - none
+      - best
       - density_based
       - data_center
       - mean
+  score_postprocess:
+    type: int
+    description: score_postprocess
+    mutability: configuration
+    default: 1651863396
+    optional: 1
+    min: 0
+    max: 2147483647
   sampler:
     type: sampler
     description: Sampler for value-based strategy
@@ -1759,13 +1931,13 @@ mapping/policy/multi:
     type: "[mapping/policy]"
     description: Sub-policies
     mutability: configuration
-    default: 0x56506e386a20
+    default: 0x23551c0
     optional: 0
   value:
     type: "[mapping]"
     description: Values of sub-policy actions
     mutability: configuration
-    default: 0x56506e386a38
+    default: 0x23551d8
     optional: 1
   output_min:
     type: vector.action_min
@@ -3682,7 +3854,7 @@ predictor/multi:
     type: "[predictor]"
     description: First downstream predictor
     mutability: configuration
-    default: 0x56506e75c8a0
+    default: 0x24e2380
     optional: 0
 predictor/naf:
   description: Value function predictor using Normalized Advantage Features
@@ -3939,7 +4111,7 @@ projector/multi:
     type: "[projector.]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x56506e387c70
+    default: 0x25c5d30
     optional: 0
   memories:
     type: vector.memory
@@ -4347,7 +4519,7 @@ representation/additive:
     type: "[representation.]"
     description: Downstream representations
     mutability: configuration
-    default: 0x56506e771990
+    default: 0x26316f0
     optional: 0
 representation/communicator:
   description: Interface to an out-of-process representation
@@ -4635,50 +4807,6 @@ representation/parameterized/tensorflow:
     mutability: configuration
     default: ""
     optional: 1
-  learning_rate_actor:
-    type: double
-    description: Value of Learning Rate Actor
-    mutability: configuration
-    default: 0.0001
-    optional: 1
-    min: 0
-    max: 1
-  learning_rate_critic:
-    type: double
-    description: Value of Learning Rate Critic
-    mutability: configuration
-    default: 0.001
-    optional: 1
-    min: 0
-    max: 1
-  activation_dl:
-    type: string
-    description: Activation Deep Learning
-    mutability: configuration
-    default: ""
-    optional: 1
-  activation_end_critic:
-    type: string
-    description: Activation at End of Critic
-    mutability: configuration
-    default: ""
-    optional: 1
-  layer1_size:
-    type: int
-    description: Layer1 Size
-    mutability: configuration
-    default: 0
-    optional: 1
-    min: 0
-    max: 2147483647
-  layer2_size:
-    type: int
-    description: Layer2 Size
-    mutability: configuration
-    default: 0
-    optional: 1
-    min: 0
-    max: 2147483647
   init_node:
     type: string
     description: Name of node to run to initialize weights
@@ -4967,6 +5095,24 @@ sampler/softmax:
     optional: 1
     min: 1e-06
     max: 100
+sandbox_model/breakout:
+  description: Breakout sandbox
+  control_step:
+    type: double.control_step
+    description: Control step time
+    mutability: configuration
+    default: 0.05
+    optional: 1
+    min: 0.05
+    max: 1.797693134862316e+308
+  integration_steps:
+    type: int
+    description: Number of integration steps per control step
+    mutability: configuration
+    default: 6
+    optional: 1
+    min: 2
+    max: 2147483647
 sandbox_model/compass_walker:
   description: Simplest walker model from Garcia et al. with a sequential evaluation
   control_step:
@@ -5007,6 +5153,70 @@ sandbox_model/compass_walker:
     optional: 1
     min: 0
     max: 1
+sandbox_model/leo_squatting:
+  description: State transition model that integrates equations of motion and augments state vector with additional elements
+  control_step:
+    type: double.control_step
+    description: Control step time
+    mutability: configuration
+    default: 0.05
+    optional: 1
+    min: 0.001
+    max: 1.797693134862316e+308
+  integration_steps:
+    type: int
+    description: Number of integration steps per control step
+    mutability: configuration
+    default: 5
+    optional: 1
+    min: 1
+    max: 2147483647
+  dynamics:
+    type: dynamics/rbdl
+    description: Equations of motion
+    mutability: configuration
+    default: 0
+    optional: 0
+  target_dof:
+    type: int.target_dof
+    description: Number of degrees of freedom of the target model
+    mutability: configuration
+    default: 4
+    optional: 1
+    min: 0
+    max: 2147483647
+  animation:
+    type: string
+    description: Save current state or full animation
+    mutability: configuration
+    default: ""
+    optional: 1
+    options:
+      - nope
+      - full
+      - immediate
+  target_env:
+    type: environment
+    description: Interaction environment
+    mutability: configuration
+    default: 0
+    optional: 1
+  lower_height:
+    type: double.lower_height
+    description: Lower bound of root height to switch direction
+    mutability: configuration
+    default: 0.28
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
+  upper_height:
+    type: double.upper_height
+    description: Upper bound of root height to switch direction
+    mutability: configuration
+    default: 0.35
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
 signal/matrix:
   description: Matrix-based signal (trajectory, etc.)
 signal/vector:
@@ -5300,6 +5510,56 @@ task/acrobot/regulator:
     description: Cost function smoothing parameter
     mutability: configuration
     default: 0.01
+    optional: 1
+    min: 0
+    max: 1
+task/breakout/targeting:
+  description: Target a single point
+  observation_dims:
+    type: int.observation_dims
+    description: Number of observation dimensions
+    mutability: provided
+  observation_min:
+    type: vector.observation_min
+    description: Lower limit on observations
+    mutability: provided
+  observation_max:
+    type: vector.observation_max
+    description: Upper limit on observations
+    mutability: provided
+  action_dims:
+    type: int.action_dims
+    description: Number of action dimensions
+    mutability: provided
+  action_min:
+    type: vector.action_min
+    description: Lower limit on actions
+    mutability: provided
+  action_max:
+    type: vector.action_max
+    description: Upper limit on actions
+    mutability: provided
+  reward_min:
+    type: double.reward_min
+    description: Lower limit on immediate reward
+    mutability: provided
+  reward_max:
+    type: double.reward_max
+    description: Upper limit on immediate reward
+    mutability: provided
+  timeout:
+    type: double
+    description: Episode timeout
+    mutability: configuration
+    default: 10
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
+  randomization:
+    type: double
+    description: Level of start state randomization
+    mutability: configuration
+    default: 0
     optional: 1
     min: 0
     max: 1
@@ -6247,6 +6507,102 @@ task/integrator/regulator:
     optional: 1
     min: 0
     max: 1
+task/leo_squatting:
+  description: Task specification for Leo squatting with a fixed arm
+  observation_dims:
+    type: int.observation_dims
+    description: Number of observation dimensions
+    mutability: provided
+  observation_min:
+    type: vector.observation_min
+    description: Lower limit on observations
+    mutability: provided
+  observation_max:
+    type: vector.observation_max
+    description: Upper limit on observations
+    mutability: provided
+  action_dims:
+    type: int.action_dims
+    description: Number of action dimensions
+    mutability: provided
+  action_min:
+    type: vector.action_min
+    description: Lower limit on actions
+    mutability: provided
+  action_max:
+    type: vector.action_max
+    description: Upper limit on actions
+    mutability: provided
+  reward_min:
+    type: double.reward_min
+    description: Lower limit on immediate reward
+    mutability: provided
+  reward_max:
+    type: double.reward_max
+    description: Upper limit on immediate reward
+    mutability: provided
+  timeout:
+    type: double.timeout
+    description: Task timeout
+    mutability: system
+    default: 0
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
+  rand_init:
+    type: int.rand_init
+    description: Initialization from a random pose
+    mutability: system
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
+task/lua:
+  description: User-provided task specification in LUA
+  observation_dims:
+    type: int.observation_dims
+    description: Number of observation dimensions
+    mutability: provided
+  observation_min:
+    type: vector.observation_min
+    description: Lower limit on observations
+    mutability: provided
+  observation_max:
+    type: vector.observation_max
+    description: Upper limit on observations
+    mutability: provided
+  action_dims:
+    type: int.action_dims
+    description: Number of action dimensions
+    mutability: provided
+  action_min:
+    type: vector.action_min
+    description: Lower limit on actions
+    mutability: provided
+  action_max:
+    type: vector.action_max
+    description: Upper limit on actions
+    mutability: provided
+  reward_min:
+    type: double.reward_min
+    description: Lower limit on immediate reward
+    mutability: provided
+  reward_max:
+    type: double.reward_max
+    description: Upper limit on immediate reward
+    mutability: provided
+  file:
+    type: string
+    description: Lua task file
+    mutability: configuration
+    default: ""
+    optional: 1
+  options:
+    type: string
+    description: Lua string to execute when loading task
+    mutability: configuration
+    default: ""
+    optional: 1
 task/mountain/regulator:
   description: Mountain world regulator task
   observation_dims:
@@ -6947,6 +7303,14 @@ visualization/acrobot:
     mutability: configuration
     default: 0
     optional: 0
+visualization/breakout:
+  description: Breakout visualization
+  state:
+    type: signal/vector
+    description: Breakout state to visualize
+    mutability: configuration
+    default: 0
+    optional: 0
 visualization/cart_double_pole:
   description: Cart-double-pole visualization
   state:
@@ -7620,7 +7984,7 @@ projector/multi.observation:
     type: "[projector.observation]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x56506e387c70
+    default: 0x29d9770
     optional: 0
   memories:
     type: vector.memory
@@ -7956,7 +8320,7 @@ representation/additive.action:
     type: "[representation.action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x56506e9e85e0
+    default: 0x2a2b540
     optional: 0
 representation/communicator.action:
   description: Interface to an out-of-process representation
@@ -8244,50 +8608,6 @@ representation/parameterized/tensorflow.action:
     mutability: configuration
     default: ""
     optional: 1
-  learning_rate_actor:
-    type: double
-    description: Value of Learning Rate Actor
-    mutability: configuration
-    default: 0.0001
-    optional: 1
-    min: 0
-    max: 1
-  learning_rate_critic:
-    type: double
-    description: Value of Learning Rate Critic
-    mutability: configuration
-    default: 0.001
-    optional: 1
-    min: 0
-    max: 1
-  activation_dl:
-    type: string
-    description: Activation Deep Learning
-    mutability: configuration
-    default: ""
-    optional: 1
-  activation_end_critic:
-    type: string
-    description: Activation at End of Critic
-    mutability: configuration
-    default: ""
-    optional: 1
-  layer1_size:
-    type: int
-    description: Layer1 Size
-    mutability: configuration
-    default: 0
-    optional: 1
-    min: 0
-    max: 2147483647
-  layer2_size:
-    type: int
-    description: Layer2 Size
-    mutability: configuration
-    default: 0
-    optional: 1
-    min: 0
-    max: 2147483647
   init_node:
     type: string
     description: Name of node to run to initialize weights
@@ -8403,7 +8723,7 @@ projector/multi.pair:
     type: "[projector.pair]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x56506e387c70
+    default: 0x2aa0fd0
     optional: 0
   memories:
     type: vector.memory
@@ -8739,7 +9059,7 @@ representation/additive.value/action:
     type: "[representation.value/action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x56506e9e85e0
+    default: 0x2af2e00
     optional: 0
 representation/communicator.value/action:
   description: Interface to an out-of-process representation
@@ -9027,50 +9347,6 @@ representation/parameterized/tensorflow.value/action:
     mutability: configuration
     default: ""
     optional: 1
-  learning_rate_actor:
-    type: double
-    description: Value of Learning Rate Actor
-    mutability: configuration
-    default: 0.0001
-    optional: 1
-    min: 0
-    max: 1
-  learning_rate_critic:
-    type: double
-    description: Value of Learning Rate Critic
-    mutability: configuration
-    default: 0.001
-    optional: 1
-    min: 0
-    max: 1
-  activation_dl:
-    type: string
-    description: Activation Deep Learning
-    mutability: configuration
-    default: ""
-    optional: 1
-  activation_end_critic:
-    type: string
-    description: Activation at End of Critic
-    mutability: configuration
-    default: ""
-    optional: 1
-  layer1_size:
-    type: int
-    description: Layer1 Size
-    mutability: configuration
-    default: 0
-    optional: 1
-    min: 0
-    max: 2147483647
-  layer2_size:
-    type: int
-    description: Layer2 Size
-    mutability: configuration
-    default: 0
-    optional: 1
-    min: 0
-    max: 2147483647
   init_node:
     type: string
     description: Name of node to run to initialize weights
@@ -9097,7 +9373,7 @@ representation/additive.value/state:
     type: "[representation.value/state]"
     description: Downstream representations
     mutability: configuration
-    default: 0x56506e9e85e0
+    default: 0x2b29570
     optional: 0
 representation/communicator.value/state:
   description: Interface to an out-of-process representation
@@ -9385,50 +9661,6 @@ representation/parameterized/tensorflow.value/state:
     mutability: configuration
     default: ""
     optional: 1
-  learning_rate_actor:
-    type: double
-    description: Value of Learning Rate Actor
-    mutability: configuration
-    default: 0.0001
-    optional: 1
-    min: 0
-    max: 1
-  learning_rate_critic:
-    type: double
-    description: Value of Learning Rate Critic
-    mutability: configuration
-    default: 0.001
-    optional: 1
-    min: 0
-    max: 1
-  activation_dl:
-    type: string
-    description: Activation Deep Learning
-    mutability: configuration
-    default: ""
-    optional: 1
-  activation_end_critic:
-    type: string
-    description: Activation at End of Critic
-    mutability: configuration
-    default: ""
-    optional: 1
-  layer1_size:
-    type: int
-    description: Layer1 Size
-    mutability: configuration
-    default: 0
-    optional: 1
-    min: 0
-    max: 2147483647
-  layer2_size:
-    type: int
-    description: Layer2 Size
-    mutability: configuration
-    default: 0
-    optional: 1
-    min: 0
-    max: 2147483647
   init_node:
     type: string
     description: Name of node to run to initialize weights
@@ -9469,7 +9701,7 @@ representation/additive.transition:
     type: "[representation.transition]"
     description: Downstream representations
     mutability: configuration
-    default: 0x56506e9e85e0
+    default: 0x2bb4ab0
     optional: 0
 representation/communicator.transition:
   description: Interface to an out-of-process representation
@@ -9757,50 +9989,6 @@ representation/parameterized/tensorflow.transition:
     mutability: configuration
     default: ""
     optional: 1
-  learning_rate_actor:
-    type: double
-    description: Value of Learning Rate Actor
-    mutability: configuration
-    default: 0.0001
-    optional: 1
-    min: 0
-    max: 1
-  learning_rate_critic:
-    type: double
-    description: Value of Learning Rate Critic
-    mutability: configuration
-    default: 0.001
-    optional: 1
-    min: 0
-    max: 1
-  activation_dl:
-    type: string
-    description: Activation Deep Learning
-    mutability: configuration
-    default: ""
-    optional: 1
-  activation_end_critic:
-    type: string
-    description: Activation at End of Critic
-    mutability: configuration
-    default: ""
-    optional: 1
-  layer1_size:
-    type: int
-    description: Layer1 Size
-    mutability: configuration
-    default: 0
-    optional: 1
-    min: 0
-    max: 2147483647
-  layer2_size:
-    type: int
-    description: Layer2 Size
-    mutability: configuration
-    default: 0
-    optional: 1
-    min: 0
-    max: 2147483647
   init_node:
     type: string
     description: Name of node to run to initialize weights
@@ -9930,7 +10118,7 @@ projector/multi.action:
     type: "[projector.action]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x56506e387c70
+    default: 0x2c1b4f0
     optional: 0
   memories:
     type: vector.memory
