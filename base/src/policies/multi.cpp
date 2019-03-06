@@ -1019,7 +1019,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       std::vector<size_t> ii_max_density;
       std::vector<Action> aa_normalized(n_policies);
       std::vector<double> density(n_policies);
-      std::vector<double> scores;
+      LargeVector scores;
       LargeVector center, vals;
       std::vector<double> score(0);
 
@@ -1082,7 +1082,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
         CRAWL("MultiPolicy::csAlg4StepsNew::moving_average[i= " << i << "]: " << moving_average_[i]);
       
       CRAWL("MultiPolicy::csAlg4StepsNew::update_mean_mov::for i < in.size()");  
-      moving_average_ = alpha_mov_mean_*scores_ + (1-alpha_mov_mean_)*moving_average_;
+      moving_average_ = alpha_mov_mean_*scores + (1-alpha_mov_mean_)*moving_average_;
       CRAWL("MultiPolicy::csAlg4StepsNew::update_mean_mov::ending...");
       
       for(size_t i = 0; i < policy_.size(); ++i)
@@ -1827,9 +1827,9 @@ MultiPolicy::ActionArray MultiPolicy::percentile(ActionArray const &array, Large
   return retorno;
 }
 
-std::vector<double> MultiPolicy::density_based(ActionArray &actions_actors, LargeVector *center) const
+LargeVector MultiPolicy::density_based(ActionArray &actions_actors, LargeVector *center) const
 {
-  std::vector<double> scores(0);
+  LargeVector scores =  ConstantLargeVector(policy_.size(), 0.);
   int n_dimension = actions_actors[0].v.size();
   
   for(size_t i = 0; i < actions_actors.size(); ++i)
