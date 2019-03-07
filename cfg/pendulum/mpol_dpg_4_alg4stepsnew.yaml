@@ -9,7 +9,6 @@ experiment:
   output: mpol_dpg_4_alg4steps_dens_dens_best_dens_data
   environment: 
     type: environment/modeled
-    discrete_time: 1
     model: 
       type: model/dynamical
       control_step: 0.03
@@ -25,13 +24,13 @@ experiment:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: alg4steps
-      score_distance: density_based
+      strategy: alg4stepsNew
+      score_distance: none
       update_history: density
-      choose_actions: max
+      choose_actions: none
       percentile: 1
-      select_by_distance: none
-      score_postprocess: 1651863396
+      select_by_distance: best
+      score_postprocess: 0
       sampler: 
         type: sampler/greedy
       bins: 100
@@ -65,7 +64,6 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
-            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
@@ -89,7 +87,6 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
-            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
@@ -113,7 +110,6 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
-            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
@@ -137,7 +133,6 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
-            limit: 1
       value: 
         - 
           type: mapping/represented
@@ -151,7 +146,6 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
-            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/1/projector
@@ -164,7 +158,6 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
-            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/2/projector
@@ -177,7 +170,6 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
-            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/3/projector
@@ -190,7 +182,6 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
-            limit: 1
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
     predictor: 
@@ -217,7 +208,6 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
-            limit: 1
           actor_representation: experiment/agent/policy/policy/0/representation
         - 
           type: predictor/dpg
@@ -240,7 +230,6 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
-            limit: 1
           actor_representation: experiment/agent/policy/policy/1/representation
         - 
           type: predictor/dpg
@@ -263,7 +252,6 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
-            limit: 1
           actor_representation: experiment/agent/policy/policy/2/representation
         - 
           type: predictor/dpg
@@ -286,7 +274,6 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
-            limit: 1
           actor_representation: experiment/agent/policy/policy/3/representation
   test_agent: 
     type: agent/fixed

@@ -329,8 +329,8 @@ class MultiPolicy : public Policy
     virtual LargeVector mean(ActionArray const &array) const;
     virtual LargeVector score(ActionArray const &array, double mean) const;
     virtual ActionArray percentile(ActionArray const &array, LargeVector moving_average_, double percentile) const;
-    virtual LargeVector density_based(ActionArray &actions_actors, LargeVector *center) const;
-    virtual size_t get_max_index(const std::vector<double> &in) const;
+    virtual LargeVector density_based(ActionArray &ensemble_set, LargeVector *center) const;
+    virtual size_t get_max_index(const LargeVector &in) const;
     virtual ActionArray run_policies(const Observation &in, LargeVector *values = NULL) const;
  
 };

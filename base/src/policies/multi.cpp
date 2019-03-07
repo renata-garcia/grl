@@ -903,6 +903,13 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       std::vector<double> score(0);
 
       mean = get_policy_mean(in, &action_actors, &vals);
+      
+      for (size_t i = 0; i < action_actors.size(); ++i)
+      {
+        action_actors[i].action = i;
+        action_actors[i].normalized = i/action_actors.size();
+      }
+      
       //https://en.wikibooks.org/wiki/C%2B%2B_Programming/Code/Design_Patterns
       switch (score_distance_)
       {
@@ -1024,6 +1031,10 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       std::vector<double> score(0);
 
       actions_actors = run_policies(in);
+      
+      for (size_t i = 0; i < actions_actors.size(); ++i)
+        actions_actors[i].v[0] = i;
+
       if (scores_ != uhEuclideanDistance && ensemble_center_ != sdNone)
         throw Exception("ensemble_mean can only be used with update_history: eucludean_distance");
       else if (scores_ == uhEuclideanDistance && ensemble_center_ == sdNone)
@@ -1069,6 +1080,9 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
         //   break;
       }
 
+      for(size_t i = 0; i < policy_.size(); ++i)
+        CRAWL("MultiPolicy::csAlg4StepsNew::scores[i= " << i << "]: " << scores[i]);
+
       if (score_postprocess_ == 1)
       {
         throw Exception("MultiPolicy::csAlg4StepsNew::score_postprocess_ not implemented!");
@@ -1078,12 +1092,13 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
         //   break;
       }
 
+      CRAWL("MultiPolicy::csAlg4StepsNew::alpha_mov_mean_: " << alpha_mov_mean_);
       for(size_t i = 0; i < policy_.size(); ++i)
         CRAWL("MultiPolicy::csAlg4StepsNew::moving_average[i= " << i << "]: " << moving_average_[i]);
       
-      CRAWL("MultiPolicy::csAlg4StepsNew::update_mean_mov::for i < in.size()");  
       moving_average_ = alpha_mov_mean_*scores + (1-alpha_mov_mean_)*moving_average_;
-      CRAWL("MultiPolicy::csAlg4StepsNew::update_mean_mov::ending...");
+      // for(size_t i =0; i < moving_average_.size(); ++i)
+      //   moving_average_[i] = alpha_mov_mean_*scores[i] + (1-alpha_mov_mean_)*moving_average_[i];
       
       for(size_t i = 0; i < policy_.size(); ++i)
         CRAWL("MultiPolicy::csAlg4StepsNew::moving_average[i= " << i << "]: " << moving_average_[i]);
@@ -1803,44 +1818,40 @@ MultiPolicy::ActionArray MultiPolicy::percentile(ActionArray const &array, Large
   CRAWL("MultiPolicy::percentile");
   std::vector<std::tuple<double, size_t>> mean_mov_id(array.size());
   
-  CRAWL("MultiPolicy::percentile::update_mean_mov_::for i < in->size()");  
+  CRAWL("MultiPolicy::percentile::mount tuples<double, size_t>");  
   for(size_t i = 0; i < array.size(); ++i)
-  {
     mean_mov_id[i] = std::tuple<double, size_t>(mean_mov_->at(i), i);
-    CRAWL("MultiPolicy::percentile::update_mean_mov_::mean_mov_->at(i): " << mean_mov_->at(i));
-  }
-  CRAWL("MultiPolicy::percentile::update_mean_mov_::ending...");
-
-  CRAWL("MultiPolicy::percentile");
-  std::sort(mean_mov_id.begin(), mean_mov_id.end()); //,std::greater<double>()
+  
+  std::sort(mean_mov_id.begin(), mean_mov_id.end());
   int ind_cut = mean_mov_id.size() * percentile;
+  CRAWL("MultiPolicy::percentile::ind_cut= " << ind_cut << ", mean_mov_id.size()= " << mean_mov_id.size());
   
   for(size_t k = std::max(ind_cut - 1, 0); k < mean_mov_id.size(); ++k)
   {
-    CRAWL("MultiPolicy::get<0>(mean_mov_id[k:" << k << "])" << std::get<0>(mean_mov_id[k]) << ", get<1>(mean_mov_id[k:" << k << "])" << std::get<1>(mean_mov_id[k]) << ".");
+    CRAWL("MultiPolicy::percentile::k = std::max(ind_cut - 1, 0)::policy action k = " << k);
+    CRAWL("MultiPolicy::percentile::get<0>(mean_mov_id[k:" << k << "])" << std::get<0>(mean_mov_id[k]) << ", get<1>(mean_mov_id[k:" << k << "])" << std::get<1>(mean_mov_id[k]) << ".");
     size_t j = std::get<1>(mean_mov_id[k]);
     retorno.push_back( array[j] );
   }
   
-  CRAWL("MultiPolicy::percentile::retorno: " << retorno.size());
-
+  CRAWL("MultiPolicy::percentile::retorno.size(): " << retorno.size());
   return retorno;
 }
 
-LargeVector MultiPolicy::density_based(ActionArray &actions_actors, LargeVector *center) const
+LargeVector MultiPolicy::density_based(ActionArray &ensemble_set, LargeVector *center) const
 {
-  LargeVector scores =  ConstantLargeVector(policy_.size(), 0.);
-  int n_dimension = actions_actors[0].v.size();
+  LargeVector scores =  ConstantLargeVector(ensemble_set.size(), 0.);
+  int n_dimension = ensemble_set[0].v.size();
   
-  for(size_t i = 0; i < actions_actors.size(); ++i)
+  for(size_t i = 0; i < ensemble_set.size(); ++i)
   {
     std::string strtmp = "";
     double r_dist = 0.0;
-    LargeVector i_normalized = -1 + 2*((actions_actors[i].v - min_)/(max_ - min_));
-    for(size_t j = 0; j < actions_actors.size(); ++j)
+    LargeVector i_normalized = -1 + 2*((ensemble_set[i].v - min_)/(max_ - min_));
+    for(size_t j = 0; j < ensemble_set.size(); ++j)
     {
       double expoent = 0.0;
-      LargeVector j_normalized = -1 + 2*((actions_actors[j].v - min_)/(max_ - min_));
+      LargeVector j_normalized = -1 + 2*((ensemble_set[j].v - min_)/(max_ - min_));
       for(size_t k = 0; k != n_dimension; ++k)
       {
         expoent += pow(i_normalized[k] - j_normalized[k], 2);
@@ -1851,15 +1862,15 @@ LargeVector MultiPolicy::density_based(ActionArray &actions_actors, LargeVector 
     }
     //CRAWL(strtmp << strspace << "sum(expo) - density[ii:" << ii << "]: " << r_dist );
 
-    scores.push_back(r_dist);
+    scores[i] = r_dist;
   }
   
-  *center = actions_actors[get_max_index(scores)].v;
+  *center = ensemble_set[get_max_index(scores)].v;
 
   return scores;
 }
 
-size_t MultiPolicy::get_max_index(const std::vector<double> &in) const
+size_t MultiPolicy::get_max_index(const LargeVector &in) const
 {
   double max = -std::numeric_limits<double>::infinity();
   std::vector<size_t> i_max_density;
@@ -1886,7 +1897,6 @@ size_t MultiPolicy::get_max_index(const std::vector<double> &in) const
 MultiPolicy::ActionArray MultiPolicy::run_policies(const Observation &in, LargeVector *values) const
 {
   ActionArray actions(0);
-  size_t i = 0;
   Vector dummy;
   // if (values != NULL)
   //   values = LargeVector::Zero(policy_.size());
