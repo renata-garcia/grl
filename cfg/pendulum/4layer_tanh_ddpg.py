@@ -1,4 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+#
+# NOTE: Actions are defined on [-1, 1], so they need to be
+# normalized on input (with a signed projector/pre/normalized) and
+# on output (with a renormalizing mapping/policy/action)
 
 from __future__ import print_function
 
@@ -34,13 +38,9 @@ else:
   layer1_size = int(sys.argv[8])
   layer2_size = int(sys.argv[9])
 
-if int(sys.argv[2]) != 1:
-  print("Not suitable for more than one output", file=sys.stderr)
-  sys.exit(1)
-
 print("lr_actor: ",lr_actor, ", lr_critic: ", lr_critic, ", activation_dl: ", activation_dl, ", activation_end_critic: ", activation_end_critic, ", layer1_size: ", layer1_size, ", layer2_size: ", layer2_size)
 obs = int(sys.argv[1])
-actions = 1
+actions = int(sys.argv[2])
 action_max = sys.argv[3]
 normalization = False
 share_weights = False
@@ -61,12 +61,11 @@ if normalization:
   han = BatchNormalization()(ha)
 else:
   han = ha
-a_raw = Dense(actions, activation='tanh', name='a_raw')(han)
-a_out = Lambda(lambda x: action_max*x, name='a_out')(a_raw)
+a_out = Dense(actions, activation='tanh', name='a_out')(han)
 theta = tf.trainable_variables()
 
 # Critic network definition
-a_in = tf.stop_gradient(tf.placeholder_with_default(a_out, shape=(None,actions), name='a_in'))
+a_in = tf.placeholder_with_default(tf.stop_gradient(a_out), shape=(None,actions), name='a_in')
 if normalization:
   an = BatchNormalization()(a_in)
 else:
@@ -87,8 +86,11 @@ else:
   hqn = hq
 q = Dense(1, activation=activation_end_critic, name='q')(hqn)
 
+tf.group([s_in, a_in], name='inputs')
+tf.group([q, a_out], name='outputs')
+
 # Critic network update
-q_target = tf.placeholder(tf.float32, shape=(None, 1), name='q_target')
+q_target = tf.placeholder(tf.float32, shape=(None, 1), name='target')
 q_loss = tf.losses.mean_squared_error(q_target, q)
 q_update = tf.train.AdamOptimizer(lr_critic).minimize(q_loss, name='q_update') #0.001
 
