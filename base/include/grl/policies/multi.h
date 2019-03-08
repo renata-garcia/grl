@@ -334,6 +334,7 @@ class MultiPolicy : public Policy
     virtual ActionArray run_policies(const Observation &in, LargeVector *values = NULL) const;
  
 };
+
 /// Policy that combines two or more sub-policies using different strategies
 class DiscreteMultiPolicy : public DiscretePolicy
 {

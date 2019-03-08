@@ -904,11 +904,11 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
 
       mean = get_policy_mean(in, &action_actors, &vals);
       
-      for (size_t i = 0; i < action_actors.size(); ++i)
-      {
-        action_actors[i].action = i;
-        action_actors[i].normalized = i/action_actors.size();
-      }
+      // for (size_t i = 0; i < action_actors.size(); ++i)
+      // {
+      //   action_actors[i].action = i;
+      //   action_actors[i].normalized = -1 + 2*( (i - min_) / (max_ - min_) );
+      // }
       
       //https://en.wikibooks.org/wiki/C%2B%2B_Programming/Code/Design_Patterns
       switch (score_distance_)
@@ -1032,8 +1032,8 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
 
       actions_actors = run_policies(in);
       
-      for (size_t i = 0; i < actions_actors.size(); ++i)
-        actions_actors[i].v[0] = i;
+      // for (size_t i = 0; i < actions_actors.size(); ++i)
+      //   actions_actors[i].v[0] = i;
 
       if (scores_ != uhEuclideanDistance && ensemble_center_ != sdNone)
         throw Exception("ensemble_mean can only be used with update_history: eucludean_distance");
@@ -1483,6 +1483,7 @@ LargeVector MultiPolicy::get_policy_mean(const Observation &in, std::vector<node
     policy_[i]->act(in, &tmp);
     // *values[i] = *value_[i]->read(in, &dummy);
     (action_actors->at(i)).action = tmp.v;
+    // (action_actors->at(i)).action[0] = i;
     (action_actors->at(i)).normalized = -1 + 2*( ((action_actors->at(i)).action - min_) / (max_ - min_) );
     (action_actors->at(i)).score = 0;
     (action_actors->at(i)).id = i;
@@ -1651,9 +1652,18 @@ void MultiPolicy::choosing_quartile_of_mean_mov(std::vector<node> *in) const
 void MultiPolicy::set_density_based(std::vector<node> *in) const
 {
   int n_dimension = in->at(0).normalized.size();
+  CRAWL("MultiPolicy::set_density_based::n_dimension: " << n_dimension);
+
+  // for(size_t i = 0; i < in->size(); ++i)
+  //   in->at(i).normalized[0] = -1 + 2*((i - min_[0])/(max_[0] - min_[0]));
+
+  // for(size_t i = 0; i < in->size(); ++i)
+  //   CRAWL("MultiPolicy::set_density_based::RESET::in->at(i:" << i << ").normalized[0]: " << in->at(i).normalized[0]);
+
   for(size_t i = 0; i < in->size(); ++i)
   {
     std::string strtmp = "";
+    std::string strspace = "                    ";
     double r_dist = 0.0;
     for(size_t j = 0; j < in->size(); ++j)
     {
@@ -1661,13 +1671,14 @@ void MultiPolicy::set_density_based(std::vector<node> *in) const
       for(size_t k = 0; k != n_dimension; ++k)
       {
         expoent += pow(in->at(i).normalized[k] - in->at(j).normalized[k], 2);
-        //strtmp += strspace + "expoent(k:" + std::to_string(k) + "): " +  std::to_string(expoent) + " (1): " + std::to_string((*it).v[k]) + " (2): " + std::to_string((*it2).v[k]) + "\n";
+        // strtmp += strspace + "expoent(k:" + std::to_string(k) + "): " +  std::to_string(expoent) + " (1): " + std::to_string(in->at(i).normalized[k]) + " (2): " + std::to_string(in->at(j).normalized[k]) + "\n";
       }
-      //strtmp += strspace + strspace + "r_dist(before): " + std::to_string(r_dist) + " expoent: " + std::to_string((-1 * expoent / pow(r_distance_parameter_, 2))) + " exp: " + std::to_string(exp( -1 * expoent / pow(r_distance_parameter_, 2))) + "\n";
+      // strtmp += strspace + strspace + "r_dist(before): " + std::to_string(r_dist) + " expoent: " + std::to_string((-1 * expoent / pow(r_distance_parameter_, 2))) + " exp: " + std::to_string(exp( -1 * expoent / pow(r_distance_parameter_, 2))) + "\n";
       r_dist = r_dist + exp( -1 * expoent / pow(r_distance_parameter_, 2) );
     }
-    //CRAWL(strtmp << strspace << "sum(expo) - density[ii:" << ii << "]: " << r_dist );
+    // CRAWL(strtmp << strspace << "sum(expo) - density[i:" << i << "]: " << r_dist );
 
+    CRAWL("MultiPolicy::set_density_based::density#[i:" << i << "]: " << r_dist );
     in->at(i).score = r_dist;
   }
 }
@@ -1816,21 +1827,25 @@ MultiPolicy::ActionArray MultiPolicy::percentile(ActionArray const &array, Large
   ActionArray retorno;
 
   CRAWL("MultiPolicy::percentile");
-  std::vector<std::tuple<double, size_t>> mean_mov_id(array.size());
+  std::vector<std::tuple<double, size_t>> tuple_mean_id(array.size());
   
   CRAWL("MultiPolicy::percentile::mount tuples<double, size_t>");  
   for(size_t i = 0; i < array.size(); ++i)
-    mean_mov_id[i] = std::tuple<double, size_t>(mean_mov_->at(i), i);
+    tuple_mean_id[i] = std::tuple<double, size_t>(moving_average_[i], i);
   
-  std::sort(mean_mov_id.begin(), mean_mov_id.end());
-  int ind_cut = mean_mov_id.size() * percentile;
-  CRAWL("MultiPolicy::percentile::ind_cut= " << ind_cut << ", mean_mov_id.size()= " << mean_mov_id.size());
+  std::sort(tuple_mean_id.begin(), tuple_mean_id.end());
+  int ind_cut = tuple_mean_id.size() * percentile;
+
+  for (size_t i = 0; i < tuple_mean_id.size(); ++i)
+    CRAWL("MultiPolicy::percentile::get<0>(tuple_mean_id[i:" << i << "])" << std::get<0>(tuple_mean_id[i]) << ", get<1>(tuple_mean_id[i:" << i << "])" << std::get<1>(tuple_mean_id[i]) << ".");
+
+  CRAWL("MultiPolicy::percentile::ind_cut= " << ind_cut << ", tuple_mean_id.size()= " << tuple_mean_id.size());
   
-  for(size_t k = std::max(ind_cut - 1, 0); k < mean_mov_id.size(); ++k)
+  for(size_t k = std::max(ind_cut - 1, 0); k < tuple_mean_id.size(); ++k)
   {
     CRAWL("MultiPolicy::percentile::k = std::max(ind_cut - 1, 0)::policy action k = " << k);
-    CRAWL("MultiPolicy::percentile::get<0>(mean_mov_id[k:" << k << "])" << std::get<0>(mean_mov_id[k]) << ", get<1>(mean_mov_id[k:" << k << "])" << std::get<1>(mean_mov_id[k]) << ".");
-    size_t j = std::get<1>(mean_mov_id[k]);
+    CRAWL("MultiPolicy::percentile::get<0>(tuple_mean_id[k:" << k << "])" << std::get<0>(tuple_mean_id[k]) << ", get<1>(tuple_mean_id[k:" << k << "])" << std::get<1>(tuple_mean_id[k]) << ".");
+    size_t j = std::get<1>(tuple_mean_id[k]);
     retorno.push_back( array[j] );
   }
   
@@ -1842,10 +1857,18 @@ LargeVector MultiPolicy::density_based(ActionArray &ensemble_set, LargeVector *c
 {
   LargeVector scores =  ConstantLargeVector(ensemble_set.size(), 0.);
   int n_dimension = ensemble_set[0].v.size();
+  CRAWL("MultiPolicy::density_based::n_dimension: " << n_dimension);
+
+  // for(size_t i = 0; i < ensemble_set.size(); ++i)
+  //   ensemble_set[i].v[0] = i*0.36;
+    
+  // for(size_t i = 0; i < ensemble_set.size(); ++i)
+  //   CRAWL("MultiPolicy::density_based::RESET::ensemble_set[i:" << i << "].v[0]: " << ensemble_set[i].v[0]);
   
   for(size_t i = 0; i < ensemble_set.size(); ++i)
   {
     std::string strtmp = "";
+    std::string strspace = "                    ";
     double r_dist = 0.0;
     LargeVector i_normalized = -1 + 2*((ensemble_set[i].v - min_)/(max_ - min_));
     for(size_t j = 0; j < ensemble_set.size(); ++j)
@@ -1855,17 +1878,20 @@ LargeVector MultiPolicy::density_based(ActionArray &ensemble_set, LargeVector *c
       for(size_t k = 0; k != n_dimension; ++k)
       {
         expoent += pow(i_normalized[k] - j_normalized[k], 2);
-        //strtmp += strspace + "expoent(k:" + std::to_string(k) + "): " +  std::to_string(expoent) + " (1): " + std::to_string((*it).v[k]) + " (2): " + std::to_string((*it2).v[k]) + "\n";
+        // strtmp += strspace + "expoent(k:" + std::to_string(k) + "): " +  std::to_string(expoent) + " (1): " + std::to_string(i_normalized[k]) + " (2): " + std::to_string(j_normalized[k]) + "\n";
       }
-      //strtmp += strspace + strspace + "r_dist(before): " + std::to_string(r_dist) + " expoent: " + std::to_string((-1 * expoent / pow(r_distance_parameter_, 2))) + " exp: " + std::to_string(exp( -1 * expoent / pow(r_distance_parameter_, 2))) + "\n";
+      // strtmp += strspace + strspace + "r_dist(before): " + std::to_string(r_dist) + " expoent: " + std::to_string((-1 * expoent / pow(r_distance_parameter_, 2))) + " exp: " + std::to_string(exp( -1 * expoent / pow(r_distance_parameter_, 2))) + "\n";
       r_dist = r_dist + exp( -1 * expoent / pow(r_distance_parameter_, 2) );
     }
-    //CRAWL(strtmp << strspace << "sum(expo) - density[ii:" << ii << "]: " << r_dist );
+    // CRAWL(strtmp << strspace << "sum(expo) - density[i:" << i << "]: " << r_dist );
 
+    CRAWL("MultiPolicy::density_based::density*[i:" << i << "]: " << r_dist );
     scores[i] = r_dist;
+    
   }
   
   *center = ensemble_set[get_max_index(scores)].v;
+  CRAWL("MultiPolicy::density_based::*center[0]: " << (*center)[0]);
 
   return scores;
 }

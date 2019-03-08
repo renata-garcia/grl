@@ -31,7 +31,7 @@ experiment:
       choose_actions: max
       percentile: 1
       select_by_distance: none
-      score_postprocess: 1651863396
+      score_postprocess: 0
       sampler: 
         type: sampler/greedy
       bins: 100
