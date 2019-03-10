@@ -1,5 +1,10 @@
-#!/usr/bin/python
-#/home/renatargo/anaconda3/bin/python
+#!/home/renatargo/anaconda3/bin/python
+#/usr/bin/python
+#
+# NOTE: Actions are defined on [-1, 1], so they need to be
+# normalized on input (with a signed projector/pre/normalized) and
+# on output (with a renormalizing mapping/policy/action)
+
 
 from __future__ import print_function
 
@@ -17,36 +22,35 @@ print(sys.argv)
 print(len(sys.argv))
 print(sys.argv[-1])
 
-if len(sys.argv) == 7:
+if len(sys.argv) == 4:
   lr_actor = 0.0001
   lr_critic = 0.001
   activation_dl = "relu"
   activation_end_critic = "linear"
   layer1_size = 400
   layer2_size = 300
-elif len(sys.argv) != 13:
+elif len(sys.argv) != 10:
   print("Usage:")
   print(" ", sys.argv[0], "<inputs> <outputs> <lr_actor> <lr_critic> <activation_dl> <activation_end_critic> <layer1_size> <layer2_size> <output.pb>")
   sys.exit(1)
 else:
-  lr_actor = float(sys.argv[6])
-  lr_critic = float(sys.argv[7])
-  activation_dl = sys.argv[8]
-  activation_end_critic = sys.argv[9]
-  layer1_size = int(sys.argv[10])
-  layer2_size = int(sys.argv[11])
+  lr_actor = float(sys.argv[3])
+  lr_critic = float(sys.argv[4])
+  activation_dl = sys.argv[5]
+  activation_end_critic = sys.argv[6]
+  layer1_size = int(sys.argv[7])
+  layer2_size = int(sys.argv[8])
 
 if int(sys.argv[2]) != 1:
   print("Not suitable for more than one output", file=sys.stderr)
   sys.exit(1)
 
 obs = int(sys.argv[1])
-actions = 1
-action_max = int(sys.argv[4])
+actions = int(sys.argv[2])
 normalization = False
 share_weights = False
 
-print("lr_actor: ",lr_actor, ", lr_critic: ", lr_critic, ", activation_dl: ", activation_dl, ", activation_end_critic: ", activation_end_critic, ", layer1_size: ", layer1_size, ", layer2_size: ", layer2_size, ", action_max: ", action_max)
+print("lr_actor: ",lr_actor, ", lr_critic: ", lr_critic, ", activation_dl: ", activation_dl, ", activation_end_critic: ", activation_end_critic, ", layer1_size: ", layer1_size, ", layer2_size: ", layer2_size)
 
 # Actor network definition
 s_in = tf.placeholder(tf.float32, shape=(None,obs), name='s_in')
@@ -64,12 +68,11 @@ if normalization:
   han = BatchNormalization()(ha)
 else:
   han = ha
-a_raw = Dense(actions, activation='tanh', name='a_raw')(han)
-a_out = Lambda(lambda x: action_max*x, name='a_out')(a_raw)
+a_out = Dense(actions, activation='tanh', name='a_out')(han)
 theta = tf.trainable_variables()
 
 # Critic network definition
-a_in = tf.stop_gradient(tf.placeholder_with_default(a_out, shape=(None,actions), name='a_in'))
+a_in = tf.placeholder_with_default(tf.stop_gradient(a_out), shape=(None,actions), name='a_in')
 if normalization:
   an = BatchNormalization()(a_in)
 else:
@@ -89,11 +92,14 @@ if normalization:
 else:
   hqn = hq
 q = Dense(1, activation=activation_end_critic, name='q')(hqn)
+tf.group([s_in, a_in], name='inputs')
+tf.group([q, a_out], name='outputs')
+
 
 # Critic network update
-q_target = tf.placeholder(tf.float32, shape=(None, 1), name='q_target')
+q_target = tf.placeholder(tf.float32, shape=(None, 1), name='target')
 q_loss = tf.losses.mean_squared_error(q_target, q)
-q_update = tf.train.AdamOptimizer(lr_critic).minimize(q_loss, name='q_update') #0.001
+q_update = tf.train.AdamOptimizer(lr_critic).minimize(q_loss, name='update') #0.001
 
 # Actor network update
 dq_da = tf.gradients(q, a_in, name='dq_da')[0]
