@@ -20,7 +20,7 @@ agent/communicator:
     type: communicator
     description: Comunicator which exchanges messages with an actual/virtual environment
     mutability: configuration
-    default: 0x2189a10
+    default: 0
     optional: 0
   observation_dims:
     type: int.observation_dims
@@ -196,7 +196,7 @@ agent/master/exclusive:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x21a5d08
+    default: 0x556e369d40e8
     optional: 0
 agent/master/predicated:
   description: Master agent in which execution is predicated on preceding agent confidence
@@ -218,7 +218,7 @@ agent/master/predicated:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x21a5d08
+    default: 0x556e369d40e8
     optional: 0
 agent/master/random:
   description: Master agent that chooses sub-agents randomly
@@ -240,7 +240,7 @@ agent/master/random:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x21a5d08
+    default: 0x556e369d40e8
     optional: 0
 agent/master/sequential:
   description: Master agent that executes sub-agents sequentially
@@ -1435,7 +1435,13 @@ mapping/policy/action:
   description: Policy based on a direct action representation
   sigma:
     type: vector
-    description: Standard deviation of exploration distribution
+    description: Standard deviation of Gaussian exploration distribution
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  theta:
+    type: vector
+    description: Ornstein-Uhlenbeck friction term (1=pure Gaussian noise)
     mutability: configuration
     default: "[  ]"
     optional: 1
@@ -1450,6 +1456,14 @@ mapping/policy/action:
   decay_min:
     type: double
     description: Minimum decay (sigma_min = sigma*decay_min)
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
+  renormalize:
+    type: int
+    description: Renormalize representation output from [-1, 1] to [min, max]
     mutability: configuration
     default: 0
     optional: 1
@@ -1531,7 +1545,7 @@ mapping/policy/discrete/multi:
     type: "[mapping/policy/discrete]"
     description: Sub-policies
     mutability: configuration
-    default: 0x2308350
+    default: 0x556e369d58a0
     optional: 0
   r_distance_parameter:
     type: double
@@ -1861,7 +1875,7 @@ mapping/policy/multi:
     type: int
     description: score_postprocess
     mutability: configuration
-    default: 1651863396
+    default: 0
     optional: 1
     min: 0
     max: 2147483647
@@ -1931,13 +1945,13 @@ mapping/policy/multi:
     type: "[mapping/policy]"
     description: Sub-policies
     mutability: configuration
-    default: 0x23551c0
+    default: 0x556e369d43e0
     optional: 0
   value:
     type: "[mapping]"
     description: Values of sub-policy actions
     mutability: configuration
-    default: 0x23551d8
+    default: 0x556e369d43f8
     optional: 1
   output_min:
     type: vector.action_min
@@ -3369,6 +3383,14 @@ predictor/ddpg:
     optional: 1
     min: 0
     max: 1
+  reward_scale:
+    type: double
+    description: Scaling factor for all rewards
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 2.225073858507201e-308
+    max: 1.797693134862316e+308
   observation:
     type: string
     description: TensorFlow placeholder node for graph observation input
@@ -3404,6 +3426,12 @@ predictor/ddpg:
     description: TensorFlow operation node to run actor update
     mutability: configuration
     default: ""
+    optional: 1
+  discretizer:
+    type: discretizer.action
+    description: Optional action discretizer to take max over next state
+    mutability: configuration
+    default: 0
     optional: 1
   obs_projector:
     type: projector.observation
@@ -3854,7 +3882,7 @@ predictor/multi:
     type: "[predictor]"
     description: First downstream predictor
     mutability: configuration
-    default: 0x24e2380
+    default: 0x556e36de28a0
     optional: 0
 predictor/naf:
   description: Value function predictor using Normalized Advantage Features
@@ -4111,7 +4139,7 @@ projector/multi:
     type: "[projector.]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x25c5d30
+    default: 0x556e369d2750
     optional: 0
   memories:
     type: vector.memory
@@ -4123,8 +4151,42 @@ projector/multi:
     type: int.memory
     description: Feature vector size
     mutability: provided
+projector/pre/geometric:
+  description: Preprocesses vector projection by splitting angles into sine/cosine representation
+  angles:
+    type: vector
+    description: "[0, 1] vector that specifies which dimensions to convert"
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  normalized:
+    type: int
+    description: Assume angles are normalized to [0, 1] (1) or [-1, 1] (-1)
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: -1
+    max: 1
+  projector:
+    type: projector.
+    description: Downstream vector projector
+    mutability: configuration
+    default: 0
+    optional: 0
+  memory:
+    type: int.memory
+    description: Feature vector size after conversion
+    mutability: provided
 projector/pre/normalizing:
-  description: Preprocesses projection onto a normalized [0, 1] vector
+  description: Preprocesses projection onto a normalized vector
+  signed:
+    type: int
+    description: If true, project onto [-1, 1] instead of [0, 1]
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
   input_min:
     type: vector
     description: Lower input dimension limit (for scaling)
@@ -4151,6 +4213,14 @@ projector/pre/peaked:
     mutability: configuration
     default: "[  ]"
     optional: 1
+  signed:
+    type: int
+    description: If true, project onto [-1, 1] instead of [0, 1]
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
   input_min:
     type: vector
     description: Lower input dimension limit (for scaling)
@@ -4519,7 +4589,7 @@ representation/additive:
     type: "[representation.]"
     description: Downstream representations
     mutability: configuration
-    default: 0x26316f0
+    default: 0x556e36deb200
     optional: 0
 representation/communicator:
   description: Interface to an out-of-process representation
@@ -4755,55 +4825,39 @@ representation/parameterized/tensorflow:
     type: representation/parameterized/tensorflow.
     description: Target representation
     mutability: provided
-  inputs:
-    type: int
-    description: Number of input dimensions
-    mutability: system
-    default: 1
-    optional: 1
-    min: 1
-    max: 2147483647
-  targets:
-    type: int
-    description: Number of target dimensions
-    mutability: system
-    default: 1
-    optional: 1
-    min: 1
-    max: 2147483647
   file:
     type: string
-    description: TensorFlow graph stored in binary protocol buffer
+    description: TensorFlow graph stored in binary protocol buffer, or Python command to generate it
     mutability: configuration
     default: ""
     optional: 1
   input_layer:
     type: string
-    description: Name of input layer placeholders
+    description: "Name of input layer placeholders (default: inputs of 'inputs' node)"
     mutability: configuration
     default: ""
     optional: 1
   output_layer:
     type: string
-    description: Name of output layer tensors
+    description: "Name of output layer tensors (default: inputs of 'outputs' node)"
     mutability: configuration
     default: ""
     optional: 1
   output_target:
     type: string
-    description: Name of output layer target placeholders
+    description: "Name of output layer target placeholders (default: nodes containing 'target')"
     mutability: configuration
     default: ""
     optional: 1
   sample_weights:
     type: string
-    description: Name of sample weights placeholder
+    description: "Name of sample weights placeholder (default: nodes containing 'sample_weights')"
     mutability: configuration
     default: ""
     optional: 1
   learning_phase:
     type: string
-    description: Name of learning phase placeholder
+    description: "Name of learning phase placeholder (default: nodes containing 'learning_phase')"
     mutability: configuration
     default: ""
     optional: 1
@@ -4811,13 +4865,13 @@ representation/parameterized/tensorflow:
     type: string
     description: Name of node to run to initialize weights
     mutability: configuration
-    default: ""
+    default: init
     optional: 1
   update_node:
     type: string
     description: Name of node to run to update weights
     mutability: configuration
-    default: ""
+    default: update
     optional: 1
 sampler/ac_ornstein_ohlenbeck:
   description: Action-correlated maximum search with an Ornstein-Uhlenbeck random chance of non-maximums
@@ -5095,24 +5149,6 @@ sampler/softmax:
     optional: 1
     min: 1e-06
     max: 100
-sandbox_model/breakout:
-  description: Breakout sandbox
-  control_step:
-    type: double.control_step
-    description: Control step time
-    mutability: configuration
-    default: 0.05
-    optional: 1
-    min: 0.05
-    max: 1.797693134862316e+308
-  integration_steps:
-    type: int
-    description: Number of integration steps per control step
-    mutability: configuration
-    default: 6
-    optional: 1
-    min: 2
-    max: 2147483647
 sandbox_model/compass_walker:
   description: Simplest walker model from Garcia et al. with a sequential evaluation
   control_step:
@@ -5510,56 +5546,6 @@ task/acrobot/regulator:
     description: Cost function smoothing parameter
     mutability: configuration
     default: 0.01
-    optional: 1
-    min: 0
-    max: 1
-task/breakout/targeting:
-  description: Target a single point
-  observation_dims:
-    type: int.observation_dims
-    description: Number of observation dimensions
-    mutability: provided
-  observation_min:
-    type: vector.observation_min
-    description: Lower limit on observations
-    mutability: provided
-  observation_max:
-    type: vector.observation_max
-    description: Upper limit on observations
-    mutability: provided
-  action_dims:
-    type: int.action_dims
-    description: Number of action dimensions
-    mutability: provided
-  action_min:
-    type: vector.action_min
-    description: Lower limit on actions
-    mutability: provided
-  action_max:
-    type: vector.action_max
-    description: Upper limit on actions
-    mutability: provided
-  reward_min:
-    type: double.reward_min
-    description: Lower limit on immediate reward
-    mutability: provided
-  reward_max:
-    type: double.reward_max
-    description: Upper limit on immediate reward
-    mutability: provided
-  timeout:
-    type: double
-    description: Episode timeout
-    mutability: configuration
-    default: 10
-    optional: 1
-    min: 0
-    max: 1.797693134862316e+308
-  randomization:
-    type: double
-    description: Level of start state randomization
-    mutability: configuration
-    default: 0
     optional: 1
     min: 0
     max: 1
@@ -6877,14 +6863,6 @@ task/pendulum/swingup:
     optional: 1
     min: 0
     max: 1
-  sincos:
-    type: int
-    description: Use sine-cosine representation for observations
-    mutability: configuration
-    default: 0
-    optional: 1
-    min: 0
-    max: 1
 task/pinball/movement:
   description: Pinball movement task
   observation_dims:
@@ -7303,14 +7281,6 @@ visualization/acrobot:
     mutability: configuration
     default: 0
     optional: 0
-visualization/breakout:
-  description: Breakout visualization
-  state:
-    type: signal/vector
-    description: Breakout state to visualize
-    mutability: configuration
-    default: 0
-    optional: 0
 visualization/cart_double_pole:
   description: Cart-double-pole visualization
   state:
@@ -7687,6 +7657,14 @@ visualization/slice:
     optional: 1
     min: 0
     max: 2147483647
+  savepoints:
+    type: int
+    description: Number of points to save when pressing 'i'
+    mutability: configuration
+    default: 1048576
+    optional: 1
+    min: 0
+    max: 2147483647
   delay:
     type: double
     description: Delay between updates (s)
@@ -7984,7 +7962,7 @@ projector/multi.observation:
     type: "[projector.observation]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x29d9770
+    default: 0x556e369d2750
     optional: 0
   memories:
     type: vector.memory
@@ -7996,8 +7974,42 @@ projector/multi.observation:
     type: int.memory
     description: Feature vector size
     mutability: provided
+projector/pre/geometric.observation:
+  description: Preprocesses vector projection by splitting angles into sine/cosine representation
+  angles:
+    type: vector
+    description: "[0, 1] vector that specifies which dimensions to convert"
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  normalized:
+    type: int
+    description: Assume angles are normalized to [0, 1] (1) or [-1, 1] (-1)
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: -1
+    max: 1
+  projector:
+    type: projector.observation
+    description: Downstream vector projector
+    mutability: configuration
+    default: 0
+    optional: 0
+  memory:
+    type: int.memory
+    description: Feature vector size after conversion
+    mutability: provided
 projector/pre/normalizing.observation:
-  description: Preprocesses projection onto a normalized [0, 1] vector
+  description: Preprocesses projection onto a normalized vector
+  signed:
+    type: int
+    description: If true, project onto [-1, 1] instead of [0, 1]
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
   input_min:
     type: vector.observation_min
     description: Lower input dimension limit (for scaling)
@@ -8024,6 +8036,14 @@ projector/pre/peaked.observation:
     mutability: configuration
     default: "[  ]"
     optional: 1
+  signed:
+    type: int
+    description: If true, project onto [-1, 1] instead of [0, 1]
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
   input_min:
     type: vector.observation_min
     description: Lower input dimension limit (for scaling)
@@ -8320,7 +8340,7 @@ representation/additive.action:
     type: "[representation.action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x2a2b540
+    default: 0x556e370719b0
     optional: 0
 representation/communicator.action:
   description: Interface to an out-of-process representation
@@ -8556,55 +8576,39 @@ representation/parameterized/tensorflow.action:
     type: representation/parameterized/tensorflow.action
     description: Target representation
     mutability: provided
-  inputs:
-    type: int.observation_dims
-    description: Number of input dimensions
-    mutability: system
-    default: 1
-    optional: 1
-    min: 1
-    max: 2147483647
-  targets:
-    type: int.action_dims
-    description: Number of target dimensions
-    mutability: system
-    default: 1
-    optional: 1
-    min: 1
-    max: 2147483647
   file:
     type: string
-    description: TensorFlow graph stored in binary protocol buffer
+    description: TensorFlow graph stored in binary protocol buffer, or Python command to generate it
     mutability: configuration
     default: ""
     optional: 1
   input_layer:
     type: string
-    description: Name of input layer placeholders
+    description: "Name of input layer placeholders (default: inputs of 'inputs' node)"
     mutability: configuration
     default: ""
     optional: 1
   output_layer:
     type: string
-    description: Name of output layer tensors
+    description: "Name of output layer tensors (default: inputs of 'outputs' node)"
     mutability: configuration
     default: ""
     optional: 1
   output_target:
     type: string
-    description: Name of output layer target placeholders
+    description: "Name of output layer target placeholders (default: nodes containing 'target')"
     mutability: configuration
     default: ""
     optional: 1
   sample_weights:
     type: string
-    description: Name of sample weights placeholder
+    description: "Name of sample weights placeholder (default: nodes containing 'sample_weights')"
     mutability: configuration
     default: ""
     optional: 1
   learning_phase:
     type: string
-    description: Name of learning phase placeholder
+    description: "Name of learning phase placeholder (default: nodes containing 'learning_phase')"
     mutability: configuration
     default: ""
     optional: 1
@@ -8612,13 +8616,13 @@ representation/parameterized/tensorflow.action:
     type: string
     description: Name of node to run to initialize weights
     mutability: configuration
-    default: ""
+    default: init
     optional: 1
   update_node:
     type: string
     description: Name of node to run to update weights
     mutability: configuration
-    default: ""
+    default: update
     optional: 1
 projector/fourier.pair:
   description: Fourier basis function projector
@@ -8723,7 +8727,7 @@ projector/multi.pair:
     type: "[projector.pair]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x2aa0fd0
+    default: 0x556e369d2750
     optional: 0
   memories:
     type: vector.memory
@@ -8735,8 +8739,42 @@ projector/multi.pair:
     type: int.memory
     description: Feature vector size
     mutability: provided
+projector/pre/geometric.pair:
+  description: Preprocesses vector projection by splitting angles into sine/cosine representation
+  angles:
+    type: vector
+    description: "[0, 1] vector that specifies which dimensions to convert"
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  normalized:
+    type: int
+    description: Assume angles are normalized to [0, 1] (1) or [-1, 1] (-1)
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: -1
+    max: 1
+  projector:
+    type: projector.pair
+    description: Downstream vector projector
+    mutability: configuration
+    default: 0
+    optional: 0
+  memory:
+    type: int.memory
+    description: Feature vector size after conversion
+    mutability: provided
 projector/pre/normalizing.pair:
-  description: Preprocesses projection onto a normalized [0, 1] vector
+  description: Preprocesses projection onto a normalized vector
+  signed:
+    type: int
+    description: If true, project onto [-1, 1] instead of [0, 1]
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
   input_min:
     type: vector.observation_min+vector.action_min
     description: Lower input dimension limit (for scaling)
@@ -8763,6 +8801,14 @@ projector/pre/peaked.pair:
     mutability: configuration
     default: "[  ]"
     optional: 1
+  signed:
+    type: int
+    description: If true, project onto [-1, 1] instead of [0, 1]
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
   input_min:
     type: vector.observation_min+vector.action_min
     description: Lower input dimension limit (for scaling)
@@ -9059,7 +9105,7 @@ representation/additive.value/action:
     type: "[representation.value/action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x2af2e00
+    default: 0x556e370719b0
     optional: 0
 representation/communicator.value/action:
   description: Interface to an out-of-process representation
@@ -9295,55 +9341,39 @@ representation/parameterized/tensorflow.value/action:
     type: representation/parameterized/tensorflow.value/action
     description: Target representation
     mutability: provided
-  inputs:
-    type: int.observation_dims+int.action_dims
-    description: Number of input dimensions
-    mutability: system
-    default: 1
-    optional: 1
-    min: 1
-    max: 2147483647
-  targets:
-    type: int
-    description: Number of target dimensions
-    mutability: system
-    default: 1
-    optional: 1
-    min: 1
-    max: 2147483647
   file:
     type: string
-    description: TensorFlow graph stored in binary protocol buffer
+    description: TensorFlow graph stored in binary protocol buffer, or Python command to generate it
     mutability: configuration
     default: ""
     optional: 1
   input_layer:
     type: string
-    description: Name of input layer placeholders
+    description: "Name of input layer placeholders (default: inputs of 'inputs' node)"
     mutability: configuration
     default: ""
     optional: 1
   output_layer:
     type: string
-    description: Name of output layer tensors
+    description: "Name of output layer tensors (default: inputs of 'outputs' node)"
     mutability: configuration
     default: ""
     optional: 1
   output_target:
     type: string
-    description: Name of output layer target placeholders
+    description: "Name of output layer target placeholders (default: nodes containing 'target')"
     mutability: configuration
     default: ""
     optional: 1
   sample_weights:
     type: string
-    description: Name of sample weights placeholder
+    description: "Name of sample weights placeholder (default: nodes containing 'sample_weights')"
     mutability: configuration
     default: ""
     optional: 1
   learning_phase:
     type: string
-    description: Name of learning phase placeholder
+    description: "Name of learning phase placeholder (default: nodes containing 'learning_phase')"
     mutability: configuration
     default: ""
     optional: 1
@@ -9351,13 +9381,13 @@ representation/parameterized/tensorflow.value/action:
     type: string
     description: Name of node to run to initialize weights
     mutability: configuration
-    default: ""
+    default: init
     optional: 1
   update_node:
     type: string
     description: Name of node to run to update weights
     mutability: configuration
-    default: ""
+    default: update
     optional: 1
 representation/additive.value/state:
   description: Linear combination of two representations
@@ -9373,7 +9403,7 @@ representation/additive.value/state:
     type: "[representation.value/state]"
     description: Downstream representations
     mutability: configuration
-    default: 0x2b29570
+    default: 0x556e370719b0
     optional: 0
 representation/communicator.value/state:
   description: Interface to an out-of-process representation
@@ -9609,55 +9639,39 @@ representation/parameterized/tensorflow.value/state:
     type: representation/parameterized/tensorflow.value/state
     description: Target representation
     mutability: provided
-  inputs:
-    type: int.observation_dims
-    description: Number of input dimensions
-    mutability: system
-    default: 1
-    optional: 1
-    min: 1
-    max: 2147483647
-  targets:
-    type: int
-    description: Number of target dimensions
-    mutability: system
-    default: 1
-    optional: 1
-    min: 1
-    max: 2147483647
   file:
     type: string
-    description: TensorFlow graph stored in binary protocol buffer
+    description: TensorFlow graph stored in binary protocol buffer, or Python command to generate it
     mutability: configuration
     default: ""
     optional: 1
   input_layer:
     type: string
-    description: Name of input layer placeholders
+    description: "Name of input layer placeholders (default: inputs of 'inputs' node)"
     mutability: configuration
     default: ""
     optional: 1
   output_layer:
     type: string
-    description: Name of output layer tensors
+    description: "Name of output layer tensors (default: inputs of 'outputs' node)"
     mutability: configuration
     default: ""
     optional: 1
   output_target:
     type: string
-    description: Name of output layer target placeholders
+    description: "Name of output layer target placeholders (default: nodes containing 'target')"
     mutability: configuration
     default: ""
     optional: 1
   sample_weights:
     type: string
-    description: Name of sample weights placeholder
+    description: "Name of sample weights placeholder (default: nodes containing 'sample_weights')"
     mutability: configuration
     default: ""
     optional: 1
   learning_phase:
     type: string
-    description: Name of learning phase placeholder
+    description: "Name of learning phase placeholder (default: nodes containing 'learning_phase')"
     mutability: configuration
     default: ""
     optional: 1
@@ -9665,13 +9679,13 @@ representation/parameterized/tensorflow.value/state:
     type: string
     description: Name of node to run to initialize weights
     mutability: configuration
-    default: ""
+    default: init
     optional: 1
   update_node:
     type: string
     description: Name of node to run to update weights
     mutability: configuration
-    default: ""
+    default: update
     optional: 1
 importer/csv.dynamic:
   description: Comma-separated values importer
@@ -9701,7 +9715,7 @@ representation/additive.transition:
     type: "[representation.transition]"
     description: Downstream representations
     mutability: configuration
-    default: 0x2bb4ab0
+    default: 0x556e370719b0
     optional: 0
 representation/communicator.transition:
   description: Interface to an out-of-process representation
@@ -9937,55 +9951,39 @@ representation/parameterized/tensorflow.transition:
     type: representation/parameterized/tensorflow.transition
     description: Target representation
     mutability: provided
-  inputs:
-    type: int.observation_dims+int.action_dims
-    description: Number of input dimensions
-    mutability: system
-    default: 1
-    optional: 1
-    min: 1
-    max: 2147483647
-  targets:
-    type: int.observation_dims+2
-    description: Number of target dimensions
-    mutability: system
-    default: 1
-    optional: 1
-    min: 1
-    max: 2147483647
   file:
     type: string
-    description: TensorFlow graph stored in binary protocol buffer
+    description: TensorFlow graph stored in binary protocol buffer, or Python command to generate it
     mutability: configuration
     default: ""
     optional: 1
   input_layer:
     type: string
-    description: Name of input layer placeholders
+    description: "Name of input layer placeholders (default: inputs of 'inputs' node)"
     mutability: configuration
     default: ""
     optional: 1
   output_layer:
     type: string
-    description: Name of output layer tensors
+    description: "Name of output layer tensors (default: inputs of 'outputs' node)"
     mutability: configuration
     default: ""
     optional: 1
   output_target:
     type: string
-    description: Name of output layer target placeholders
+    description: "Name of output layer target placeholders (default: nodes containing 'target')"
     mutability: configuration
     default: ""
     optional: 1
   sample_weights:
     type: string
-    description: Name of sample weights placeholder
+    description: "Name of sample weights placeholder (default: nodes containing 'sample_weights')"
     mutability: configuration
     default: ""
     optional: 1
   learning_phase:
     type: string
-    description: Name of learning phase placeholder
+    description: "Name of learning phase placeholder (default: nodes containing 'learning_phase')"
     mutability: configuration
     default: ""
     optional: 1
@@ -9993,13 +9991,13 @@ representation/parameterized/tensorflow.transition:
     type: string
     description: Name of node to run to initialize weights
     mutability: configuration
-    default: ""
+    default: init
     optional: 1
   update_node:
     type: string
     description: Name of node to run to update weights
     mutability: configuration
-    default: ""
+    default: update
     optional: 1
 importer/csv.static:
   description: Comma-separated values importer
@@ -10118,7 +10116,7 @@ projector/multi.action:
     type: "[projector.action]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x2c1b4f0
+    default: 0x556e369d2750
     optional: 0
   memories:
     type: vector.memory
@@ -10130,8 +10128,42 @@ projector/multi.action:
     type: int.memory
     description: Feature vector size
     mutability: provided
+projector/pre/geometric.action:
+  description: Preprocesses vector projection by splitting angles into sine/cosine representation
+  angles:
+    type: vector
+    description: "[0, 1] vector that specifies which dimensions to convert"
+    mutability: configuration
+    default: "[  ]"
+    optional: 1
+  normalized:
+    type: int
+    description: Assume angles are normalized to [0, 1] (1) or [-1, 1] (-1)
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: -1
+    max: 1
+  projector:
+    type: projector.action
+    description: Downstream vector projector
+    mutability: configuration
+    default: 0
+    optional: 0
+  memory:
+    type: int.memory
+    description: Feature vector size after conversion
+    mutability: provided
 projector/pre/normalizing.action:
-  description: Preprocesses projection onto a normalized [0, 1] vector
+  description: Preprocesses projection onto a normalized vector
+  signed:
+    type: int
+    description: If true, project onto [-1, 1] instead of [0, 1]
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
   input_min:
     type: vector.action_min
     description: Lower input dimension limit (for scaling)
@@ -10158,6 +10190,14 @@ projector/pre/peaked.action:
     mutability: configuration
     default: "[  ]"
     optional: 1
+  signed:
+    type: int
+    description: If true, project onto [-1, 1] instead of [0, 1]
+    mutability: configuration
+    default: 0
+    optional: 1
+    min: 0
+    max: 1
   input_min:
     type: vector.action_min
     description: Lower input dimension limit (for scaling)

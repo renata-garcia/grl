@@ -1,7 +1,22 @@
 config:
-  file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 15
-  file_ddpg_lcf1_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims experiment/environment/task/action_max 0.0001 0.001 "relu" "linear" 300 200 
-  file_ddpg_lcf2_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims experiment/environment/task/action_max 0.0001 0.001 "softmax" "linear" 300 200 
+  cf1_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims experiment/environment/task/action_max 0.001 0.001 "relu" "linear" 400 300
+  cf1_reward_scale: 0.1
+  cf1_interval: 10000
+  cf2_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims experiment/environment/task/action_max 0.001 0.001 "relu" "linear" 300 50
+  cf2_reward_scale: 0.01
+  cf2_interval: 1000
+  cf3_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims experiment/environment/task/action_max 0.001 0.001 "softmax" "linear" 100 200
+  cf3_reward_scale: 1
+  cf3_interval: 10000
+  cf4_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims experiment/environment/task/action_max 0.001 0.0001 "relu" "linear" 400 50
+  cf4_reward_scale: 0.1
+  cf4_interval: 1000
+  cf5_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims experiment/environment/task/action_max 0.001 0.0001 "relu" "linear" 300 300
+  cf5_reward_scale: 0.01
+  cf5_interval: 10000
+  cf6_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims experiment/environment/task/action_max 0.001 0.0001 "softmax" "linear" 100 200
+  cf6_reward_scale: 1
+  cf6_interval: 1000
   file_ddpg_3l8_py: ../cfg/network/4layer_tanh_ddpg_3l8.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 
 experiment: 
   type: experiment/online_learning
@@ -40,7 +55,7 @@ experiment:
       type: mapping/policy/multi
       strategy: alg4steps
       score_distance: none
-      update_history: density
+      update_history: none
       choose_actions: none
       select_by_distance: density_based
       sampler: 

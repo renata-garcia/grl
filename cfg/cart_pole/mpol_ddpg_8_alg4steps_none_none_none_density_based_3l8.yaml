@@ -1,5 +1,5 @@
 config:
-  file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 15
+  file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims  experiment/environment/task/action_max
   file_ddpg_3l8_py: ../cfg/network/4layer_tanh_ddpg_3l8.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 
 experiment: 
   type: experiment/online_learning
@@ -38,7 +38,7 @@ experiment:
       type: mapping/policy/multi
       strategy: alg4steps
       score_distance: none
-      update_history: none
+      update_history: density
       choose_actions: none
       select_by_distance: density_based
       sampler: 
