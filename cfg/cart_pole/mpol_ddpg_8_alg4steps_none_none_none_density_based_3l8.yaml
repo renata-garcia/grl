@@ -1,5 +1,5 @@
 config:
-  file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims  experiment/environment/task/action_max
+  file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims
   file_ddpg_3l8_py: ../cfg/network/4layer_tanh_ddpg_3l8.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 
 experiment: 
   type: experiment/online_learning
@@ -52,22 +52,13 @@ experiment:
       major_remove_bound: 0.75
       policy: 
         - 
-          type: mapping/policy/post/noise
-          sigma: [1]
-          theta: [0.15]
-          decay_rate: 0.99
-          decay_min: 0.1
-          output_min: experiment/environment/task/action_min
-          output_max: experiment/environment/task/action_max
           policy: 
-            type: mapping/policy/filtering
             observation_idx: [0, 1, 2, 3]
             action_idx: [0]
             policy: 
-              type: mapping/policy/action
-              sigma: 0
-              decay_rate: 0
-              decay_min: 0
+              sigma: [1]
+              theta: [0.15]
+              renormalize: 1
               output_min: experiment/environment/task/action_min++[0]
               output_max: experiment/environment/task/action_max++[0]
               projector: 
@@ -76,16 +67,18 @@ experiment:
                 input_max: experiment/environment/task/observation_max
                 projector: 
                   type: projector/identity
+                signed: 0
+                type: projector/pre/normalizing
               representation: 
-                type: representation/parameterized/tensorflow
                 interval: 10000
+                file: config/file_ddpg_py
                 inputs: experiment/environment/task/observation_dims
                 targets: experiment/environment/task/action_dims
-                file: config/file_ddpg_py
                 input_layer: s_in
                 output_layer: a_out/mul, q/BiasAdd
                 output_target: q_target
                 update_node: q_update
+                type: representation/parameterized/tensorflow
         - 
           type: mapping/policy/post/noise
           sigma: [1]
