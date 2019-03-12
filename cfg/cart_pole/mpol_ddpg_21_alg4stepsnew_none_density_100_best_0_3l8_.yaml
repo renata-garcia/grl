@@ -64,13 +64,13 @@ config:
   cf21_interval: 10000
 experiment: 
   type: experiment/online_learning
-  runs: 1
+  runs: 10
   run_offset: 0
-  trials: 0
+  trials: 10000
   steps: 0
   rate: 0
   test_interval: 10
-  output: cart_pole_mpol_ddpg_8_alg4steps_none_none_none_density_based_3l8_
+  output: mpol_ddpg_21_alg4stepsnew_none_density_100_best_0_3l8_
   environment: 
     type: environment/modeled
     model: 
