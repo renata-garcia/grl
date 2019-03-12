@@ -70,7 +70,7 @@ if len(sys.argv) == 4:
   layer1_size = 8
   layer2_size = 8
   layer3_size = 8
-elif len(sys.argv) != 10:
+elif len(sys.argv) != 11:
   print("Usage:")
   print(" ", sys.argv[0], "<inputs> <outputs> <lr_actor> <lr_critic> <activation_dl> <activation_end_critic> <layer1_size> <layer2_size> <layer3_size> <output.pb>")
   sys.exit(1)

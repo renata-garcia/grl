@@ -50,7 +50,7 @@ experiment:
         representation: 
           type: representation/parameterized/tensorflow
           interval: 10000
-          file: ../cfg/network/4layer_tanh_ddpg_3l8.py experiment/environment/task/observation_dims experiment/environment/task/action_dims
+          file: ../cfg/network/4layer_tanh_ddpg_3l8.py experiment/environment/task/observation_dims experiment/environment/task/action_dims  0.0001 0.001 "relu" "linear" 8 8 8
           input_layer: s_in, a_in
           output_layer: q/BiasAdd, a_out/Tanh
           init_node: init
