@@ -135,7 +135,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_ddpg_21_alg4stepsnew_none_density_100_best_0_3l8_
+  output: mpol_ddpg_32_alg4stepsnew_none_density_100_best_0_
   environment: 
     type: environment/modeled
     model: 
