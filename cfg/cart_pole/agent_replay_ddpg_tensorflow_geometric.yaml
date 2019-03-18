@@ -2,30 +2,11 @@ experiment:
   type: experiment/online_learning
   runs: 1
   run_offset: 0
-  trials: 1000
+  trials: 100
   steps: 0
   rate: 0
   test_interval: 10
-  output: cartpole_mpol_1_replay_ddpg_tensorflow_
-  environment: 
-    type: environment/modeled
-    discrete_time: 1
-    model: 
-      type: model/dynamical
-      control_step: 0.05
-      integration_steps: 5
-      dynamics: 
-        type: dynamics/cart_pole
-        end_stop: 1
-    task: 
-      type: task/cart_pole/swingup
-      timeout: 9.99
-      randomization: 1
-      shaping: 0
-      gamma: 1
-      end_stop_penalty: 0
-      action_penalty: 0
-    exporter: 0
+  output: cartpole_agent_replay_ddpg_tensorflow_
   agent: 
     type: agent/replay
     memory_size: 100000
@@ -51,7 +32,7 @@ experiment:
           signed: 0
           input_min: experiment/environment/task/observation_min
           input_max: experiment/environment/task/observation_max
-          projector: 
+          projector:
             type: projector/pre/geometric
             angles: [0, 1, 0, 0]
             normalized: 1
@@ -105,25 +86,3 @@ experiment:
         projector: experiment/agent/policy/policy/projector
         representation: experiment/agent/policy/policy/representation
   save_every: never
-points: 4096
-delay: 1
-policy_visualization: 
-  type: visualization/slice
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  operating_point: []
-  output_dim: 1
-  points: points
-  savepoints: 1048576
-  delay: delay
-  state: experiment/state
-  action: 0
-  mapping: experiment/test_agent/policy/policy
-curve_visualization: 
-  type: visualization/state
-  input_dims: []
-  input_min: [-4000]
-  input_max: [0]
-  memory: 256
-  state: experiment/curve
