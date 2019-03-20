@@ -1,19 +1,8 @@
 - file: all
   configuration:
   - name: experiment/output
-    value: $@_replay_steps$0_batch_size$1_interval$2_gamma$3_reward_scale$4_
+    value: $@_interval$2_gamma$3_reward_scale$4_
   parameters:
-  - name: experiment/agent/replay_steps
-    values:
-    - 64
-    - 128
-    - 254
-  - name: experiment/agent/batch_size
-    values:
-    - 32
-    - 64
-    - 128
-    - 254
   - name: experiment/agent/policy/policy/representation/interval
     values:
     - 100
@@ -40,4 +29,4 @@
     - 2
   - name: experiment/trials
     values:
-    - 10000
+    - 5000
