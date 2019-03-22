@@ -10,7 +10,7 @@ experiment:
   agent: 
     type: agent/replay
     memory_size: 100000
-    replay_steps: 64
+    replay_steps: 32
     batch_size: 32
     observation_steps: 1000
     threads: 0
