@@ -1,7 +1,7 @@
 - file: all
   configuration:
   - name: experiment/output
-    value: $@_interval$2_gamma$3_reward_scale$4_
+    value: $@_interval$0_gamma$1_reward_scale$2_
   parameters:
   - name: experiment/agent/policy/policy/representation/interval
     values:
