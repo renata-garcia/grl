@@ -20,7 +20,7 @@ agent/communicator:
     type: communicator
     description: Comunicator which exchanges messages with an actual/virtual environment
     mutability: configuration
-    default: 0
+    default: 0x271dc90
     optional: 0
   observation_dims:
     type: int.observation_dims
@@ -196,7 +196,7 @@ agent/master/exclusive:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x55c7ff1af0e8
+    default: 0x2739f78
     optional: 0
 agent/master/predicated:
   description: Master agent in which execution is predicated on preceding agent confidence
@@ -218,7 +218,7 @@ agent/master/predicated:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x55c7ff1af0e8
+    default: 0x2739f78
     optional: 0
 agent/master/random:
   description: Master agent that chooses sub-agents randomly
@@ -240,7 +240,7 @@ agent/master/random:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x55c7ff1af0e8
+    default: 0x2739f78
     optional: 0
 agent/master/sequential:
   description: Master agent that executes sub-agents sequentially
@@ -1545,7 +1545,7 @@ mapping/policy/discrete/multi:
     type: "[mapping/policy/discrete]"
     description: Sub-policies
     mutability: configuration
-    default: 0x55c7ff1b08a0
+    default: 0x289c180
     optional: 0
   r_distance_parameter:
     type: double
@@ -1875,7 +1875,7 @@ mapping/policy/multi:
     type: int
     description: score_postprocess
     mutability: configuration
-    default: 0
+    default: 1651863396
     optional: 1
     min: 0
     max: 2147483647
@@ -1945,13 +1945,13 @@ mapping/policy/multi:
     type: "[mapping/policy]"
     description: Sub-policies
     mutability: configuration
-    default: 0x55c7ff1af3e0
+    default: 0x28ed120
     optional: 0
   value:
     type: "[mapping]"
     description: Values of sub-policy actions
     mutability: configuration
-    default: 0x55c7ff1af3f8
+    default: 0x28ed138
     optional: 1
   output_min:
     type: vector.action_min
@@ -3882,7 +3882,7 @@ predictor/multi:
     type: "[predictor]"
     description: First downstream predictor
     mutability: configuration
-    default: 0x55c7ff5bd8a0
+    default: 0x2af99d0
     optional: 0
 predictor/naf:
   description: Value function predictor using Normalized Advantage Features
@@ -4139,7 +4139,7 @@ projector/multi:
     type: "[projector.]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x55c7ff1ad750
+    default: 0x2b61590
     optional: 0
   memories:
     type: vector.memory
@@ -4589,7 +4589,7 @@ representation/additive:
     type: "[representation.]"
     description: Downstream representations
     mutability: configuration
-    default: 0x55c7ff5c6200
+    default: 0x2bdfb10
     optional: 0
 representation/communicator:
   description: Interface to an out-of-process representation
@@ -5149,6 +5149,24 @@ sampler/softmax:
     optional: 1
     min: 1e-06
     max: 100
+sandbox_model/breakout:
+  description: Breakout sandbox
+  control_step:
+    type: double.control_step
+    description: Control step time
+    mutability: configuration
+    default: 0.05
+    optional: 1
+    min: 0.05
+    max: 1.797693134862316e+308
+  integration_steps:
+    type: int
+    description: Number of integration steps per control step
+    mutability: configuration
+    default: 6
+    optional: 1
+    min: 2
+    max: 2147483647
 sandbox_model/compass_walker:
   description: Simplest walker model from Garcia et al. with a sequential evaluation
   control_step:
@@ -5546,6 +5564,56 @@ task/acrobot/regulator:
     description: Cost function smoothing parameter
     mutability: configuration
     default: 0.01
+    optional: 1
+    min: 0
+    max: 1
+task/breakout/targeting:
+  description: Target a single point
+  observation_dims:
+    type: int.observation_dims
+    description: Number of observation dimensions
+    mutability: provided
+  observation_min:
+    type: vector.observation_min
+    description: Lower limit on observations
+    mutability: provided
+  observation_max:
+    type: vector.observation_max
+    description: Upper limit on observations
+    mutability: provided
+  action_dims:
+    type: int.action_dims
+    description: Number of action dimensions
+    mutability: provided
+  action_min:
+    type: vector.action_min
+    description: Lower limit on actions
+    mutability: provided
+  action_max:
+    type: vector.action_max
+    description: Upper limit on actions
+    mutability: provided
+  reward_min:
+    type: double.reward_min
+    description: Lower limit on immediate reward
+    mutability: provided
+  reward_max:
+    type: double.reward_max
+    description: Upper limit on immediate reward
+    mutability: provided
+  timeout:
+    type: double
+    description: Episode timeout
+    mutability: configuration
+    default: 10
+    optional: 1
+    min: 0
+    max: 1.797693134862316e+308
+  randomization:
+    type: double
+    description: Level of start state randomization
+    mutability: configuration
+    default: 0
     optional: 1
     min: 0
     max: 1
@@ -7281,6 +7349,14 @@ visualization/acrobot:
     mutability: configuration
     default: 0
     optional: 0
+visualization/breakout:
+  description: Breakout visualization
+  state:
+    type: signal/vector
+    description: Breakout state to visualize
+    mutability: configuration
+    default: 0
+    optional: 0
 visualization/cart_double_pole:
   description: Cart-double-pole visualization
   state:
@@ -7962,7 +8038,7 @@ projector/multi.observation:
     type: "[projector.observation]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x55c7ff1ad750
+    default: 0x2f7c050
     optional: 0
   memories:
     type: vector.memory
@@ -8340,7 +8416,7 @@ representation/additive.action:
     type: "[representation.action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x55c7ff84c9b0
+    default: 0x2fd94f0
     optional: 0
 representation/communicator.action:
   description: Interface to an out-of-process representation
@@ -8727,7 +8803,7 @@ projector/multi.pair:
     type: "[projector.pair]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x55c7ff1ad750
+    default: 0x304ab20
     optional: 0
   memories:
     type: vector.memory
@@ -9105,7 +9181,7 @@ representation/additive.value/action:
     type: "[representation.value/action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x55c7ff84c9b0
+    default: 0x30a7fc0
     optional: 0
 representation/communicator.value/action:
   description: Interface to an out-of-process representation
@@ -9403,7 +9479,7 @@ representation/additive.value/state:
     type: "[representation.value/state]"
     description: Downstream representations
     mutability: configuration
-    default: 0x55c7ff84c9b0
+    default: 0x30de830
     optional: 0
 representation/communicator.value/state:
   description: Interface to an out-of-process representation
@@ -9715,7 +9791,7 @@ representation/additive.transition:
     type: "[representation.transition]"
     description: Downstream representations
     mutability: configuration
-    default: 0x55c7ff84c9b0
+    default: 0x3160830
     optional: 0
 representation/communicator.transition:
   description: Interface to an out-of-process representation
@@ -10116,7 +10192,7 @@ projector/multi.action:
     type: "[projector.action]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x55c7ff1ad750
+    default: 0x31c37a0
     optional: 0
   memories:
     type: vector.memory
