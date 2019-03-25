@@ -1,0 +1,113 @@
+experiment: 
+  type: experiment/online_learning
+  runs: 1
+  run_offset: 0
+  trials: 1000
+  steps: 0
+  rate: 0
+  test_interval: 10
+  output: cartpole_mpol_1_replay_ddpg_tensorflow_
+  environment: 
+    type: environment/modeled
+    model: 
+      type: model/dynamical
+      control_step: 0.05
+      integration_steps: 5
+      dynamics: 
+        type: dynamics/cart_double_pole
+        end_stop: 1
+    task: 
+      type: task/cart_double_pole/balancing
+      timeout: 4.99
+      randomization: 1
+      shaping: 0
+      gamma: 1
+      end_stop_penalty: 0
+      action_penalty: 0
+    exporter: 0
+  agent: 
+    type: agent/replay
+    memory_size: 100000
+    replay_steps: 32                                           
+    batch_size: 32
+    observation_steps: 1000
+    threads: 0
+    policy: 
+      type: mapping/policy/filtering
+      observation_idx: [0, 1, 2, 3, 4, 5]
+      action_idx: [0, 3]
+      policy: 
+        type: mapping/policy/action
+        sigma: [1]
+        theta: [0.15]
+        decay_rate: 1
+        decay_min: 0
+        renormalize: 1
+        output_min: experiment/environment/task/action_min++[0]
+        output_max: experiment/environment/task/action_max++[0]
+        projector: 
+          type: projector/pre/normalizing
+          signed: 0
+          input_min: experiment/environment/task/observation_min
+          input_max: experiment/environment/task/observation_max
+          projector: 
+            type: projector/pre/geometric
+            angles: [1, 0, 0, 1, 0, 0]
+            normalized: 1
+            projector:
+              type: projector/identity
+        representation: 
+          type: representation/parameterized/tensorflow
+          interval: 10000
+          file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims+1 experiment/environment/task/action_dims
+          input_layer: s_in, a_in
+          output_layer: a_out/Tanh, q/BiasAdd
+          init_node: init
+          update_node: update
+    predictor: 
+      type: predictor/ddpg
+      importer: 0
+      exporter: 0
+      gamma: 0.99
+      reward_scale: 1
+      observation: s_in
+      action: a_in
+      value: q/BiasAdd
+      target: target
+      critic_update: update
+      actor_update: a_update
+      discretizer: 0
+      obs_projector: ../../policy/policy/projector
+      action_projector: 
+        type: projector/pre/normalizing
+        signed: 1
+        input_min: experiment/environment/task/action_min
+        input_max: experiment/environment/task/action_max
+        projector: 
+          type: projector/identity
+      representation: experiment/agent/policy/policy/representation
+  test_agent: 
+    type: agent/fixed
+    policy: 
+      type: mapping/policy/filtering
+      observation_idx: [0, 1, 2, 3, 4, 5]
+      action_idx: [0, 3]
+      policy: 
+        type: mapping/policy/action
+        sigma: []
+        theta: []
+        decay_rate: 1
+        decay_min: 0
+        renormalize: 1
+        output_min: experiment/agent/policy/policy/output_min
+        output_max: experiment/agent/policy/policy/output_max
+        projector: experiment/agent/policy/policy/projector
+        representation: experiment/agent/policy/policy/representation
+  save_every: never
+points: 4096
+delay: 1
+visualizer: 
+  type: visualizer/glut
+visualization: 
+  type: visualization/cart_double_pole
+  state: experiment/environment/state
