@@ -1,12 +1,12 @@
 experiment: 
   type: experiment/online_learning
-  runs: 1
+  runs: 10
   run_offset: 0
   trials: 1000
   steps: 0
   rate: 0
   test_interval: 10
-  output: cartpole_mpol_1_replay_ddpg_tensorflow_
+  output: cart_double_pole_mpol_1_replay_ddpg_tensorflow_
   environment: 
     type: environment/modeled
     model: 
@@ -29,7 +29,7 @@ experiment:
     type: agent/replay
     memory_size: 100000
     replay_steps: 256                                           
-    batch_size: 32
+    batch_size: 64
     observation_steps: 1000
     threads: 0
     policy: 

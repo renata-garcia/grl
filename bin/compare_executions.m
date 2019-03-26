@@ -1,6 +1,6 @@
-function compare_executions(n, folder, nstd, title_fig, varargin)
+function compare_executions(n, folder, nstd, lim_x, title_fig, varargin)
     size_windows = [0 0 1.0 1.0];
-    for i = 1:(nargin -4)
+    for i = 1:(nargin -5)
         name = varargin{i};
         file = folder + name;
         if i == 1
@@ -74,7 +74,7 @@ function compare_executions(n, folder, nstd, title_fig, varargin)
     num_alg = length(array);
     h = zeros(1, num_alg);
     for j=1:size(array,1)
-        [mean_d, std_d] = load_mean(array(j,2), n);
+        [mean_d, std_d] = load_mean(array(j,2), n, lim_x);
         errstd_d = std_d/sqrt(n);
         maximum = max(mean_d);
         x = 1:length(mean_d);
@@ -99,7 +99,7 @@ function compare_executions(n, folder, nstd, title_fig, varargin)
     num_alg = length(array);
     h = zeros(1, num_alg);
     for j=1:size(array,1)
-        [mean_d, std_d] = load_mean(array(j,2), n);
+        [mean_d, std_d] = load_mean(array(j,2), n, lim_x);
         errstd_d = std_d/sqrt(n);
         maximum = max(mean_d);
         x = 1:length(mean_d);
