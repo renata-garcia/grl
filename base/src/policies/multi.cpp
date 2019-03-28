@@ -46,7 +46,7 @@ void MultiPolicy::request(ConfigurationRequest *config)
   
   config->push_back(CRP("update_history", "Update History", update_history_str_, CRP::Configuration,
   
-  {"euclidian_distance", "density", "voting"}));
+  {"euclidian_distance", "density", "voting", "datacenter"}));
   
   config->push_back(CRP("choose_actions", "Choose Actions", choose_actions_str_, CRP::Configuration,
   
@@ -162,6 +162,11 @@ void MultiPolicy::configure(Configuration &config)
   {
     update_history_ = uhVoting;
     scores_ = uhVoting;
+  }
+  else if (update_history_str_ == "datacenter")
+  {
+    update_history_ = uhDataCenter;
+    scores_ = uhDataCenter;
   }
 
   choose_actions_str_ = config["choose_actions"].str();
@@ -1028,56 +1033,60 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       std::vector<double> density(n_policies);
       LargeVector scores;
       LargeVector center, vals;
-      std::vector<double> score(0);
+      std::vector<double> score(0); 
+      
+      ActionArray aa_copied(n_policies);
 
       actions_actors = run_policies(in);
-      
-      // for (size_t i = 0; i < actions_actors.size(); ++i)
-      //   actions_actors[i].v[0] = i;
 
       if (scores_ != uhEuclideanDistance && ensemble_center_ != sdNone)
         throw Exception("ensemble_mean can only be used with update_history: eucludean_distance");
       else if (scores_ == uhEuclideanDistance && ensemble_center_ == sdNone)
         throw Exception("update_history: eucludean_distance requires a valid ensemble_mean");
 
+      CRAWL("MultiPolicy::csAlg4StepsNew::switch (ensemble_center_)");
       switch (ensemble_center_)
       {
         case sdNone:
-          CRAWL("MultiPolicy::csAlg4Steps::ensemble_center_: sdNone");
           break;
 
         case sdDensityBased:
-            density_based(actions_actors, &center);
+          density_based(actions_actors, &center);
           break;
       
         case sdDataCenter:
-          // data_center(actions_actors, &center);
-          throw Exception("MultiPolicy::csAlg4Steps::ensemble_center_: sdDataCenter not implemented!");
+          data_center(actions_actors, &center);
           break;
       
         case sdMean:
-          // center = get_mean(actions_actors);
-          throw Exception("MultiPolicy::csAlg4Steps::ensemble_center_: sdMean not implemented!");
+          center = g_mean(actions_actors);
           break;
 
         default:
-          throw Exception("MultiPolicy::csAlg4Steps::ensemble_center_: score_distance_ not implemented!");
+          throw Exception("MultiPolicy::csAlg4StepsNew::ensemble_center_ not implemented!");
       }
-      
+
+      CRAWL("MultiPolicy::csAlg4StepsNew::switch (scores_)");
       switch(scores_)
       {
         case uhEuclideanDistance:
-          CRAWL("MultiPolicy::csAlg4Steps::scores_: uhEuclideanDistance not implemented!");
-          //set_euclidian_distance(&actions_actors, mean);
+          scores = euclidian_distance(actions_actors, center);
           break;
         
         case uhDensity:
           scores = density_based(actions_actors, &center);
           break;
+
+        case uhVoting:
+          throw Exception("MultiPolicy::csAlg4StepsNew::scores_::uhVoting not implemented!");
         
-        // case uhDataCenter:
-        //   scores = data_center(actions_actors, &center);
-        //   break;
+        case uhDataCenter:
+          //TODO: review names
+          scores = datacenter_update_voting(actions_actors);
+          break;
+
+        default:
+          throw Exception("MultiPolicy::csAlg4StepsNew::scores_ not implemented!");
       }
 
       for(size_t i = 0; i < policy_.size(); ++i)
@@ -1090,6 +1099,56 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
         //   throw Exception("MultiPolicy::csAlg4Steps::scores_: uhVoting not implemented!");
         //   //scores = voting(scores);
         //   break;
+
+        //PART 2
+        // update_mean_mov_with_euclidian(actions_actors, mean);
+
+        // std::vector<size_t> v_id = choosing_bests_of_mean_mov(aa_copied, ASC);
+
+        // //initing voting vectors
+        // for(size_t i = 0; i < voting_policies_->size(); ++i)
+        // {
+        // voting_policies_->at(i) = 1;
+        // voting_weights_id_kepper[i] = i;
+        // }
+
+        // for(size_t i=0; i < voting_weights.size(); ++i)
+        // voting_weights[i] = 1 + iRoulette_*(n_policies-1);
+
+        // for(size_t k = 0; k < v_id.size(); ++k)
+        // {
+        // voting_weights_id_kepper[v_id[k]] = -1;
+        // voting_weights[v_id[k]] = voting_weights[v_id[k]] - (v_id.size() - k)*iRoulette_;
+        // }
+
+        // for(size_t i=0, k=0; i < voting_weights_id_kepper.size(); ++i)
+        // if(voting_weights_id_kepper[i] >= 0)
+        //   voting_weights_id_kepper[i] = k++;
+
+        // while(aa_copied.size() > data_center_mean_size_)
+        // {
+        // size_t index = get_max_index_by_euclidian_distance(aa_copied, mean2);
+        // aa_copied.erase(aa_copied.begin()+index); //retirando apenas o elemento que está no index i_max
+        // //atualizando o vetor de voting_weights conforme escolha de retirada
+        // bool found = false;
+        // for(size_t i = 0; i < n_policies; ++i)
+        // {
+        //   if(voting_weights_id_kepper[i] == index){
+        //   voting_weights_id_kepper[i] = -1;
+        //   found = true;
+        //   } else if(found)
+        //   voting_weights_id_kepper[i]--;
+        // }
+        // for(size_t i = 0; i < voting_weights.size(); ++i)
+        //   if(voting_weights_id_kepper[i] < 0)
+        //   voting_weights[i] = voting_weights[i] - iRoulette_;
+
+        // mean2 = get_mean(aa_copied);
+        // }
+        // for(size_t k = 0; k < v_id.size(); ++k)
+        // voting_weights[v_id[k]] = 1;
+
+        // dist = mean2;
       }
 
       CRAWL("MultiPolicy::csAlg4StepsNew::alpha_mov_mean_: " << alpha_mov_mean_);
@@ -1097,8 +1156,6 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
         CRAWL("MultiPolicy::csAlg4StepsNew::moving_average[i= " << i << "]: " << moving_average_[i]);
       
       moving_average_ = alpha_mov_mean_*scores + (1-alpha_mov_mean_)*moving_average_;
-      // for(size_t i =0; i < moving_average_.size(); ++i)
-      //   moving_average_[i] = alpha_mov_mean_*scores[i] + (1-alpha_mov_mean_)*moving_average_[i];
       
       for(size_t i = 0; i < policy_.size(); ++i)
         CRAWL("MultiPolicy::csAlg4StepsNew::moving_average[i= " << i << "]: " << moving_average_[i]);
@@ -1119,8 +1176,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
           break;
           
         case sdDataCenter:
-          throw Exception("MultiPolicy sdDataCenter not implemented!");
-          // dist = score_distance_data_center(&actions_actors, mean);
+          data_center(active_set, &dist);
           break;
           
         case sdMean:
@@ -1806,7 +1862,7 @@ size_t MultiPolicy::get_min_index(const std::vector<node> &in) const
 
 //...............................................................................................................
 
-LargeVector MultiPolicy::mean(ActionArray const &array) const
+LargeVector MultiPolicy::g_mean(const ActionArray &array) const
 {
   LargeVector mean = array[0].v;
   
@@ -1896,6 +1952,48 @@ LargeVector MultiPolicy::density_based(ActionArray &ensemble_set, LargeVector *c
   return scores;
 }
 
+LargeVector MultiPolicy::data_center(ActionArray ensemble_set, LargeVector *center) const
+{
+  CRAWL("MultiPolicy::data_center");
+  LargeVector mean = g_mean(ensemble_set);
+  while(ensemble_set.size() > 2)
+  { 
+    LargeVector euclidian_distance = ConstantLargeVector(ensemble_set.size(), 0.);
+    // LargeVector euclidian_distance = euclidian_distance(ensemble_set);/*, mean*/
+    for(size_t i = 0; i < ensemble_set.size(); ++i)
+      euclidian_distance[i] = sum(pow(ensemble_set[i].v - mean, 2));
+
+    size_t index = get_max_index(euclidian_distance);
+    CRAWL("MultiPolicy::data_center::remove outlier");
+    
+    ensemble_set.erase(ensemble_set.begin()+index);
+
+    for(size_t i=0; i < ensemble_set.size(); ++i)
+      CRAWL("MultiPolicy::data_center::after remove the i_max actions_actors: " << ensemble_set[i].v);
+    
+    CRAWL("MultiPolicy::data_center::starting new mean");
+    mean = g_mean(ensemble_set);
+    CRAWL("MultiPolicy::data_center::mean...........: " << mean);
+  }
+
+  *center = mean;
+  return mean;
+}
+
+LargeVector MultiPolicy::euclidian_distance(ActionArray &ensemble_set, LargeVector center) const
+{
+  if (ensemble_set.size() < 2)
+    throw Exception("MultiPolicy::euclidian_distance::ensemble_set.size() < 2");
+
+  LargeVector euclidian_distance = ConstantLargeVector(policy_.size(), 0.);
+  for(size_t i = 0; i < ensemble_set.size(); ++i)
+  {
+     euclidian_distance[i] = sum(pow(ensemble_set[i].v - center, 2));
+    CRAWL("MultiPolicy::euclidian_distance[i: " << i << " ]: " << euclidian_distance[i]);
+  }
+  return euclidian_distance;
+}
+
 size_t MultiPolicy::get_max_index(const LargeVector &in) const
 {
   double max = -std::numeric_limits<double>::infinity();
@@ -1943,4 +2041,59 @@ MultiPolicy::ActionArray MultiPolicy::run_policies(const Observation &in, LargeV
 
   action_->set(send_actions);
   return actions;
+}
+
+LargeVector MultiPolicy::datacenter_update_voting(ActionArray ensemble_set) const
+{
+  CRAWL("MultiPolicy::datacenter_update_voting:: initing variables");
+  //TODO: retirar o voting_weights_id
+  size_t ensemble_set_size = ensemble_set.size();
+  LargeVector voting_weights = ConstantLargeVector(ensemble_set_size, 0.);
+  LargeVector voting_weights_id_kepper = ConstantLargeVector(ensemble_set_size, 0.);
+
+  for(size_t i=0; i < voting_weights.size(); ++i)
+  {
+    voting_weights[i] = 1 + iRoulette_*(ensemble_set_size-1);
+    voting_weights_id_kepper[i] = i;
+  }
+
+  while(ensemble_set.size() > 2)
+  {
+    // size_t index = get_max_index_by_euclidian_distance(actions_actors, mean);
+    //TODO: error: no match for call to ‘(grl::LargeVector {aka Eigen::Array<double, 1, -1>}) (grl::MultiPolicy::ActionArray&, grl::LargeVector)’
+    //TODO: LargeVector euclidian_distance = euclidian_distance(ensemble_set, g_mean(ensemble_set));
+
+    LargeVector mean = g_mean(ensemble_set);
+    LargeVector euclidian_distance = ConstantLargeVector(ensemble_set.size(), 0.);
+    for(size_t i = 0; i < ensemble_set.size(); ++i)
+      euclidian_distance[i] = sum(pow(ensemble_set[i].v - mean, 2));
+
+    size_t index = get_max_index(euclidian_distance);
+
+    CRAWL("MultiPolicy::datacenter_update_voting::remove outlier");
+    ensemble_set.erase(ensemble_set.begin()+index);
+
+    for(size_t i=0; i < ensemble_set.size(); ++i)
+      CRAWL("MultiPolicy::datacenter_update_voting::after remove the i_max actions_actors: " << ensemble_set[i].v);
+
+    //atualizando o vetor de voting_weights conforme escolha de retirada
+    bool found = false;
+    for(size_t i = 0; i < ensemble_set_size; ++i)
+    {
+      if(voting_weights_id_kepper[i] == index){
+      voting_weights_id_kepper[i] = -1;
+      found = true;
+      } else if(found)
+      voting_weights_id_kepper[i]--;
+    }
+    for(size_t i = 0; i < voting_weights.size(); ++i)
+      if(voting_weights_id_kepper[i] < 0)
+      voting_weights[i] = voting_weights[i] - iRoulette_;
+
+    CRAWL("MultiPolicy::datacenter_update_voting::starting new mean");
+    mean = g_mean(ensemble_set);
+    CRAWL("MultiPolicy::datacenter_update_voting::mean...........: " << mean);
+  }
+
+  return voting_weights;
 }

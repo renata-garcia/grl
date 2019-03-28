@@ -4,8 +4,16 @@ close all;
 
 n = 10;
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
-addpath("~/Dropbox/phd_grl_results/");
+addpath("~/Dropbox/phd_grl_results/matlab");
 
+%%
+data = readseries("/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/testes/cart_pole*.txt", 3, 1);
+for i=1:2
+    plot(data{1,i});
+    hold on;
+    %[t, m, e] = avgseries({[x1' y1'], [x2' y2']});
+    %errorbaralpha(t, m, e);
+end
 %%
 compare_executions(n, folder, 1, 909, 'Algoritmos Pendulum',...
     "pendulum_ac_tc",...
@@ -416,3 +424,8 @@ compare_executions(n, folder, 0, 909, 'MPOL DPG CARTPOLE',...
     "cartpole_mpol_dpg_26_density_based_mm_a90_data",...
     "cartpole_mpol_dpg_26_density_based_bm_a01_data",...
     "cartpole_mpol_dpg_26_data_center_voting_mov_data");
+
+%% MPOL DPG CART DOUBLE POLE 
+compare_executions(n, folder, 2, 909, 'MPOL DDPG CART DOUBLE POLE',...
+  "cart_double_pole_mpol_1_replay_ddpg_tensorflow_",...  
+  "cart_double_pole_mpol_1_replay_ddpg_tensorflow_");
