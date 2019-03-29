@@ -22,10 +22,6 @@
 ./grld ../cfg/pendulum/mpol_dpg_13_density_based_mm_a75.yaml
 
 ./grld ../cfg/pendulum/mpol_dpg_26_density_based.yaml
-./grld ../cfg/pendulum/mpol_dpg_26_density_based_mm_a001.yaml
-./grld ../cfg/pendulum/mpol_dpg_26_density_based_mm_a01.yaml
-./grld ../cfg/pendulum/mpol_dpg_26_density_based_mm_a75.yaml
-./grld ../cfg/pendulum/mpol_dpg_26_density_based_mm_a90.yaml
 
 ./grld ../cfg/pendulum/mpol_dpg_20_density_based_mm_a001.yaml
 ./grld ../cfg/pendulum/mpol_dpg_20_density_based_mm_a01.yaml
@@ -156,16 +152,7 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_9876.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_9876_3l8.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center.yaml
-./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_9888.yaml
-./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_9889.yaml
-./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_9899.yaml
-./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_9989.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based.yaml
-./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_9888.yaml
-./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_9889.yaml
-./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_9899.yaml
-./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_9989.yaml
-./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_9999.yaml
 
 ./grld  ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_9876_3l8.yaml
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_density_based_8_3l8.yaml
