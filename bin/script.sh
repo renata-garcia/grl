@@ -179,12 +179,11 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ./grld ../cfg/pendulum/mpol_ddpg_4_rand1_sincos_alg4steps_none_none_none_data_center_8_3l8_mem10000.yaml
 '
 
-./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_data_center_euclidian_distance_100_mean.yaml
-./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_euclidian_distance_050_data_center.yaml
-./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_none_none_datacenter.yaml
-./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_data_center_100_best.yaml
+sh ../cfg/pendulum/spec_pendulum_dpg_13.sh
+../bin/grlr ../cfg/pendulum/spec_pendulum_dpg_13_alg4steps_data_center_euclidian_distance_100_mean.yaml
+../bin/grlr ../cfg/pendulum/spec_pendulum_dpg_13_alg4steps_density_euclidian_distance_100_mean.yaml
+../bin/grlr ../cfg/pendulum/spec_pendulum_dpg_13_alg4steps_none_data_center_100_best.yaml
+../bin/grlr ../cfg/pendulum/spec_pendulum_dpg_13_alg4steps_none_euclidian_distance_050_data_center.yaml
+../bin/grlr ../cfg/pendulum/spec_pendulum_dpg_13_alg4steps_none_euclidian_distance_050_density.yaml
 
-sh spec_pendulum_dpg_13.sh
-spec_pendulum_dpg_13_alg4steps_data_center_euclidian_distance_100_mean.yaml spec_pendulum_dpg_13_alg4steps_density_euclidian_distance_100_mean.yaml
-spec_pendulum_dpg_13_alg4steps_none_data_center_100_best.yaml spec_pendulum_dpg_13_alg4steps_none_euclidian_distance_050_data_center.yaml spec_pendulum_dpg_13_alg4steps_none_euclidian_distance_050_density.yaml
 

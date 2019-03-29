@@ -211,9 +211,9 @@ class MultiPolicy : public Policy
     typedef std::vector<Action> ActionArray;
   
     enum CombinationStrategy {csBinning,
-    csDensityBased, csDensityBasedMeanMov, csDensityBasedBestMov, csDensityBasedVotingMov, csDensityBasedHistoric, csDensityBasedHistoricDens, csDensityBasedDensBest,
-    csDataCenter, csDataCenterMeanMov, csDataCenterBestMov, csDataCenterVotingMov, csDataCenterVotingMovTwoSteps,
-    csAlg4StepsNew, csAlg4Steps,
+    csDensityBasedMeanMov, csDensityBasedHistoric, csDensityBasedHistoricDens, csDensityBasedDensBest,
+    csDataCenterMeanMov,  csDataCenterVotingMov,
+    csAlg4StepsNew,
     csMean, csMeanMov, csRandom, csStatic, csValueBased, csRoulette};
     enum ScoreDistance {sdNone, sdBest, sdDensityBased, sdDataCenter, sdMean};
     enum UpdateHistory {uhEuclideanDistance, uhDensity, uhVoting,uhDataCenter};
