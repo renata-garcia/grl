@@ -5,21 +5,19 @@
   parameters:
   - name: experiment/agent/replay_steps
     values:
-    - 32
-    - 64
+    - 032
+    - 064
     - 128
-    - 256
   - name: experiment/agent/batch_size
     values:
-    - 32
-    - 64
+    - 064
     - 128
     - 256
   - name: experiment/agent/policy/representation/interval
     values:
-    - 100
-    - 1000
-    - 4000
+    - 00100
+    - 01000
+    - 04000
     - 10000
   - name: experiment/agent/predictor/gamma
     values:
@@ -28,8 +26,7 @@
   - name: experiment/agent/predictor/reward_scale
     values:
     - 0.01
-    - 0.1
-    - 1
+    - 0.10
   - name: experiment/agent/policy/sigma
     values:
     - [1]
@@ -38,7 +35,7 @@
     - [0.15]
   - name: experiment/runs
     values:
-    - 1
+    - 5
   - name: experiment/trials
     values:
     - 550
