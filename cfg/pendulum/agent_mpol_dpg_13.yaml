@@ -6,32 +6,35 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_13_data_center_mm_b2_a90_data
-  environment: 
-    type: environment/modeled
-    model:
-      type: model/dynamical
-      control_step: 0.03
-      integration_steps: 5
-      dynamics: 
-        type: dynamics/pendulum
-    task: 
-      type: task/pendulum/swingup
-      timeout: 2.99
-      randomization: 0
+  output: mpol_dpg_13_alg4steps
   agent: 
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: data_center_mean_mov
-      bins: 2
-      alpha: 0.9
+      strategy: alg4stepsNew
+      score_distance: data_center
+      update_history: euclidian_distance
+      choose_actions: none
+      percentile: 1
+      select_by_distance: mean
+      score_postprocess: 0
+      sampler: 
+        type: sampler/greedy
+      bins: 10
+      static_policy: 0
+      r_distance_parameter: 0.005
+      alpha: 1.0
+      iroulette: 0.3
+      minor_remove_bound: 0.25
+      major_remove_bound: 0.75
       policy: 
         - 
           type: mapping/policy/action
           sigma: [1]
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: 
@@ -50,11 +53,14 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
+            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: 
@@ -73,11 +79,14 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
+            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: 
@@ -96,11 +105,14 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
+            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: 
@@ -119,11 +131,14 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
+            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: 
@@ -142,11 +157,14 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
+            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: 
@@ -165,11 +183,14 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
+            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: 
@@ -188,11 +209,14 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
+            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: 
@@ -211,11 +235,14 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
+            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: 
@@ -234,11 +261,14 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
+            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: 
@@ -257,11 +287,14 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
+            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: 
@@ -280,11 +313,14 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
+            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: 
@@ -303,11 +339,14 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
+            limit: 1
         - 
           type: mapping/policy/action
           sigma: [1]
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: 
@@ -326,6 +365,7 @@ experiment:
             outputs: experiment/environment/task/action_dims
             output_min: experiment/environment/task/action_min
             output_max: experiment/environment/task/action_max
+            limit: 1
       value: 
         - 
           type: mapping/represented
@@ -339,6 +379,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/1/projector
@@ -351,6 +392,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/2/projector
@@ -363,6 +405,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/3/projector
@@ -375,6 +418,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/4/projector
@@ -387,6 +431,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/5/projector
@@ -399,6 +444,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/6/projector
@@ -411,6 +457,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/7/projector
@@ -423,6 +470,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/8/projector
@@ -435,6 +483,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/9/projector
@@ -447,6 +496,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/10/projector
@@ -459,6 +509,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/11/projector
@@ -471,6 +522,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
         - 
           type: mapping/represented
           projector: experiment/agent/policy/policy/12/projector
@@ -483,6 +535,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
     predictor: 
@@ -509,6 +562,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
           actor_representation: experiment/agent/policy/policy/0/representation
         - 
           type: predictor/dpg
@@ -531,6 +585,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
           actor_representation: experiment/agent/policy/policy/1/representation
         - 
           type: predictor/dpg
@@ -553,6 +608,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
           actor_representation: experiment/agent/policy/policy/2/representation
         - 
           type: predictor/dpg
@@ -575,6 +631,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
           actor_representation: experiment/agent/policy/policy/3/representation
         - 
           type: predictor/dpg
@@ -597,6 +654,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
           actor_representation: experiment/agent/policy/policy/4/representation
         - 
           type: predictor/dpg
@@ -619,6 +677,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
           actor_representation: experiment/agent/policy/policy/5/representation
         - 
           type: predictor/dpg
@@ -641,6 +700,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
           actor_representation: experiment/agent/policy/policy/6/representation
         - 
           type: predictor/dpg
@@ -648,7 +708,7 @@ experiment:
           beta_v: 0.01
           beta_a: 0.01
           gamma: 0.97
-          lambda: 0.60
+          lambda: 0.6
           target: off-policy
           projector: experiment/agent/policy/policy/7/projector
           critic_representation: experiment/agent/policy/value/7/representation
@@ -663,6 +723,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
           actor_representation: experiment/agent/policy/policy/7/representation
         - 
           type: predictor/dpg
@@ -670,7 +731,7 @@ experiment:
           beta_v: 0.1
           beta_a: 0.01
           gamma: 0.97
-          lambda: 0.60
+          lambda: 0.6
           target: off-policy
           projector: experiment/agent/policy/policy/8/projector
           critic_representation: experiment/agent/policy/value/8/representation
@@ -685,6 +746,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
           actor_representation: experiment/agent/policy/policy/8/representation
         - 
           type: predictor/dpg
@@ -692,7 +754,7 @@ experiment:
           beta_v: 0.01
           beta_a: 0.01
           gamma: 0.97
-          lambda: 0.60
+          lambda: 0.6
           target: off-policy
           projector: experiment/agent/policy/policy/9/projector
           critic_representation: experiment/agent/policy/value/9/representation
@@ -707,6 +769,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
           actor_representation: experiment/agent/policy/policy/9/representation
         - 
           type: predictor/dpg
@@ -714,7 +777,7 @@ experiment:
           beta_v: 0.1
           beta_a: 0.01
           gamma: 0.98
-          lambda: 0.70
+          lambda: 0.7
           target: off-policy
           projector: experiment/agent/policy/policy/10/projector
           critic_representation: experiment/agent/policy/value/10/representation
@@ -729,6 +792,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
           actor_representation: experiment/agent/policy/policy/10/representation
         - 
           type: predictor/dpg
@@ -736,7 +800,7 @@ experiment:
           beta_v: 0.01
           beta_a: 0.01
           gamma: 0.98
-          lambda: 0.70
+          lambda: 0.7
           target: off-policy
           projector: experiment/agent/policy/policy/11/projector
           critic_representation: experiment/agent/policy/value/11/representation
@@ -751,6 +815,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
           actor_representation: experiment/agent/policy/policy/11/representation
         - 
           type: predictor/dpg
@@ -773,18 +838,35 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
+            limit: 1
           actor_representation: experiment/agent/policy/policy/12/representation
   test_agent: 
     type: agent/fixed
     policy: 
       type: mapping/policy/multi
       strategy: experiment/agent/policy/strategy
-      policy:
+      score_distance: experiment/agent/policy/score_distance
+      update_history: experiment/agent/policy/update_history
+      choose_actions: experiment/agent/policy/choose_actions
+      percentile: experiment/agent/policy/percentile
+      select_by_distance: experiment/agent/policy/select_by_distance
+      score_postprocess: experiment/agent/policy/score_postprocess
+      sampler: experiment/agent/policy/sampler
+      bins: experiment/agent/policy/bins
+      static_policy: experiment/agent/policy/static_policy
+      r_distance_parameter: experiment/agent/policy/r_distance_parameter
+      alpha: experiment/agent/policy/alpha
+      iroulette: experiment/agent/policy/iroulette
+      minor_remove_bound: experiment/agent/policy/minor_remove_bound
+      major_remove_bound: experiment/agent/policy/major_remove_bound
+      policy: 
         - 
           type: mapping/policy/action
           sigma: []
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/0/projector
@@ -792,8 +874,10 @@ experiment:
         - 
           type: mapping/policy/action
           sigma: []
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/1/projector
@@ -801,8 +885,10 @@ experiment:
         - 
           type: mapping/policy/action
           sigma: []
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/2/projector
@@ -810,8 +896,10 @@ experiment:
         - 
           type: mapping/policy/action
           sigma: []
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/3/projector
@@ -819,8 +907,10 @@ experiment:
         - 
           type: mapping/policy/action
           sigma: []
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/4/projector
@@ -828,8 +918,10 @@ experiment:
         - 
           type: mapping/policy/action
           sigma: []
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/5/projector
@@ -837,8 +929,10 @@ experiment:
         - 
           type: mapping/policy/action
           sigma: []
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/6/projector
@@ -846,8 +940,10 @@ experiment:
         - 
           type: mapping/policy/action
           sigma: []
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/7/projector
@@ -855,8 +951,10 @@ experiment:
         - 
           type: mapping/policy/action
           sigma: []
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/8/projector
@@ -864,8 +962,10 @@ experiment:
         - 
           type: mapping/policy/action
           sigma: []
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/9/projector
@@ -873,8 +973,10 @@ experiment:
         - 
           type: mapping/policy/action
           sigma: []
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/10/projector
@@ -882,8 +984,10 @@ experiment:
         - 
           type: mapping/policy/action
           sigma: []
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/11/projector
@@ -891,8 +995,10 @@ experiment:
         - 
           type: mapping/policy/action
           sigma: []
+          theta: [  ]
           decay_rate: 1
           decay_min: 0
+          renormalize: 0
           output_min: experiment/environment/task/action_min
           output_max: experiment/environment/task/action_max
           projector: experiment/agent/policy/policy/12/projector
@@ -911,108 +1017,6 @@ experiment:
         - experiment/agent/policy/value/10
         - experiment/agent/policy/value/11
         - experiment/agent/policy/value/12
-      bins: experiment/agent/policy/bins
-      static_policy: experiment/agent/policy/static_policy
-      r_distance_parameter: experiment/agent/policy/r_distance_parameter
-      alpha: experiment/agent/policy/alpha
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
   save_every: never
-#visualizer: 
-#  type: visualizer/glut
-critic_visual0: 
-  type: visualization/field/value
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  projection: mean
-  output_dim: 0
-  projector: experiment/agent/policy/policy/0/projector
-  representation: experiment/agent/policy/policy/0/representation
-critic_visual1: 
-  type: visualization/field/value
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  projection: mean
-  output_dim: 0
-  projector: experiment/agent/policy/policy/1/projector
-  representation: experiment/agent/policy/policy/1/representation
-critic_visual2: 
-  type: visualization/field/value
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  projection: mean
-  output_dim: 0
-  projector: experiment/agent/policy/policy/2/projector
-  representation: experiment/agent/policy/policy/2/representation
-critic_visual3: 
-  type: visualization/field/value
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  projection: mean
-  output_dim: 0
-  projector: experiment/agent/policy/policy/3/projector
-  representation: experiment/agent/policy/policy/3/representation
-critic_visual4: 
-  type: visualization/field/value
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  projection: mean
-  output_dim: 0
-  projector: experiment/agent/policy/policy/4/projector
-  representation: experiment/agent/policy/policy/4/representation
-policy_visualization0: 
-  type: visualization/field/mapping
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  projection: mean
-  mapping: experiment/test_agent/policy/policy/2
-  output_dim: 0
-policy_visualization1: 
-  type: visualization/field/mapping
-  field_dims: [0, 1]
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  points: 65536
-  savepoints: 1048576
-  projection: mean
-  mapping: experiment/test_agent/policy/policy/3
-  output_dim: 0
-actions: 
-  type: visualization/state
-  input_dims: []
-  input_min: [-3, -3]
-  input_max: [3, 3]
-  memory: 256
-  state: experiment/test_agent/policy/actions
-state: 
-  type: visualization/state
-  input_dims: []
-  input_min: experiment/environment/task/observation_min
-  input_max: experiment/environment/task/observation_max
-  memory: 256
-  state: experiment/state
-actions2: 
-  type: visualization/state
-  input_dims: []
-  input_min: [-3, -3]
-  input_max: [3, 3]
-  memory: 256
-  state: experiment/action

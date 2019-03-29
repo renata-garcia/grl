@@ -211,12 +211,12 @@ class MultiPolicy : public Policy
     typedef std::vector<Action> ActionArray;
   
     enum CombinationStrategy {csBinning,
-    csDensityBased, csDensityBasedMeanMov, csDensityBasedBestMov, csDensityBasedVotingMov, csDensityBasedHistoric, csDensityBasedHistoricDens, csDensityBasedDensBest,
-    csDataCenter, csDataCenterMeanMov, csDataCenterBestMov, csDataCenterVotingMov, csDataCenterVotingMovTwoSteps,
-    csAlg4StepsNew, csAlg4Steps,
+    csDensityBasedMeanMov, csDensityBasedHistoric, csDensityBasedHistoricDens, csDensityBasedDensBest,
+    csDataCenterMeanMov,  csDataCenterVotingMov,
+    csAlg4StepsNew,
     csMean, csMeanMov, csRandom, csStatic, csValueBased, csRoulette};
     enum ScoreDistance {sdNone, sdBest, sdDensityBased, sdDataCenter, sdMean};
-    enum UpdateHistory {uhEuclideanDistance, uhDensity, uhVoting};
+    enum UpdateHistory {uhEuclideanDistance, uhDensity, uhVoting,uhDataCenter};
     enum ChooseActions {caNone, caMax, caMin, ca50PercAsc, ca50PercDesc, ca25Perc, ca10Perc, caQuartileOfMeanMov};
 
   protected:
@@ -326,9 +326,12 @@ class MultiPolicy : public Policy
     virtual size_t get_min_index(const std::vector<node> &in) const;
 
     //trying again
-    virtual LargeVector mean(ActionArray const &array) const;
+    virtual LargeVector euclidian_distance(ActionArray &ensemble_set, LargeVector center) const;
+    virtual LargeVector g_mean(const ActionArray &array) const;
     virtual LargeVector score(ActionArray const &array, double mean) const;
     virtual ActionArray percentile(ActionArray const &array, LargeVector moving_average_, double percentile) const;
+    virtual LargeVector data_center(ActionArray ensemble_set, LargeVector *center) const;
+    virtual LargeVector datacenter_update_voting(ActionArray ensemble_set) const;
     virtual LargeVector density_based(ActionArray &ensemble_set, LargeVector *center) const;
     virtual size_t get_max_index(const LargeVector &in) const;
     virtual ActionArray run_policies(const Observation &in, LargeVector *values = NULL) const;
