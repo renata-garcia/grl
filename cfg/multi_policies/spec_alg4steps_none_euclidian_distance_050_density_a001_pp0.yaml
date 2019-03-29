@@ -1,20 +1,23 @@
 - file: all
   configuration:
   - name: experiment/output
-    value: $@_$0_$1_$2_$3_$4_ 
+    value: $@_$0_$1_$2_$3_a$4_pp$5
   parameters:
   - name: experiment/agent/policy/score_distance
     values:
-    - data_center
+    - none
   - name: experiment/agent/policy/update_history
     values:
     - euclidian_distance
   - name: experiment/agent/policy/percentile
     values:
-    - 1.0
+    - 0.7
   - name: experiment/agent/policy/select_by_distance
     values:
-    - mean
+    - density_based
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
   - name: experiment/agent/policy/score_postprocess
     values:
     - 0

@@ -20,7 +20,7 @@ agent/communicator:
     type: communicator
     description: Comunicator which exchanges messages with an actual/virtual environment
     mutability: configuration
-    default: 0x1e26c90
+    default: 0x2de4c90
     optional: 0
   observation_dims:
     type: int.observation_dims
@@ -196,7 +196,7 @@ agent/master/exclusive:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x1e42f78
+    default: 0x2e00f78
     optional: 0
 agent/master/predicated:
   description: Master agent in which execution is predicated on preceding agent confidence
@@ -218,7 +218,7 @@ agent/master/predicated:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x1e42f78
+    default: 0x2e00f78
     optional: 0
 agent/master/random:
   description: Master agent that chooses sub-agents randomly
@@ -240,7 +240,7 @@ agent/master/random:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x1e42f78
+    default: 0x2e00f78
     optional: 0
 agent/master/sequential:
   description: Master agent that executes sub-agents sequentially
@@ -1545,7 +1545,7 @@ mapping/policy/discrete/multi:
     type: "[mapping/policy/discrete]"
     description: Sub-policies
     mutability: configuration
-    default: 0x1fa5180
+    default: 0x2f63180
     optional: 0
   r_distance_parameter:
     type: double
@@ -1795,11 +1795,6 @@ mapping/policy/multi:
     optional: 1
     options:
       - binning
-      - density_based_mean_mov
-      - density_based_historic
-      - density_based_historic_dens
-      - density_based_dens_best
-      - data_center_mean_mov
       - data_center_voting_mov
       - alg4stepsNew
       - mean
@@ -1827,24 +1822,8 @@ mapping/policy/multi:
     optional: 1
     options:
       - euclidian_distance
-      - density
-      - voting
+      - density_based
       - data_center
-  choose_actions:
-    type: string
-    description: Choose Actions
-    mutability: configuration
-    default: ""
-    optional: 1
-    options:
-      - none
-      - max
-      - min
-      - 50percAsc
-      - 50percDesc
-      - 25perc
-      - 10perc
-      - quartile_of_mean_mov
   percentile:
     type: double
     description: Percentile of Scores / Actions
@@ -1862,14 +1841,15 @@ mapping/policy/multi:
     options:
       - none
       - best
-      - density_based
       - data_center
+      - density_based
       - mean
+      - random
   score_postprocess:
     type: int
     description: score_postprocess
     mutability: configuration
-    default: 1651863396
+    default: 50020792
     optional: 1
     min: 0
     max: 2147483647
@@ -1877,7 +1857,7 @@ mapping/policy/multi:
     type: sampler
     description: Sampler for value-based strategy
     mutability: configuration
-    default: 0
+    default: 0x3
     optional: 1
   bins:
     type: int
@@ -1939,13 +1919,13 @@ mapping/policy/multi:
     type: "[mapping/policy]"
     description: Sub-policies
     mutability: configuration
-    default: 0x1ff6120
+    default: 0x2fb40f0
     optional: 0
   value:
     type: "[mapping]"
     description: Values of sub-policy actions
     mutability: configuration
-    default: 0x1ff6138
+    default: 0x2fb4108
     optional: 1
   output_min:
     type: vector.action_min
@@ -3876,7 +3856,7 @@ predictor/multi:
     type: "[predictor]"
     description: First downstream predictor
     mutability: configuration
-    default: 0x2176310
+    default: 0x3146b80
     optional: 0
 predictor/naf:
   description: Value function predictor using Normalized Advantage Features
@@ -4133,7 +4113,7 @@ projector/multi:
     type: "[projector.]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x2269900
+    default: 0x3224280
     optional: 0
   memories:
     type: vector.memory
@@ -4583,7 +4563,7 @@ representation/additive:
     type: "[representation.]"
     description: Downstream representations
     mutability: configuration
-    default: 0x22e11b0
+    default: 0x3297720
     optional: 0
 representation/communicator:
   description: Interface to an out-of-process representation
@@ -8032,7 +8012,7 @@ projector/multi.observation:
     type: "[projector.observation]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x2684810
+    default: 0x363f3a0
     optional: 0
   memories:
     type: vector.memory
@@ -8410,7 +8390,7 @@ representation/additive.action:
     type: "[representation.action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x26e1850
+    default: 0x369c390
     optional: 0
 representation/communicator.action:
   description: Interface to an out-of-process representation
@@ -8797,7 +8777,7 @@ projector/multi.pair:
     type: "[projector.pair]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x2752df0
+    default: 0x370d940
     optional: 0
   memories:
     type: vector.memory
@@ -9175,7 +9155,7 @@ representation/additive.value/action:
     type: "[representation.value/action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x27b01e0
+    default: 0x376ad80
     optional: 0
 representation/communicator.value/action:
   description: Interface to an out-of-process representation
@@ -9473,7 +9453,7 @@ representation/additive.value/state:
     type: "[representation.value/state]"
     description: Downstream representations
     mutability: configuration
-    default: 0x27e6a00
+    default: 0x37a1560
     optional: 0
 representation/communicator.value/state:
   description: Interface to an out-of-process representation
@@ -9785,7 +9765,7 @@ representation/additive.transition:
     type: "[representation.transition]"
     description: Downstream representations
     mutability: configuration
-    default: 0x2868a80
+    default: 0x3823520
     optional: 0
 representation/communicator.transition:
   description: Interface to an out-of-process representation
@@ -10186,7 +10166,7 @@ projector/multi.action:
     type: "[projector.action]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x28cb920
+    default: 0x3886360
     optional: 0
   memories:
     type: vector.memory

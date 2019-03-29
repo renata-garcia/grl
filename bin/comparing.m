@@ -7,7 +7,17 @@ folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
 addpath("~/Dropbox/phd_grl_results/matlab");
 
 %%
-data = readseries("/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/testes/cart_pole*.txt", 3, 1);
+data = readseries("/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/testes/cart_pole*.txt", 3, 2, 20);
+[t, m, ~, e] = avgseries(data);
+errorbaralpha(t, m, icdf('norm', 0.975, 0, 1)*e);
+
+(icdf('norm', 0.975, 0, 1) == 1.96) ou diretamente
+
+readseries("/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/testes/cart_pole*.txt", 
+3, 2, 20);
+
+%Obs: peguei coluna 2 (steps) e coloquei 20 (steps por segundo) para ter eixo horizontal em segundos.
+
 for i=1:2
     plot(data{1,i});
     hold on;
