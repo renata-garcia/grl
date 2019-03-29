@@ -6,10 +6,10 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_13_data_center_mm_b2_a75_data
+  output: mpol_dpg_13_data_center_voting_mov_data
   environment: 
     type: environment/modeled
-    model:
+    model: 
       type: model/dynamical
       control_step: 0.03
       integration_steps: 5
@@ -19,13 +19,19 @@ experiment:
       type: task/pendulum/swingup
       timeout: 2.99
       randomization: 0
+      sincos: 0
   agent: 
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: data_center_mean_mov
-      sampler: 
-        type: sampler/greedy
+      strategy: alg4stepsNew
+      score_distance: none
+      update_history: datacenter
+      choose_actions: none
+      percentile: 1.0
+      select_by_distance: best
+      score_postprocess: 0
+      alpha: 0.01
       policy: 
         - 
           type: mapping/policy/action
@@ -483,9 +489,6 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
-      bins: 2
-      static_policy: 0
-      alpha: 0.75
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
     predictor: 
@@ -651,7 +654,7 @@ experiment:
           beta_v: 0.01
           beta_a: 0.01
           gamma: 0.97
-          lambda: 0.60
+          lambda: 0.6
           target: off-policy
           projector: experiment/agent/policy/policy/7/projector
           critic_representation: experiment/agent/policy/value/7/representation
@@ -673,7 +676,7 @@ experiment:
           beta_v: 0.1
           beta_a: 0.01
           gamma: 0.97
-          lambda: 0.60
+          lambda: 0.6
           target: off-policy
           projector: experiment/agent/policy/policy/8/projector
           critic_representation: experiment/agent/policy/value/8/representation
@@ -695,7 +698,7 @@ experiment:
           beta_v: 0.01
           beta_a: 0.01
           gamma: 0.97
-          lambda: 0.60
+          lambda: 0.6
           target: off-policy
           projector: experiment/agent/policy/policy/9/projector
           critic_representation: experiment/agent/policy/value/9/representation
@@ -717,7 +720,7 @@ experiment:
           beta_v: 0.1
           beta_a: 0.01
           gamma: 0.98
-          lambda: 0.70
+          lambda: 0.7
           target: off-policy
           projector: experiment/agent/policy/policy/10/projector
           critic_representation: experiment/agent/policy/value/10/representation
@@ -739,7 +742,7 @@ experiment:
           beta_v: 0.01
           beta_a: 0.01
           gamma: 0.98
-          lambda: 0.70
+          lambda: 0.7
           target: off-policy
           projector: experiment/agent/policy/policy/11/projector
           critic_representation: experiment/agent/policy/value/11/representation
@@ -782,8 +785,20 @@ experiment:
     policy: 
       type: mapping/policy/multi
       strategy: experiment/agent/policy/strategy
-      sampler: experiment/agent/policy/sampler
-      policy:
+      score_distance: experiment/agent/policy/score_distance
+      update_history: experiment/agent/policy/update_history
+      choose_actions: experiment/agent/policy/choose_actions
+      percentile: experiment/agent/policy/percentile
+      select_by_distance: experiment/agent/policy/select_by_distance
+      score_postprocess: experiment/agent/policy/score_postprocess
+      bins: experiment/agent/policy/bins
+      static_policy: experiment/agent/policy/static_policy
+      r_distance_parameter: experiment/agent/policy/r_distance_parameter
+      alpha: experiment/agent/policy/alpha
+      iroulette: experiment/agent/policy/iroulette
+      minor_remove_bound: experiment/agent/policy/minor_remove_bound
+      major_remove_bound: experiment/agent/policy/major_remove_bound
+      policy: 
         - 
           type: mapping/policy/action
           sigma: []
@@ -915,15 +930,9 @@ experiment:
         - experiment/agent/policy/value/10
         - experiment/agent/policy/value/11
         - experiment/agent/policy/value/12
-      bins: experiment/agent/policy/bins
-      static_policy: experiment/agent/policy/static_policy
-      r_distance_parameter: experiment/agent/policy/r_distance_parameter
-      alpha: experiment/agent/policy/alpha
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
   save_every: never
-#visualizer: 
-#  type: visualizer/glut
 critic_visual0: 
   type: visualization/field/value
   field_dims: [0, 1]

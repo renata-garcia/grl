@@ -46,7 +46,7 @@ void MultiPolicy::request(ConfigurationRequest *config)
   
   config->push_back(CRP("update_history", "Update History", update_history_str_, CRP::Configuration,
   
-  {"euclidian_distance", "density", "voting", "datacenter"}));
+  {"euclidian_distance", "density", "voting", "data_center"}));
   
   config->push_back(CRP("choose_actions", "Choose Actions", choose_actions_str_, CRP::Configuration,
   
@@ -163,7 +163,7 @@ void MultiPolicy::configure(Configuration &config)
     update_history_ = uhVoting;
     scores_ = uhVoting;
   }
-  else if (update_history_str_ == "datacenter")
+  else if (update_history_str_ == "data_center")
   {
     update_history_ = uhDataCenter;
     scores_ = uhDataCenter;
@@ -1039,10 +1039,10 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
 
       actions_actors = run_policies(in);
 
-      if (scores_ != uhEuclideanDistance && ensemble_center_ != sdNone)
-        throw Exception("ensemble_mean can only be used with update_history: eucludean_distance");
-      else if (scores_ == uhEuclideanDistance && ensemble_center_ == sdNone)
-        throw Exception("update_history: eucludean_distance requires a valid ensemble_mean");
+      // if (scores_ != uhEuclideanDistance && ensemble_center_ != sdNone)
+      //    throw Exception("ensemble_mean can only be used with update_history: eucludean_distance");
+      // else if (scores_ == uhEuclideanDistance && ensemble_center_ == sdNone)
+      //   throw Exception("update_history: eucludean_distance requires a valid ensemble_mean");
 
       CRAWL("MultiPolicy::csAlg4StepsNew::switch (ensemble_center_)");
       switch (ensemble_center_)
@@ -1180,7 +1180,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
           break;
           
         case sdMean:
-          throw Exception("MultiPolicy sdMean not implemented!");
+          dist = center;
           break;
       }
 
@@ -1943,7 +1943,6 @@ LargeVector MultiPolicy::density_based(ActionArray &ensemble_set, LargeVector *c
 
     CRAWL("MultiPolicy::density_based::density*[i:" << i << "]: " << r_dist );
     scores[i] = r_dist;
-    
   }
   
   *center = ensemble_set[get_max_index(scores)].v;

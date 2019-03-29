@@ -6,10 +6,10 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_13_data_center_mm_b2_a90_data
+  output: mpol_dpg_13_alg4steps_data_center_euclidian_distance_100_mean_
   environment: 
     type: environment/modeled
-    model:
+    model: 
       type: model/dynamical
       control_step: 0.03
       integration_steps: 5
@@ -19,13 +19,18 @@ experiment:
       type: task/pendulum/swingup
       timeout: 2.99
       randomization: 0
-  agent: 
+  agent:
     type: agent/td
     policy: 
       type: mapping/policy/multi
-      strategy: data_center_mean_mov
-      bins: 2
-      alpha: 0.9
+      strategy: alg4stepsNew
+      score_distance: data_center
+      update_history: euclidian_distance
+      choose_actions: none
+      percentile: 1
+      select_by_distance: mean
+      score_postprocess: 0
+      alpha: 1.0
       policy: 
         - 
           type: mapping/policy/action
@@ -779,6 +784,13 @@ experiment:
     policy: 
       type: mapping/policy/multi
       strategy: experiment/agent/policy/strategy
+      score_distance: experiment/agent/policy/score_distance
+      update_history: experiment/agent/policy/update_history
+      choose_actions: experiment/agent/policy/choose_actions
+      percentile: experiment/agent/policy/percentile
+      select_by_distance: experiment/agent/policy/select_by_distance
+      score_postprocess: experiment/agent/policy/score_postprocess
+      alpha: experiment/agent/policy/alpha
       policy:
         - 
           type: mapping/policy/action
@@ -911,10 +923,6 @@ experiment:
         - experiment/agent/policy/value/10
         - experiment/agent/policy/value/11
         - experiment/agent/policy/value/12
-      bins: experiment/agent/policy/bins
-      static_policy: experiment/agent/policy/static_policy
-      r_distance_parameter: experiment/agent/policy/r_distance_parameter
-      alpha: experiment/agent/policy/alpha
       output_min: experiment/environment/task/action_min
       output_max: experiment/environment/task/action_max
   save_every: never
