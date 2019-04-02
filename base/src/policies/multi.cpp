@@ -122,7 +122,7 @@ void MultiPolicy::configure(Configuration &config)
     update_history_ = uhEuclideanDistance;
     scores_ = uhEuclideanDistance;
   }
-  else if (update_history_str_ == "density")
+  else if (update_history_str_ == "density_based")
   {
     update_history_ = uhDensity;  
     scores_ = uhDensity;  
