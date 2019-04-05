@@ -7,195 +7,6 @@ folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
 addpath("~/Dropbox/phd_grl_results/matlab");
 
 %%
-f = ["cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval10000_gamma0.98_reward_scale0.01_*.txt",...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval10000_gamma0.98_reward_scale0.1_*.txt",...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval10000_gamma0.99_reward_scale0.01_*.txt",...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval10000_gamma0.99_reward_scale0.1_*.txt",...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval2048_gamma0.98_reward_scale0.01_*.txt",...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval2048_gamma0.98_reward_scale0.1_*.txt",...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval2048_gamma0.99_reward_scale0.01_*.txt",...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval2048_gamma0.99_reward_scale0.1_*.txt"];
-fd = "/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/new_runs/" + f(1);
-data = readseries("/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/new_runs/cart_pole*.txt", 3, 2, 1);
-%Obs: peguei coluna 2 (steps) e coloquei 20 (steps por segundo) para ter eixo horizontal em segundos.
-[t, m, ~, e] = avgseries(data);
-errorbaralpha(t, m, icdf('norm', 0.975, 0, 1)*e);
-(icdf('norm', 0.975, 0, 1) == 1.96)% ou diretamente
-
-figure;
-for i=1:2
-    plot(data{1,i}(:,2));
-    hold on;
-end
-
-figure('units','normalized','outerposition',size_windows);
-leg = [];
-color = ['y', 'm', 'b', 'r', 'k', 'g', 'c'];
-num_alg = length(f);
-h = zeros(1, num_alg);
-for j=1:size(f,1)
-    fd = "/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/new_runs/" + f(j);
-    data = readseries(fd, 3, 2, 1);
-    [t, m, ~, e] = avgseries(data);
-    
-    
-    
-    
-    [mean_d, std_d] = load_mean(array(j,2), n, lim_x);
-    errstd_d = std_d/sqrt(n);
-    maximum = max(mean_d);
-    x = 1:length(mean_d);
-    n_color = color(1 + rem(j, length(color)));
-    h(j) = errorbaralpha(mean_d, (n + 1.96*(std_d/sqrt(n))), 'color', n_color, 'linestyle', '--');
-    leg = [leg, strcat(array(j,1), ':... ', num2str(maximum))];
-    hold on;
-end
-
-grid;
-title([title_fig, ' (int val 95)']);
-xlabel('step');
-ylabel('reward');
-legend(h, leg,'Location','SouthEast');
-
-
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval512_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval512_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval512_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval512_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval64_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval64_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval64_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval64_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval10000_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval10000_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval10000_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval10000_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval2048_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval2048_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval2048_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval2048_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval512_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval512_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval512_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval512_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval64_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval64_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval64_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256_interval64_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval10000_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval10000_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval10000_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval10000_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval2048_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval2048_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval2048_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval2048_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval512_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval512_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval512_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval512_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval64_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval64_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval64_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size52_interval64_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval10000_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval10000_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval10000_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval10000_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval2048_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval2048_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval2048_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval2048_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval512_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval512_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval512_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval512_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval64_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval64_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval64_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size128_interval64_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval10000_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval10000_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval10000_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval10000_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval2048_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval2048_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval2048_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval2048_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval512_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval512_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval512_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval512_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval64_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval64_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval64_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size256_interval64_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval10000_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval10000_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval10000_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval10000_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval2048_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval2048_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval2048_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval2048_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval512_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval512_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval512_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval512_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval64_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval64_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval64_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps26_batch_size52_interval64_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval10000_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval10000_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval10000_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval10000_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval2048_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval2048_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval2048_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval2048_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval512_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval512_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval512_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval512_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval64_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval64_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval64_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size128_interval64_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval10000_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval10000_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval10000_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval10000_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval2048_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval2048_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval2048_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval2048_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval512_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval512_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval512_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval512_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval64_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval64_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval64_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size256_interval64_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval10000_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval10000_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval10000_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval10000_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval2048_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval2048_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval2048_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval2048_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval512_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval512_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval512_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval512_gamma0.99_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval64_gamma0.98_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval64_gamma0.98_reward_scale0.1_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval64_gamma0.99_reward_scale0.01_.yaml
-% cart_pole_replay_ddpg_tensorflow_geometric_replay_steps52_batch_size52_interval64_gamma0.99_reward_scale0.1_.yaml
-
-%%
 compare_executions(n, folder, 1, 909, 'Algoritmos Pendulum',...
     "pendulum_ac_tc",...
     "pendulum_dpg.dat",...        %%%
@@ -313,15 +124,27 @@ n = n_old;
 
 %%
 compare_executions(n, folder, 0, 909, 'MPOL DPG 13 benchmark',...
-    "pendulum_dpg.dat", "mpol_dpg_13_density_based_data",...
-    "mpol_dpg_13_data_center_data", "mpol_dpg_13_random_data",...
+    "pendulum_dpg.dat", "mpol_dpg_13_density_based_data", "pendulum_mpol_dpg_13_density_based_euclidian_distance_1.0_mean_a1.0_pp0",...
+    "pendulum_mpol_dpg_13_data_center_euclidian_distance_1.0_mean_a1.0_pp0", "mpol_dpg_13_random_data",...
     "mpol_dpg_13_greedy_data", "mpol_dpg_13_mean_mov_data",...
     "mpol_dpg_13_mean_data");
+
+%% NEW NEW NEW
+compare_executions(n, folder, 0, 909, 'MPOL DPG 13 benchmark',...
+    "mpol_dpg_13_data_center_data", "pendulum_mpol_dpg_13_data_center_euclidian_distance_1.0_mean_a1.0_pp0");
+
+compare_executions(n, folder, 0, 909, 'MPOL DPG 13 benchmark',...
+    "mpol_dpg_13_density_based_data", "pendulum_mpol_dpg_13_density_based_euclidian_distance_1.0_mean_a1.0_pp0");
 
 %%
 compare_executions(n, folder, 1, 909, 'MPOL DPG 13 benchmark',...
     "pendulum_dpg.dat", "mpol_dpg_13_density_based_data",...
     "mpol_dpg_13_data_center_data");
+
+compare_executions(n, folder, 0, 909, 'MPOL DPG 13 benchmark',...
+    "pendulum_dpg.dat",...
+    "pendulum_mpol_dpg_13_density_based_euclidian_distance_1.0_mean_a1.0_pp0",...
+    "pendulum_mpol_dpg_13_data_center_euclidian_distance_1.0_mean_a1.0_pp0");
 
 %%
 compare_executions(n, folder, 0, 909, 'MPOL DPG 13 data center bm',...
@@ -358,7 +181,7 @@ compare_executions(n, folder, 0, 909, 'MPOL DPG 13 density based bm',...
     "mpol_dpg_13_density_based_historic_a10_data",...
     "mpol_dpg_13_density_based_dens_best_data",...
     "mpol_dpg_13_density_based_historic_dens_data",...
-    "mpol_dpg_13_density_based_historic_data", "mpol_dpg_26_density_based_historic_a001_data",...
+    "mpol_dpg_13_density_based_historic_data",...
     "mpol_dpg_13_density_based_mm_a90_data");
 
 %%
@@ -369,11 +192,20 @@ compare_executions(n, folder, 0, 909, 'MPOL DPG 13 BC',...
     "mpol_dpg_13_density_based_historic_dens_data",...
     "mpol_dpg_13_density_based_voting_mov_data");
 
-%%
+
+%% NEW NEW NEW
+compare_executions(n, folder, 0, 90, 'MPOL DPG 13 BC',...
+    "pendulum_dpg.dat", "mpol_dpg_13_density_based_voting_mov_data",...
+    "pendulum_mpol_dpg_13_none_data_center_1.0_best_a0.01_pp0");
+
+%% NEW NEW NEW
 compare_executions(n, folder, 1, 909, 'MPOL DPG 13 BC',...
     "pendulum_dpg.dat", "mpol_dpg_13_density_based_bm_a90_data",...
     "mpol_dpg_13_density_based_dens_best_data",...
-    "mpol_dpg_13_density_based_historic_dens_data");
+    "mpol_dpg_13_density_based_historic_dens_data",...
+    "pendulum_mpol_dpg_13_none_density_based_1.0_best_a0.01_pp0",...
+    "pendulum_mpol_dpg_13_none_density_based_0.5_density_based_a0.01_pp0",...
+    "pendulum_mpol_dpg_13_density_based_euclidian_distance_0.01_mean_a0.01_pp0");
 
 %%
 compare_executions(n, folder, 1, 909, 'MPOL DPG 13 BC',...
@@ -402,17 +234,6 @@ compare_executions(n, folder, 1, 909, 'MPOL DPG 26 ALG4STEPS none.dens',...
     "pendulum_dpg.dat",...
     "mpol_dpg_26_alg4steps_none_dens_50desc_dens_",... %VC
     "mpol_dpg_26_alg4steps_none_dens_max_none_");      %ABOVE
-
-% NOT GOOD
-% compare_executions(n, folder, 1, 'MPOL DPG 13 ALG4STEPS quartile',...
-%     "pendulum_dpg.dat",...
-%     "mpol_dpg_13_alg4steps_none_eucl_quartileMM_datacenter_",...
-%     "mpol_dpg_13_alg4steps_none_eucl_quartileMM_dens_");
-% 
-% compare_executions(n, folder, 1, 'MPOL DPG 26 ALG4STEPS quartile',...
-%     "pendulum_dpg.dat",...
-%     "mpol_dpg_26_alg4steps_none_eucl_quartileMM_datacenter_",...
-%     "mpol_dpg_26_alg4steps_none_eucl_quartileMM_dens_");
 
 compare_executions(n, folder, 1, 909, 'MPOL DPG 13 BC',...
     "pendulum_dpg.dat",...
@@ -484,7 +305,6 @@ compare_executions(n, folder, 0, 909, 'MPOL DPG 26 DENSITY BASED TODOS/BC',...
     "mpol_dpg_26_density_based_mm_a90_data", "mpol_dpg_26_density_based_historic_a10_data",...
     "mpol_dpg_26_density_based_historic_data", "mpol_dpg_26_density_based_historic_a001_data",...
     "mpol_dpg_26_density_based_bm_a90_data");
-%"mpol_dpg_26_density_based_voting_mov_data",
 
 %% MPOL DPG 26 Density based
 compare_executions(n, folder, 0, 909, 'MPOL DPG 26 DENSITY BASED TODOS/BC',...
