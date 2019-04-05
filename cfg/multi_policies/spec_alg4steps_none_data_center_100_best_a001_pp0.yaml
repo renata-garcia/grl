@@ -1,7 +1,7 @@
 - file: all
   configuration:
   - name: experiment/output
-    value: $@_$0_$1_$2_$3_$4_ 
+    value: $@_$0_$1_$2_$3_a$4_pp$5
   parameters:
   - name: experiment/agent/policy/score_distance
     values:
@@ -15,6 +15,9 @@
   - name: experiment/agent/policy/select_by_distance
     values:
     - best
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
   - name: experiment/agent/policy/score_postprocess
     values:
     - 0
@@ -23,4 +26,4 @@
     - 10
   - name: experiment/trials
     values:
-    - 10000
+    - 1000

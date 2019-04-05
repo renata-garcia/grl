@@ -22,8 +22,8 @@ experiment:
         type: sampler/greedy
       bins: 10
       static_policy: 0
-      r_distance_parameter: 0.005
-      alpha: 1.0
+      r_distance_parameter: 0.05
+      alpha: 0.01
       iroulette: 0.3
       minor_remove_bound: 0.25
       major_remove_bound: 0.75
