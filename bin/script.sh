@@ -142,15 +142,15 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 
 ./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_dens_50asc_datacenter.yaml
 ./grld ../cfg/pendulum/mpol_dpg_13_alg4steps_none_dens_50desc_dens.yaml
-'
 
-sh ../cfg/pendulum/spec_pendulum_dpg_13.sh
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_data_center_euclidian_distance_100_mean_a100_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_density_euclidian_distance_001_mean_a001_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_density_euclidian_distance_100_mean_a100_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_data_center_100_best_a001_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_based_001_best_a001_pp0.yaml
+'
+sh ../cfg/pendulum/spec_pendulum_dpg_13.sh
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_euclidian_distance_050_data_center_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_data_center_100_best_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_euclidian_distance_070_density_a001_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_based_050_data_center_a001_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_based_050_density_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_euclidian_distance_050_data_center_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_euclidian_distance_050_density_a001_pp0.yaml

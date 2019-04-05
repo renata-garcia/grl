@@ -26,4 +26,4 @@
     - 10
   - name: experiment/trials
     values:
-    - 1000
+    - 10000
