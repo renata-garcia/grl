@@ -10,8 +10,8 @@ experiment:
   agent: 
     type: agent/replay
     memory_size: 100000
-    replay_steps: 32
-    batch_size: 32
+    replay_steps: 128
+    batch_size: 64
     observation_steps: 1000
     threads: 0
     policy: 
@@ -47,7 +47,7 @@ experiment:
       importer: 0
       exporter: 0
       gamma: 0.99
-      reward_scale: 1
+      reward_scale: 0.1
       observation: s_in
       action: a_in
       value: q/BiasAdd

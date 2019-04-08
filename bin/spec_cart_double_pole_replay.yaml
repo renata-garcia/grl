@@ -36,4 +36,7 @@
     - 5
   - name: experiment/trials
     values:
-    - 2000
+    - 0
+  - name: experiment/steps
+    values:
+    - 8000

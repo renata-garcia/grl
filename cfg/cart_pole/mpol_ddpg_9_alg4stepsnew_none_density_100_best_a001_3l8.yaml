@@ -38,7 +38,7 @@ experiment:
       type: mapping/policy/multi
       strategy: alg4stepsNew
       score_distance: none
-      update_history: density
+      update_history: density_based
       choose_actions: none
       percentile: 1
       select_by_distance: best

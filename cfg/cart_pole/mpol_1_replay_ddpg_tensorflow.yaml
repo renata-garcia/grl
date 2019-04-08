@@ -1,12 +1,12 @@
 experiment: 
   type: experiment/online_learning
-  runs: 1
+  runs: 10
   run_offset: 0
   trials: 1000
   steps: 0
   rate: 0
   test_interval: 10
-  output: cartpole_mpol_1_replay_ddpg_tensorflow_
+  output: cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward 010_
   environment: 
     type: environment/modeled
     discrete_time: 1
@@ -29,8 +29,8 @@ experiment:
   agent: 
     type: agent/replay
     memory_size: 100000
-    replay_steps: 32                                           
-    batch_size: 32
+    replay_steps: 128                                        
+    batch_size: 64
     observation_steps: 1000
     threads: 0
     policy: 
@@ -70,7 +70,7 @@ experiment:
       importer: 0
       exporter: 0
       gamma: 0.99
-      reward_scale: 1
+      reward_scale: 0.1
       observation: s_in
       action: a_in
       value: q/BiasAdd
