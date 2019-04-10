@@ -1,8 +1,8 @@
 /** \file multi.h
  * \brief Policy combiner header file.
  *
- * \author    Wouter Caarls <wouter@caarls.org>
- * \date      2018-03-13
+ * \author    Renata Garcia Oliveira <renata.garcia.eng@gmail.com>
+ * \date      2019-03-13
  *
  * \copyright \verbatim
  * Copyright (c) 2018, Wouter Caarls
@@ -53,9 +53,9 @@ class MultiPolicy : public Policy
     enum CombinationStrategy {csBinning,
     csDataCenterVotingMov,
     csAlg4StepsNew,
-    csMean, csMeanMov, csStatic, csValueBased, csRoulette};
+    csMeanMov, csStatic, csValueBased, csRoulette};
     enum ScoreDistance {sdNone, sdBest, sdDensityBased, sdDataCenter, sdMean, sdRandom};
-    enum UpdateHistory {uhEuclideanDistance, uhDensity, uhDataCenter};
+    enum UpdateHistory {uhNone, uhEuclideanDistance, uhDensity, uhDataCenter};
     
   protected:
     std::string strategy_str_;
@@ -131,7 +131,6 @@ class MultiPolicy : public Policy
     virtual void act(double time, const Observation &in, Action *out);
 
     // From Multi Policy
-    virtual std::vector<size_t> choosing_bests_of_mean_mov(std::vector<Action> &in, int asc_desc) const;
     virtual std::vector<size_t> choosing_quartile_of_mean_mov(std::vector<Action> &in) const;
     static bool compare_asc_value_with_id(const data &a, const data &b);
     static bool compare_desc_value_with_id(const data &a, const data &b);
@@ -152,7 +151,6 @@ class MultiPolicy : public Policy
     virtual void set_density_based(std::vector<node> *in) const;
     virtual LargeVector get_mean(const std::vector<node> &in) const;
     virtual void update_mean_mov(std::vector<node> *in) const;
-    virtual void choosing_first50perc_of_mean_mov(std::vector<node> *in, int asc_desc) const;
     static bool compare_asc_mean_mov_i(const node &a, const node &b);
     static bool compare_desc_mean_mov_i(const node &a, const node &b);
     virtual void set_euclidian_distance(std::vector<node> *in, LargeVector mean) const;
@@ -162,7 +160,7 @@ class MultiPolicy : public Policy
     //trying again
     virtual LargeVector euclidian_distance(const ActionArray &ensemble_set, const LargeVector center) const;
     virtual LargeVector g_mean(const ActionArray &array) const;
-    virtual LargeVector score(ActionArray const &array, double mean) const;
+    virtual LargeVector get_actions(const ActionArray &array) const;
     virtual ActionArray percentile(ActionArray const &array, LargeVector moving_average_, double percentile) const;
     virtual LargeVector data_center(ActionArray ensemble_set, LargeVector *center) const;
     virtual LargeVector datacenter_update_voting(ActionArray ensemble_set) const;
