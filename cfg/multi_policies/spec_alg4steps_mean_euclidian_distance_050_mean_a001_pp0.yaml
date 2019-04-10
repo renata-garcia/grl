@@ -1,0 +1,29 @@
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_pp$5
+  parameters:
+  - name: experiment/agent/policy/score_distance
+    values:
+    - mean
+  - name: experiment/agent/policy/update_history
+    values:
+    - euclidian_distance
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.5
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - mean
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+  - name: experiment/agent/policy/score_postprocess
+    values:
+    - 0
+  - name: experiment/runs
+    values:
+    - 10
+  - name: experiment/trials
+    values:
+    - 10000

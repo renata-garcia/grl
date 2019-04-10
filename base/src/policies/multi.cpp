@@ -38,9 +38,9 @@ void MultiPolicy::request(ConfigurationRequest *config)
   {"binning",
   "data_center_voting_mov", 
   "alg4stepsNew",
-  "mean_mov", "random", "static", "value_based", "roulette"}));
+  "random", "static", "value_based", "roulette"}));
   
-  config->push_back(CRP("score_distance", "Score distance", score_distance_str_, CRP::Configuration,
+  config->push_back(CRP("ensemble_center", "Ensemble Center", ensemble_center_str_, CRP::Configuration,
   {"none", "density_based","data_center","mean"}));
   
   config->push_back(CRP("update_history", "Update History", update_history_str_, CRP::Configuration,
@@ -80,8 +80,6 @@ void MultiPolicy::configure(Configuration &config)
   	strategy_ = csDataCenterVotingMov;
   else if (strategy_str_ == "alg4stepsNew")
     strategy_ = csAlg4StepsNew;
-  else if (strategy_str_ == "mean_mov")
-    strategy_ = csMeanMov;
   else if (strategy_str_ == "static")
     strategy_ = csStatic;
   else if (strategy_str_ == "value_based")
@@ -91,27 +89,15 @@ void MultiPolicy::configure(Configuration &config)
   else
     throw bad_param("mapping/policy/multi:strategy");
 
-  score_distance_str_ = config["score_distance"].str();
-  if (score_distance_str_ == "density_based")
-  {
-    score_distance_ = sdDensityBased;
+  ensemble_center_str_ = config["score_distance"].str();
+  if (ensemble_center_str_ == "density_based")
     ensemble_center_ = sdDensityBased;
-  }
-  else if(score_distance_str_ == "data_center")
-  {
-    score_distance_ = sdDataCenter;
+  else if(ensemble_center_str_ == "data_center")
     ensemble_center_ = sdDataCenter;
-  }
-  else if(score_distance_str_ == "mean")
-  {
-    score_distance_ = sdMean;
+  else if(ensemble_center_str_ == "mean")
     ensemble_center_ = sdMean;
-  }
-  else if(score_distance_str_ == "none")
-  {
-    score_distance_ = sdNone;
+  else if(ensemble_center_str_ == "none")
     ensemble_center_ = sdNone;
-  }
 
   update_history_str_ = config["update_history"].str();
   if (update_history_str_ == "none")
@@ -392,10 +378,10 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
 
       actions_actors = run_policies(in);
 
-      // if (scores_ != uhEuclideanDistance && ensemble_center_ != sdNone)
-      //    throw Exception("ensemble_mean can only be used with update_history: eucludean_distance");
-      // else if (scores_ == uhEuclideanDistance && ensemble_center_ == sdNone)
-      //   throw Exception("update_history: eucludean_distance requires a valid ensemble_mean");
+      if (scores_ != uhEuclideanDistance && ensemble_center_ != sdNone)
+         throw Exception("ensemble_mean can only be used with update_history: eucludean_distance");
+      else if (scores_ == uhEuclideanDistance && ensemble_center_ == sdNone)
+        throw Exception("update_history: eucludean_distance requires a valid ensemble_mean");
 
       CRAWL("MultiPolicy::csAlg4StepsNew::switch (ensemble_center_)");
       switch (ensemble_center_)
@@ -495,16 +481,6 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
     }
     break;
 
-    case csMeanMov:
-    {
-      LargeVector vals;
-      update_mean_mov_with_euclidian(actions_actors, get_policy_mean(in, actions_actors, vals));
-      choosing_quartile_of_mean_mov(actions_actors);
-      
-      dist = get_mean(actions_actors);
-    }
-    break;
-    
     case csStatic:
     {
       size_t policy_chosen = static_policy_%n_policies;

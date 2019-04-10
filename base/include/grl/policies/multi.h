@@ -52,20 +52,17 @@ class MultiPolicy : public Policy
   
     enum CombinationStrategy {csBinning,
     csDataCenterVotingMov,
-    csAlg4StepsNew,
-    csMeanMov, csStatic, csValueBased, csRoulette};
+    csAlg4StepsNew, csStatic, csValueBased, csRoulette};
     enum ScoreDistance {sdNone, sdBest, sdDensityBased, sdDataCenter, sdMean, sdRandom};
     enum UpdateHistory {uhNone, uhEuclideanDistance, uhDensity, uhDataCenter};
     
   protected:
     std::string strategy_str_;
-    std::string score_distance_str_;
+    std::string ensemble_center_str_;
     std::string update_history_str_;
     std::string select_by_distance_str_;
     CombinationStrategy strategy_;
-    ScoreDistance score_distance_;
     UpdateHistory update_history_;
-    UpdateHistory score_;
     ///////////////////////////////
     ScoreDistance ensemble_center_;
     UpdateHistory scores_;
