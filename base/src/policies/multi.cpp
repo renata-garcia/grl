@@ -89,7 +89,7 @@ void MultiPolicy::configure(Configuration &config)
   else
     throw bad_param("mapping/policy/multi:strategy");
 
-  ensemble_center_str_ = config["score_distance"].str();
+  ensemble_center_str_ = config["ensemble_center"].str();
   if (ensemble_center_str_ == "density_based")
     ensemble_center_ = sdDensityBased;
   else if(ensemble_center_str_ == "data_center")
@@ -788,28 +788,9 @@ void MultiPolicy::update_voting_preferences_ofchoosen_mean_mov(const std::vector
     mean_mov_->at(i) = (alpha_mov_mean_)*voting_policies_->at(i) + (1-alpha_mov_mean_)*mean_mov_->at(i);
     CRAWL("MultiPolicy::update_voting_preferences_ofchoosen_mean_mov::a(ii= " << i << "): "<<in[i].v<<" voting_policies_->at(i): " << voting_policies_->at(i) << ", mean_mov_->at(i): " << mean_mov_->at(i));
   }
- }
-
-LargeVector MultiPolicy::score_distance_data_center(std::vector<node> *in, LargeVector center) const
-{
-  LargeVector mean = center;
-  while(in->size() > data_center_mean_size_)
-  {
-    set_euclidian_distance(in, mean);
-    size_t index = get_max_index(*in);
-    CRAWL("MultiPolicy::csDataCenter::remove outlier");
-    in->erase(in->begin()+index); //retirando apenas o elemento que está no index i_max
-
-    for(size_t i=0; i < in->size(); ++i)  //PRINTLN
-      CRAWL("MultiPolicy::after remove the i_max actions_actors: " << in->at(i).action);
-    
-    CRAWL("MultiPolicy::csDataCenter::starting new mean");
-    mean = get_mean(*in);
-    CRAWL("MultiPolicy::csDataCenter::mean...........: " << mean);
-  }
-
-  return mean;
 }
+
+
 
 void MultiPolicy::choosing_quartile_of_mean_mov(std::vector<node> *in) const
 {

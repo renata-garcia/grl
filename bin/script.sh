@@ -1,4 +1,4 @@
-: '
+'
 ./grld ../cfg/pendulum/mpol_dpg_13_mean_mov.yaml
 ./grld ../cfg/pendulum/mpol_dpg_13_mean.yaml 
 ./grld ../cfg/pendulum/mpol_dpg_13_random.yaml 
@@ -147,17 +147,22 @@ python3 ../addons/tensorflow/share/pendulum_ddpg.py
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_density_euclidian_distance_001_mean_a001_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_density_euclidian_distance_100_mean_a100_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_based_001_best_a001_pp0.yaml
-'
-sh ../cfg/pendulum/spec_pendulum_dpg_13.sh
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_euclidian_distance_050_data_center_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_data_center_100_best_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_euclidian_distance_070_density_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_based_050_data_center_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_based_050_density_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_010_best_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_050_mean_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_075_mean_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_mean_a100_pp0.yaml
 
 ./grld  ../cfg/cart_pole/mpol_1_replay_ddpg_tensorflow.yaml
 sh ../tests/grlr_cart_double_pole_ddpg.sh
+'
+
+sh ../cfg/pendulum/spec_pendulum_dpg_16.sh
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_data_center_euclidian_distance_100_mean_a100_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_density_euclidian_distance_001_mean_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_density_euclidian_distance_100_mean_a100_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_010_best_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_050_mean_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_075_mean_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_data_center_100_best_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_based_001_best_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_based_050_data_center_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_based_050_density_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_050_data_center_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_070_density_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_mean_a100_pp0.yaml

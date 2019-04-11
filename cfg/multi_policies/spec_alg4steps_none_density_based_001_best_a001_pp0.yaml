@@ -1,9 +1,9 @@
 - file: all
   configuration:
   - name: experiment/output
-    value: $@_$0_$1_$2_$3_a$4_pp$5
+    value: $@_$0_$1_$2_$3_a$4_pp$5_
   parameters:
-  - name: experiment/agent/policy/score_distance
+  - name: experiment/agent/policy/ensemble_center
     values:
     - none
   - name: experiment/agent/policy/update_history

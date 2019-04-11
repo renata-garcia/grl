@@ -11,4 +11,3 @@ experiment:
       type: task/pendulum/swingup
       timeout: 2.99
       randomization: 1
-      sincos: 1
