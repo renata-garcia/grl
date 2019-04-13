@@ -1,8 +1,4 @@
 config:
-  cf0_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
-  cf0_gamma: 0.99
-  cf0_reward_scale: 0.01
-  cf0_interval: 10000
   cf1_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.001 "relu" "linear" 400 300
   cf1_gamma: 0.99
   cf1_reward_scale: 0.1
@@ -63,6 +59,11 @@ config:
   cf15_gamma: 0.99
   cf15_reward_scale: 0.01
   cf15_interval: 10000
+  cf16_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 300 200
+  cf16_gamma: 0.99
+  cf16_reward_scale: 0.1
+  cf16_interval: 10000
+  cf17_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
 experiment: 
   type: experiment/online_learning
   runs: 10
@@ -71,7 +72,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: cartpole_mpol_ddpg_16_alg4steps
+  output: cart_pole_mpol_ddpg_16_alg4steps_2
   environment: 
     type: environment/modeled
     model: 
@@ -556,8 +557,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf0_interval
-                file: config/cf0_file_ddpg_py
+                interval: config/cf16_interval
+                file: config/cf16_file_ddpg_py
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -1024,8 +1025,8 @@ experiment:
           representation: experiment/agent/policy/policy/14/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf0_gamma
-          reward_scale: config/cf0_reward_scale
+          gamma: config/cf16_gamma
+          reward_scale: config/cf16_reward_scale
           observation: s_in
           action: a_in
           value: q/BiasAdd
