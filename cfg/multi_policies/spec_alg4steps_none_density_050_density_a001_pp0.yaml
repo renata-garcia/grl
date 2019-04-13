@@ -8,13 +8,13 @@
     - none
   - name: experiment/agent/policy/update_history
     values:
-    - density_based
+    - density
   - name: experiment/agent/policy/percentile
     values:
     - 0.5
   - name: experiment/agent/policy/select_by_distance
     values:
-    - density_based
+    - density
   - name: experiment/agent/policy/alpha
     values:
     - 0.01

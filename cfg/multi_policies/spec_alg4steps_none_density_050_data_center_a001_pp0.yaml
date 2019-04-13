@@ -8,7 +8,7 @@
     - none
   - name: experiment/agent/policy/update_history
     values:
-    - density_based
+    - density
   - name: experiment/agent/policy/percentile
     values:
     - 0.5

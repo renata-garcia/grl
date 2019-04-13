@@ -8,7 +8,7 @@
     - none
   - name: experiment/agent/policy/update_history
     values:
-    - data_center
+    - data_center_linear_order
   - name: experiment/agent/policy/percentile
     values:
     - 1.0
