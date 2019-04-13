@@ -41,7 +41,7 @@ void MultiPolicy::request(ConfigurationRequest *config)
   "random", "static", "value_based", "roulette"}));
   
   config->push_back(CRP("ensemble_center", "Ensemble Center", ensemble_center_str_, CRP::Configuration,
-  {"none", "density_based","data_center","mean"}));
+  {"none", "density","data_center","mean"}));
   
   config->push_back(CRP("update_history", "Update History", update_history_str_, CRP::Configuration,
   {"none", "euclidian_distance", "density", "data_center_linear_order"}));
@@ -49,7 +49,7 @@ void MultiPolicy::request(ConfigurationRequest *config)
   config->push_back(CRP("percentile", "Percentile of Scores / Actions", percentile_));
   
   config->push_back(CRP("select_by_distance", "Select by distance", select_by_distance_str_, CRP::Configuration,
-  {"none", "best", "data_center", "density_based", "mean", "random"}));
+  {"none", "best", "data_center", "density", "mean", "random"}));
   
   config->push_back(CRP("score_postprocess", "score_postprocess", score_postprocess_));
   
@@ -90,7 +90,7 @@ void MultiPolicy::configure(Configuration &config)
     throw bad_param("mapping/policy/multi:strategy");
 
   ensemble_center_str_ = config["ensemble_center"].str();
-  if (ensemble_center_str_ == "density_based")
+  if (ensemble_center_str_ == "density")
     ensemble_center_ = sdDensityBased;
   else if(ensemble_center_str_ == "data_center")
     ensemble_center_ = sdDataCenter;
@@ -137,7 +137,7 @@ void MultiPolicy::configure(Configuration &config)
     select_by_distance_ = sdDataCenter;
     select_ = sdDataCenter;
   }
-  else if(select_by_distance_str_ == "density_based")
+  else if(select_by_distance_str_ == "density")
   {
     select_by_distance_ = sdDensityBased;
     select_ = sdDensityBased;

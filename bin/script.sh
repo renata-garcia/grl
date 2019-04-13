@@ -153,16 +153,15 @@ sh ../tests/grlr_cart_double_pole_ddpg.sh
 '
 
 sh ../cfg/pendulum/spec_pendulum_dpg_16.sh
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_data_center_euclidian_distance_100_mean_a100_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_density_euclidian_distance_001_mean_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_density_euclidian_distance_100_mean_a100_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_density_euclidian_distance_001_best_a001_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_010_best_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_050_mean_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_075_mean_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_data_center_100_best_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_based_001_best_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_based_050_data_center_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_based_050_density_a001_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_050_data_center_a001_pp0.yaml
-../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_070_density_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_050_density_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_data_center_100_best_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_001_best_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_050_data_center_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_density_050_density_a001_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_data_center_a100_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_density_a100_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_mean_a100_pp0.yaml
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_random_a100_pp0.yaml

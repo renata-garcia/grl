@@ -5,19 +5,19 @@
   parameters:
   - name: experiment/agent/policy/ensemble_center
     values:
-    - density_based
+    - density
   - name: experiment/agent/policy/update_history
     values:
     - euclidian_distance
   - name: experiment/agent/policy/percentile
     values:
-    - 1.0
+    - 0.01
   - name: experiment/agent/policy/select_by_distance
     values:
-    - mean
+    - best
   - name: experiment/agent/policy/alpha
     values:
-    - 1.0
+    - 0.01
   - name: experiment/agent/policy/score_postprocess
     values:
     - 0
