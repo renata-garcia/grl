@@ -1,68 +1,68 @@
-config:
-  cf1_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.001 "relu" "linear" 400 300
+config: 
+  cf1_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
   cf1_gamma: 0.99
-  cf1_reward_scale: 0.1
-  cf1_interval: 10000
-  cf2_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.001 "relu" "linear" 300 200
+  cf1_reward_scale: 0.01
+  cf1_interval: 1000
+  cf2_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
   cf2_gamma: 0.99
-  cf2_reward_scale: 0.01
+  cf2_reward_scale: 1
   cf2_interval: 1000
-  cf3_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.001 "softmax" "linear" 100 50
+  cf3_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
   cf3_gamma: 0.99
-  cf3_reward_scale: 1
-  cf3_interval: 10000
-  cf4_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "relu" "linear" 300 200
+  cf3_reward_scale: 0.01
+  cf3_interval: 1000
+  cf4_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
   cf4_gamma: 0.99
   cf4_reward_scale: 0.01
   cf4_interval: 10000
-  cf5_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "relu" "linear" 400 300
+  cf5_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
   cf5_gamma: 0.99
   cf5_reward_scale: 0.1
-  cf5_interval: 1000
-  cf6_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "relu" "linear" 400 300
+  cf5_interval: 10000
+  cf6_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
   cf6_gamma: 0.99
-  cf6_reward_scale: 0.01
+  cf6_reward_scale: 1
   cf6_interval: 10000
-  cf7_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "softmax" "linear" 100 50
+  cf7_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 100 50
   cf7_gamma: 0.99
   cf7_reward_scale: 1
   cf7_interval: 1000
-  cf8_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
-  cf8_gamma: 0.98
+  cf8_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 100 50
+  cf8_gamma: 0.99
   cf8_reward_scale: 0.01
   cf8_interval: 10000
-  cf9_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
-  cf9_gamma: 0.98
-  cf9_reward_scale: 0.1
+  cf9_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 100 50
+  cf9_gamma: 0.99
+  cf9_reward_scale: 1
   cf9_interval: 10000
-  cf10_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
-  cf10_gamma: 0.98
-  cf10_reward_scale: 1
+  cf10_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 400 300
+  cf10_gamma: 0.99
+  cf10_reward_scale: 0.01
   cf10_interval: 10000
   cf11_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 400 300
-  cf11_gamma: 0.98
-  cf11_reward_scale: 0.01
+  cf11_gamma: 0.99
+  cf11_reward_scale: 0.1
   cf11_interval: 10000
   cf12_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 400 300
-  cf12_gamma: 0.98
-  cf12_reward_scale: 0.1
+  cf12_gamma: 0.99
+  cf12_reward_scale: 1
   cf12_interval: 10000
-  cf13_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 400 300
-  cf13_gamma: 0.98
-  cf13_reward_scale: 1
-  cf13_interval: 10000
-  cf14_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 300 200
+  cf13_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.0001 "relu" "linear" 300 300
+  cf13_gamma: 0.99
+  cf13_reward_scale: 0.01
+  cf13_interval: 1000
+  cf14_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.0001 "relu" "linear" 300 200
   cf14_gamma: 0.99
   cf14_reward_scale: 0.01
-  cf14_interval: 1000
-  cf15_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 300 200
+  cf14_interval: 10000
+  cf15_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.0001 "relu" "linear" 400 200
   cf15_gamma: 0.99
-  cf15_reward_scale: 0.01
+  cf15_reward_scale: 0.1
   cf15_interval: 10000
-  cf16_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 300 200
+  cf16_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.0001 "softmax" "linear" 100 50
   cf16_gamma: 0.99
-  cf16_reward_scale: 0.1
-  cf16_interval: 10000
+  cf16_reward_scale: 1
+  cf16_interval: 1000
 experiment: 
   type: experiment/online_learning
   runs: 10
@@ -71,7 +71,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: cart_pole_mpol_ddpg_16_alg4steps_2
+  output: cart_pole_mpol_ddpg_16_alg4steps_3
   environment: 
     type: environment/modeled
     model: 
