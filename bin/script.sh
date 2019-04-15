@@ -154,6 +154,7 @@ sh ../tests/grlr_cart_double_pole_ddpg.sh
 
 sh ../cfg/pendulum/spec_pendulum_dpg_16.sh
 sh ../cfg/pendulum/spec_pendulum_dpg_16_2.sh
+sh ../cfg/pendulum/spec_pendulum_dpg_16_3.sh
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_density_euclidian_distance_001_best_a001_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_010_best_a001_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_050_data_center_a001_pp0.yaml
