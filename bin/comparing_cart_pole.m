@@ -5,140 +5,81 @@ close all;
 n = 10;
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
 addpath("~/Dropbox/phd_grl_results/matlab");
+steps_per_second = 33;
+
+%% MPOL DPG CARTPOLE 
+compare_executions(n, folder, 2, 909, 'MPOL DPG CARTPOLE',...
+  "cart_pole_dpg_data",...  
+  "cartpole_q_data");
+
+%% MPOL DPG CARTPOLE 
+n = 10;
+compare_executions(n, folder, 2, 90, 'MPOL DDPG CARTPOLE',...
+  "cart_pole_dpg_data",...  
+  "cartpole_q_data",...
+  "cartpole_mpol_1_replay_ddpg_tensorflow_data");
 
 %%
 %Interval 10.000
 %reward scale 0.1
 %replay 128, batch_size 52
+title_fig = "TRYING MPOL CART POLE";
+array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
+    "cartPoleMpolDdpg16Alg4stepsNoneDensity100BestA001*.txt",... %none_density_100_best
+    "cartPoleMpolDdpg16V2Alg4stepsNoneDensity100BestA001*.txt"];
 
-f = ["cart_2019_04_12_21/cartpole_mpol_ddpg_16_alg4steps*.txt",...
-    "cart_pole_2019_04_14/cart_pole_mpol_ddpg_16_alg4steps_2*.txt",...
-    "cart_pole_3/cart_pole_mpol_ddpg_16_alg4steps_3*.txt",...
-    "cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt"];
-
-size_windows = [0 0 0.75 0.75];
-title_fig = "CART_POLE";
-leg = [];
-    
-figure('units','normalized','outerposition',size_windows);
-leg = [];
-color = ['y', 'm', 'b', 'r', 'k', 'g', 'c'];
-num_alg = length(f);
-h = zeros(1, num_alg);
-for j=1:size(f,2)
-    fd = "/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/" + f(j);
-    data = readseries(fd, 3, 2, 33);
-    [t, mean_d, ~, std_d] = avgseries(data);
-    %errstd_d = std_d/sqrt(n);
-    maximum = max(mean_d);
-    n_color = color(1 + rem(j, length(color)));
-    h(j) = errorbaralpha(t, mean_d, icdf('norm', 0.975, 0, 1)*std_d, 'color', n_color, 'linestyle', '--');
-    leg = [leg, strcat(f(j), ':... ', num2str(maximum))];
-    hold on;
-end
-grid;
-title([title_fig, ' (int val 95)']);
-xlabel('step');
-ylabel('reward');
-legend(h, leg,'Location','SouthEast');
-
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
 
 %%
 %Interval 10.000
 %reward scale 0.1
 %replay 128, batch_size 52
+title_fig = "TRYING MPOL CART POLE";
+array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
+    "cartPoleMpolDdpg16V2MeanEuclidianDistance010BestA001*.txt",...
+    "cartPoleMpolDdpg16V3Alg4stepsMeanEuclidian010BestA001*.txt"];
 
-f = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+%%
+%Interval 10.000
+%reward scale 0.1
+%replay 128, batch_size 52
+title_fig = "FINDING BEST SINGLE CART POLE";
+array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
+    "cartPoleMpolDdpg16V2Alg4stepsNoneDensity100BestA001*.txt",...
+    "cartPoleMpolDdpg16V2MeanEuclidianDistance010BestA001*.txt"];
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+%%
+%Interval 10.000
+%reward scale 0.1
+%replay 128, batch_size 52
+array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
     "cart_pole_new/cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128*.txt" , ...
     "cart_pole_new/cart_pole_replay_ddpg_tensorflow_geometric_replay_steps64_batch_size64*.txt"];
+title_fig = "FINDING BEST SINGLE CART POLE";
 
-size_windows = [0 0 0.75 0.75];
-title_fig = "CART_POLE";
-leg = [];
-    
-figure('units','normalized','outerposition',size_windows);
-leg = [];
-color = ['y', 'm', 'b', 'r', 'k', 'g', 'c'];
-num_alg = length(f);
-h = zeros(1, num_alg);
-for j=1:size(f,2)
-    fd = "/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/" + f(j);
-    data = readseries(fd, 3, 2, 33);
-    [t, mean_d, ~, std_d] = avgseries(data);
-    %errstd_d = std_d/sqrt(n);
-    maximum = max(mean_d);
-    n_color = color(1 + rem(j, length(color)));
-    h(j) = errorbaralpha(t, mean_d, icdf('norm', 0.975, 0, 1)*std_d, 'color', n_color, 'linestyle', '--');
-    leg = [leg, strcat(f(j), ':... ', num2str(maximum))];
-    hold on;
-end
-grid;
-title([title_fig, ' (int val 95)']);
-xlabel('step');
-ylabel('reward');
-legend(h, leg,'Location','SouthEast');
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
 
 %%
-f = ["cart_pole_replay_ddpg_tensorflow_geometric_replay_steps32_batch_size64*.txt" , ...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps64_batch_size128*.txt" , ...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps64_batch_size256*.txt" , ...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps64_batch_size64*.txt"];
+array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
+"cart_pole_new/cart_pole_replay_ddpg_tensorflow_geometric_replay_steps32_batch_size64*.txt" , ...
+"cart_pole_new/cart_pole_replay_ddpg_tensorflow_geometric_replay_steps64_batch_size128*.txt" , ...
+"cart_pole_new/cart_pole_replay_ddpg_tensorflow_geometric_replay_steps64_batch_size256*.txt" , ...
+"cart_pole_new/cart_pole_replay_ddpg_tensorflow_geometric_replay_steps64_batch_size64*.txt"];
+title_fig = "FINDING BEST SINGLE CART POLE";
 
-size_windows = [0 0 0.75 0.75];
-title_fig = "CART_POLE";
-leg = [];
-    
-figure('units','normalized','outerposition',size_windows);
-leg = [];
-color = ['y', 'm', 'b', 'r', 'k', 'g', 'c'];
-num_alg = length(f);
-h = zeros(1, num_alg);
-for j=1:size(f,2)
-    fd = "/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/cart_pole_new/" + f(j);
-    data = readseries(fd, 3, 2, 1);
-    [t, mean_d, ~, std_d] = avgseries(data);
-    %errstd_d = std_d/sqrt(n);
-    maximum = max(mean_d);
-    n_color = color(1 + rem(j, length(color)));
-    h(j) = errorbaralpha(t, mean_d, icdf('norm', 0.975, 0, 1)*std_d, 'color', n_color, 'linestyle', '--');
-    leg = [leg, strcat(f(j), ':... ', num2str(maximum))];
-    hold on;
-end
-grid;
-title([title_fig, ' (int val 95)']);
-xlabel('step');
-ylabel('reward');
-legend(h, leg,'Location','SouthEast');
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
 
 %%
-f = ["cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128*.txt" , ...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256*.txt" , ...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size64*.txt" , ...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps32_batch_size128*.txt" , ...
-"cart_pole_replay_ddpg_tensorflow_geometric_replay_steps32_batch_size256*.txt"];
+array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
+"cart_pole_new/cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128*.txt" , ...
+"cart_pole_new/cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size256*.txt" , ...
+"cart_pole_new/cart_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size64*.txt" , ...
+"cart_pole_new/cart_pole_replay_ddpg_tensorflow_geometric_replay_steps32_batch_size128*.txt" , ...
+"cart_pole_new/cart_pole_replay_ddpg_tensorflow_geometric_replay_steps32_batch_size256*.txt"];
+title_fig = "FINDING BEST SINGLE CART POLE";
 
-size_windows = [0 0 0.75 0.75];
-title_fig = "CART_POLE";
-leg = [];
-    
-figure('units','normalized','outerposition',size_windows);
-leg = [];
-color = ['y', 'm', 'b', 'r', 'k', 'g', 'c'];
-num_alg = length(f);
-h = zeros(1, num_alg);
-for j=1:size(f,2)
-    fd = "/home/renatargo/Dropbox/phd_grl_results/phd_grl_mpol_results/cart_pole_new/" + f(j);
-    data = readseries(fd, 3, 2, 1);
-    [t, mean_d, ~, std_d] = avgseries(data);
-    %errstd_d = std_d/sqrt(n);
-    maximum = max(mean_d);
-    n_color = color(1 + rem(j, length(color)));
-    h(j) = errorbaralpha(t, mean_d, icdf('norm', 0.975, 0, 1)*std_d, 'color', n_color, 'linestyle', '--');
-    leg = [leg, strcat(f(j), ':... ', num2str(maximum))];
-    hold on;
-end
-grid;
-title([title_fig, ' (int val 95)']);
-xlabel('step');
-ylabel('reward');
-legend(h, leg,'Location','SouthEast');
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
