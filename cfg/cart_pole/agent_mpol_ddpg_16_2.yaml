@@ -1,68 +1,3 @@
-config:
-  cf1_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.001 "relu" "linear" 400 300
-  cf1_gamma: 0.99
-  cf1_reward_scale: 0.1
-  cf1_interval: 10000
-  cf2_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.001 "relu" "linear" 300 200
-  cf2_gamma: 0.99
-  cf2_reward_scale: 0.01
-  cf2_interval: 1000
-  cf3_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.001 "softmax" "linear" 100 50
-  cf3_gamma: 0.99
-  cf3_reward_scale: 1
-  cf3_interval: 10000
-  cf4_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "relu" "linear" 300 200
-  cf4_gamma: 0.99
-  cf4_reward_scale: 0.01
-  cf4_interval: 10000
-  cf5_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "relu" "linear" 400 300
-  cf5_gamma: 0.99
-  cf5_reward_scale: 0.1
-  cf5_interval: 1000
-  cf6_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "relu" "linear" 400 300
-  cf6_gamma: 0.99
-  cf6_reward_scale: 0.01
-  cf6_interval: 10000
-  cf7_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "softmax" "linear" 100 50
-  cf7_gamma: 0.99
-  cf7_reward_scale: 1
-  cf7_interval: 1000
-  cf8_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
-  cf8_gamma: 0.98
-  cf8_reward_scale: 0.01
-  cf8_interval: 10000
-  cf9_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
-  cf9_gamma: 0.98
-  cf9_reward_scale: 0.1
-  cf9_interval: 10000
-  cf10_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
-  cf10_gamma: 0.98
-  cf10_reward_scale: 1
-  cf10_interval: 10000
-  cf11_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 400 300
-  cf11_gamma: 0.98
-  cf11_reward_scale: 0.01
-  cf11_interval: 10000
-  cf12_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 400 300
-  cf12_gamma: 0.98
-  cf12_reward_scale: 0.1
-  cf12_interval: 10000
-  cf13_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 400 300
-  cf13_gamma: 0.98
-  cf13_reward_scale: 1
-  cf13_interval: 10000
-  cf14_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 300 200
-  cf14_gamma: 0.99
-  cf14_reward_scale: 0.01
-  cf14_interval: 1000
-  cf15_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 300 200
-  cf15_gamma: 0.99
-  cf15_reward_scale: 0.01
-  cf15_interval: 10000
-  cf16_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 300 200
-  cf16_gamma: 0.99
-  cf16_reward_scale: 0.1
-  cf16_interval: 10000
 experiment: 
   type: experiment/online_learning
   runs: 10
@@ -119,8 +54,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf1_interval
-                file: config/cf1_file_ddpg_py
+                interval: 10000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.001 "relu" "linear" 400 300
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -147,8 +82,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf2_interval
-                file: config/cf2_file_ddpg_py
+                interval: 1000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.001 "relu" "linear" 300 200
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -175,8 +110,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf3_interval
-                file: config/cf3_file_ddpg_py
+                interval: 10000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.001 "softmax" "linear" 100 50
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -203,8 +138,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf4_interval
-                file: config/cf4_file_ddpg_py
+                interval: 10000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "relu" "linear" 300 200
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -231,8 +166,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf5_interval
-                file: config/cf5_file_ddpg_py
+                interval: 1000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "relu" "linear" 400 300
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -259,8 +194,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf6_interval
-                file: config/cf6_file_ddpg_py
+                interval: 10000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "relu" "linear" 400 300
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -287,8 +222,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf7_interval
-                file: config/cf7_file_ddpg_py
+                interval: 1000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "softmax" "linear" 100 50
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -315,8 +250,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf8_interval
-                file: config/cf8_file_ddpg_py
+                interval: 10000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -343,8 +278,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf9_interval
-                file: config/cf9_file_ddpg_py
+                interval: 10000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -371,8 +306,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf10_interval
-                file: config/cf10_file_ddpg_py
+                interval: 10000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -399,8 +334,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf11_interval
-                file: config/cf11_file_ddpg_py
+                interval: 10000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 400 300
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -427,8 +362,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf12_interval
-                file: config/cf12_file_ddpg_py
+                interval: 10000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 400 300
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -455,8 +390,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf13_interval
-                file: config/cf13_file_ddpg_py
+                interval: 10000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 400 300
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -483,8 +418,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf14_interval
-                file: config/cf14_file_ddpg_py
+                interval: 1000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 300 200
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -511,8 +446,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf15_interval
-                file: config/cf15_file_ddpg_py
+                interval: 10000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 300 200
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -539,8 +474,8 @@ experiment:
                   type: projector/identity
               representation: 
                 type: representation/parameterized/tensorflow
-                interval: config/cf16_interval
-                file: config/cf16_file_ddpg_py
+                interval: 10000
+                file: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 300 200
                 input_layer: s_in, a_in
                 output_layer: a_out/Tanh, q/BiasAdd
                 unit_node: init
@@ -617,8 +552,8 @@ experiment:
       predictor: 
         - 
           type: predictor/ddpg
-          gamma: config/cf1_gamma
-          reward_scale: config/cf1_reward_scale
+          gamma: 0.99
+          reward_scale: 0.1
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -643,8 +578,8 @@ experiment:
           representation: experiment/agent/policy/policy/0/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf2_gamma
-          reward_scale: config/cf2_reward_scale
+          gamma: 0.99
+          reward_scale: 0.01
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -669,8 +604,8 @@ experiment:
           representation: experiment/agent/policy/policy/1/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf3_gamma
-          reward_scale: config/cf3_reward_scale
+          gamma: 0.99
+          reward_scale: 1
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -695,8 +630,8 @@ experiment:
           representation: experiment/agent/policy/policy/2/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf4_gamma
-          reward_scale: config/cf4_reward_scale
+          gamma: 0.99
+          reward_scale: 0.01
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -721,8 +656,8 @@ experiment:
           representation: experiment/agent/policy/policy/3/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf5_gamma
-          reward_scale: config/cf5_reward_scale
+          gamma: 0.99
+          reward_scale: 0.1
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -747,8 +682,8 @@ experiment:
           representation: experiment/agent/policy/policy/4/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf6_gamma
-          reward_scale: config/cf6_reward_scale
+          gamma: 0.99
+          reward_scale: 0.01
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -773,8 +708,8 @@ experiment:
           representation: experiment/agent/policy/policy/5/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf7_gamma
-          reward_scale: config/cf7_reward_scale
+          gamma: 0.99
+          reward_scale: 1
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -799,8 +734,8 @@ experiment:
           representation: experiment/agent/policy/policy/6/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf8_gamma
-          reward_scale: config/cf8_reward_scale
+          gamma: 0.98
+          reward_scale: 0.01
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -825,8 +760,8 @@ experiment:
           representation: experiment/agent/policy/policy/7/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf9_gamma
-          reward_scale: config/cf9_reward_scale
+          gamma: 0.98
+          reward_scale: 0.1
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -851,8 +786,8 @@ experiment:
           representation: experiment/agent/policy/policy/8/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf10_gamma
-          reward_scale: config/cf10_reward_scale
+          gamma: 0.98
+          reward_scale: 1
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -877,8 +812,8 @@ experiment:
           representation: experiment/agent/policy/policy/9/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf11_gamma
-          reward_scale: config/cf11_reward_scale
+          gamma: 0.98
+          reward_scale: 0.01
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -903,8 +838,8 @@ experiment:
           representation: experiment/agent/policy/policy/10/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf12_gamma
-          reward_scale: config/cf12_reward_scale
+          gamma: 0.98
+          reward_scale: 0.1
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -929,8 +864,8 @@ experiment:
           representation: experiment/agent/policy/policy/11/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf13_gamma
-          reward_scale: config/cf13_reward_scale
+          gamma: 0.98
+          reward_scale: 1
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -955,8 +890,8 @@ experiment:
           representation: experiment/agent/policy/policy/12/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf14_gamma
-          reward_scale: config/cf14_reward_scale
+          gamma: 0.99
+          reward_scale: 0.01
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -981,8 +916,8 @@ experiment:
           representation: experiment/agent/policy/policy/13/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf15_gamma
-          reward_scale: config/cf15_reward_scale
+          gamma: 0.99
+          reward_scale: 0.01
           observation: s_in
           action: a_in
           value: q/BiasAdd
@@ -1007,8 +942,8 @@ experiment:
           representation: experiment/agent/policy/policy/14/policy/representation
         - 
           type: predictor/ddpg
-          gamma: config/cf16_gamma
-          reward_scale: config/cf16_reward_scale
+          gamma: 0.99
+          reward_scale: 0.1
           observation: s_in
           action: a_in
           value: q/BiasAdd
