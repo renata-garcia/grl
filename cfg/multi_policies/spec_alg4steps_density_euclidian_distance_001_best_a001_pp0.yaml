@@ -24,6 +24,3 @@
   - name: experiment/runs
     values:
     - 10
-  - name: experiment/trials
-    values:
-    - 10000
