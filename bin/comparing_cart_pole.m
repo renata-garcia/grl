@@ -23,28 +23,6 @@ compare_executions(n, folder, 2, 90, 'MPOL DDPG CARTPOLE',...
 %Interval 10.000
 %reward scale 0.1
 %replay 128, batch_size 52
-title_fig = "TRYING MPOL CART POLE";
-array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
-    "cartPoleMpolDdpg16Alg4stepsNoneDensity100BestA001*.txt",... %none_density_100_best
-    "cartPoleMpolDdpg16V2Alg4stepsNoneDensity100BestA001*.txt"];
-
-ploting_executions(folder, title_fig, steps_per_second, array_runs);
-
-%%
-%Interval 10.000
-%reward scale 0.1
-%replay 128, batch_size 52
-title_fig = "TRYING MPOL CART POLE";
-array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
-    "cartPoleMpolDdpg16V2MeanEuclidianDistance010BestA001*.txt",...
-    "cartPoleMpolDdpg16V3Alg4stepsMeanEuclidian010BestA001*.txt"];
-
-ploting_executions(folder, title_fig, steps_per_second, array_runs);
-
-%%
-%Interval 10.000
-%reward scale 0.1
-%replay 128, batch_size 52
 title_fig = "FINDING BEST SINGLE CART POLE";
 array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
     "cartPoleMpolDdpg16V2Alg4stepsNoneDensity100BestA001*.txt",...
@@ -83,3 +61,26 @@ array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_siz
 title_fig = "FINDING BEST SINGLE CART POLE";
 
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+%%
+%Interval 10.000
+%reward scale 0.1
+%replay 128, batch_size 52
+title_fig = "TRYING MPOL CART POLE";
+array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
+    "cartPoleMpolDdpg16Alg4stepsNoneDensity100BestA001*.txt",... %none_density_100_best
+    "cartPoleMpolDdpg16V2Alg4stepsNoneDensity100BestA001*.txt"];
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+%%
+%Interval 10.000
+%reward scale 0.1
+%replay 128, batch_size 52
+title_fig = "TRYING MPOL CART POLE";
+array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
+    "cartPoleMpolDdpg16V2MeanEuclidianDistance010BestA001*.txt",...
+    "cartPoleMpolDdpg16V3Alg4stepsMeanEuclidian010BestA001*.txt"];
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
