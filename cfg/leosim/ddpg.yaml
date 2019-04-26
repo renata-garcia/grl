@@ -1,9 +1,8 @@
 experiment: 
   type: experiment/online_learning
   runs: 10
-  run_offset: 0
-  trials: 100000
-  steps: 0
+  trials: 0
+  steps: 550000
   rate: 0
   test_interval: 10
   output: leosim_ddpg
@@ -11,9 +10,8 @@ experiment:
     type: environment/leosim
     xml: leolearnwalking-sarsa-tc.xml
     visualize: 1
-    observe: torso_boom, hipright, hipleft, kneeright, kneeleft
-    actuate: hipright, hipleft, kneeright, kneeleft
-    learn_stance_knee: 0
+    observe: torso.angle, torso.anglerate, lefthip.angle, lefthip.anglerate, righthip.angle, righthip.anglerate, leftknee.angle, leftknee.anglerate, rightknee.angle, rightknee.anglerate
+    actuate: lefthip.torque, righthip.torque, leftknee.torque, rightknee.torque
   agent: 
     type: agent/replay
     replay_steps: 256
@@ -41,7 +39,7 @@ experiment:
         output_layer: a_out/Tanh
     predictor: 
       type: predictor/ddpg
-      gamma: 0.99
+      gamma: 0.75
       observation: s_in
       action: a_in
       value: q/BiasAdd
@@ -68,6 +66,7 @@ experiment:
       type: mapping/policy/action
       output_min: experiment/agent/policy/output_min
       output_max: experiment/agent/policy/output_max
+      renormalize: 1
       projector: experiment/agent/policy/projector
       representation: experiment/agent/policy/representation
   save_every: never
