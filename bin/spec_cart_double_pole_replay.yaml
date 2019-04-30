@@ -8,6 +8,7 @@
     - 32
     - 64
     - 128
+    - 256
   - name: experiment/agent/batch_size
     values:
     - 64
@@ -39,4 +40,4 @@
     - 0
   - name: experiment/steps
     values:
-    - 8000
+    - 60000
