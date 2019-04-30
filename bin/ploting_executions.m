@@ -1,5 +1,5 @@
 function ploting_executions(folder, title_fig, steps_per_second, array_runs)
-    size_windows = [0 0 0.75 0.75];    
+    size_windows = [0 0 1 1];
     leg = [];
 
     figure('units','normalized','outerposition',size_windows);

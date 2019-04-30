@@ -36,7 +36,7 @@ void DDPGPredictor::request(ConfigurationRequest *config)
   Predictor::request(config);
   
   config->push_back(CRP("gamma", "Discount rate", gamma_));
-  config->push_back(CRP("reward_scale", "Scaling factor for all rewards", reward_scale_, CRP::Configuration, DBL_MIN, DBL_MAX));
+  config->push_back(CRP("reward_scale", "Scaling factor for all rewards", reward_scale_));
   
   config->push_back(CRP("observation", "TensorFlow placeholder node for graph observation input", observation_));
   config->push_back(CRP("action", "TensorFlow node for graph action input", action_));
@@ -67,8 +67,14 @@ void DDPGPredictor::configure(Configuration &config)
   action_projector_ = (Projector*)config["action_projector"].ptr();
   representation_ = (TensorFlowRepresentation*)config["representation"].ptr();
   
-  gamma_ = config["gamma"];
-  reward_scale_ = config["reward_scale"];
+  gamma_ = config["gamma"].v();
+  reward_scale_ = config["reward_scale"].v();
+  
+  if (!gamma_.size())
+    throw bad_param("predictor/ddpg:gamma");
+
+  if (!reward_scale_.size())
+    throw bad_param("predictor/ddpg:reward_scale");
 }
 
 void DDPGPredictor::reconfigure(const Configuration &config)
@@ -117,7 +123,22 @@ void DDPGPredictor::update(const std::vector<const Transition*> &transitions)
   representation_->target()->SessionRun({{observation_, read_input}}, {value_}, {}, &result);
 
   TF::Tensor &qap = *result[0];
+  size_t networks = 1;
+  if (qap.shape().num_dims() > 1)
+    networks = qap.shape().dims()[1];
+    
+  if (gamma_.size() == 1)
+    gamma_ = ConstantLargeVector(networks, gamma_[0]);
   
+  if (gamma_.size() != networks)
+    throw bad_param("predictor/ddpg:gamma");
+    
+  if (reward_scale_.size() == 1)
+    reward_scale_ = ConstantLargeVector(networks, reward_scale_[0]);
+  
+  if (reward_scale_.size() != networks)
+    throw bad_param("predictor/ddpg:reward_scale");
+    
   std::vector<TF::TensorPtr> disc_result;
   if (discretizer_)
   {
@@ -152,26 +173,13 @@ void DDPGPredictor::update(const std::vector<const Transition*> &transitions)
   
   TF::TensorPtr write_obs_input = representation_->tensor(TF::Shape({(int)transitions.size(), vp_obs->vector.size()}));
   TF::TensorPtr write_action_input = representation_->tensor(TF::Shape({(int)transitions.size(), vp_action->vector.size()}));
-  TF::TensorPtr write_target = representation_->tensor(TF::Shape({(int)transitions.size(), 1}));
+  TF::TensorPtr write_target = representation_->tensor(TF::Shape({(int)transitions.size(), (int)networks}));
   
   // Create target tensor 
   qs = 0;
+  
   for (size_t ii=0; ii < transitions.size(); ++ii)
   {
-    double target = reward_scale_*transitions[ii]->reward;
-  
-    if (!transitions[ii]->obs.absorbing)
-    {
-      double v = qap(qs);
-      
-      if (discretizer_)
-        for (size_t aa=0; aa < discretizer_->size(); ++aa)
-          v = fmax(v, (*disc_result[0])(qs*as+aa));
-
-      target += pow(gamma_, transitions[ii]->tau)*v;
-      qs++;
-    }
-     
     ProjectionPtr obs_projection = obs_projector_->project(transitions[ii]->prev_obs);
     VectorProjection *vp_obs = dynamic_cast<VectorProjection*>(obs_projection.get());
     for (size_t jj=0; jj < vp_obs->vector.size(); ++jj)
@@ -181,8 +189,27 @@ void DDPGPredictor::update(const std::vector<const Transition*> &transitions)
     VectorProjection *vp_action = dynamic_cast<VectorProjection*>(action_projection.get());
     for (size_t jj=0; jj < vp_action->vector.size(); ++jj)
       (*write_action_input)(ii, jj) = vp_action->vector[jj];
+
+    for (size_t nn=0; nn < networks; ++nn)
+    {
+      double target = reward_scale_[nn]*transitions[ii]->reward;
+  
+      if (!transitions[ii]->obs.absorbing)
+      {
+        double v = qap(qs, nn);
+        
+        if (discretizer_)
+          for (size_t aa=0; aa < discretizer_->size(); ++aa)
+            v = fmax(v, (*disc_result[0])(qs*as+aa, nn));
+
+        target += pow(gamma_[nn], transitions[ii]->tau)*v;
+      }
+       
+      (*write_target)(ii, nn) = target;
+    }
     
-    (*write_target)(ii) = target;
+    if (!transitions[ii]->obs.absorbing)
+      qs++;
   }
   
   // Update critic

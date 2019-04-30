@@ -1,4 +1,8 @@
-#!/home/renatargo/anaconda3/bin/python3
+#!/usr/bin/python3
+#
+# NOTE: Actions are defined on [-1, 1], so they need to be
+# normalized on input (with a signed projector/pre/normalized) and
+# on output (with a renormalizing mapping/policy/action)
 
 from __future__ import print_function
 
@@ -26,6 +30,8 @@ if int(sys.argv[2]) != 1:
 obs = int(sys.argv[1])
 actions = 1
 action_max = 15
+#obs = int(sys.argv[1])
+#actions = int(sys.argv[2])
 normalization = False
 share_weights = False
 layer1_size = 400
@@ -53,6 +59,11 @@ theta = tf.trainable_variables()
 
 # Critic network definition
 a_in = tf.stop_gradient(tf.placeholder_with_default(a_out, shape=(None,actions), name='a_in'))
+#a_out = Dense(actions, activation='tanh', name='a_out')(han)
+#theta = tf.trainable_variables()
+
+# Critic network definition
+#a_in = tf.placeholder_with_default(tf.stop_gradient(a_out), shape=(None,actions), name='a_in')
 if normalization:
   an = BatchNormalization()(a_in)
 else:
@@ -77,6 +88,13 @@ q = Dense(1, activation='linear', name='q')(hqn)
 q_target = tf.placeholder(tf.float32, shape=(None, 1), name='q_target')
 q_loss = tf.losses.mean_squared_error(q_target, q)
 q_update = tf.train.AdamOptimizer(0.001).minimize(q_loss, name='q_update')
+#tf.group([s_in, a_in], name='inputs')
+#tf.group([q, a_out], name='outputs')
+
+## Critic network update
+#q_target = tf.placeholder(tf.float32, shape=(None, 1), name='target')
+#q_loss = tf.losses.mean_squared_error(q_target, q)
+#q_update = tf.train.AdamOptimizer(0.001).minimize(q_loss, name='update')
 
 # Actor network update
 dq_da = tf.gradients(q, a_in, name='dq_da')[0]
