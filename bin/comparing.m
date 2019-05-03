@@ -377,3 +377,11 @@ ploting_executions(folder, title_fig, steps_per_second, array_runs);
 % title_fig = "FINDING BEST SINGLE PENDULUM V3";
 % 
 % ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+%%
+array_runs = ["pendulum_yamls_mpols_group_results/pendulum_mpol_replay_ddpg_tensorflow_sincos_16good_mean_eucl_050_dens_a001_*.txt",...
+    "pendulum_yamls_mpols_group_results/pendulum_mpol_replay_ddpg_tensorflow_sincos_16mid_mean_eucl_050_dens_a001_*.txt",...
+    "pendulum_yamls_mpols_group_results/pendulum_mpol_replay_ddpg_tensorflow_sincos_16bad_mean_eucl_050_dens_a001_*.txt"];
+title_fig = "MPOL PENDULUM";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);

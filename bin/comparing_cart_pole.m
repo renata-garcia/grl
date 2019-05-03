@@ -199,3 +199,10 @@ array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_siz
 
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
 
+%%
+array_runs = ["cart_pole_yamls_mpols_group_results/cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*.txt",...
+    "cart_pole_yamls_mpols_group_results/cart_pole_mpol_replay_ddpg_tensorflow_sincos_16mid_*.txt",...
+    "cart_pole_yamls_mpols_group_results/cart_pole_mpol_replay_ddpg_tensorflow_sincos_16bad_*.txt"];
+title_fig = "MPOL PENDULUM";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
