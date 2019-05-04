@@ -196,7 +196,7 @@ agent/master/exclusive:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x55a3b3771308
+    default: 0x55d91bd086a8
     optional: 0
 agent/master/predicated:
   description: Master agent in which execution is predicated on preceding agent confidence
@@ -218,7 +218,7 @@ agent/master/predicated:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x55a3b3771308
+    default: 0x55d91bd086a8
     optional: 0
 agent/master/random:
   description: Master agent that chooses sub-agents randomly
@@ -240,7 +240,7 @@ agent/master/random:
     type: "[agent/sub]"
     description: Subagents
     mutability: configuration
-    default: 0x55a3b3771308
+    default: 0x55d91bd086a8
     optional: 0
 agent/master/sequential:
   description: Master agent that executes sub-agents sequentially
@@ -816,14 +816,6 @@ environment/leosim:
     mutability: configuration
     default: Comma-separated list of action elements provided by an agent
     optional: 1
-  learn_stance_knee:
-    type: int
-    description: Learn stance knee
-    mutability: configuration
-    default: 0
-    optional: 1
-    min: 0
-    max: 1
   exporter:
     type: exporter
     description: Optional exporter for transition log (supports time, state, observation, action, reward, terminal)
@@ -1545,7 +1537,7 @@ mapping/policy/discrete/multi:
     type: "[mapping/policy/discrete]"
     description: Sub-policies
     mutability: configuration
-    default: 0x55a3b3725440
+    default: 0x55d91bca93c0
     optional: 0
   r_distance_parameter:
     type: double
@@ -1848,7 +1840,7 @@ mapping/policy/multi:
     type: int
     description: score_postprocess
     mutability: configuration
-    default: 0
+    default: 466570720
     optional: 1
     min: 0
     max: 2147483647
@@ -1856,7 +1848,7 @@ mapping/policy/multi:
     type: sampler
     description: Sampler for value-based strategy
     mutability: configuration
-    default: 0x7f4bef8faca0
+    default: 0
     optional: 1
   bins:
     type: int
@@ -1918,13 +1910,13 @@ mapping/policy/multi:
     type: "[mapping/policy]"
     description: Sub-policies
     mutability: configuration
-    default: 0x55a3b3754db0
+    default: 0x55d91bcf4c70
     optional: 0
   value:
     type: "[mapping]"
     description: Values of sub-policy actions
     mutability: configuration
-    default: 0x55a3b3754dc8
+    default: 0x55d91bcf4c88
     optional: 1
   output_min:
     type: vector.action_min
@@ -3349,21 +3341,17 @@ predictor/ddpg:
     default: 0
     optional: 1
   gamma:
-    type: double
+    type: vector
     description: Discount rate
     mutability: configuration
-    default: 0.97
+    default: "[ 0.96999999999999997 ]"
     optional: 1
-    min: 0
-    max: 1
   reward_scale:
-    type: double
+    type: vector
     description: Scaling factor for all rewards
     mutability: configuration
-    default: 1
+    default: "[ 1 ]"
     optional: 1
-    min: 2.225073858507201e-308
-    max: 1.797693134862316e+308
   observation:
     type: string
     description: TensorFlow placeholder node for graph observation input
@@ -3855,7 +3843,7 @@ predictor/multi:
     type: "[predictor]"
     description: First downstream predictor
     mutability: configuration
-    default: 0x55a3b3bf1220
+    default: 0x55d91c177790
     optional: 0
 predictor/naf:
   description: Value function predictor using Normalized Advantage Features
@@ -4112,7 +4100,7 @@ projector/multi:
     type: "[projector.]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x55a3b3790730
+    default: 0x55d91bd22830
     optional: 0
   memories:
     type: vector.memory
@@ -4562,7 +4550,7 @@ representation/additive:
     type: "[representation.]"
     description: Downstream representations
     mutability: configuration
-    default: 0x55a3b3bf9b80
+    default: 0x55d91c18e620
     optional: 0
 representation/communicator:
   description: Interface to an out-of-process representation
@@ -4681,13 +4669,27 @@ representation/llr:
 representation/parameterized/ann:
   description: Parameterized artificial neural network representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/ann.
     description: Target representation
@@ -4725,13 +4727,27 @@ representation/parameterized/ann:
 representation/parameterized/linear:
   description: Linear-in-parameters representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/linear.
     description: Target representation
@@ -4787,13 +4803,27 @@ representation/parameterized/linear:
 representation/parameterized/tensorflow:
   description: TensorFlow representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/tensorflow.
     description: Target representation
@@ -7935,7 +7965,7 @@ projector/multi.observation:
     type: "[projector.observation]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x55a3b3790730
+    default: 0x55d91bd22830
     optional: 0
   memories:
     type: vector.memory
@@ -8313,7 +8343,7 @@ representation/additive.action:
     type: "[representation.action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x55a3b3e80320
+    default: 0x55d91c413020
     optional: 0
 representation/communicator.action:
   description: Interface to an out-of-process representation
@@ -8432,13 +8462,27 @@ representation/llr.action:
 representation/parameterized/ann.action:
   description: Parameterized artificial neural network representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/ann.action
     description: Target representation
@@ -8476,13 +8520,27 @@ representation/parameterized/ann.action:
 representation/parameterized/linear.action:
   description: Linear-in-parameters representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/linear.action
     description: Target representation
@@ -8538,13 +8596,27 @@ representation/parameterized/linear.action:
 representation/parameterized/tensorflow.action:
   description: TensorFlow representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/tensorflow.action
     description: Target representation
@@ -8700,7 +8772,7 @@ projector/multi.pair:
     type: "[projector.pair]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x55a3b3790730
+    default: 0x55d91bd22830
     optional: 0
   memories:
     type: vector.memory
@@ -9078,7 +9150,7 @@ representation/additive.value/action:
     type: "[representation.value/action]"
     description: Downstream representations
     mutability: configuration
-    default: 0x55a3b3e80320
+    default: 0x55d91c413020
     optional: 0
 representation/communicator.value/action:
   description: Interface to an out-of-process representation
@@ -9197,13 +9269,27 @@ representation/llr.value/action:
 representation/parameterized/ann.value/action:
   description: Parameterized artificial neural network representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/ann.value/action
     description: Target representation
@@ -9241,13 +9327,27 @@ representation/parameterized/ann.value/action:
 representation/parameterized/linear.value/action:
   description: Linear-in-parameters representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/linear.value/action
     description: Target representation
@@ -9303,13 +9403,27 @@ representation/parameterized/linear.value/action:
 representation/parameterized/tensorflow.value/action:
   description: TensorFlow representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/tensorflow.value/action
     description: Target representation
@@ -9376,7 +9490,7 @@ representation/additive.value/state:
     type: "[representation.value/state]"
     description: Downstream representations
     mutability: configuration
-    default: 0x55a3b3e80320
+    default: 0x55d91c413020
     optional: 0
 representation/communicator.value/state:
   description: Interface to an out-of-process representation
@@ -9495,13 +9609,27 @@ representation/llr.value/state:
 representation/parameterized/ann.value/state:
   description: Parameterized artificial neural network representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/ann.value/state
     description: Target representation
@@ -9539,13 +9667,27 @@ representation/parameterized/ann.value/state:
 representation/parameterized/linear.value/state:
   description: Linear-in-parameters representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/linear.value/state
     description: Target representation
@@ -9601,13 +9743,27 @@ representation/parameterized/linear.value/state:
 representation/parameterized/tensorflow.value/state:
   description: TensorFlow representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/tensorflow.value/state
     description: Target representation
@@ -9688,7 +9844,7 @@ representation/additive.transition:
     type: "[representation.transition]"
     description: Downstream representations
     mutability: configuration
-    default: 0x55a3b3e80320
+    default: 0x55d91c413020
     optional: 0
 representation/communicator.transition:
   description: Interface to an out-of-process representation
@@ -9807,13 +9963,27 @@ representation/llr.transition:
 representation/parameterized/ann.transition:
   description: Parameterized artificial neural network representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/ann.transition
     description: Target representation
@@ -9851,13 +10021,27 @@ representation/parameterized/ann.transition:
 representation/parameterized/linear.transition:
   description: Linear-in-parameters representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/linear.transition
     description: Target representation
@@ -9913,13 +10097,27 @@ representation/parameterized/linear.transition:
 representation/parameterized/tensorflow.transition:
   description: TensorFlow representation
   interval:
-    type: double
-    description: Target representation update interval (number of writes; 0=never update, <0=exp.mov.av.)
+    type: int
+    description: Target representation update interval (number of writes; 0=never update)
     mutability: configuration
     default: 0
     optional: 1
     min: 0
-    max: 1.797693134862316e+308
+    max: 2147483647
+  tau:
+    type: double
+    description: Target representation update strength
+    mutability: configuration
+    default: 1
+    optional: 1
+    min: 0
+    max: 1
+  file_suffix:
+    type: string
+    description: "Suffix for loading and saving parameters (default: configuration path)"
+    mutability: configuration
+    default: ""
+    optional: 1
   target:
     type: representation/parameterized/tensorflow.transition
     description: Target representation
@@ -10089,7 +10287,7 @@ projector/multi.action:
     type: "[projector.action]"
     description: Downstream projectors
     mutability: configuration
-    default: 0x55a3b3790730
+    default: 0x55d91bd22830
     optional: 0
   memories:
     type: vector.memory
