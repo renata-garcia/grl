@@ -2,24 +2,26 @@ clc;
 clear all;
 close all;
 
-env = "cart_pols";
 % env = "cart_pole";
-% env = "pendulum";
+env = "pendulum";
+% env = "pendulum_pd_tau";
+% env = "cart_pole_cp_notau";
+% env = "cart_pole_cp_notau-2";
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_yamls_results/";
 addpath("~/Dropbox/phd_grl_results/matlab");
+steps_counted = 20;
+printing = 0;
 
-if (env == "cart_pole" || env == "cart_pols")    
+if (contains(env,"cart"))    
     steps_per_second = 20;
-elseif (env == "pendulum")
+elseif (contains(env,"pendulum"))
     steps_per_second = 33;
 else 
-    display("NONE NONE");
+    disp("NONE NONE");
 end
-    
-steps_counted = 10;
 
-env = "cart_pole";
-array_runs = ["cart_pole_replay_ddpg_tensorflow_sincos_i1_j*.txt",...
+% env = "cart_pole_cp_notau";
+array_runs = [env + "_replay_ddpg_tensorflow_sincos_i1_j*.txt",...
     env + "_replay_ddpg_tensorflow_sincos_i2_j*.txt",...
     env + "_replay_ddpg_tensorflow_sincos_i3_j*.txt",...
     env + "_replay_ddpg_tensorflow_sincos_i4_j*.txt",...
@@ -54,6 +56,9 @@ array_runs = ["cart_pole_replay_ddpg_tensorflow_sincos_i1_j*.txt",...
 
 for j=1:length(array_runs)
     fd = folder + array_runs(j);
+    if (printing)
+        disp(fd);
+    end
     [t, mean_d, ~, std_d] = avgseries(readseries(fd, 3, 2, steps_per_second));
-    display(mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d))));
+    disp(mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d))));
 end
