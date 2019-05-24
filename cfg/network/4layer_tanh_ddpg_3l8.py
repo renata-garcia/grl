@@ -1,5 +1,4 @@
-#!/home/renatargo/anaconda3/bin/python3
-#/usr/bin/python
+#!/usr/bin/python
 #
 # NOTE: Actions are defined on [-1, 1], so they need to be
 # normalized on input (with a signed projector/pre/normalized) and
