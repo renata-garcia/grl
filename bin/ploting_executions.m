@@ -19,7 +19,7 @@ function ploting_executions(folder, title_fig, steps_per_second, array_runs)
     end
     grid;
     title([title_fig, ' (int val 95)']);
-    xlabel('steps');
+    xlabel('seconds');
     ylabel('reward');
     legend(h, leg,'Location','SouthEast');
 end

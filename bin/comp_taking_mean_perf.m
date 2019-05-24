@@ -2,15 +2,15 @@ clc;
 clear all;
 close all;
 
-% env = "cart_pole";
-env = "pendulum";
+steps_counted = 20;
+printing = 0;
+env = "cart_pole";
+% env = "pendulum";
 % env = "pendulum_pd_tau";
 % env = "cart_pole_cp_notau";
 % env = "cart_pole_cp_notau-2";
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_yamls_results/";
 addpath("~/Dropbox/phd_grl_results/matlab");
-steps_counted = 20;
-printing = 0;
 
 if (contains(env,"cart"))    
     steps_per_second = 20;
@@ -20,7 +20,6 @@ else
     disp("NONE NONE");
 end
 
-% env = "cart_pole_cp_notau";
 array_runs = [env + "_replay_ddpg_tensorflow_sincos_i1_j*.txt",...
     env + "_replay_ddpg_tensorflow_sincos_i2_j*.txt",...
     env + "_replay_ddpg_tensorflow_sincos_i3_j*.txt",...
