@@ -8,6 +8,7 @@ function ploting_executions(folder, title_fig, steps_per_second, array_runs)
     h = zeros(1, num_alg);
     for j=1:size(array_runs,2)
         fd = folder + array_runs(j);
+        disp(fd);
         data = readseries(fd, 3, 2, steps_per_second);
         [t, mean_d, ~, std_d] = avgseries(data);
         maximum = max(mean_d);

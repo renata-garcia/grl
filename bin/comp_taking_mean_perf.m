@@ -12,11 +12,11 @@ env = "cart_pole";
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_yamls_results/";
 addpath("~/Dropbox/phd_grl_results/matlab");
 
-if (contains(env,"cart"))    
+if (contains(env,"cart"))
     steps_per_second = 20;
 elseif (contains(env,"pendulum"))
     steps_per_second = 33;
-else 
+else
     disp("NONE NONE");
 end
 

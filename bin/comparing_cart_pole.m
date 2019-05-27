@@ -80,6 +80,43 @@ title_fig = "SINGLE CART POLE BAD";
 
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
 
+
+%%
+subfolderold = subfolder;
+subfolder = "cart_pole_mpols_yamls_results/";
+preffixold = preffix;
+preffix = "cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16";
+array_runs = [subfolder + preffix + "good_*_none_data_center_linear_order_1.0_best_a0.01_*.txt",...
+              subfolder + preffix + "good_*_none_none_1.0_random_a1_*txt"];
+title_fig = "SINGLE CART POLE MPOL GOOD";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+subfolder = subfolderold;
+preffix = preffixold;
+
+%%
+subfolderold = subfolder;
+subfolder = "cart_pole_mpols_yamls_results/";
+preffix = "cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16";
+array_runs = [subfolder + preffix + "mid_*_none_data_center_linear_order_1.0_best_a0.01_*.txt",...
+              subfolder + preffix + "mid_j0_none_none_1.0_random_a1_*txt"];
+title_fig = "SINGLE CART POLE MPOL MID";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+subfolder = subfolderold;
+
+%%
+subfolderold = subfolder;
+subfolder = "cart_pole_mpols_yamls_results/";
+preffix = "cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16";
+array_runs = [subfolder + preffix + "bad_*_none_none_1.0_random_a1*.txt",...
+              subfolder + preffix + "bad_*_none_data_center_linear_order_1.0_best_a0.01_*txt"];
+title_fig = "SINGLE CART POLE MPOL BAD";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+subfolder = subfolderold;
+preffix = preffixold;
+
 %% MPOL DPG CARTPOLE
 n = 10;
 compare_executions(n, folder, 2, 90, 'MPOL DDPG CARTPOLE',...
@@ -200,8 +237,13 @@ title_fig = "MPOL CART POLE GOOD";
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
 
 %%
+subfolderold = subfolder;
+subfolder = "cart_pole_mpols_yamls_results/";
+preffixold = preffix;
+preffix = "cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16";
+
 array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
-              "cart_pole_yamls_results/cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*_density_euclidian_distance_0.01_best_a0.01_*.txt",...
+              subfolder + "cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*_density_euclidian_distance_0.01_best_a0.01_*.txt",...
               "cart_pole_yamls_results/cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*_mean_euclidian_distance_0.1_best_a0.01_*.txt",...
               "cart_pole_yamls_results/cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*_mean_euclidian_distance_0.5_data_center_a0.01_*.txt",...
               "cart_pole_yamls_results/cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*_mean_euclidian_distance_0.5_density_a0.01_*.txt",...
@@ -213,3 +255,6 @@ array_runs = ["cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_siz
 title_fig = "MPOL CART POLE GOOD";
 
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+preffix = preffixold;
+subfolder = subfolderold;

@@ -378,9 +378,60 @@ array_runs = [subfolder + preffix + "3_j*.txt",...
 title_fig = "PENDULUM 16 BAD POLICIES";
 
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+%%
+subfolderold = subfolder;
+preffixold = preffix;
+
+subfolder = "pendulum_yamls_results/";
+preffix = "pendulum_replay_ddpg_tensorflow_sincos_i";
 array_runs = ["pendulum_yamls_mpols_group_results/pendulum_mpol_replay_ddpg_tensorflow_sincos_16good_mean_eucl_050_dens_a001_*.txt",...
     "pendulum_yamls_mpols_group_results/pendulum_mpol_replay_ddpg_tensorflow_sincos_16mid_mean_eucl_050_dens_a001_*.txt",...
     "pendulum_yamls_mpols_group_results/pendulum_mpol_replay_ddpg_tensorflow_sincos_16bad_mean_eucl_050_dens_a001_*.txt"];
 title_fig = "MPOL PENDULUM";
 
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+preffix = preffixold;
+subfolder = subfolderold;
+
+%%
+subfolderold = subfolder;
+subfolder = "pendulum_mpols_yamls_results/";
+preffixold = preffix;
+preffix = "pendulum_pendulum_mpol_replay_ddpg_tensorflow_sincos_16";
+array_runs = [subfolder + preffix + "good_*_none_data_center_linear_order_1.0_best_a0.01_*.txt",...
+              subfolder + preffix + "good_*_none_none_1.0_random_a1_*txt"];
+title_fig = "SINGLE PENDULUM MPOL GOOD";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+subfolder = subfolderold;
+preffix = preffixold;
+
+
+%%
+subfolderold = subfolder;
+subfolder = "pendulum_mpols_yamls_results/";
+preffixold = preffix;
+preffix = "pendulum_pendulum_mpol_replay_ddpg_tensorflow_sincos_16";
+array_runs = [subfolder + preffix + "mid_*_none_data_center_linear_order_1.0_best_a0.01_*.txt",...
+              subfolder + preffix + "mid_*_none_none_1.0_random_a1_*txt"];
+title_fig = "SINGLE PENDULUM MPOL MID";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+subfolder = subfolderold;
+preffix = preffixold;
+
+
+%%
+subfolderold = subfolder;
+subfolder = "pendulum_mpols_yamls_results/";
+preffixold = preffix;
+preffix = "pendulum_pendulum_mpol_replay_ddpg_tensorflow_sincos_16";
+array_runs = [subfolder + preffix + "bad_*_none_data_center_linear_order_1.0_best_a0.01_*.txt",...
+              subfolder + preffix + "bad_*_none_none_1.0_random_a1_*txt"];
+title_fig = "SINGLE PENDULUM MPOL BAD";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+subfolder = subfolderold;
+preffix = preffixold;
