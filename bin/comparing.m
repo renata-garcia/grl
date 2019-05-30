@@ -399,7 +399,7 @@ subfolder = subfolderold;
 subfolderold = subfolder;
 subfolder = "pendulum_mpols_yamls_results/";
 preffixold = preffix;
-preffix = "pendulum_pendulum_mpol_replay_ddpg_tensorflow_sincos_16";
+preffix = "pendulum_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16";
 array_runs = [subfolder + preffix + "good_*_none_data_center_linear_order_1.0_best_a0.01_*.txt",...
               subfolder + preffix + "good_*_none_none_1.0_random_a1_*txt"];
 title_fig = "SINGLE PENDULUM MPOL GOOD";
@@ -413,7 +413,7 @@ preffix = preffixold;
 subfolderold = subfolder;
 subfolder = "pendulum_mpols_yamls_results/";
 preffixold = preffix;
-preffix = "pendulum_pendulum_mpol_replay_ddpg_tensorflow_sincos_16";
+preffix = "pendulum_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16";
 array_runs = [subfolder + preffix + "mid_*_none_data_center_linear_order_1.0_best_a0.01_*.txt",...
               subfolder + preffix + "mid_*_none_none_1.0_random_a1_*txt"];
 title_fig = "SINGLE PENDULUM MPOL MID";
@@ -427,7 +427,7 @@ preffix = preffixold;
 subfolderold = subfolder;
 subfolder = "pendulum_mpols_yamls_results/";
 preffixold = preffix;
-preffix = "pendulum_pendulum_mpol_replay_ddpg_tensorflow_sincos_16";
+preffix = "pendulum_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16";
 array_runs = [subfolder + preffix + "bad_*_none_data_center_linear_order_1.0_best_a0.01_*.txt",...
               subfolder + preffix + "bad_*_none_none_1.0_random_a1_*txt"];
 title_fig = "SINGLE PENDULUM MPOL BAD";

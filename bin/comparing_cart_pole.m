@@ -258,3 +258,48 @@ ploting_executions(folder, title_fig, steps_per_second, array_runs);
 
 preffix = preffixold;
 subfolder = subfolderold;
+
+%%
+subfolderold = subfolder;
+subfolder = "cart_pole_mpols_yamls_results/";
+preffixold = preffix;
+type = "bad";
+preffix = "cart_pole_cp_tau_mpol_replay_ddpg_tensorflow_sincos_16";
+array_runs = [subfolder + preffix + type + "_*_mean_euclidian_distance_0.5_density_a0.01_*.txt",...
+              subfolder + preffix + type + "_*_mean_euclidian_distance_0.5_density_a0.01_*.txt",...
+              subfolder + preffix + type + "_*_none_none_1.0_random_a1_*txt"];
+title_fig = ["SINGLE CART_POLE MPOL ", type];
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+subfolder = subfolderold;
+preffix = preffixold;
+
+%%
+subfolderold = subfolder;
+subfolder = "cart_pole_mpols_yamls_results/";
+preffixold = preffix;
+type = "mid";
+preffix = "cart_pole_cp_tau_mpol_replay_ddpg_tensorflow_sincos_16";
+array_runs = [subfolder + preffix + type + "_*_none_data_center_linear_order_1.0_best_a0.01_*.txt",...
+              subfolder + preffix + type + "_*_mean_euclidian_distance_0.5_density_a0.01_*.txt",...
+              subfolder + preffix + type + "_*_none_none_1.0_random_a1_*txt"];
+title_fig = ["SINGLE CART_POLE MPOL ", type];
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+subfolder = subfolderold;
+preffix = preffixold;
+
+%%
+subfolderold = subfolder;
+subfolder = "cart_pole_mpols_yamls_results/";
+preffixold = preffix;
+type = "good";
+preffix = "cart_pole_cp_tau_mpol_replay_ddpg_tensorflow_sincos_16";
+array_runs = [subfolder + preffix + type + "_*_none_data_center_linear_order_1.0_best_a0.01_*.txt",...
+              subfolder + preffix + type + "_*_none_none_1.0_random_a1_*txt"];
+title_fig = ["SINGLE CART POLE MPOL ", type];
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+subfolder = subfolderold;
+preffix = preffixold;
+
