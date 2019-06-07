@@ -41,10 +41,6 @@ else:
   layer1_size = int(sys.argv[7])
   layer2_size = int(sys.argv[8])
 
-if int(sys.argv[2]) != 1:
-  print("Not suitable for more than one output", file=sys.stderr)
-  sys.exit(1)
-
 obs = int(sys.argv[1])
 actions = int(sys.argv[2])
 normalization = False
