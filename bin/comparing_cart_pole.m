@@ -435,3 +435,11 @@ array_runs = [subfolder2 + preffix2 + "_j*_mean_euclidian_distance_0.1_best_a0.0
 title_fig = "MPOL CART POLE GOOD";
 
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+
+array_runs = [subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
+              subfolder + preffix + type + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt"];
+          
+title_fig = "MPOL CART POLE GOOD";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);

@@ -110,8 +110,8 @@ preffix = env + "_" + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_16";
 type = "good";
 title_fig = [env, "MPOL ", type];
 
-subfolder2 = "cart_pole_mpols_load_yamls_results/";
-preffix2 = "cart_pole_cp_tau_mpol_replay_ddpg_tensorflow_sincos_16good_load";
+subfolder2 = "cart_double_pole_mpols_load_yamls_results/";
+preffix2 = "cart_double_pole_cdp_tau_mpol_replay_ddpg_tensorflow_sincos_16good_load";
 
 array_runs = [subfolder2 + preffix2 + "_j*_mean_euclidian_distance_0.1_best_a0.01_*txt",...
               subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
