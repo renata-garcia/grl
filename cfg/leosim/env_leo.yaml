@@ -1,0 +1,8 @@
+experiment: 
+  environment: 
+    type: environment/leosim
+    xml: leolearnwalking-sarsa-tc.xml
+    randomize: 0
+    visualize: 0
+    observe: torso.angle, torso.anglerate, lefthip.angle, lefthip.anglerate, righthip.angle, righthip.anglerate, leftknee.angle, leftknee.anglerate, rightknee.angle, rightknee.anglerate
+    actuate: lefthip.torque, righthip.torque, leftknee.torque, rightknee.torque

@@ -1,0 +1,50 @@
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_replay_steps$0_batch_size$1_interval$2_gamma$3_reward_scale$4_sigma$5_
+  parameters:
+  - name: experiment/agent/replay_steps
+    values:
+    - 32
+    - 64
+    - 128
+    - 256
+    - 384
+    - 512
+  - name: experiment/agent/batch_size
+    values:
+    - 64
+    - 128
+    - 256
+    - 384
+    - 512
+  - name: experiment/agent/policy/representation/interval
+    values:
+    - 400
+    - 1000
+    - 2000
+  - name: experiment/agent/predictor/gamma
+    values:
+    - 0.73
+    - 0.74
+    - 0.75
+    - 0.76
+  - name: experiment/agent/predictor/reward_scale
+    values:
+    - 0.01
+    - 0.10
+    - 1.0
+  - name: experiment/agent/policy/sigma
+    values:
+    - [1]
+    - [2]
+    - [3]
+  - name: experiment/agent/policy/theta
+    values:
+    - [0.15]
+  - name: experiment/runs
+    values:
+    - 5
+  - name: experiment/trials
+    values:
+    - 0
