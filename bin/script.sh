@@ -167,9 +167,39 @@ sh ../cfg/pendulum/spec_pendulum_dpg_16_3.sh
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_mean_a100_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_random_a100_pp0.yaml
 sh ../cfg/cart_pole/spec_cart_pole_dpg_16_2.sh
-'
 sh ../cfg/cart_double_pole/spec_cart_double_pole_ddpg_16_2.sh
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_010_best_a001_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_050_data_center_a001_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_050_density_a001_pp0.yaml
+
+'
+
+
+cp files_agents/agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16mid_j5.yaml .
+cp ../cfg/pendulum/env_pendulum.yaml .
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_010_best_a001_pp0.yaml
+rm agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16mid_j5.yaml
+
+cp files_agents/agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16mid_j9.yaml .
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_010_best_a001_pp0.yaml
+rm agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16mid_j9.yaml
+
+cp files_agents/agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16good_j1.yaml .
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_mean_a100_pp0.yaml
+rm agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16good_j1.yaml
+
+cp files_agents/agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16good_j5.yaml .
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_data_center_a100_pp0.yaml
+rm agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16good_j5.yaml
+
+cp files_agents/agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16good_j6.yaml .
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_density_a100_pp0.yaml
+rm agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16good_j6.yaml
+
+cp files_agents/agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16good_j7.yaml .
+../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_data_center_a100_pp0.yaml
+rm agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16good_j7.yaml
+
+cp files_agents/pendulum_replay_ddpg_tensorflow_sincos_i21_j1.yaml .
+./grld pendulum_replay_ddpg_tensorflow_sincos_i21_j1.yaml .
 
