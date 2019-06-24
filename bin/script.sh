@@ -172,13 +172,13 @@ sh ../cfg/cart_double_pole/spec_cart_double_pole_ddpg_16_2.sh
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_050_data_center_a001_pp0.yaml
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_050_density_a001_pp0.yaml
 
-'
-
 
 cp files_agents/agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16mid_j5.yaml .
 cp ../cfg/pendulum/env_pendulum.yaml .
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_010_best_a001_pp0.yaml
 rm agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16mid_j5.yaml
+'
+
 
 cp files_agents/agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16mid_j9.yaml .
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_mean_euclidian_distance_010_best_a001_pp0.yaml
