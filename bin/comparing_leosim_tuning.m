@@ -16,7 +16,8 @@ title_fig = "FINDING BEST SINGLE LEOSIM";
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
 
 array_runs = [
-    "leo_ddpg_replay_steps256_batch_size64_interval1000_gamma0.75_reward_scale1.0_sigma[2]*txt"];
+    "leo_ddpg_replay_steps256_batch_size64_interval1000_gamma0.75_reward_scale1.0_sigma[2]*txt",...
+    "leo_ddpg_replay_steps64_batch_size384_interval1000_gamma0.75_reward_scale1.0_sigma[2]*txt"];
 title_fig = "FINDING BEST SINGLE LEOSIM";
 
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
