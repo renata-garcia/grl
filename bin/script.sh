@@ -185,9 +185,9 @@ rm agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16mid_j9.yaml
 
 cp files_agents/agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16good_j1.yaml .
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_mean_a100_pp0.yaml
-'
 rm agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16good_j1.yaml
 
+'
 cp files_agents/agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16good_j5.yaml .
 ../bin/grlr ../cfg/multi_policies/spec_alg4steps_none_none_100_data_center_a100_pp0.yaml
 rm agent_pd_tau_mpol_replay_ddpg_tensorflow_sincos_16good_j5.yaml

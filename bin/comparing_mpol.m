@@ -38,13 +38,13 @@ type = "good";
 plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 %%
 type = "good";
-plot_mpol_load_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+plot_mpol_load_best_type(folder, steps_per_second, env, env_abr, env_title, type)
 %%
 type = "mid";
-plot_mpol_load_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+plot_mpol_load_best_type(folder, steps_per_second, env, env_abr, env_title, type)
 %%
 type = "bad";
-plot_mpol_load_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+plot_mpol_load_best_type(folder, steps_per_second, env, env_abr, env_title, type)
 
 %%
 env = "cart_pole";
@@ -78,13 +78,13 @@ type = "good";
 plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
 type = "good";
-plot_mpol_load_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+plot_mpol_load_best_type(folder, steps_per_second, env, env_abr, env_title, type)
 %%
 type = "mid";
-plot_mpol_load_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+plot_mpol_load_best_type(folder, steps_per_second, env, env_abr, env_title, type)
 %%
 type = "bad";
-plot_mpol_load_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+plot_mpol_load_best_type(folder, steps_per_second, env, env_abr, env_title, type)
 
 %%
 env = "cart_double_pole";
@@ -119,72 +119,21 @@ plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
 %%
 type = "good";
-plot_mpol_load_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+plot_mpol_load_best_type(folder, steps_per_second, env, env_abr, env_title, type)
 
 %%
-env = "cart_double_pole";
-env_abr = "cdp";
-subfolder = env + "_mpols_load_yamls_results/";
-preffix = env + "_" + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_16";
-
-type = "good_load";
-title_fig = [env, "MPOL ", type];
-ploting_mpols(n, folder, subfolder, preffix, steps_per_second, type, title_fig,...
-              "_j*_mean_euclidian_distance_0.1_best_a0.01_",...
-              "_*_mean_euclidian_distance_0.5_density_a0.01_",...
-              "_*_none_data_center_linear_order_1.0_best_a0.01_",...
-              "_*_none_none_1.0_random_a1_");
-%%
-env = "cart_double_pole";
-env_abr = "cdp";
-subfolder = env + "_mpols_yamls_results/";
-preffix = env + "_" + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_16";
-
 type = "good";
-title_fig = [env, "MPOL ", type];
+plot_mpol_all_type(folder, steps_per_second, env, env_abr, env_title, type)
 
-subfolder2 = "cart_double_pole_mpols_load_yamls_results/";
-preffix2 = "cart_double_pole_cdp_tau_mpol_replay_ddpg_tensorflow_sincos_16good_load";
+type = "mid";
+plot_mpol_all_type(folder, steps_per_second, env, env_abr, env_title, type)
 
-array_runs = [subfolder2 + preffix2 + "_j*_mean_euclidian_distance_0.1_best_a0.01_*txt",...
-              subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
-              subfolder2 + preffix2 + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
-              subfolder2 + preffix2 + "_*_none_none_1.0_random_a1_*txt",...          
-              subfolder + preffix + type + "_*_mean_euclidian_distance_0.1_best_a0.01_*txt",...
-              subfolder + preffix + type + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
-              subfolder + preffix + type + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
-              subfolder + preffix + type + "_*_none_none_1.0_random_a1_*txt"];
-          
-%               "cartpole_mpol_1_replay_ddpg_tensorflow_replay_steps_128_batch_size_64_reward_010_*.txt",...
-%               subfolder + "cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*_density_euclidian_distance_0.01_best_a0.01_*.txt",...
-%               "cart_pole_yamls_results/cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*_mean_euclidian_distance_0.1_best_a0.01_*.txt",...
-%               "cart_pole_yamls_results/cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*_mean_euclidian_distance_0.5_data_center_a0.01_*.txt",...
-%               "cart_pole_yamls_results/cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*_mean_euclidian_distance_0.5_density_a0.01_*.txt",...
-%               "cart_pole_yamls_results/cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*_none_data_center_linear_order_1.0_best_a0.01_*.txt",...
-%               "cart_pole_yamls_results/cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*_none_density_0.5_data_center_a0.01_*.txt",...
-%               "cart_pole_yamls_results/cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*_none_density_0.5_density_a0.01_*.txt",...
-%               "cart_pole_yamls_results/cart_pole_cart_pole_mpol_replay_ddpg_tensorflow_sincos_16good_*_none_density_1.0_best_a0.01_*.txt"];
+type = "bad";
+plot_mpol_all_type(folder, steps_per_second, env, env_abr, env_title, type)
 
-title_fig = "MPOL CART POLE GOOD";
-
-ploting_executions(folder, title_fig, steps_per_second, array_runs);
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% MPOL DPG CART DOUBLE POLE 
-compare_executions(n, folder, 2, 909, 'MPOL DDPG CART DOUBLE POLE',...
-  "cart_double_pole_mpol_1_replay_ddpg_tensorflow_");
-
-%%
-array_runs = ["cart_double_pole/cart_double_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size128_interval512_gamma0.98_reward_scale0.01_*.txt",...
-    "cart_double_pole_new/cart_double_pole_replay_ddpg_tensorflow_geometric_replay_steps128_batch_size64_interval4000_gamma0.98_reward_scale0.01_*.txt"];
-title_fig = "TRYING MPOL CART DOUBLE POLE";
-
-ploting_executions(folder, title_fig, steps_per_second, array_runs);
-
-%% %%
+%% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %%
+%% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %%
+%% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %%
 function plot_single_type(folder, steps_per_second, env, env_abr, env_title, type, p, old_name)
     subfolder = env + "_yamls_results/";
     if (old_name == 1)
@@ -267,7 +216,30 @@ function plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_titl
                   "_*_none_none_1.0_random_a1_");
 end
 
-function plot_mpol_load_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+
+function plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+    subfolder = env + "_mpols" + "_yamls_results/";
+    preffix = env + "_" + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_16";
+ 
+    title_fig = [env_title, " MPOL ", type];
+    ploting_mpols(n, folder, subfolder, preffix, steps_per_second, type, title_fig,...
+                  "_*_mean_euclidian_distance_0.5_data_center_a0.01_",...
+                  "_*_mean_euclidian_distance_0.5_density_a0.01_",...
+                  "_*_mean_euclidian_distance_0.1_best_a0.01_",...
+                  "_*_none_data_center_linear_order_1.0_best_a0.01_",...
+                  "_*_none_none_1.0_data_center_a1.0_",...
+                  "_*_none_none_1.0_random_a1_");
+    ploting_mpols(n, folder, subfolder, preffix, steps_per_second, type, title_fig,...
+                  "_*_none_none_1.0_density_a1.0_",...
+                  "_*_none_none_1.0_mean_a1.0_",...
+                  "_*_none_density_0.5_data_center_a0.01_",...
+                  "_*_none_none_1.0_random_a1_");
+%                   "_*_density_euclidian_distance_0.01_best_a0.01_",...
+%                   "_*_none_density_0.5_density_a0.01_",...
+%                   "_*_none_density_1.0_best_a0.01_",...
+end
+
+function plot_mpol_load_best_type(folder, steps_per_second, env, env_abr, env_title, type)
     subfolder = env + "_mpols" + "_yamls_results/";
     preffix = env + "_" + env_abr +"_tau_mpol_replay_ddpg_tensorflow_sincos_16";
 
@@ -288,3 +260,4 @@ function plot_mpol_load_best_type(folder, n, steps_per_second, env, env_abr, env
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
 
 end
+
