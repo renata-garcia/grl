@@ -1,3 +1,5 @@
+%% TODO VERIFICANDO QUANTIDADE DE ARQUIVOS
+%% TODO VERIFICANDO FINALIZAÇÃO DE ARQUIVOS
 clc;
 clear all;
 close all;
@@ -13,6 +15,7 @@ env_title = "PENDULUM";
 steps_per_second = 33;
 old_name = 1;
 
+%% plot_single_type OK ALL 10
 type = "GOOD";
 p = [1, 2, 3, 8, 9, 10, 13, 15, 16, 17, 19, 20, 21, 25, 29, 32];
 plot_single_type(folder, steps_per_second, env, env_abr, env_title, type, p, old_name);
@@ -28,6 +31,43 @@ plot_single_type(folder, steps_per_second, env, env_abr, env_title, type, p, old
 p = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
 plot_single_all(folder, steps_per_second, env, env_abr, env_title, p, old_name);
 
+%%
+% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol good
+% 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol good | wc -l
+% 10
+% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol mid
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol bad
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+
 type = "bad";
 plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
@@ -36,6 +76,54 @@ plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
 type = "good";
 plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol good
+% 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol mid
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol bad
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+
+%% plot_mpol_all_type
+type = "good";
+plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+%%
+type = "mid";
+plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+%%
+type = "bad";
+plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+
+%%NONE LOAD
+%%NONE LOAD
+%%NONE LOAD
+%%NONE LOAD
 %%
 type = "good";
 plot_mpol_load_best_type(folder, steps_per_second, env, env_abr, env_title, type)
@@ -53,6 +141,7 @@ env_title = "CART POLE";
 steps_per_second = 20;
 old_name = 1;
 
+%% plot_single_type OK ALL 10
 type = "GOOD";
 p = [1, 2, 3, 8, 9, 10, 13, 15, 16, 17, 19, 20, 21, 25, 29, 32];
 plot_single_type(folder, steps_per_second, env, env_abr, env_title, type, p, old_name);
@@ -68,6 +157,40 @@ plot_single_type(folder, steps_per_second, env, env_abr, env_title, type, p, old
 p = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
 plot_single_all(folder, steps_per_second, env, env_abr, env_title, p, old_name);
 
+%%
+% renatargo@REPCmint ~/grl_results/cart_pole_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh cart_pole_cp_tau_mpol txt noprint mpol good
+% 12
+% 12
+% 11
+% 12
+% 12
+% 12
+% 12
+% 11
+% 12
+% 12
+% renatargo@REPCmint ~/grl_results/cart_pole_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh cart_pole_cp_tau_mpol txt noprint mpol mid
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 4
+% 3
+% 4
+% 4
+% renatargo@REPCmint ~/grl_results/cart_pole_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh cart_pole_cp_tau_mpol txt noprint mpol bad
+% 4
+% 4
+% 3
+% 4
+% 3
+% 4
+% 4
+% 4
+% 4
+% 3
 type = "bad";
 plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
@@ -77,6 +200,22 @@ plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 type = "good";
 plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
+%% plot_mpol_all_type
+type = "good";
+plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+%%
+type = "mid";
+plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+%%
+type = "bad";
+plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+
+%%
+%LOAD RUNNING
+%LOAD RUNNING
+%LOAD RUNNING
+%LOAD RUNNING
+%%
 type = "good";
 plot_mpol_load_best_type(folder, steps_per_second, env, env_abr, env_title, type)
 %%
@@ -93,6 +232,7 @@ env_title = "CART DOUBLE POLE";
 steps_per_second = 20;
 old_name = 0;
 
+%%plot_single_type OK ALL 10
 type = "GOOD";
 p = [0, 1, 2, 3, 6, 10, 11, 12, 15, 17, 22, 23, 24, 25, 30, 31];
 plot_single_type(folder, steps_per_second, env, env_abr, env_title, type, p, old_name);
@@ -108,6 +248,7 @@ plot_single_type(folder, steps_per_second, env, env_abr, env_title, type, p, old
 p = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
 plot_single_all(folder, steps_per_second, env, env_abr, env_title, p, old_name);
 
+%%plot_mpol_all_type OK ALL 12 OF J[0-9]
 type = "bad";
 plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
@@ -117,19 +258,25 @@ plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 type = "good";
 plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
-%%
+%%plot_mpol_all_type OK ALL 12 OF J[0-9]
+type = "good";
+plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+
+type = "mid";
+plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+
+type = "bad";
+plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
+
+%% 
+%%NONE LOAD
+%%NONE LOAD
+%%NONE LOAD
+%%NONE LOAD
+
 type = "good";
 plot_mpol_load_best_type(folder, steps_per_second, env, env_abr, env_title, type)
 
-%%
-type = "good";
-plot_mpol_all_type(folder, steps_per_second, env, env_abr, env_title, type)
-
-type = "mid";
-plot_mpol_all_type(folder, steps_per_second, env, env_abr, env_title, type)
-
-type = "bad";
-plot_mpol_all_type(folder, steps_per_second, env, env_abr, env_title, type)
 
 %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %%
 %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %% %%
@@ -223,13 +370,27 @@ function plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title
  
     title_fig = [env_title, " MPOL ", type];
     ploting_mpols(n, folder, subfolder, preffix, steps_per_second, type, title_fig,...
-                  "_*_mean_euclidian_distance_0.5_data_center_a0.01_",...
                   "_*_mean_euclidian_distance_0.5_density_a0.01_",...
-                  "_*_mean_euclidian_distance_0.1_best_a0.01_",...
+                  "_*_mean_euclidian_distance_0.5_data_center_a0.01_",...
                   "_*_none_data_center_linear_order_1.0_best_a0.01_",...
+                  "_*_mean_euclidian_distance_0.1_best_a0.01_",...
                   "_*_none_none_1.0_data_center_a1.0_",...
                   "_*_none_none_1.0_random_a1_");
     ploting_mpols(n, folder, subfolder, preffix, steps_per_second, type, title_fig,...
+                  "_*_none_none_1.0_density_a1.0_",...
+                  "_*_none_none_1.0_mean_a1.0_",...
+                  "_*_none_density_0.5_data_center_a0.01_",...
+                  "_*_none_none_1.0_random_a1_");
+%                   "_*_density_euclidian_distance_0.01_best_a0.01_",...
+%                   "_*_none_density_0.5_density_a0.01_",...
+%                   "_*_none_density_1.0_best_a0.01_",...
+
+    ploting_mpols(n, folder, subfolder, preffix, steps_per_second, type, title_fig,...
+                  "_*_mean_euclidian_distance_0.5_density_a0.01_",...
+                  "_*_mean_euclidian_distance_0.5_data_center_a0.01_",...
+                  "_*_none_data_center_linear_order_1.0_best_a0.01_",...
+                  "_*_mean_euclidian_distance_0.1_best_a0.01_",...
+                  "_*_none_none_1.0_data_center_a1.0_",...
                   "_*_none_none_1.0_density_a1.0_",...
                   "_*_none_none_1.0_mean_a1.0_",...
                   "_*_none_density_0.5_data_center_a0.01_",...
@@ -246,14 +407,20 @@ function plot_mpol_load_best_type(folder, steps_per_second, env, env_abr, env_ti
     subfolder2 = env + "_mpols_load_yamls_results/";
     preffix2 = env + "_" + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_16" + type + "_load";
 
-    array_runs = [subfolder2 + preffix2 + "_j*_mean_euclidian_distance_0.1_best_a0.01_*txt",...
-                  subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
-                  subfolder2 + preffix2 + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
+    array_runs = [subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
                   subfolder2 + preffix2 + "_*_none_none_1.0_random_a1_*txt",...          
-                  subfolder + preffix + type + "_*_mean_euclidian_distance_0.1_best_a0.01_*txt",...
                   subfolder + preffix + type + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
-                  subfolder + preffix + type + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
                   subfolder + preffix + type + "_*_none_none_1.0_random_a1_*txt"];
+              
+              
+%     array_runs = [subfolder2 + preffix2 + "_j*_mean_euclidian_distance_0.1_best_a0.01_*txt",...
+%                   subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
+%                   subfolder2 + preffix2 + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
+%                   subfolder2 + preffix2 + "_*_none_none_1.0_random_a1_*txt",...          
+%                   subfolder + preffix + type + "_*_mean_euclidian_distance_0.1_best_a0.01_*txt",...
+%                   subfolder + preffix + type + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
+%                   subfolder + preffix + type + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
+%                   subfolder + preffix + type + "_*_none_none_1.0_random_a1_*txt"];
 
     title_fig = [env_title, " MPOL ", type];
 
