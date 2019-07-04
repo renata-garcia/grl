@@ -31,8 +31,7 @@ plot_single_type(folder, steps_per_second, env, env_abr, env_title, type, p, old
 p = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
 plot_single_all(folder, steps_per_second, env, env_abr, env_title, p, old_name);
 
-%%
-% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol good
+% renatargo@relenovo:~/grl_results/pendulum_mpols_yamls_results$ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint init0 mpol good
 % 12
 % 12
 % 12
@@ -43,72 +42,29 @@ plot_single_all(folder, steps_per_second, env, env_abr, env_title, p, old_name);
 % 12
 % 12
 % 12
-% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol good | wc -l
+% renatargo@relenovo:~/grl_results/pendulum_mpols_yamls_results$ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint init0 mpol mid
+% 11
+% 11
+% 11
+% 11
+% 12
+% 12
+% 12
 % 10
-% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol mid
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol bad
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-
-type = "bad";
-plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
-
-type = "mid";
-plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
-
-type = "good";
-plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
-% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol good
+% 11
+% 11
+% renatargo@relenovo:~/grl_results/pendulum_mpols_yamls_results$ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint init0 mpol bad
+% 11
 % 12
+% 11
 % 12
-% 12
-% 12
-% 12
-% 12
-% 12
-% 12
-% 12
-% 12
-% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol mid
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% renatargo@REPCmint ~/grl_results/pendulum_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh pendulum_pd_tau_mpol txt noprint mpol bad
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
+% 11
+% 11
+% 11
+% 11
+% 11
+% 11
+% renatargo@relenovo:~/grl_results/pendulum_mpols_yamls_results$ 
 
 %% plot_mpol_all_type
 type = "good";
@@ -158,39 +114,39 @@ p = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 
 plot_single_all(folder, steps_per_second, env, env_abr, env_title, p, old_name);
 
 %%
-% renatargo@REPCmint ~/grl_results/cart_pole_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh cart_pole_cp_tau_mpol txt noprint mpol good
+% renatargo@relenovo:~/grl_results/cart_pole_mpols_yamls_results$ ~/projects/grl_sh/runs_32_policy_count.sh cart_pole_cp_tau_mpol txt noprint init0 mpol good
 % 12
 % 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% 12
+% renatargo@relenovo:~/grl_results/cart_pole_mpols_yamls_results$ ~/projects/grl_sh/runs_32_policy_count.sh cart_pole_cp_tau_mpol txt noprint init0 mpol mid
 % 11
-% 12
-% 12
-% 12
-% 12
 % 11
-% 12
-% 12
-% renatargo@REPCmint ~/grl_results/cart_pole_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh cart_pole_cp_tau_mpol txt noprint mpol mid
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 3
-% 4
-% 4
-% renatargo@REPCmint ~/grl_results/cart_pole_mpols_yamls_results $ ~/projects/grl_sh/runs_32_policy_count.sh cart_pole_cp_tau_mpol txt noprint mpol bad
-% 4
-% 4
-% 3
-% 4
-% 3
-% 4
-% 4
-% 4
-% 4
-% 3
+% 9
+% 10
+% 10
+% 10
+% 11
+% 10
+% 9
+% 11
+% renatargo@relenovo:~/grl_results/cart_pole_mpols_yamls_results$ ~/projects/grl_sh/runs_32_policy_count.sh cart_pole_cp_tau_mpol txt noprint init0 mpol bad
+% 10
+% 9
+% 9
+% 11
+% 10
+% 11
+% 10
+% 9
+% 10
+% 9
 type = "bad";
 plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
@@ -407,20 +363,18 @@ function plot_mpol_load_best_type(folder, steps_per_second, env, env_abr, env_ti
     subfolder2 = env + "_mpols_load_yamls_results/";
     preffix2 = env + "_" + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_16" + type + "_load";
 
-    array_runs = [subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
-                  subfolder2 + preffix2 + "_*_none_none_1.0_random_a1_*txt",...          
-                  subfolder + preffix + type + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
-                  subfolder + preffix + type + "_*_none_none_1.0_random_a1_*txt"];
-              
-              
-%     array_runs = [subfolder2 + preffix2 + "_j*_mean_euclidian_distance_0.1_best_a0.01_*txt",...
-%                   subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
-%                   subfolder2 + preffix2 + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
+%     array_runs = [subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
 %                   subfolder2 + preffix2 + "_*_none_none_1.0_random_a1_*txt",...          
-%                   subfolder + preffix + type + "_*_mean_euclidian_distance_0.1_best_a0.01_*txt",...
 %                   subfolder + preffix + type + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
-%                   subfolder + preffix + type + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
 %                   subfolder + preffix + type + "_*_none_none_1.0_random_a1_*txt"];
+              
+              
+    array_runs = [subfolder2 + preffix2 + "_j*_mean_euclidian_distance_0.1_best_a0.01_*txt",...
+                  subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
+                  subfolder2 + preffix2 + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
+                  subfolder + preffix + type + "_*_mean_euclidian_distance_0.1_best_a0.01_*txt",...
+                  subfolder + preffix + type + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
+                  subfolder + preffix + type + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt"];
 
     title_fig = [env_title, " MPOL ", type];
 
