@@ -164,39 +164,10 @@ plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 type = "bad";
 plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
-%%
-% renatargo@relenovo:~/Dropbox/phd_grl_results/phd_grl_mpol_results/cart_pole_mpols_load_yamls_results$ ~/projects/grl_sh/runs_32_policy_count.sh cart_pole_cp_tau_mpol txt noprint init0 load all 
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 4
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-% 6
-%%
+%% plot_mpol_load_all_type OK ALL 12 OF J[0-9]
+% cart_pole_mpols_load_yamls_results
+% ~/projects/grl_sh/runs_32_policy_count.sh cart_pole_cp_tau_mpol txt noprint init0 load all 
+
 type = "good";
 plot_mpol_load_all_type(folder, steps_per_second, env, env_abr, env_title, type)
 
