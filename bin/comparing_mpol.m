@@ -1,7 +1,7 @@
-%% TODO VERIFICANDO QUANTIDADE DE ARQUIVOS
-%% TODO VERIFICANDO FINALIZAÇÃO DE ARQUIVOS
+% TODO VERIFICANDO QUANTIDADE DE ARQUIVOS
+% TODO VERIFICANDO FINALIZAÇÃO DE ARQUIVOS
 clc;
-clear all;
+clear;
 close all;
 
 n = 10;
@@ -69,7 +69,7 @@ plot_single_all(folder, steps_per_second, env, env_abr, env_title, p, old_name);
 %% plot_mpol_all_type
 type = "good";
 plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
-
+%%
 type = "mid";
 plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
@@ -95,7 +95,7 @@ env_title = "CART POLE";
 steps_per_second = 20;
 old_name = 1;
 
-%% plot_single_type OK ALL 10
+% plot_single_type OK ALL 10
 type = "GOOD";
 p = [1, 2, 3, 8, 9, 10, 13, 15, 16, 17, 19, 20, 21, 25, 29, 32];
 plot_single_type(folder, steps_per_second, env, env_abr, env_title, type, p, old_name);
@@ -111,7 +111,7 @@ plot_single_type(folder, steps_per_second, env, env_abr, env_title, type, p, old
 p = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
 plot_single_all(folder, steps_per_second, env, env_abr, env_title, p, old_name);
 
-%%
+%
 % renatargo@relenovo:~/grl_results/cart_pole_mpols_yamls_results$ ~/projects/grl_sh/runs_32_policy_count.sh cart_pole_cp_tau_mpol txt noprint init0 mpol good
 % 12
 % 12
@@ -154,17 +154,17 @@ plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 type = "good";
 plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
-%% plot_mpol_all_type
+% plot_mpol_all_type
 type = "good";
 plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
-%%
+%
 type = "mid";
 plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
-%%
+%
 type = "bad";
 plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
-%% plot_mpol_load_all_type OK ALL 12 OF J[0-9]
+% plot_mpol_load_all_type OK ALL 12 OF J[0-9]
 % cart_pole_mpols_load_yamls_results
 % ~/projects/grl_sh/runs_32_policy_count.sh cart_pole_cp_tau_mpol txt noprint init0 load all 
 
@@ -184,7 +184,7 @@ env_title = "CART DOUBLE POLE";
 steps_per_second = 20;
 old_name = 0;
 
-%% plot_single_type OK ALL 10
+% plot_single_type OK ALL 10
 type = "GOOD";
 p = [0, 1, 2, 3, 6, 10, 11, 12, 15, 17, 22, 23, 24, 25, 30, 31];
 plot_single_type(folder, steps_per_second, env, env_abr, env_title, type, p, old_name);
@@ -200,7 +200,7 @@ plot_single_type(folder, steps_per_second, env, env_abr, env_title, type, p, old
 p = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
 plot_single_all(folder, steps_per_second, env, env_abr, env_title, p, old_name);
 
-%% plot_mpol_all_type OK ALL 12 OF J[0-9]
+% plot_mpol_all_type OK ALL 12 OF J[0-9]
 type = "bad";
 plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
@@ -210,7 +210,7 @@ plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 type = "good";
 plot_mpol_best_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
-%% plot_mpol_all_type OK ALL 12 OF J[0-9]
+% plot_mpol_all_type OK ALL 12 OF J[0-9]
 type = "good";
 plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
@@ -220,16 +220,16 @@ plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 type = "bad";
 plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title, type)
 
-%% plot_mpol_load_all_type OK ALL 12 OF J[0-9]
+% plot_mpol_load_all_type OK ALL 12 OF J[0-9]
 % cart_double_pole_mpols_load_yamls_results
 % $ ~/projects/grl_sh/runs_32_policy_count.sh cart_double_pole_cdp_tau_mpol txt noprint init0 load all
 
 type = "good";
 plot_mpol_load_all_type(folder, steps_per_second, env, env_abr, env_title, type)
-%%
+%
 type = "mid";
 plot_mpol_load_all_type(folder, steps_per_second, env, env_abr, env_title, type)
-%%
+%
 type = "bad";
 plot_mpol_load_all_type(folder, steps_per_second, env, env_abr, env_title, type)
 
@@ -244,15 +244,16 @@ function plot_single_type(folder, steps_per_second, env, env_abr, env_title, typ
     else
         preffix = env + "_" + env_abr + "_tau_replay_ddpg_tensorflow_sincos_i";
     end
-    array_runs = [subfolder + preffix + p(1) + "_j*.txt",...
-        subfolder + preffix + p(2) + "_j*.txt",...
-        subfolder + preffix + p(3) + "_j*txt",...
-        subfolder + preffix + p(4) + "_j*.txt",...
-        subfolder + preffix + p(5) + "_j*txt",...
-        subfolder + preffix + p(6) + "_j*txt",...
-        subfolder + preffix + p(7) + "_j*txt",...
-        subfolder + preffix + p(8) + "_j*txt",...
-        subfolder + preffix + p(9) + "_j*txt",...
+    array_runs = [
+        subfolder + preffix +  p(1) + "_j*txt",...
+        subfolder + preffix +  p(2) + "_j*txt",...
+        subfolder + preffix +  p(3) + "_j*txt",...
+        subfolder + preffix +  p(4) + "_j*txt",...
+        subfolder + preffix +  p(5) + "_j*txt",...
+        subfolder + preffix +  p(6) + "_j*txt",...
+        subfolder + preffix +  p(7) + "_j*txt",...
+        subfolder + preffix +  p(8) + "_j*txt",...
+        subfolder + preffix +  p(9) + "_j*txt",...
         subfolder + preffix + p(10) + "_j*txt",...
         subfolder + preffix + p(11) + "_j*txt",...
         subfolder + preffix + p(12) + "_j*txt",...
@@ -271,15 +272,16 @@ function plot_single_all(folder, steps_per_second, env, env_abr, env_title, p, o
     else
         preffix = env + "_" + env_abr + "_tau_replay_ddpg_tensorflow_sincos_i";
     end
-    array_runs = [subfolder + preffix + p(1) + "_j*.txt",...
-        subfolder + preffix + p(2) + "_j*.txt",...
-        subfolder + preffix + p(3) + "_j*txt",...
-        subfolder + preffix + p(4) + "_j*.txt",...
-        subfolder + preffix + p(5) + "_j*txt",...
-        subfolder + preffix + p(6) + "_j*txt",...
-        subfolder + preffix + p(7) + "_j*txt",...
-        subfolder + preffix + p(8) + "_j*txt",...
-        subfolder + preffix + p(9) + "_j*txt",...
+    array_runs = [
+        subfolder + preffix +  p(1) + "_j*txt",...
+        subfolder + preffix +  p(2) + "_j*txt",...
+        subfolder + preffix +  p(3) + "_j*txt",...
+        subfolder + preffix +  p(4) + "_j*txt",...
+        subfolder + preffix +  p(5) + "_j*txt",...
+        subfolder + preffix +  p(6) + "_j*txt",...
+        subfolder + preffix +  p(7) + "_j*txt",...
+        subfolder + preffix +  p(8) + "_j*txt",...
+        subfolder + preffix +  p(9) + "_j*txt",...
         subfolder + preffix + p(10) + "_j*txt",...
         subfolder + preffix + p(11) + "_j*txt",...
         subfolder + preffix + p(12) + "_j*txt",...
@@ -287,10 +289,10 @@ function plot_single_all(folder, steps_per_second, env, env_abr, env_title, p, o
         subfolder + preffix + p(14) + "_j*txt",...
         subfolder + preffix + p(15) + "_j*txt",...
         subfolder + preffix + p(16) + "_j*txt",...
-        subfolder + preffix + p(17) + "_j*.txt",...
-        subfolder + preffix + p(18) + "_j*.txt",...
+        subfolder + preffix + p(17) + "_j*txt",...
+        subfolder + preffix + p(18) + "_j*txt",...
         subfolder + preffix + p(19) + "_j*txt",...
-        subfolder + preffix + p(20) + "_j*.txt",...
+        subfolder + preffix + p(20) + "_j*txt",...
         subfolder + preffix + p(21) + "_j*txt",...
         subfolder + preffix + p(22) + "_j*txt",...
         subfolder + preffix + p(23) + "_j*txt",...
@@ -303,7 +305,7 @@ function plot_single_all(folder, steps_per_second, env, env_abr, env_title, p, o
         subfolder + preffix + p(30) + "_j*txt",...
         subfolder + preffix + p(31) + "_j*txt",...
         subfolder + preffix + p(32) + "_j*txt"];
-    title_fig = "SINGLE ALL" + env_title + " ALL";
+    title_fig = strcat("SINGLE ALL", env_title, " ALL");
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
 end
 
@@ -324,7 +326,7 @@ function plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title
     subfolder = env + "_mpols" + "_yamls_results/";
     preffix = env + "_" + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_16";
  
-    title_fig = [env_title, " MPOL ALL", type];
+    title_fig = strcat(env_title, " MPOL ALL", type);
     ploting_mpols(n, folder, subfolder, preffix, steps_per_second, type, title_fig,...
                   "_*_mean_euclidian_distance_0.5_density_a0.01_",...
                   "_*_mean_euclidian_distance_0.5_data_center_a0.01_",...
@@ -338,7 +340,7 @@ function plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title
                   "_*_density_euclidian_distance_0.01_best_a0.01_",...
                   "_*_none_density_0.5_density_a0.01_",...
                   "_*_none_density_1.0_best_a0.01_");
-    title_fig = [env_title, " MPOL THE BEST?!?", type];
+    title_fig = strcat(env_title, " MPOL THE BEST", type);
     ploting_mpols(n, folder, subfolder, preffix, steps_per_second, type, title_fig,...
                   "_*_mean_euclidian_distance_0.5_density_a0.01_",...
                   "_*_mean_euclidian_distance_0.5_data_center_a0.01_",...
@@ -346,7 +348,7 @@ function plot_mpol_all_type(folder, n, steps_per_second, env, env_abr, env_title
                   "_*_mean_euclidian_distance_0.1_best_a0.01_",...
                   "_*_none_none_1.0_data_center_a1.0_",...
                   "_*_none_none_1.0_random_a1_");
-    title_fig = [env_title, " MPOL OTHERS", type];
+    title_fig = strcat(env_title, " MPOL OTHERS", type);
     ploting_mpols(n, folder, subfolder, preffix, steps_per_second, type, title_fig,...
                   "_*_none_none_1.0_density_a1.0_",...
                   "_*_none_none_1.0_mean_a1.0_",...
@@ -370,7 +372,7 @@ function plot_mpol_load_all_type(folder, steps_per_second, env, env_abr, env_tit
 %                   subfolder + preffix + type + "_*_none_none_1.0_random_a1_*txt"];
               
               
-    title_fig = [env_title, " MPOL W/LOAD", type];
+    title_fig = strcat(env_title, " MPOL W/LOAD", type);
     array_runs = [subfolder2 + preffix2 + "_j*_mean_euclidian_distance_0.1_best_a0.01_*txt",...
                   subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
                   subfolder2 + preffix2 + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
@@ -381,84 +383,84 @@ function plot_mpol_load_all_type(folder, steps_per_second, env, env_abr, env_tit
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
               
     %1
-    title_fig = [env_title, " RDZ 1/12 MPOL W/LOAD", type];
+    title_fig = strcat(env_title, " RDZ 1/12 MPOL W/LOAD", type);
     array_runs = [subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
                   subfolder + preffix + type + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt"];
 
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
     
     %2
-    title_fig = [env_title, " RDZ 2/12 MPOL W/LOAD", type];
+    title_fig = strcat(env_title, " RDZ 2/12 MPOL W/LOAD", type);
     array_runs = [subfolder2 + preffix2 + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
                   subfolder + preffix + type + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt"];
 
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
     
     %3
-    title_fig = [env_title, " RDZ 3/12 MPOL W/LOAD", type];
+    title_fig = strcat(env_title, " RDZ 3/12 MPOL W/LOAD", type);
     array_runs = [subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.5_data_center_a0.01_*txt",...
                   subfolder + preffix + type + "_*_mean_euclidian_distance_0.5_data_center_a0.01_*txt"];
 
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
     
     %4
-    title_fig = [env_title, " RDZ 4/12 MPOL W/LOAD", type];
+    title_fig = strcat(env_title, " RDZ 4/12 MPOL W/LOAD", type);
     array_runs = [subfolder2 + preffix2 + "_*_mean_euclidian_distance_0.1_best_a0.01_*txt",...
                   subfolder + preffix + type + "_*_mean_euclidian_distance_0.1_best_a0.01_*txt"];
 
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
     
     %5
-    title_fig = [env_title, " RDZ 5/12 MPOL W/LOAD", type];
+    title_fig = strcat(env_title, " RDZ 5/12 MPOL W/LOAD", type);
     array_runs = [subfolder2 + preffix2 + "_*_none_none_1.0_data_center_a1.0_*txt",...
                   subfolder + preffix + type + "_*_none_none_1.0_data_center_a1.0_*txt"];
 
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
     
     %6
-    title_fig = [env_title, " RDZ 6/12 MPOL W/LOAD", type];
+    title_fig = strcat(env_title, " RDZ 6/12 MPOL W/LOAD", type);
     array_runs = [subfolder2 + preffix2 + "_*_none_none_1.0_density_a1.0_*txt",...
                   subfolder + preffix + type + "_*_none_none_1.0_density_a1.0_*txt"];
 
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
     
     %7
-    title_fig = [env_title, " RDZ 7/12 MPOL W/LOAD", type];
+    title_fig = strcat(env_title, " RDZ 7/12 MPOL W/LOAD", type);
     array_runs = [subfolder2 + preffix2 + "_*_none_none_1.0_mean_a1.0_*txt",...
                   subfolder + preffix + type + "_*_none_none_1.0_mean_a1.0_*txt"];
 
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
     
     %8
-    title_fig = [env_title, " RDZ 8/12 MPOL W/LOAD", type];
+    title_fig = strcat(env_title, " RDZ 8/12 MPOL W/LOAD", type);
     array_runs = [subfolder2 + preffix2 + "_*_none_density_0.5_data_center_a0.01_*txt",...
                   subfolder + preffix + type + "_*_none_density_0.5_data_center_a0.01_*txt"];
 
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
     
     %9
-    title_fig = [env_title, " RDZ 9/12 MPOL W/LOAD", type];
+    title_fig = strcat(env_title, " RDZ 9/12 MPOL W/LOAD", type);
     array_runs = [subfolder2 + preffix2 + "_*_none_none_1.0_random_a1_*txt",...
                   subfolder + preffix + type + "_*_none_none_1.0_random_a1_*txt"];
 
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
     
     %10
-    title_fig = [env_title, " RDZ 10/12 MPOL W/LOAD", type];
+    title_fig = strcat(env_title, " RDZ 10/12 MPOL W/LOAD", type);
     array_runs = [subfolder2 + preffix2 + "_*_density_euclidian_distance_0.01_best_a0.01_*txt",...
                   subfolder + preffix + type + "_*_density_euclidian_distance_0.01_best_a0.01_*txt"];
 
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
     
     %11
-    title_fig = [env_title, " RDZ 11/12 MPOL W/LOAD", type];
+    title_fig = strcat(env_title, " RDZ 11/12 MPOL W/LOAD", type);
     array_runs = [subfolder2 + preffix2 + "_*_none_density_0.5_density_a0.01_*txt",...
                   subfolder + preffix + type + "_*_none_density_0.5_density_a0.01_*txt"];
 
     ploting_executions(folder, title_fig, steps_per_second, array_runs);
     
     %12
-    title_fig = [env_title, " RDZ 12/12 MPOL W/LOAD", type];
+    title_fig = strcat(env_title, " RDZ 12/12 MPOL W/LOAD", type);
     array_runs = [subfolder2 + preffix2 + "_*_none_density_1.0_best_a0.01_*txt",...
                   subfolder + preffix + type + "_*_none_density_1.0_best_a0.01_*txt"];
 

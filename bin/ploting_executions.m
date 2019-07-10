@@ -2,13 +2,12 @@ function ploting_executions(folder, title_fig, steps_per_second, array_runs)
     size_windows = [0 0 1 1];
     leg = [];
 
-    figure('units','normalized','outerposition',size_windows);
+    fig = figure('units','normalized','outerposition',size_windows);
     color = ['y', 'm', 'b', 'r', 'k', 'g', 'c'];
-    num_alg = length(array_runs);
-    h = zeros(1, num_alg);
+    h = zeros(1, length(array_runs));
     for j=1:size(array_runs,2)
         fd = folder + array_runs(j);
-        disp(fd);
+%         disp(fd);
         data = readseries(fd, 3, 2, steps_per_second);
         [t, mean_d, ~, std_d] = avgseries(data);
         maximum = max(mean_d);
@@ -23,6 +22,7 @@ function ploting_executions(folder, title_fig, steps_per_second, array_runs)
     xlabel('seconds');
     ylabel('reward');
     legend(h, leg,'Location','SouthEast');
+    print(fig, strcat("figs/plots_", title_fig, " (int val 95)",".png"),'-dpng');
 end
 
 
