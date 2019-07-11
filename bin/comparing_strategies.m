@@ -1,6 +1,29 @@
-https://www.mathworks.com/matlabcentral/answers/85219-subplot-of-already-saved-figures
-https://www.mathworks.com/matlabcentral/answers/101806-how-can-i-insert-my-matlab-figure-fig-files-into-multiple-subplots
+% https://www.mathworks.com/matlabcentral/answers/85219-subplot-of-already-saved-figures
+% https://www.mathworks.com/matlabcentral/answers/101806-how-can-i-insert-my-matlab-figure-fig-files-into-multiple-subplots
+clc;
+clear;
+close all;
 
+%% Load saved figures
+filename_c = 'figs/plots_PENDULUM CMP LOAD DENSITY BASED good (int val 95).png';
+filename_k = 'figs/plots_PENDULUM CMP LOAD DATA CENTER good (int val 95).png';
+% c=hgload(filename_c);
+c = imread(filename_c);
+% k=hgload(filename_k);
+k = imread(filename_k);
+% Prepare subplots
+figure
+h(1)=subplot(1,2,1);
+imshow(c);
+h(2)=subplot(1,2,2);
+imshow(k);
+% Paste figures on the subplots
+% copyobj(allchild(get(c,'CurrentAxes')),h(1));
+% copyobj(allchild(get(k,'CurrentAxes')),h(2));
+
+% Add legends
+l(1)=legend(h(1),'LegendForFirstFigure')
+l(2)=legend(h(2),'LegendForSecondFigure')
 
 % clc;
 % clear all;
