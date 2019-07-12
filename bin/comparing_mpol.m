@@ -9,7 +9,9 @@ folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
 addpath("~/Dropbox/phd_grl_results/matlab");
 
 %% comparações
+plot_mpol_load_compare(folder, "good");
 plot_mpol_load_compare2(folder, "good");
+plot_mpol_load_compare3(folder, "good");
 
 %%
 env = "pendulum";
@@ -613,6 +615,103 @@ function plot_mpol_load_compare2(folder, type)
     
     array_runs = ["replay_ddpg_tensorflow_sincos_*txt",...
                   subfolder + preffix + type + "_*_none_none_1.0_density_a1.0_*txt",...
+                  subfolder + preffix + type + "_*_none_none_1.0_data_center_a1.0_*txt"];
+
+    executions_subploting(folder, title_fig, steps_per_second, x, y, 6, array_runs);
+    
+   
+%     hFig    = gcf;
+%     hAxes   = findobj(allchild(hFig), 'flat', 'Type', 'axes');
+%     hTempFig = figure;
+%     for i=1:4
+%         hAxRef(i)=subplot(2,2,5-i);
+%     end % create reference positions
+%     set(hAxes,{'position'},{hAxRef.Position}.')
+%     delete(hTempFig);
+%     axPosition = hAxes(1).Position;
+%     set(hAxes(1), 'Position', [axPosition(1) axPosition(2) axPosition(3)-0.15 axPosition(4)]);
+%     axPosition = hAxes(2).Position;
+%     set(hAxes(2), 'Position', [axPosition(1) axPosition(2) axPosition(3)-0.15 axPosition(4)]);
+
+    title_fig = strcat("CMP_LEARNED_VS_LEARNING_", type);
+    print(fig, strcat("figs/plots_", title_fig,".png"),'-dpng');
+end
+
+function plot_mpol_load_compare3(folder, type)
+    fig = figure('units','normalized','outerposition', [0 0 0.5 1]);
+% %     fig = figure('units','normalized','outerposition', [0 0 1 1]);
+    x = 3;
+    y = 2;
+    
+    env = "pendulum";
+    env_abr = "pd";
+    env_title = "PENDULUM";
+    steps_per_second = 33;
+    title_fig = env_title;
+    
+    subfolder = env + "_mpols" + "_yamls_results/";
+    preffix = env + "_" + env_abr +"_tau_mpol_replay_ddpg_tensorflow_sincos_16";
+
+    subfolder2 = env + "_mpols_load_yamls_results/";
+    preffix2 = env + "_" + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_16" + type + "_load";
+    
+    array_runs = ["replay_ddpg_tensorflow_sincos_*txt",...
+                  subfolder2 + preffix2 + "_*_none_none_1.0_density_a1.0_*txt",...
+                  subfolder + preffix + type + "_*_none_none_1.0_data_center_a1.0_*txt"];
+
+    executions_subploting(folder, title_fig, steps_per_second, x, y, 1, array_runs);
+    
+    array_runs = ["replay_ddpg_tensorflow_sincos_*txt",...
+                  subfolder + preffix + type + "_*_none_none_1.0_density_a1.0_*txt",...
+                  subfolder2 + preffix2 + "_*_none_none_1.0_data_center_a1.0_*txt"];
+
+    executions_subploting(folder, title_fig, steps_per_second, x, y, 2, array_runs);
+    
+    env = "cart_pole";
+    env_abr = "cp";
+    env_title = "CART POLE";
+    steps_per_second = 20;
+    title_fig = env_title;
+    
+    subfolder = env + "_mpols" + "_yamls_results/";
+    preffix = env + "_" + env_abr +"_tau_mpol_replay_ddpg_tensorflow_sincos_16";
+
+    subfolder2 = env + "_mpols_load_yamls_results/";
+    preffix2 = env + "_" + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_16" + type + "_load";
+    
+    array_runs = ["replay_ddpg_tensorflow_sincos_*txt",...
+                  subfolder2 + preffix2 + "_*_none_none_1.0_density_a1.0_*txt",...
+                  subfolder + preffix + type + "_*_none_none_1.0_density_a1.0_*txt"];
+
+    executions_subploting(folder, title_fig, steps_per_second, x, y, 3, array_runs);
+    
+    array_runs = ["replay_ddpg_tensorflow_sincos_*txt",...
+                  subfolder2 + preffix2 + "_*_none_none_1.0_data_center_a1.0_*txt",...
+                  subfolder + preffix + type + "_*_none_none_1.0_data_center_a1.0_*txt"];
+
+    executions_subploting(folder, title_fig, steps_per_second, x, y, 4, array_runs);
+    
+    env = "cart_double_pole";
+    env_abr = "cdp";
+    env_title = "CART DOUBLE POLE";
+    steps_per_second = 20;
+    old_name = 0;
+    title_fig = env_title;
+
+    subfolder = env + "_mpols" + "_yamls_results/";
+    preffix = env + "_" + env_abr +"_tau_mpol_replay_ddpg_tensorflow_sincos_16";
+
+    subfolder2 = env + "_mpols_load_yamls_results/";
+    preffix2 = env + "_" + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_16" + type + "_load";
+    
+    array_runs = ["replay_ddpg_tensorflow_sincos_*txt",...
+                  subfolder2 + preffix2 + "_*_none_none_1.0_density_a1.0_*txt",...
+                  subfolder + preffix + type + "_*_none_none_1.0_density_a1.0_*txt"];
+
+    executions_subploting(folder, title_fig, steps_per_second, x, y, 5, array_runs);
+    
+    array_runs = ["replay_ddpg_tensorflow_sincos_*txt",...
+                  subfolder2 + preffix2 + "_*_none_none_1.0_data_center_a1.0_*txt",...
                   subfolder + preffix + type + "_*_none_none_1.0_data_center_a1.0_*txt"];
 
     executions_subploting(folder, title_fig, steps_per_second, x, y, 6, array_runs);
