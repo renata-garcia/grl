@@ -42,8 +42,34 @@ ploting_executions(folder, title_fig, steps_per_second, array_runs);
 %%
 array_runs = [
 "leo_ddpg_replay_steps256_batch_size64_interval1000_gamma0.5_reward_scale1.0_sigma[1]*txt",...
-"leo_ddpg_replay_steps256_batch_size64_interval1000_gamma0.5_reward_scale1.0_sigma[2]*txt",...
+"leo_ddpg_replay_steps256_batch_size64_interval1000_gamma0.5_reward_scale1.0_sigma[2]*txt"];
+
+title_fig = "FINDING BEST SINGLE LEOSIM";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+%%
+array_runs = [
+"leo_ddpg_replay_steps256_batch_size64_interval1000_gamma0.5_reward_scale1.0_sigma[1]*txt",...
 "leo_ddpg_replay_steps512_batch_size64_interval1000_gamma0.5_reward_scale1.0_sigma[1]*txt"];
+
+title_fig = "FINDING BEST SINGLE LEOSIM";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+%%
+array_runs = [
+"leo_ddpg_replay_steps256_batch_size64_interval1000_gamma0.5_reward_scale1.0_sigma[1]*txt",...
+"leo_ddpg_replay_steps512_batch_size128_interval1000_gamma0.5_reward_scale1.0_sigma[1]*txt"];
+
+title_fig = "FINDING BEST SINGLE LEOSIM";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+%%
+array_runs = [
+"leo_ddpg_replay_steps256_batch_size64_interval1000_gamma0.5_reward_scale1.0_sigma[1]*txt",...
+"leo_ddpg_replay_steps256_batch_size64_interval10000_gamma0.5_reward_scale1.0_sigma[2]*txt"];
 
 title_fig = "FINDING BEST SINGLE LEOSIM";
 
