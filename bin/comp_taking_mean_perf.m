@@ -1,12 +1,15 @@
 clc;
-clear all;
+clear;
 close all;
+
+%% COUNT MEAN (LEAST 10) TO USE IN ORDERING GOO, MID AND BAD
+
 
 steps_counted = 20;
 printing = 0;
-env = "cart_pole";
-env = "cart_double_pole_cdp_tau";
-% env = "pendulum";
+% env = "cart_pole";
+% env = "cart_double_pole_cdp_tau";
+env = "pendulum";
 % env = "pendulum_pd_tau";
 % env = "cart_pole_cp_notau";
 % env = "cart_pole_cp_notau-2";
@@ -21,7 +24,8 @@ else
     disp("NONE NONE");
 end
 
-array_runs = [env + "_replay_ddpg_tensorflow_sincos_i0_j*.txt",...
+array_runs = [
+%     env + "_replay_ddpg_tensorflow_sincos_i0_j*.txt",...
     env + "_replay_ddpg_tensorflow_sincos_i1_j*.txt",...
     env + "_replay_ddpg_tensorflow_sincos_i2_j*.txt",...
     env + "_replay_ddpg_tensorflow_sincos_i3_j*.txt",...
@@ -52,7 +56,8 @@ array_runs = [env + "_replay_ddpg_tensorflow_sincos_i0_j*.txt",...
     env + "_replay_ddpg_tensorflow_sincos_i28_j*.txt",...
     env + "_replay_ddpg_tensorflow_sincos_i29_j*.txt",...
     env + "_replay_ddpg_tensorflow_sincos_i30_j*.txt",...
-    env + "_replay_ddpg_tensorflow_sincos_i31_j*.txt"];
+    env + "_replay_ddpg_tensorflow_sincos_i31_j*.txt",...
+    env + "_replay_ddpg_tensorflow_sincos_i32_j*.txt"];
 
 for j=1:length(array_runs)
     fd = folder + array_runs(j);
