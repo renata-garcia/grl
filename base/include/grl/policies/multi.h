@@ -54,7 +54,7 @@ class MultiPolicy : public Policy
     csDataCenterVotingMov,
     csAlg4StepsNew, csStatic, csValueBased, csRoulette};
     enum ScoreDistance {sdNone, sdBest, sdDensityBased, sdDataCenter, sdMean, sdRandom};
-    enum UpdateHistory {uhNone, uhEuclideanDistance, uhDensity, uhDataCenter};
+    enum UpdateHistory {uhNone, uhEuclideanDistance, uhDensity, uhDensityLinear, uhDataCenter};
     
   protected:
     std::string strategy_str_;
@@ -160,6 +160,7 @@ class MultiPolicy : public Policy
     virtual LargeVector data_center(ActionArray ensemble_set, LargeVector *center) const;
     virtual LargeVector datacenter_update_voting(ActionArray ensemble_set) const;
     virtual LargeVector density_based(ActionArray &ensemble_set, LargeVector *center) const;
+    virtual LargeVector density_based_update_voting(ActionArray &ensemble_set, LargeVector *center) const;
     virtual size_t get_max_index(const LargeVector &in) const;
     virtual ActionArray run_policies(const Observation &in, LargeVector *values = NULL) const;
  

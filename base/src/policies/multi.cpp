@@ -44,7 +44,7 @@ void MultiPolicy::request(ConfigurationRequest *config)
   {"none", "density","data_center","mean"}));
   
   config->push_back(CRP("update_history", "Update History", update_history_str_, CRP::Configuration,
-  {"none", "euclidian_distance", "density", "data_center_linear_order"}));
+  {"none", "euclidian_distance", "density", "density_linear_order", "data_center_linear_order"}));
   
   config->push_back(CRP("percentile", "Percentile of Scores / Actions", percentile_));
   
@@ -114,6 +114,11 @@ void MultiPolicy::configure(Configuration &config)
   {
     update_history_ = uhDensity;  
     scores_ = uhDensity;  
+  }
+  else if (update_history_str_ == "density_linear_order")
+  {
+    update_history_ = uhDensityLinear;
+    scores_ = uhDensityLinear;
   }
   else if (update_history_str_ == "data_center_linear_order")
   {
@@ -424,8 +429,11 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
           scores = density_based(actions_actors, &center);
           break;
         
+        case uhDensityLinear:
+          scores = density_based_update_voting(actions_actors, &center);
+          break;
+
         case uhDataCenter:
-          //TODO: review names
           scores = datacenter_update_voting(actions_actors);
           break;
 
@@ -789,8 +797,6 @@ void MultiPolicy::update_voting_preferences_ofchoosen_mean_mov(const std::vector
     CRAWL("MultiPolicy::update_voting_preferences_ofchoosen_mean_mov::a(ii= " << i << "): "<<in[i].v<<" voting_policies_->at(i): " << voting_policies_->at(i) << ", mean_mov_->at(i): " << mean_mov_->at(i));
   }
 }
-
-
 
 void MultiPolicy::choosing_quartile_of_mean_mov(std::vector<node> *in) const
 {
@@ -1198,4 +1204,15 @@ LargeVector MultiPolicy::datacenter_update_voting(ActionArray ensemble_set) cons
   }
 
   return voting_weights;
+}
+
+LargeVector MultiPolicy::density_based_update_voting(ActionArray &ensemble_set, LargeVector *center) const
+{
+  LargeVector scores =  density_based(ensemble_set, center);
+  for (size_t i = 0; i < scores.size(); i++)
+  {
+    CRAWL("MultiPolicy::density_based_update_voting::scores = " << scores(i));
+  }
+  // std::sort(scores)
+  return scores;
 }

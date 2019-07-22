@@ -60,7 +60,8 @@ title_fig = "FINDING BEST SINGLE LEOSIM";
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
 array_runs = [
 "leo_ddpg_replay_steps256_batch_size64_interval1000_gamma0.5_reward_scale1.0_sigma[1]*txt",...
-"../leosim_tunning_nornd_notau_results/*txt"];
+"../leosim_tunning_nornd_notau_results/*txt",...
+"../leosim_tuning_nornd_notau_obsproj_results/*txt"];
 
 title_fig = "FINDING BEST SINGLE LEOSIM";
 
