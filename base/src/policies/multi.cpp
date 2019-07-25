@@ -1209,10 +1209,32 @@ LargeVector MultiPolicy::datacenter_update_voting(ActionArray ensemble_set) cons
 LargeVector MultiPolicy::density_based_update_voting(ActionArray &ensemble_set, LargeVector *center) const
 {
   LargeVector scores =  density_based(ensemble_set, center);
-  for (size_t i = 0; i < scores.size(); i++)
+  LargeVector voting_weights = ConstantLargeVector(scores.size(), 0.);
+
+  std::vector<std::tuple<double, size_t>> tuple_density_id(scores.size());
+  
+  for(size_t i = 0; i < scores.size(); ++i)
+    tuple_density_id[i] = std::tuple<double, size_t>(scores(i), i);
+  
+  std::sort(tuple_density_id.begin(), tuple_density_id.end());
+
+  for (size_t i = 0; i < tuple_density_id.size(); i++)
   {
-    CRAWL("MultiPolicy::density_based_update_voting::scores = " << scores(i));
+    CRAWL("MultiPolicy::density_based_update_voting::tuple_density_id<id> = " << 1*std::get<1>(tuple_density_id[i]) );
+    CRAWL(" tuple_density_id<score> = " << std::get<0>(tuple_density_id[i]) );
   }
-  // std::sort(scores)
-  return scores;
+
+  for (size_t i = 0; i < tuple_density_id.size(); i++)
+  {
+    size_t j = std::get<1>(tuple_density_id[i]); 
+    tuple_density_id[i] = std::tuple<double, size_t>(1 + iRoulette_*(i), j);;
+  }
+
+  for(int i =0; i < scores.size(); ++i)
+    voting_weights[std::get<1>(tuple_density_id[i])] = std::get<0>(tuple_density_id[i]);
+  
+  for(int i =0; i < scores.size(); ++i)
+    CRAWL("MultiPolicy::density_based_update_voting::voting_weights<i=" << i << "> = " << voting_weights[i] );
+  
+  return voting_weights;
 }
