@@ -22,7 +22,7 @@ function ploting_executions(folder, title_fig, steps_per_second, array_runs)
     xlabel('seconds');
     ylabel('reward');
     legend(h, leg,'Location','SouthEast');
-    print(fig, strcat("figs/plots_", title_fig, " (int val 95)",".png"),'-dpng');
+%     print(fig, strcat("figs/plots_", title_fig, " (int val 95)",".png"),'-dpng');
 end
 
 
