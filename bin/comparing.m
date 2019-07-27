@@ -380,20 +380,16 @@ title_fig = "PENDULUM 16 BAD POLICIES";
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
 
 %%
-subfolderold = subfolder;
-preffixold = preffix;
+env = "pendulum";
+env_abr = "pd";
+subfolder = env + "_mpols_yamls_results/";
+preffix = env + "_" + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_16";
 
-subfolder = "pendulum_yamls_results/";
-preffix = "pendulum_replay_ddpg_tensorflow_sincos_i";
-array_runs = ["pendulum_yamls_mpols_group_results/pendulum_mpol_replay_ddpg_tensorflow_sincos_16good_mean_eucl_050_dens_a001_*.txt",...
-    "pendulum_yamls_mpols_group_results/pendulum_mpol_replay_ddpg_tensorflow_sincos_16mid_mean_eucl_050_dens_a001_*.txt",...
-    "pendulum_yamls_mpols_group_results/pendulum_mpol_replay_ddpg_tensorflow_sincos_16bad_mean_eucl_050_dens_a001_*.txt"];
-title_fig = "MPOL PENDULUM";
-
+title_fig = [env, "MPOL M\_ED\_50\_D throuhgt TYPEs"];
+array_runs = [subfolder + preffix + "bad_*_mean_euclidian_distance_0.5_density_a0.01_*.txt",...
+              subfolder + preffix + "mid_*_mean_euclidian_distance_0.5_density_a0.01_*.txt",...
+              subfolder + preffix + "good_*_mean_euclidian_distance_0.5_density_a0.01_*.txt"];
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
-
-preffix = preffixold;
-subfolder = subfolderold;
 
 %%
 env = "pendulum";
