@@ -5,16 +5,16 @@
   parameters:
   - name: experiment/agent/policy/ensemble_center
     values:
+    - mean
+  - name: experiment/agent/policy/update_history
+    values:
+    - euclidian_distance
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.25
+  - name: experiment/agent/policy/select_by_distance
+    values:
     - density
-  - name: experiment/agent/policy/update_history
-    values:
-    - euclidian_distance
-  - name: experiment/agent/policy/percentile
-    values:
-    - 0.01
-  - name: experiment/agent/policy/select_by_distance
-    values:
-    - best
   - name: experiment/agent/policy/alpha
     values:
     - 0.01
@@ -25,16 +25,16 @@
   parameters:
   - name: experiment/agent/policy/ensemble_center
     values:
-    - mean
+    - none
   - name: experiment/agent/policy/update_history
     values:
-    - euclidian_distance
+    - data_center_linear_order
   - name: experiment/agent/policy/percentile
     values:
-    - 0.1
+    - 0.75
   - name: experiment/agent/policy/select_by_distance
     values:
-    - best
+    - data_center
   - name: experiment/agent/policy/alpha
     values:
     - 0.01
@@ -45,13 +45,33 @@
   parameters:
   - name: experiment/agent/policy/ensemble_center
     values:
-    - mean
+    - none
+  - name: experiment/agent/policy/update_history
+    values:
+    - none
+  - name: experiment/agent/policy/percentile
+    values:
+    - 1.0
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - density
+  - name: experiment/agent/policy/alpha
+    values:
+    - 1.0
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - data_center
   - name: experiment/agent/policy/update_history
     values:
     - euclidian_distance
   - name: experiment/agent/policy/percentile
     values:
-    - 0.5
+    - 0.25
   - name: experiment/agent/policy/select_by_distance
     values:
     - data_center
@@ -74,7 +94,7 @@
     - 0.5
   - name: experiment/agent/policy/select_by_distance
     values:
-    - density
+    - data_center
   - name: experiment/agent/policy/alpha
     values:
     - 0.01
@@ -108,6 +128,66 @@
     - none
   - name: experiment/agent/policy/update_history
     values:
+    - none
+  - name: experiment/agent/policy/percentile
+    values:
+    - 1.0
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - mean
+  - name: experiment/agent/policy/alpha
+    values:
+    - 1.0
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - data_center
+  - name: experiment/agent/policy/update_history
+    values:
+    - euclidian_distance
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.5
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - data_center
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - mean
+  - name: experiment/agent/policy/update_history
+    values:
+    - euclidian_distance
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.5
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - density
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - none
+  - name: experiment/agent/policy/update_history
+    values:
     - density
   - name: experiment/agent/policy/percentile
     values:
@@ -128,6 +208,66 @@
     - none
   - name: experiment/agent/policy/update_history
     values:
+    - none
+  - name: experiment/agent/policy/percentile
+    values:
+    - 1.0
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - random
+  - name: experiment/agent/policy/alpha
+    values:
+    - 1
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - data_center
+  - name: experiment/agent/policy/update_history
+    values:
+    - euclidian_distance
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.75
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - data_center
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - mean
+  - name: experiment/agent/policy/update_history
+    values:
+    - euclidian_distance
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.75
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - density
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - none
+  - name: experiment/agent/policy/update_history
+    values:
     - density
   - name: experiment/agent/policy/percentile
     values:
@@ -135,6 +275,46 @@
   - name: experiment/agent/policy/select_by_distance
     values:
     - density
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - data_center
+  - name: experiment/agent/policy/update_history
+    values:
+    - euclidian_distance
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.1
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - best
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - none
+  - name: experiment/agent/policy/update_history
+    values:
+    - data_center_linear_order
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.25
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - data_center
   - name: experiment/agent/policy/alpha
     values:
     - 0.01
@@ -165,6 +345,146 @@
   parameters:
   - name: experiment/agent/policy/ensemble_center
     values:
+    - density
+  - name: experiment/agent/policy/update_history
+    values:
+    - euclidian_distance
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.01
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - best
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - none
+  - name: experiment/agent/policy/update_history
+    values:
+    - data_center_linear_order
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.5
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - data_center
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - none
+  - name: experiment/agent/policy/update_history
+    values:
+    - density_linear_order
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.5
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - density
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - none
+  - name: experiment/agent/policy/update_history
+    values:
+    - density_linear_order
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.1
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - best
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - none
+  - name: experiment/agent/policy/update_history
+    values:
+    - density_linear_order
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.5
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - data_center
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - mean
+  - name: experiment/agent/policy/update_history
+    values:
+    - euclidian_distance
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.1
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - best
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - none
+  - name: experiment/agent/policy/update_history
+    values:
+    - data_center_linear_order
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.5
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - density
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
     - none
   - name: experiment/agent/policy/update_history
     values:
@@ -175,66 +495,6 @@
   - name: experiment/agent/policy/select_by_distance
     values:
     - data_center
-  - name: experiment/agent/policy/alpha
-    values:
-    - 1.0
-- file: all
-  configuration:
-  - name: experiment/output
-    value: $@_$0_$1_$2_$3_a$4_
-  parameters:
-  - name: experiment/agent/policy/ensemble_center
-    values:
-    - none
-  - name: experiment/agent/policy/update_history
-    values:
-    - none
-  - name: experiment/agent/policy/percentile
-    values:
-    - 1.0
-  - name: experiment/agent/policy/select_by_distance
-    values:
-    - random
-  - name: experiment/agent/policy/alpha
-    values:
-    - 1
-- file: all
-  configuration:
-  - name: experiment/output
-    value: $@_$0_$1_$2_$3_a$4_
-  parameters:
-  - name: experiment/agent/policy/ensemble_center
-    values:
-    - none
-  - name: experiment/agent/policy/update_history
-    values:
-    - none
-  - name: experiment/agent/policy/percentile
-    values:
-    - 1.0
-  - name: experiment/agent/policy/select_by_distance
-    values:
-    - mean
-  - name: experiment/agent/policy/alpha
-    values:
-    - 1.0
-- file: all
-  configuration:
-  - name: experiment/output
-    value: $@_$0_$1_$2_$3_a$4_
-  parameters:
-  - name: experiment/agent/policy/ensemble_center
-    values:
-    - none
-  - name: experiment/agent/policy/update_history
-    values:
-    - none
-  - name: experiment/agent/policy/percentile
-    values:
-    - 1.0
-  - name: experiment/agent/policy/select_by_distance
-    values:
-    - density
   - name: experiment/agent/policy/alpha
     values:
     - 1.0
