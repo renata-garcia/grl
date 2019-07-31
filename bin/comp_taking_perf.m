@@ -4,7 +4,8 @@ close all;
 
 % % 
 steps_counted = 10;
-test_pendulum();
+test_cartpole();
+% test_pendulum();
 % [perf_good, perf_mid, perf_bad, perf_stdgood, perf_stdmid, perf_stdbad, bpd, bstdpd, bcp, bstdcp, bcdp, bstdcdp] = generate_tables(steps_counted);
 
 function [perf_good, perf_mid, perf_bad, perf_stdgood, perf_stdmid, perf_stdbad, bpd, bstdpd, bcp, bstdcp, bcdp, bstdcdp] = generate_tables(steps_counted)
@@ -376,7 +377,9 @@ runs_specific_bad = [         type + "_*_none_data_center_linear_order_0.25_data
                               type + "_*_none_data_center_linear_order_0.75_data_center_a0.01_*txt",...
                               type + "_*_none_data_center_linear_order_0.5_density_a0.01_*txt",...
                               type + "_*_data_center_euclidian_distance_0.1_best_a0.01_*txt",...
+                              type + "_*_data_center_euclidian_distance_0.1_best_a0.02_*txt",...
                               type + "_*_data_center_euclidian_distance_0.25_data_center_a0.01_*.txt",...
+                              type + "_*_data_center_euclidian_distance_0.5_data_center_a0.005_*.txt",...
                               type + "_*_data_center_euclidian_distance_0.5_data_center_a0.01_*.txt",...
                               type + "_*_data_center_euclidian_distance_0.5_data_center_a0.02_*.txt",...
                               type + "_*_data_center_euclidian_distance_0.75_data_center_a0.01_*.txt",...
@@ -424,4 +427,61 @@ function means_std = test_take_mean_mpol(folder, env, env_abr, load, runs, print
         means_std(j, 2) = mean(std_d(length(std_d)-steps_counted+1:length(std_d)));
     end
     
+end
+
+
+
+function test_cartpole()
+steps_counted = 10;
+printing = 0;
+folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
+addpath("~/Dropbox/phd_grl_results/matlab");
+
+type = ["good", "mid", "bad"];
+load = ["", "_load"];
+n = length(type);
+
+% % 
+tbl_meanstd_all = zeros(12, 2*n*length(load));
+
+env = "cart_pole"; env_abr = "cp";
+
+if (contains(env,"cart"))
+    steps_per_second = 20;
+elseif (contains(env,"pendulum"))
+    steps_per_second = 33;
+else
+    disp("NONE NONE");
+end
+
+i=1;
+for j = 1:length(type)
+    for k = 1:length(load)
+        runs_generic = [type(j) + load(k) + "_*_none_none_1.0_density_a1.0_*txt",...
+                        type(j) + load(k) + "_*_none_none_1.0_data_center_a1.0_*txt",...
+                        type(j) + load(k) + "_*_none_none_1.0_mean_a1.0_*txt",...
+                        type(j) + load(k) + "_*_none_none_1.0_random_a1_*txt",...
+                        type(j) + load(k) + "_*_none_density_0.5_density_a0.01_*txt",...
+                        type(j) + load(k) + "_*_none_density_0.5_data_center_a0.01_*txt",...
+                        type(j) + load(k) + "_*_none_density_1.0_best_a0.01_*txt",...
+                        type(j) + load(k) + "_*_density_euclidian_distance_0.01_best_a0.01_*txt",...
+                        type(j) + load(k) + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
+                        type(j) + load(k) + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
+                        type(j) + load(k) + "_*_mean_euclidian_distance_0.5_data_center_a0.01_*txt",...
+                        type(j) + load(k) + "_*_mean_euclidian_distance_0.1_best_a0.01_*txt"];
+        [tbl_meanstd_all(:, 2*n*(k-1) + ((2*j)-1) : 2*n*(k-1) + (2*j))] = test_take_mean_mpol(folder, env, env_abr, load(k), runs_generic, printing, steps_per_second, steps_counted);
+    end
+end
+
+type = "bad";
+runs_specific_bad = [         type + "_*_data_center_euclidian_distance_0.5_data_center_a0.01_*.txt",...
+                              type + "_*_data_center_euclidian_distance_0.5_data_center_a0.02_*.txt"];
+tbl_meanstd_specific_bad = test_take_mean_mpol(folder, env, env_abr, "", runs_specific_bad, printing, steps_per_second, steps_counted);
+
+% print_tbl_good_latex(strcat("Table of performance...steps_counted=", num2str(steps_counted)), pd_good);
+% print_tbl_good_std_latex(strcat("Table of performance...steps_counted=", num2str(steps_counted)), pd_good, stdpd_good, bpd, bstdpd);
+% print_tbl_all_std_latex(strcat("Table of performance...steps_counted=", num2str(steps_counted)), pd_good, stdpd_good, pd_mid, stdpd_mid, pd_bad, stdpd_bad);
+
+disp(tbl_meanstd_all);
+disp(tbl_meanstd_specific_bad);
 end
