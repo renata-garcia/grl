@@ -9,17 +9,19 @@ steps_counted = 20;
 printing = 0;
 % env = "cart_pole";
 % env = "cart_double_pole_cdp_tau";
-env = "pendulum"; env_abr = "pd";
 env = "cart_pole"; env_abr = "cp";
+env = "pendulum"; env_abr = "pd_";
+alg = "ac_tc";
+alg = "dpg"; env_abr = "";
 % env = "pendulum_pd_tau";
 % env = "cart_pole_cp_notau";
 % env = "cart_pole_cp_notau-2";
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_yamls_results/";
-folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_ac_tc_yamls_results/";
 folder = "/home/renatargo/projects/grl/build/";
+folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_" + alg + "_yamls_results/";
 addpath("~/Dropbox/phd_grl_results/matlab");
 file = env + "_replay_ddpg_tensorflow_sincos_i";
-file = env + "_" + env_abr + "_tau_ac_tc_i";
+file = env + "_" + env_abr + "tau_" + alg + "_i";
 
 if (contains(env,"cart"))
     steps_per_second = 20;

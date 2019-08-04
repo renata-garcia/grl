@@ -6,6 +6,7 @@ close all;
 steps_counted = 10;
 % test_cartpole();
 tbl_meanstd_all = test_pendulum();
+test_printL_1env_tbl_all_std("pendulum ddpg", tbl_meanstd_all)
 % [perf_good, perf_mid, perf_bad, perf_stdgood, perf_stdmid, perf_stdbad, bpd, bstdpd, bcp, bstdcp, bcdp, bstdcdp] = generate_tables(steps_counted);
 
 function [perf_good, perf_mid, perf_bad, perf_stdgood, perf_stdmid, perf_stdbad, bpd, bstdpd, bcp, bstdcp, bcdp, bstdcdp] = generate_tables(steps_counted)
@@ -174,7 +175,7 @@ function print_tbl_good_latex(caption, pd, cp, cdp)
     fprintf("    \\multicolumn{1}{|l|}{} & M\\_ED\\_MA\\_50\\_DC & %.0f & %.0f & %.0f & %.0f & %.0f & %.0f \\\\ \\cline{2-8} \n", pd(11,1), pd(11,2), cp(11,1), cp(11,2), cdp(11,1), cdp(11,2));
     fprintf("    \\multicolumn{1}{|l|}{} & M\\_ED\\_MA\\_B & %.0f & %.0f & %.0f & %.0f & %.0f & %.0f \\\\ \\hline\n", pd(12,1), pd(12,2), cp(12,1), cp(12,2), cdp(12,1), cdp(12,2));
     fprintf("  \\end{tabular}\n");
-    fprintf("\\end{table*}]\n");
+    fprintf("\\end{table*}\n");
 end
 
 function print_tbl_good_std_latex(caption, pd, cp, cdp, stdpd, stdcp, stdcdp, bpd, bstdpd, bcp, bstdcp, bcdp, bstdcdp)
@@ -258,7 +259,7 @@ function print_tbl_good_std_latex(caption, pd, cp, cdp, stdpd, stdcp, stdcdp, bp
     fprinttex(cdp(12,1:2), stdcdp(12,1:2), up_cdp, down_cdp);
     fprintf(" \\\\ \\hline\n");
     fprintf("  \\end{tabular}\n");
-    fprintf("\\end{table*}]\n");
+    fprintf("\\end{table*}\n");
 end
 
 function print_tbl_all_std_latex(caption, pd_good, cp_good, cdp_good, stdpd_good, stdcp_good, stdcdp_good, pd_mid, cp_mid, cdp_mid, stdpd_mid, stdcp_mid, stdcdp_mid, pd_bad, cp_bad, cdp_bad, stdpd_bad, stdcp_bad, stdcdp_bad)
@@ -301,7 +302,7 @@ function print_tbl_all_std_latex(caption, pd_good, cp_good, cdp_good, stdpd_good
     fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{M\\_ED\\_MA\\_B} & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\hline\n",...
 		pd_good(12,2), stdpd_good(12,2), pd_mid(12,2), stdpd_mid(12,2), pd_bad(12,2), stdpd_bad(12,2), cp_good(12,2), stdcp_good(12,2), cp_mid(12,2), stdcp_mid(12,2), cp_bad(12,2), stdcp_bad(12,2), cdp_good(12,2), stdcdp_good(12,2), cdp_mid(12,2), stdcdp_mid(12,2), cdp_bad(12,2), stdcdp_bad(12,2));
     fprintf("  \\end{tabular}\n");
-    fprintf("\\end{table*}]\n");
+    fprintf("\\end{table*}\n");
 end
 
 function fprinttex(v, s, up, down)
@@ -318,18 +319,21 @@ function tbl_meanstd_all = test_pendulum()
     folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
     addpath("~/Dropbox/phd_grl_results/matlab");
 
-    type = ["good", "mid", "bad"];
+    group = ["good", "mid", "bad"];
+    group = ["bad"];
     load = ["", "_load"];
-    load = [""];
-    algs = ["ac_tc", "dpg", "ddpg"];
-    n = length(type);
+    algs = ["ddpg", "ac_tc", "dpg"];
+    n_group = length(group);
+    n_load = length(load);
+    ng = 2*n_group;
+    nl = 2*n_load;
 
     % %
-    num_env = 1;
+    n_env = 1;
     alg = algs(1);
-    tbl_meanstd_all = zeros(24, num_env*2*n*length(load));
+    tbl_meanstd_all = zeros(24, n_env*ng*n_load);
 
-    for ie = 1:num_env
+    for ie = 1:n_env
         if (ie == 1)
             env = "pendulum"; env_abr = "pd";
         elseif (ie == 2)
@@ -344,34 +348,37 @@ function tbl_meanstd_all = test_pendulum()
             disp("NONE NONE");
         end
 
-        for j = 1:length(type)
-            for k = 1:length(load)
-                runs_generic = [type(j) + load(k) + "_*_none_none_1.0_data_center_a1.0_*txt",...
-                                type(j) + load(k) + "_*_none_none_1.0_density_a1.0_*txt",...
-                                type(j) + load(k) + "_*_none_none_1.0_mean_a1.0_*txt",...
-                                type(j) + load(k) + "_*_none_none_1.0_random_a1_*txt",...
-                                type(j) + load(k) + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
-                                type(j) + load(k) + "_*_none_data_center_linear_order_0.25_data_center_a0.01*txt",...
-                                type(j) + load(k) + "_*_none_data_center_linear_order_0.5_data_center_a0.01*txt",...
-                                type(j) + load(k) + "_*_none_data_center_linear_order_0.75_data_center_a0.01*txt",...
-                                type(j) + load(k) + "_*_none_data_center_linear_order_0.5_density_a0.01*txt",...
-                                type(j) + load(k) + "_*_none_density_0.5_density_a0.01_*txt",...
-                                type(j) + load(k) + "_*_none_density_0.5_data_center_a0.01_*txt",...
-                                type(j) + load(k) + "_*_none_density_1.0_best_a0.01_*txt",...
-                                type(j) + load(k) + "_*_data_center_euclidian_distance_0.25_data_center_a0.01_*txt",...
-                                type(j) + load(k) + "_*_data_center_euclidian_distance_0.5_data_center_a0.01*txt",...
-                                type(j) + load(k) + "_*_data_center_euclidian_distance_0.75_data_center_a0.01*txt",...
-                                type(j) + load(k) + "_*_data_center_euclidian_distance_0.1_best_a0.01*txt",...
-                                type(j) + load(k) + "_*_density_euclidian_distance_0.01_best_a0.01_*txt",...
-                                type(j) + load(k) + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
-                                type(j) + load(k) + "_*_mean_euclidian_distance_0.1_best_a0.01*txt",...
-                                type(j) + load(k) + "_*_mean_euclidian_distance_0.25_density_a0.01*txt",...
-                                type(j) + load(k) + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
-                                type(j) + load(k) + "_*_mean_euclidian_distance_0.75_density_a0.01_*txt",...
-                                type(j) + load(k) + "_*_mean_euclidian_distance_0.5_data_center_a0.01_*txt",...
-                                type(j) + load(k) + "_*_none_density_linear_order_0.5_density_a0.01*txt"];
-
-                [tbl_meanstd_all(:, 2*n*(k-1)*(num_env-1) + ((2*j)-1) : 2*n*(k-1)*(num_env-1) + (2*j))] = test_take_mean_mpol(folder, env, env_abr, load(k), alg, runs_generic, printing, steps_per_second, steps_counted);
+        for ig = 1:n_group
+            for il = 1:n_load
+                runs_generic = [group(ig) + load(il) + "_*_none_none_1.0_data_center_a1.0_*txt",...
+                                group(ig) + load(il) + "_*_none_none_1.0_density_a1.0_*txt",...
+                                group(ig) + load(il) + "_*_none_none_1.0_mean_a1.0_*txt",...
+                                group(ig) + load(il) + "_*_none_none_1.0_random_a1_*txt",...
+                                group(ig) + load(il) + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
+                                group(ig) + load(il) + "_*_none_data_center_linear_order_0.25_data_center_a0.01*txt",...
+                                group(ig) + load(il) + "_*_none_data_center_linear_order_0.5_data_center_a0.01*txt",...
+                                group(ig) + load(il) + "_*_none_data_center_linear_order_0.75_data_center_a0.01*txt",...
+                                group(ig) + load(il) + "_*_none_data_center_linear_order_0.5_density_a0.01*txt",...
+                                group(ig) + load(il) + "_*_none_density_0.5_density_a0.01_*txt",...
+                                group(ig) + load(il) + "_*_none_density_0.5_data_center_a0.01_*txt",...
+                                group(ig) + load(il) + "_*_none_density_1.0_best_a0.01_*txt",...
+                                group(ig) + load(il) + "_*_data_center_euclidian_distance_0.25_data_center_a0.01_*txt",...
+                                group(ig) + load(il) + "_*_data_center_euclidian_distance_0.5_data_center_a0.01*txt",...
+                                group(ig) + load(il) + "_*_data_center_euclidian_distance_0.75_data_center_a0.01*txt",...
+                                group(ig) + load(il) + "_*_data_center_euclidian_distance_0.1_best_a0.01*txt",...
+                                group(ig) + load(il) + "_*_density_euclidian_distance_0.01_best_a0.01_*txt",...
+                                group(ig) + load(il) + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
+                                group(ig) + load(il) + "_*_mean_euclidian_distance_0.1_best_a0.01*txt",...
+                                group(ig) + load(il) + "_*_mean_euclidian_distance_0.25_density_a0.01*txt",...
+                                group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
+                                group(ig) + load(il) + "_*_mean_euclidian_distance_0.75_density_a0.01_*txt",...
+                                group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_data_center_a0.01_*txt",...
+                                group(ig) + load(il) + "_*_none_density_linear_order_0.5_density_a0.01*txt"];
+                i_load = (ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)-1;
+                j_load = (ng*n_load)*(ie-1) + ng*(il-1) + (2*ig);
+                i = (ng*n_load)*(ie-1) + nl*(ig-1) + 2*il -1;
+                j = (ng*n_load)*(ie-1) + nl*(ig-1) + 2*il;
+                [tbl_meanstd_all(:, i:j)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted);
             end
         end
 
@@ -427,7 +434,7 @@ function means_std = test_take_mean_mpol(folder, env, env_abr, load, alg, runs, 
     preffix = "";
     
     if (alg == "ac_tc")
-        subfolder = env + "_mpols" + load + "_" + alg + "_yamls_results/";
+        subfolder = env + "_mpols" + "_" + alg + load + "_yamls_results/";
         preffix = env + "_" + env_abr +"_tau_ac_tc16";
     elseif (alg == "dpg")
         subfolder = env + "_mpols" + load + "_yamls_results/";
@@ -516,8 +523,28 @@ function test_cartpole()
     disp(tbl_meanstd_specific_bad);
 end
 
-
-function test_print_tbl_all_std_latex(caption, tbl_meanstd_all)
+function test_printL_1env_tbl_all_std(caption, tbl)
+    sz_base = 4;
+    strategies = ["DC", "D", "M", "RND", "DC_MA_B", "DC_MA_25_DC", "DC_MA_50_DC",...
+                  "DC_MA_75_DC", "DC_MA_50_D", "D_MA_50_D", "D_MA_50_DC", "D_MA_B",...
+                  "DC_ED_MA_25_DC", "DC_EC_MA_50_DC", "DC_ED_MA_75_DC", "DC_ED_MA_B",...
+                  "D_ED_MA_B", "DC_MA_B", "M_ED_MA_B", "M_ED_MA_25_D", "M_ED_MA_50_D",...
+                  "M_ED_MA_75_D", "M_ED_MA_50_DC", "DC_MA_50_D"];
+    strategies = ["DC", "D", "M", "RND", "DC\_MA\_B", "DC\_MA\_25\_DC", "DC\_MA\_50\_DC",...
+                  "DC\_MA\_75\_DC", "DC\_MA\_50\_D", "D\_MA\_50\_D", "D\_MA\_50\_DC", "D\_MA\_B",...
+                  "DC\_ED\_MA\_25\_DC", "DC\_EC\_MA\_50\_DC", "DC\_ED\_MA\_75\_DC", "DC\_ED\_MA\_B",...
+                  "D\_ED\_MA\_B", "DC\_MA\_B", "M\_ED\_MA\_B", "M\_ED\_MA\_25\_D", "M\_ED\_MA\_50\_D",...
+                  "M\_ED\_MA\_75\_D", "M\_ED\_MA\_50\_DC", "DC\_MA\_50\_D"];
+%     fprintf("    \\multicolumn{1}{|l|}{\\multirow{4}{*}{\\STAB{\\rotatebox[origin=c]{90}{BASE}}}} & \\footnotesize{D} & ");
+%     fprinttex(pd(1,1:2), stdpd(1,1:2), up_pd, down_pd); fprintf(" & ");
+%     fprinttex(cp(1,1:2), stdcp(1,1:2), up_cp, down_cp); fprintf(" & ");
+%     fprinttex(cdp(1,1:2), stdcdp(1,1:2), up_cdp, down_cdp)
+%     fprintf(" \\\\ \\cline{2-8} \n");
+%     fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{DC} & ");
+%     fprinttex(pd(2,1:2), stdpd(2,1:2), up_pd, down_pd); fprintf(" & ");
+%     fprinttex(cp(2,1:2), stdcp(2,1:2), up_cp, down_cp); fprintf(" & ");
+%     fprinttex(cdp(2,1:2), stdcdp(2,1:2), up_cdp, down_cdp)
+%     fprintf(" \\\\ \\cline{2-8} \n");    
 	fprintf("%% Please add the following required packages to your document preamble:\n");
     fprintf("%% \\usepackage{multirow}\n");
     fprintf("  \\begin{table*}[]\n");
@@ -525,45 +552,75 @@ function test_print_tbl_all_std_latex(caption, tbl_meanstd_all)
     fprintf("  \\footnotesize\n");
     fprintf("  \\caption{%s}\n", caption);
     fprintf("  \\label{tab_performance_all}\n");
-    fprintf("  \\begin{tabular}{l|c|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{4.4}|}\n");
-    fprintf("    \\cline{2-11}\n");
-    fprintf("     & \\multirow{2}{*}{strategy} & \\multicolumn{3}{c|}{pendulum} & \\multicolumn{3}{c|}{cart pole} & \\multicolumn{3}{c|}{cart double pole} \\\\ \\cline{3-11} \n");
-    fprintf("     &  & \\multicolumn{1}{|c|}{good} & \\multicolumn{1}{|c|}{mid} & \\multicolumn{1}{|c|}{bad} & \\multicolumn{1}{|c|}{good} & \\multicolumn{1}{|c|}{mid} & \\multicolumn{1}{|c|}{bad} & \\multicolumn{1}{|c|}{good} & \\multicolumn{1}{|c|}{mid} & \\multicolumn{1}{|c|}{bad} \\\\ \\hline\n");
-    fprintf("    \\multicolumn{1}{|l|}{\\multirow{4}{*}{\\STAB{\\rotatebox[origin=c]{90}{BASE}}}} & \\footnotesize{D}"+...
-		" & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\cline{2-11} \n",...
-		pd_good(1,2), stdpd_good(1,2), pd_mid(1,2), stdpd_mid(1,2), pd_bad(1,2), stdpd_bad(1,2), cp_good(1,2), stdcp_good(1,2), cp_mid(1,2), stdcp_mid(1,2), cp_bad(1,2), stdcp_bad(1,2), cdp_good(1,2), stdcdp_good(1,2), cdp_mid(1,2), stdcdp_mid(1,2), cdp_bad(1,2), stdcdp_bad(1,2));
-    fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{DC}"+...
-	" & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\cline{2-11} \n",...
-		pd_good(2,2), stdpd_good(2,2), pd_mid(2,2), stdpd_mid(2,2), pd_bad(2,2), stdpd_bad(2,2), cp_good(2,2), stdcp_good(2,2), cp_mid(2,2), stdcp_mid(2,2), cp_bad(2,2), stdcp_bad(2,2), cdp_good(2,2), stdcdp_good(2,2), cdp_mid(2,2), stdcdp_mid(2,2), cdp_bad(2,2), stdcdp_bad(2,2));
-    fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{M} & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\cline{2-11} \n",...
-		pd_good(3,2), stdpd_good(3,2), pd_mid(3,2), stdpd_mid(3,2), pd_bad(3,2), stdpd_bad(3,2), cp_good(3,2), stdcp_good(3,2), cp_mid(3,2), stdcp_mid(3,2), cp_bad(3,2), stdcp_bad(3,2), cdp_good(3,2), stdcdp_good(3,2), cdp_mid(3,2), stdcdp_mid(3,2), cdp_bad(3,2), stdcdp_bad(3,2));
-    fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{RND} & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\hline\n",...
-		pd_good(4,2), stdpd_good(4,2), pd_mid(4,2), stdpd_mid(4,2), pd_bad(4,2), stdpd_bad(4,2), cp_good(4,2), stdcp_good(4,2), cp_mid(4,2), stdcp_mid(4,2), cp_bad(4,2), stdcp_bad(4,2), cdp_good(4,2), stdcdp_good(4,2), cdp_mid(4,2), stdcdp_mid(4,2), cdp_bad(4,2), stdcdp_bad(4,2));
-    fprintf("    \\multicolumn{1}{|l|}{\\multirow{8}{*}{\\STAB{\\rotatebox[origin=c]{90}{NEW}}}} & \\footnotesize{D\\_MA\\_50\\_D}"+...
-		" & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\cline{2-11} \n",...
-		pd_good(5,2), stdpd_good(5,2), pd_mid(5,2), stdpd_mid(5,2), pd_bad(5,2), stdpd_bad(5,2), cp_good(5,2), stdcp_good(5,2), cp_mid(5,2), stdcp_mid(5,2), cp_bad(5,2), stdcp_bad(5,2), cdp_good(5,2), stdcdp_good(5,2), cdp_mid(5,2), stdcdp_mid(5,2), cdp_bad(5,2), stdcdp_bad(5,2));
-    fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{D\\_MA\\_50\\_DC} & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\cline{2-11} \n",...
-		pd_good(6,2), stdpd_good(6,2), pd_mid(6,2), stdpd_mid(6,2), pd_bad(6,2), stdpd_bad(6,2), cp_good(6,2), stdcp_good(6,2), cp_mid(6,2), stdcp_mid(6,2), cp_bad(6,2), stdcp_bad(6,2), cdp_good(6,2), stdcdp_good(6,2), cdp_mid(6,2), stdcdp_mid(6,2), cdp_bad(6,2), stdcdp_bad(6,2));
-    fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{D\\_MA\\_B} & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\cline{2-11} \n",...
-		pd_good(7,2), stdpd_good(7,2), pd_mid(7,2), stdpd_mid(7,2), pd_bad(7,2), stdpd_bad(7,2), cp_good(7,2), stdcp_good(7,2), cp_mid(7,2), stdcp_mid(7,2), cp_bad(7,2), stdcp_bad(7,2), cdp_good(7,2), stdcdp_good(7,2), cdp_mid(7,2), stdcdp_mid(7,2), cdp_bad(7,2), stdcdp_bad(7,2));
-    fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{D\\_ED\\_MA\\_B} & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\cline{2-11} \n",...
-		pd_good(8,2), stdpd_good(8,2), pd_mid(8,2), stdpd_mid(8,2), pd_bad(8,2), stdpd_bad(8,2), cp_good(8,2), stdcp_good(8,2), cp_mid(8,2), stdcp_mid(8,2), cp_bad(8,2), stdcp_bad(8,2), cdp_good(8,2), stdcdp_good(8,2), cdp_mid(8,2), stdcdp_mid(8,2), cdp_bad(8,2), stdcdp_bad(8,2));
-    fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{DC\\_MA\\_B} & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\cline{2-11} \n",...
-		pd_good(9,2), stdpd_good(9,2), pd_mid(9,2), stdpd_mid(9,2), pd_bad(9,2), stdpd_bad(9,2), cp_good(9,2), stdcp_good(9,2), cp_mid(9,2), stdcp_mid(9,2), cp_bad(9,2), stdcp_bad(9,2), cdp_good(9,2), stdcdp_good(9,2), cdp_mid(9,2), stdcdp_mid(9,2), cdp_bad(9,2), stdcdp_bad(9,2));
-    fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{M\\_ED\\_MA\\_50\\_D} & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\cline{2-11} \n",...
-		pd_good(10,2), stdpd_good(10,2), pd_mid(10,2), stdpd_mid(10,2), pd_bad(10,2), stdpd_bad(10,2), cp_good(10,2), stdcp_good(10,2), cp_mid(10,2), stdcp_mid(10,2), cp_bad(10,2), stdcp_bad(10,2), cdp_good(10,2), stdcdp_good(10,2), cdp_mid(10,2), stdcdp_mid(10,2), cdp_bad(10,2), stdcdp_bad(10,2));
-    fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{M\\_ED\\_MA\\_50\\_DC} & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\cline{2-11} \n",...
-		pd_good(11,2), stdpd_good(11,2), pd_mid(11,2), stdpd_mid(11,2), pd_bad(11,2), stdpd_bad(11,2), cp_good(11,2), stdcp_good(11,2), cp_mid(11,2), stdcp_mid(11,2), cp_bad(11,2), stdcp_bad(11,2), cdp_good(11,2), stdcdp_good(11,2), cdp_mid(11,2), stdcdp_mid(11,2), cdp_bad(11,2), stdcdp_bad(11,2));
-    fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{M\\_ED\\_MA\\_B} & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\hline\n",...
-		pd_good(12,2), stdpd_good(12,2), pd_mid(12,2), stdpd_mid(12,2), pd_bad(12,2), stdpd_bad(12,2), cp_good(12,2), stdcp_good(12,2), cp_mid(12,2), stdcp_mid(12,2), cp_bad(12,2), stdcp_bad(12,2), cdp_good(12,2), stdcdp_good(12,2), cdp_mid(12,2), stdcdp_mid(12,2), cdp_bad(12,2), stdcdp_bad(12,2));
+    fprintf("  \\begin{tabular}{l|c|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{4.4}|}\n");
+    fprintf("    \\cline{2-8}\n");
+    fprintf("     & \\multirow{2}{*}{strategy} & \\multicolumn{2}{c|}{good} & \\multicolumn{2}{c|}{mid} & \\multicolumn{2}{c|}{bad} \\\\ \\cline{3-8} \n");
+    fprintf("     &  & \\multicolumn{1}{|c|}{learning} & \\multicolumn{1}{|c|}{learned} & \\multicolumn{1}{|c|}{learning} & \\multicolumn{1}{|c|}{learned} & \\multicolumn{1}{|c|}{learning} & \\multicolumn{1}{|c|}{learned} \\\\ \\hline\n");
+    for j=1:sz_base
+        if (j == 1)
+            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", sz_base);
+            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{BASE}}}} & \\footnotesize{%s}", strategies(j));
+        else
+            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
+        end
+        for i=1:2:size(tbl,2)
+            max_base = max(tbl(1:sz_base, 3));
+            ind_max_base = tbl(1:sz_base, 3) == max_base;
+            max_basestd = max_base + tbl(ind_max_base, 2);
+            fprintf(" & ");
+            if ((tbl(j, i)+tbl(j, i+1)) >= max_basestd)
+                fprintf("\\textbf{%.0f},\\textbf{%.0f}", tbl(j, i:i+1));
+            else
+                fprintf("%.0f,%.0f", tbl(j, i:i+1));
+            end
+        end
+        if(j==sz_base)
+            fprintf(" \\\\ \\hline \n");
+        else
+           fprintf(" \\\\ \\cline{2-8} \n");
+        end
+    end
+    for j=(sz_base + 1):size(tbl, 1)
+        if (j == (sz_base + 1))
+            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", (size(tbl, 1)-sz_base));
+            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{NEW}}}} & \\footnotesize{%s}", strategies(j));
+        else
+            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
+        end
+        for i=1:2:size(tbl,2)
+            max_base = max(tbl(1:sz_base, 3));
+            ind_max_base = tbl(1:sz_base, 3) == max_base;
+            max_basestd = max_base - tbl(ind_max_base, 2);
+            fprintf(" & ");
+            if ((tbl(j, i)-tbl(j, i+1)) >= max_basestd)
+                fprintf("\\textbf{%.0f},\\textbf{%.0f}", tbl(j, i:i+1));
+            else
+                fprintf("%.0f,%.0f", tbl(j, i:i+1));
+            end
+        end
+        if (j == size(tbl, 1))
+            fprintf(" \\\\ \\hline \n");
+        else
+            fprintf(" \\\\ \\cline{2-8} \n");
+        end
+    end
+%     fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{DC}");
+%     test_fprinttex(tbl);
+%     fprintf("\\\\ \\cline{2-11} \n");
+%     fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{DC}");
+%     test_fprinttex(tbl);
+%     fprintf("\\\\ \\cline{2-11} \n");
+%     fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{DC}");
+%     test_fprinttex(tbl);
+%     fprintf("\\\\ \\cline{2-11} \n");
+%     fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{RND} & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\hline\n",...
+% 		pd_good(4,2), stdpd_good(4,2), pd_mid(4,2), stdpd_mid(4,2), pd_bad(4,2), stdpd_bad(4,2), cp_good(4,2), stdcp_good(4,2), cp_mid(4,2), stdcp_mid(4,2), cp_bad(4,2), stdcp_bad(4,2), cdp_good(4,2), stdcdp_good(4,2), cdp_mid(4,2), stdcdp_mid(4,2), cdp_bad(4,2), stdcdp_bad(4,2));
+%     fprintf("    \\multicolumn{1}{|l|}{\\multirow{8}{*}{\\STAB{\\rotatebox[origin=c]{90}{NEW}}}} & \\footnotesize{D\\_MA\\_50\\_D}"+...
+% 		" & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\cline{2-11} \n",...
     fprintf("  \\end{tabular}\n");
-    fprintf("\\end{table*}]\n");
+    fprintf("\\end{table*}\n");
 end
 
-function test_fprinttex(v, s, up, down)
-    if (v < down)
-        fprintf("%.0f,%.0f & %.0f,%.0f", v(1), s(1), v(2), s(2));
-    else
-        fprintf("\\textbf{%.0f},\\textbf{%.0f} & \\textbf{%.0f},\\textbf{%.0f}", v(1), s(1), v(2), s(2));
-    end
+function test_fprinttex(tbl)
 end
+
