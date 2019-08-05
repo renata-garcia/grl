@@ -5,7 +5,16 @@ close all;
 % % 
 steps_counted = 10;
 % test_cartpole();
-tbl_meanstd_all = test_pendulum();
+ie=2;
+ia=1;
+if (ie == 1)
+    env = "pendulum"; env_abr = "pd";
+elseif (ie == 2)
+    env = "cart_pole"; env_abr = "cp";
+end
+algs = ["ac_tc", "dpg", "ddpg"];
+alg = algs(ia);
+tbl_meanstd_all = generate_tbl(env, env_abr, alg);
 test_printL_1env_tbl_all_std("pendulum ddpg", tbl_meanstd_all)
 % [perf_good, perf_mid, perf_bad, perf_stdgood, perf_stdmid, perf_stdbad, bpd, bstdpd, bcp, bstdcp, bcdp, bstdcdp] = generate_tables(steps_counted);
 
@@ -313,16 +322,14 @@ function fprinttex(v, s, up, down)
     end
 end
 
-function tbl_meanstd_all = test_pendulum()
+function tbl_meanstd_all = generate_tbl(env, env_abr, alg)
     steps_counted = 10;
     printing = 1;
     folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
     addpath("~/Dropbox/phd_grl_results/matlab");
 
     group = ["good", "mid", "bad"];
-    group = ["bad"];
     load = ["", "_load"];
-    algs = ["ddpg", "ac_tc", "dpg"];
     n_group = length(group);
     n_load = length(load);
     ng = 2*n_group;
@@ -330,15 +337,9 @@ function tbl_meanstd_all = test_pendulum()
 
     % %
     n_env = 1;
-    alg = algs(1);
     tbl_meanstd_all = zeros(24, n_env*ng*n_load);
 
     for ie = 1:n_env
-        if (ie == 1)
-            env = "pendulum"; env_abr = "pd";
-        elseif (ie == 2)
-            env = "cart_pole"; env_abr = "cp";
-        end
 
         if (contains(env,"cart"))
             steps_per_second = 20;

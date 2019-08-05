@@ -9,24 +9,28 @@ steps_counted = 20;
 printing = 0;
 % env = "cart_pole";
 % env = "cart_double_pole_cdp_tau";
-env = "cart_pole"; env_abr = "cp";
 env = "pendulum"; env_abr = "pd_";
-alg = "ac_tc";
-alg = "dpg"; env_abr = "";
+env = "cart_pole"; env_abr = "cp";
+env = "leosim"; env_abr = "_tau";
+alg = "_ac_tc";
+alg = "_dpg";% env_abr = "";
+alg = "";
 % env = "pendulum_pd_tau";
 % env = "cart_pole_cp_notau";
 % env = "cart_pole_cp_notau-2";
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_yamls_results/";
 folder = "/home/renatargo/projects/grl/build/";
-folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_" + alg + "_yamls_results/";
+folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+ alg + "_yamls_results/";
 addpath("~/Dropbox/phd_grl_results/matlab");
-file = env + "_replay_ddpg_tensorflow_sincos_i";
 file = env + "_" + env_abr + "tau_" + alg + "_i";
+file = env + env_abr + "_replay_ddpg_tensorflow_sincos_i";
 
 if (contains(env,"cart"))
     steps_per_second = 20;
 elseif (contains(env,"pendulum"))
     steps_per_second = 33;
+elseif (contains(env,"leosim"))
+    steps_per_second = 30;
 else
     disp("NONE NONE");
 end
