@@ -15,7 +15,8 @@ end
 algs = ["ac_tc", "dpg", "ddpg"];
 alg = algs(ia);
 tbl_meanstd_all = generate_tbl(env, env_abr, alg);
-test_printL_1env_tbl_all_std("pendulum ddpg", tbl_meanstd_all)
+title_leg = strcat("env= ", env, " alg= ", algs(ia));
+test_printL_1env_tbl_all_std(title_leg, tbl_meanstd_all)
 % [perf_good, perf_mid, perf_bad, perf_stdgood, perf_stdmid, perf_stdbad, bpd, bstdpd, bcp, bstdcp, bcdp, bstdcdp] = generate_tables(steps_counted);
 
 function [perf_good, perf_mid, perf_bad, perf_stdgood, perf_stdmid, perf_stdbad, bpd, bstdpd, bcp, bstdcp, bcdp, bstdcdp] = generate_tables(steps_counted)
@@ -330,6 +331,7 @@ function tbl_meanstd_all = generate_tbl(env, env_abr, alg)
 
     group = ["good", "mid", "bad"];
     load = ["", "_load"];
+    load = [""];
     n_group = length(group);
     n_load = length(load);
     ng = 2*n_group;
@@ -434,12 +436,9 @@ function means_std = test_take_mean_mpol(folder, env, env_abr, load, alg, runs, 
     subfolder = "";
     preffix = "";
     
-    if (alg == "ac_tc")
+    if (alg == "ac_tc" || alg == "dpg")
         subfolder = env + "_mpols" + "_" + alg + load + "_yamls_results/";
         preffix = env + "_" + env_abr +"_tau_ac_tc16";
-    elseif (alg == "dpg")
-        subfolder = env + "_mpols" + load + "_yamls_results/";
-        preffix = env + "_" + env_abr +"_tau_mpol_replay_ddpg_tensorflow_sincos_16";
     elseif (alg == "ddpg")
         subfolder = env + "_mpols" + load + "_yamls_results/";
         preffix = env + "_" + env_abr +"_tau_mpol_replay_ddpg_tensorflow_sincos_16";
