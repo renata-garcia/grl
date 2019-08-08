@@ -5,8 +5,9 @@ close all;
 % % 
 steps_counted = 10;
 % test_cartpole();
-ie=2;
-ia=1;
+ie=1;
+ia=2;
+withLoad = 0;
 if (ie == 1)
     env = "pendulum"; env_abr = "pd";
 elseif (ie == 2)
@@ -14,9 +15,9 @@ elseif (ie == 2)
 end
 algs = ["ac_tc", "dpg", "ddpg"];
 alg = algs(ia);
-tbl_meanstd_all = generate_tbl(env, env_abr, alg);
+tbl_meanstd_all = generate_tbl(env, env_abr, alg, withLoad);
 title_leg = strcat("env= ", env, " alg= ", algs(ia));
-test_printL_1env_tbl_all_std(title_leg, tbl_meanstd_all)
+test_printL_1env_tbl_all_std(title_leg, tbl_meanstd_all, withLoad)
 % [perf_good, perf_mid, perf_bad, perf_stdgood, perf_stdmid, perf_stdbad, bpd, bstdpd, bcp, bstdcp, bcdp, bstdcdp] = generate_tables(steps_counted);
 
 function [perf_good, perf_mid, perf_bad, perf_stdgood, perf_stdmid, perf_stdbad, bpd, bstdpd, bcp, bstdcp, bcdp, bstdcdp] = generate_tables(steps_counted)
@@ -323,15 +324,19 @@ function fprinttex(v, s, up, down)
     end
 end
 
-function tbl_meanstd_all = generate_tbl(env, env_abr, alg)
+function tbl_meanstd_all = generate_tbl(env, env_abr, alg, withLoad)
     steps_counted = 10;
     printing = 1;
     folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
     addpath("~/Dropbox/phd_grl_results/matlab");
 
     group = ["good", "mid", "bad"];
-    load = ["", "_load"];
+    
     load = [""];
+    if(withLoad)
+        load = ["", "_load"];
+    end
+    
     n_group = length(group);
     n_load = length(load);
     ng = 2*n_group;
@@ -523,8 +528,12 @@ function test_cartpole()
     disp(tbl_meanstd_specific_bad);
 end
 
-function test_printL_1env_tbl_all_std(caption, tbl)
+function test_printL_1env_tbl_all_std(caption, tbl, withLoad)
     sz_base = 4;
+    ind_max = 3;
+    if(withLoad)
+        ind_max = 1;
+    end
     strategies = ["DC", "D", "M", "RND", "DC_MA_B", "DC_MA_25_DC", "DC_MA_50_DC",...
                   "DC_MA_75_DC", "DC_MA_50_D", "D_MA_50_D", "D_MA_50_DC", "D_MA_B",...
                   "DC_ED_MA_25_DC", "DC_EC_MA_50_DC", "DC_ED_MA_75_DC", "DC_ED_MA_B",...
@@ -564,8 +573,8 @@ function test_printL_1env_tbl_all_std(caption, tbl)
             fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
         end
         for i=1:2:size(tbl,2)
-            max_base = max(tbl(1:sz_base, 3));
-            ind_max_base = tbl(1:sz_base, 3) == max_base;
+            max_base = max(tbl(1:sz_base, ind_max));
+            ind_max_base = tbl(1:sz_base, ind_max) == max_base;
             max_basestd = max_base + tbl(ind_max_base, 2);
             fprintf(" & ");
             if ((tbl(j, i)+tbl(j, i+1)) >= max_basestd)
@@ -588,8 +597,8 @@ function test_printL_1env_tbl_all_std(caption, tbl)
             fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
         end
         for i=1:2:size(tbl,2)
-            max_base = max(tbl(1:sz_base, 3));
-            ind_max_base = tbl(1:sz_base, 3) == max_base;
+            max_base = max(tbl(1:sz_base, ind_max));
+            ind_max_base = tbl(1:sz_base, ind_max) == max_base;
             max_basestd = max_base - tbl(ind_max_base, 2);
             fprintf(" & ");
             if ((tbl(j, i)-tbl(j, i+1)) >= max_basestd)
