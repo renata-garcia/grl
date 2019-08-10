@@ -9,10 +9,10 @@ function ploting_executions(folder, title_fig, steps_per_second, array_runs)
         fd = folder + array_runs(j);
         disp(fd);
         data = readseries(fd, 3, 2, steps_per_second);
-        [t, mean_d, ~, std_d] = avgseries(data);
+        [t, mean_d, ~, std_e] = avgseries(data);
         maximum = max(mean_d);
         n_color = color(1 + rem(j, length(color)));
-        h(j) = errorbaralpha(t, mean_d, icdf('norm', 0.975, 0, 1)*std_d, 'color', n_color, 'linestyle', '--');
+        h(j) = errorbaralpha(t, mean_d, icdf('norm', 0.975, 0, 1)*std_e, 'color', n_color, 'linestyle', '--');
         newStrLeg = strrep(array_runs(j),'_','\_');
         leg = [leg, strcat(newStrLeg, ':... ', num2str(maximum))];
         hold on;

@@ -4,10 +4,9 @@ close all;
 
 % % 
 steps_counted = 10;
-% test_cartpole();
-ie=1;
+ie=2;
 ia=2;
-withLoad = 0;
+withLoad = 1;
 if (ie == 1)
     env = "pendulum"; env_abr = "pd";
 elseif (ie == 2)
@@ -443,7 +442,7 @@ function means_std = test_take_mean_mpol(folder, env, env_abr, load, alg, runs, 
     
     if (alg == "ac_tc" || alg == "dpg")
         subfolder = env + "_mpols" + "_" + alg + load + "_yamls_results/";
-        preffix = env + "_" + env_abr +"_tau_ac_tc16";
+        preffix = env + "_" + env_abr +"_tau_" + alg + "16";
     elseif (alg == "ddpg")
         subfolder = env + "_mpols" + load + "_yamls_results/";
         preffix = env + "_" + env_abr +"_tau_mpol_replay_ddpg_tensorflow_sincos_16";
@@ -473,87 +472,31 @@ function means_std = test_take_mean_mpol(folder, env, env_abr, load, alg, runs, 
     
 end
 
-function test_cartpole()
-    steps_counted = 10;
-    printing = 0;
-    folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
-    addpath("~/Dropbox/phd_grl_results/matlab");
-
-    type = ["good", "mid", "bad"];
-    load = ["", "_load"];
-    n = length(type);
-
-    % % 
-    tbl_meanstd_all = zeros(12, 2*n*length(load));
-
-    env = "cart_pole"; env_abr = "cp";
-
-    if (contains(env,"cart"))
-        steps_per_second = 20;
-    elseif (contains(env,"pendulum"))
-        steps_per_second = 33;
-    else
-        disp("NONE NONE");
-    end
-
-    i=1;
-    for j = 1:length(type)
-        for k = 1:length(load)
-            runs_generic = [type(j) + load(k) + "_*_none_none_1.0_density_a1.0_*txt",...
-                            type(j) + load(k) + "_*_none_none_1.0_data_center_a1.0_*txt",...
-                            type(j) + load(k) + "_*_none_none_1.0_mean_a1.0_*txt",...
-                            type(j) + load(k) + "_*_none_none_1.0_random_a1_*txt",...
-                            type(j) + load(k) + "_*_none_density_0.5_density_a0.01_*txt",...
-                            type(j) + load(k) + "_*_none_density_0.5_data_center_a0.01_*txt",...
-                            type(j) + load(k) + "_*_none_density_1.0_best_a0.01_*txt",...
-                            type(j) + load(k) + "_*_density_euclidian_distance_0.01_best_a0.01_*txt",...
-                            type(j) + load(k) + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
-                            type(j) + load(k) + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
-                            type(j) + load(k) + "_*_mean_euclidian_distance_0.5_data_center_a0.01_*txt",...
-                            type(j) + load(k) + "_*_mean_euclidian_distance_0.1_best_a0.01_*txt"];
-            [tbl_meanstd_all(:, 2*n*(k-1) + ((2*j)-1) : 2*n*(k-1) + (2*j))] = test_take_mean_mpol(folder, env, env_abr, load(k), runs_generic, printing, steps_per_second, steps_counted);
-        end
-    end
-
-    type = "bad";
-    runs_specific_bad = [         type + "_*_data_center_euclidian_distance_0.5_data_center_a0.01_*.txt",...
-                                  type + "_*_data_center_euclidian_distance_0.5_data_center_a0.02_*.txt"];
-    tbl_meanstd_specific_bad = test_take_mean_mpol(folder, env, env_abr, "", runs_specific_bad, printing, steps_per_second, steps_counted);
-
-    % print_tbl_good_latex(strcat("Table of performance...steps_counted=", num2str(steps_counted)), pd_good);
-    % print_tbl_good_std_latex(strcat("Table of performance...steps_counted=", num2str(steps_counted)), pd_good, stdpd_good, bpd, bstdpd);
-    % print_tbl_all_std_latex(strcat("Table of performance...steps_counted=", num2str(steps_counted)), pd_good, stdpd_good, pd_mid, stdpd_mid, pd_bad, stdpd_bad);
-
-    disp(tbl_meanstd_all);
-    disp(tbl_meanstd_specific_bad);
-end
-
 function test_printL_1env_tbl_all_std(caption, tbl, withLoad)
     sz_base = 4;
-    ind_max = 3;
+    ind_max = 1;
+    jmp_grp = 2;
     if(withLoad)
-        ind_max = 1;
+        ind_max = 3;
+        jmp_grp = 4;
     end
-    strategies = ["DC", "D", "M", "RND", "DC_MA_B", "DC_MA_25_DC", "DC_MA_50_DC",...
-                  "DC_MA_75_DC", "DC_MA_50_D", "D_MA_50_D", "D_MA_50_DC", "D_MA_B",...
-                  "DC_ED_MA_25_DC", "DC_EC_MA_50_DC", "DC_ED_MA_75_DC", "DC_ED_MA_B",...
-                  "D_ED_MA_B", "DC_MA_B", "M_ED_MA_B", "M_ED_MA_25_D", "M_ED_MA_50_D",...
-                  "M_ED_MA_75_D", "M_ED_MA_50_DC", "DC_MA_50_D"];
+    bests =  zeros(1, 3);
+    j = 1;
+    for i=ind_max:jmp_grp:size(tbl,2)
+    	max_base = max(tbl(1:sz_base, i));
+        ind_max_base = tbl(1:sz_base, i) == max_base;
+        iline = (1:jmp_grp)*ind_max_base;
+        max_basestd = max_base - tbl(iline,i+1);
+        bests(j) = max_basestd;
+        j=j+1;
+    end
+    disp(bests);
     strategies = ["DC", "D", "M", "RND", "DC\_MA\_B", "DC\_MA\_25\_DC", "DC\_MA\_50\_DC",...
                   "DC\_MA\_75\_DC", "DC\_MA\_50\_D", "D\_MA\_50\_D", "D\_MA\_50\_DC", "D\_MA\_B",...
                   "DC\_ED\_MA\_25\_DC", "DC\_EC\_MA\_50\_DC", "DC\_ED\_MA\_75\_DC", "DC\_ED\_MA\_B",...
                   "D\_ED\_MA\_B", "DC\_MA\_B", "M\_ED\_MA\_B", "M\_ED\_MA\_25\_D", "M\_ED\_MA\_50\_D",...
                   "M\_ED\_MA\_75\_D", "M\_ED\_MA\_50\_DC", "DC\_MA\_50\_D"];
-%     fprintf("    \\multicolumn{1}{|l|}{\\multirow{4}{*}{\\STAB{\\rotatebox[origin=c]{90}{BASE}}}} & \\footnotesize{D} & ");
-%     fprinttex(pd(1,1:2), stdpd(1,1:2), up_pd, down_pd); fprintf(" & ");
-%     fprinttex(cp(1,1:2), stdcp(1,1:2), up_cp, down_cp); fprintf(" & ");
-%     fprinttex(cdp(1,1:2), stdcdp(1,1:2), up_cdp, down_cdp)
-%     fprintf(" \\\\ \\cline{2-8} \n");
-%     fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{DC} & ");
-%     fprinttex(pd(2,1:2), stdpd(2,1:2), up_pd, down_pd); fprintf(" & ");
-%     fprinttex(cp(2,1:2), stdcp(2,1:2), up_cp, down_cp); fprintf(" & ");
-%     fprinttex(cdp(2,1:2), stdcdp(2,1:2), up_cdp, down_cdp)
-%     fprintf(" \\\\ \\cline{2-8} \n");    
+              
 	fprintf("%% Please add the following required packages to your document preamble:\n");
     fprintf("%% \\usepackage{multirow}\n");
     fprintf("  \\begin{table*}[]\n");
@@ -572,12 +515,11 @@ function test_printL_1env_tbl_all_std(caption, tbl, withLoad)
         else
             fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
         end
+        k = 1;
         for i=1:2:size(tbl,2)
-            max_base = max(tbl(1:sz_base, ind_max));
-            ind_max_base = tbl(1:sz_base, ind_max) == max_base;
-            max_basestd = max_base + tbl(ind_max_base, 2);
+            k = 1 + floor(i/jmp_grp);
             fprintf(" & ");
-            if ((tbl(j, i)+tbl(j, i+1)) >= max_basestd)
+            if ((tbl(j, i)+tbl(j, i+1)) >= bests(k))
                 fprintf("\\textbf{%.0f},\\textbf{%.0f}", tbl(j, i:i+1));
             else
                 fprintf("%.0f,%.0f", tbl(j, i:i+1));
@@ -588,6 +530,7 @@ function test_printL_1env_tbl_all_std(caption, tbl, withLoad)
         else
            fprintf(" \\\\ \\cline{2-8} \n");
         end
+        
     end
     for j=(sz_base + 1):size(tbl, 1)
         if (j == (sz_base + 1))
@@ -597,11 +540,9 @@ function test_printL_1env_tbl_all_std(caption, tbl, withLoad)
             fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
         end
         for i=1:2:size(tbl,2)
-            max_base = max(tbl(1:sz_base, ind_max));
-            ind_max_base = tbl(1:sz_base, ind_max) == max_base;
-            max_basestd = max_base - tbl(ind_max_base, 2);
+            k = 1 + floor(i/jmp_grp);
             fprintf(" & ");
-            if ((tbl(j, i)-tbl(j, i+1)) >= max_basestd)
+            if ((tbl(j, i)-tbl(j, i+1)) >= bests(k))
                 fprintf("\\textbf{%.0f},\\textbf{%.0f}", tbl(j, i:i+1));
             else
                 fprintf("%.0f,%.0f", tbl(j, i:i+1));
@@ -613,23 +554,6 @@ function test_printL_1env_tbl_all_std(caption, tbl, withLoad)
             fprintf(" \\\\ \\cline{2-8} \n");
         end
     end
-%     fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{DC}");
-%     test_fprinttex(tbl);
-%     fprintf("\\\\ \\cline{2-11} \n");
-%     fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{DC}");
-%     test_fprinttex(tbl);
-%     fprintf("\\\\ \\cline{2-11} \n");
-%     fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{DC}");
-%     test_fprinttex(tbl);
-%     fprintf("\\\\ \\cline{2-11} \n");
-%     fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{RND} & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\hline\n",...
-% 		pd_good(4,2), stdpd_good(4,2), pd_mid(4,2), stdpd_mid(4,2), pd_bad(4,2), stdpd_bad(4,2), cp_good(4,2), stdcp_good(4,2), cp_mid(4,2), stdcp_mid(4,2), cp_bad(4,2), stdcp_bad(4,2), cdp_good(4,2), stdcdp_good(4,2), cdp_mid(4,2), stdcdp_mid(4,2), cdp_bad(4,2), stdcdp_bad(4,2));
-%     fprintf("    \\multicolumn{1}{|l|}{\\multirow{8}{*}{\\STAB{\\rotatebox[origin=c]{90}{NEW}}}} & \\footnotesize{D\\_MA\\_50\\_D}"+...
-% 		" & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f & %.0f,%.0f \\\\ \\cline{2-11} \n",...
     fprintf("  \\end{tabular}\n");
     fprintf("\\end{table*}\n");
 end
-
-function test_fprinttex(tbl)
-end
-
