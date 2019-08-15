@@ -4,8 +4,8 @@ close all;
 
 % % 
 steps_counted = 10;
-ie=1;
-ia=3;
+ie=4;
+ia=1;
 withLoad = 0;
 withlimiar = 1;
 onlybad4pend=0;
@@ -15,6 +15,8 @@ elseif (ie == 2)
     env = "cart_pole"; env_abr = "cp";
 elseif (ie == 3)
     env = "cart_double_pole"; env_abr = "cdp";
+elseif (ie == 4)
+    env = "pinball"; env_abr = "pb";
 end
 algs = ["ac_tc", "dpg", "ddpg"];
 alg = algs(ia);
