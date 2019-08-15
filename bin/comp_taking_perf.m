@@ -4,7 +4,7 @@ close all;
 
 % % 
 steps_counted = 10;
-ie=1;
+ie=2;
 ia=3;
 withLoad = 0;
 withlimiar = 1;
@@ -350,7 +350,7 @@ function [tbl_meanstd_all, percentual] = generate_tbl(env, env_abr, alg, withLoa
 
     % %
     n_env = 1;
-    n_vert = 24;
+    n_vert = 14;
     tbl_meanstd_all = zeros(n_vert, n_env*ng*n_load);
     percentual = zeros(n_vert, n_group);
 
@@ -364,7 +364,7 @@ function [tbl_meanstd_all, percentual] = generate_tbl(env, env_abr, alg, withLoa
 
     for ig = 1:n_group
         for il = 1:n_load
-            runs_generic = [group(ig) + load(il) + "_*_none_none_1.0_data_center_a1.0_*txt",...
+             runs_generic = [group(ig) + load(il) + "_*_none_none_1.0_data_center_a1.0_*txt",...
                             group(ig) + load(il) + "_*_none_none_1.0_density_a1.0_*txt",...
                             group(ig) + load(il) + "_*_none_none_1.0_mean_a1.0_*txt",...
                             group(ig) + load(il) + "_*_none_none_1.0_random_a1_*txt",...
@@ -481,7 +481,7 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
 %         inc = 100/length(data_no_limiar);
         for i=1:length(data_no_limiar)
             tmp = data_no_limiar{i};
-            if (mean(tmp((end-5):end,2)) > -3500)
+            if (mean(tmp((end-5):end,2)) > -1500)
                 k = k + 1;
                 data{k} = data_no_limiar{i};
                 percentual(j) = percentual(j) + 1;

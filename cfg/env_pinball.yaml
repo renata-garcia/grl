@@ -1,0 +1,13 @@
+experiment:
+  environment: 
+    type: environment/modeled
+    model: 
+      type: model/pinball
+      control_step: 0.05
+      integration_steps: 5
+      restitution: 0.5
+      radius: 0.01
+    task: 
+      type: task/pinball/regulator
+      q: [5, 1, 0, 0]
+      r: [0.1, 0.1]
