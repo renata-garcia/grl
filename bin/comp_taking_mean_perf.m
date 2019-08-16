@@ -14,6 +14,8 @@ env = "cart_pole"; env_abr = "cp_";
 env = "cart_double_pole"; env_abr = "cdp_";
 env = "leosim"; env_abr = "_tau";
 env = "pinball"; env_abr = "";
+env = "walker"; env_abr = "";
+env = "compass_walker"; env_abr = "cw_";
 alg = "";
 alg = "_ac_tc";
 alg = "_dpg";% env_abr = "";
@@ -23,12 +25,15 @@ alg = "_dpg";% env_abr = "";
 folder = "/home/renatargo/projects/grl/build/";
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_yamls_results/";
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+ alg + "_yamls_results/";
+folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/walker" + alg + "_yamls_results/";
 addpath("~/Dropbox/phd_grl_results/matlab");
 file = env + env_abr + "_replay_ddpg_tensorflow_sincos_i";
 file = env + "_" + env_abr + "tau" + alg + "_i";
 
 if (contains(env,"cart") || contains(env,"pinball"))
     steps_per_second = 20;
+elseif (contains(env,"walker"))
+    steps_per_second = 5;
 elseif (contains(env,"pendulum"))
     steps_per_second = 33;
 elseif (contains(env,"leosim"))
