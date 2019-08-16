@@ -50,13 +50,13 @@ class MultiPolicy : public Policy
     
     typedef std::vector<Action> ActionArray;
   
-    enum CombinationStrategy {csBinning,
-    csDataCenterVotingMov,
-    csAlg4StepsNew, csStatic, csValueBased, csRoulette};
-    enum ScoreDistance {sdNone, sdBest, sdDensityBased, sdDataCenter, sdMean, sdRandom};
+    enum CombinationStrategy {csBinning, csDataCenterVotingMov, csAlg4StepsNew,
+    csStatic, csValueBased, csRoulette};
+    enum ScoreDistance {sdNone, sdBest, sdDensityBased, sdDataCenter, sdMean, sdRandom, sdRandomPersistent};
     enum UpdateHistory {uhNone, uhEuclideanDistance, uhDensity, uhDensityLinear, uhDataCenter};
     
   protected:
+    size_t policy_random_;
     std::string strategy_str_;
     std::string ensemble_center_str_;
     std::string update_history_str_;
@@ -114,7 +114,8 @@ class MultiPolicy : public Policy
                     major_remove_bound_(0.75),
                     iRoulette_(0.3),
                     iterations_(0),
-                    percentile_(1.)
+                    percentile_(1.),
+                    policy_random_(0)
     {
       srand(time(0));
     }

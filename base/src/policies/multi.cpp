@@ -38,7 +38,10 @@ void MultiPolicy::request(ConfigurationRequest *config)
   {"binning",
   "data_center_voting_mov", 
   "alg4stepsNew",
-  "random", "static", "value_based", "roulette"}));
+  "random",
+  "static",
+  "value_based",
+  "roulette"}));
   
   config->push_back(CRP("ensemble_center", "Ensemble Center", ensemble_center_str_, CRP::Configuration,
   {"none", "density","data_center","mean"}));
@@ -49,7 +52,7 @@ void MultiPolicy::request(ConfigurationRequest *config)
   config->push_back(CRP("percentile", "Percentile of Scores / Actions", percentile_));
   
   config->push_back(CRP("select_by_distance", "Select by distance", select_by_distance_str_, CRP::Configuration,
-  {"none", "best", "data_center", "density", "mean", "random"}));
+  {"none", "best", "data_center", "density", "mean", "random", "random_persistent"}));
   
   config->push_back(CRP("score_postprocess", "score_postprocess", score_postprocess_));
   
@@ -157,6 +160,11 @@ void MultiPolicy::configure(Configuration &config)
     select_by_distance_ = sdRandom;
     select_ = sdRandom;
   }
+  else if(select_by_distance_str_ == "random_persistent")
+  {
+    select_by_distance_ = sdRandomPersistent;
+    select_ = sdRandomPersistent;
+  }
 
   score_postprocess_ = config["score_postprocess"];
 
@@ -205,6 +213,7 @@ void MultiPolicy::configure(Configuration &config)
   iterations_ = 0;
   //---------------------------------
   percentile_ = config["percentile"];
+  policy_random_ = 0;
 }
 
 void MultiPolicy::reconfigure(const Configuration &config)
@@ -479,6 +488,16 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
           size_t policy_random = aleatorio%active_set.size();
           dist = active_set[policy_random].v;
           CRAWL("MultiPolicy::csAlg4Steps::case sdRandom active_set[policy_random: " << policy_random << "]->v: " << dist);
+        }
+        break;
+
+        case sdRandomPersistent:
+        {
+          int aleatorio = rand();
+          if (!time)
+            policy_random_ = aleatorio%active_set.size();
+          dist = active_set[policy_random_].v;
+          CRAWL("MultiPolicy::csAlg4Steps::case sdRandom active_set[policy_random: " << policy_random_ << "]->v: " << dist);
         }
         break;
       }

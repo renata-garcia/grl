@@ -4,9 +4,9 @@ close all;
 
 % % 
 steps_counted = 10;
-ie=3;
+ie=5;
 ia=2;
-withLoad = 0;
+withLoad = 1;
 withlimiar = 1;
 onlybad4pend=0;
 if (ie == 1)
@@ -17,6 +17,8 @@ elseif (ie == 3)
     env = "cart_double_pole"; env_abr = "cdp";
 elseif (ie == 4)
     env = "pinball"; env_abr = "pb";
+elseif (ie == 5)
+    env = "walker"; env_abr = "cw";
 end
 algs = ["ac_tc", "dpg", "ddpg"];
 alg = algs(ia);
@@ -359,6 +361,8 @@ function [tbl_meanstd_all, percentual] = generate_tbl(env, env_abr, alg, withLoa
         steps_per_second = 20;
     elseif (contains(env,"pendulum"))
         steps_per_second = 33;
+    elseif (contains(env,"walker"))
+        steps_per_second = 5;
     else
         disp("NONE NONE");
     end
@@ -563,7 +567,7 @@ function test_printL_1env_tbl_all_std_perc(caption, tbl, withLoad, percentual)
         k = 1;
         ii = 0;
         for i=1:2:size(tbl,2)
-            ii = ii + 1;
+            ii = rem(ii,3) + 1;
             k = 1 + floor(i/jmp_grp);
             fprintf(" & ");
             if ((tbl(j, i)+tbl(j, i+1)) >= bests(k))
@@ -588,7 +592,7 @@ function test_printL_1env_tbl_all_std_perc(caption, tbl, withLoad, percentual)
         end
         ii = 0;
         for i=1:2:size(tbl,2)
-            ii = ii + 1;
+            ii = rem(ii,3) + 1;
             k = 1 + floor(i/jmp_grp);
             fprintf(" & ");
             if ((tbl(j, i)-tbl(j, i+1)) >= bests(k))
