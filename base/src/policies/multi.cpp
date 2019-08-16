@@ -213,7 +213,7 @@ void MultiPolicy::configure(Configuration &config)
   iterations_ = 0;
   //---------------------------------
   percentile_ = config["percentile"];
-  policy_random_ = 0;
+  policy_persistent_ = 0;
 }
 
 void MultiPolicy::reconfigure(const Configuration &config)
@@ -495,9 +495,9 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
         {
           int aleatorio = rand();
           if (!time)
-            policy_random_ = aleatorio%active_set.size();
-          dist = active_set[policy_random_].v;
-          CRAWL("MultiPolicy::csAlg4Steps::case sdRandom active_set[policy_random: " << policy_random_ << "]->v: " << dist);
+            policy_persistent_ = aleatorio%active_set.size();
+          dist = active_set[policy_persistent_].v;
+          CRAWL("MultiPolicy::csAlg4Steps::case sdRandom active_set[policy_random: " << policy_persistent_ << "]->v: " << dist);
         }
         break;
       }

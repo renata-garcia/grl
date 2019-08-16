@@ -52,11 +52,12 @@ class MultiPolicy : public Policy
   
     enum CombinationStrategy {csBinning, csDataCenterVotingMov, csAlg4StepsNew,
     csStatic, csValueBased, csRoulette};
-    enum ScoreDistance {sdNone, sdBest, sdDensityBased, sdDataCenter, sdMean, sdRandom, sdRandomPersistent};
+    enum ScoreDistance {sdNone, sdBest, sdDensityBased, sdDataCenter,
+     sdMean, sdRandom, sdRandomPersistent};
     enum UpdateHistory {uhNone, uhEuclideanDistance, uhDensity, uhDensityLinear, uhDataCenter};
     
   protected:
-    size_t policy_random_;
+    size_t policy_persistent_;
     std::string strategy_str_;
     std::string ensemble_center_str_;
     std::string update_history_str_;
@@ -101,6 +102,7 @@ class MultiPolicy : public Policy
 	  };
     //------------------------------------------------------
     double percentile_;
+    LargeVector action_persistent;
     LargeVector moving_average_;
     int score_postprocess_; // 0 or 1
 
@@ -115,7 +117,7 @@ class MultiPolicy : public Policy
                     iRoulette_(0.3),
                     iterations_(0),
                     percentile_(1.),
-                    policy_random_(0)
+                    policy_persistent_(0)
     {
       srand(time(0));
     }
