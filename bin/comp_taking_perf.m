@@ -2,29 +2,37 @@ clc;
 clear;
 close all;
 
-% % 
-steps_counted = 10;
-ie=5;
-ia=2;
-withLoad = 1;
-withlimiar = 1;
-onlybad4pend=0;
-if (ie == 1)
-    env = "pendulum"; env_abr = "pd";
-elseif (ie == 2)
-    env = "cart_pole"; env_abr = "cp";
-elseif (ie == 3)
-    env = "cart_double_pole"; env_abr = "cdp";
-elseif (ie == 4)
-    env = "pinball"; env_abr = "pb";
-elseif (ie == 5)
-    env = "walker"; env_abr = "cw";
+% %
+for ica=1:1
+    printing = 1;
+    steps_counted = 10;
+    ie=1;
+    ia=ica
+    withLoad = 1;
+    withNoise = 1;
+    withlimiar = 1;
+    onlybad4pend=0;
+    algs = ["ac_tc", "dpg", "ddpg"];
+    if (ie == 1)
+        env = "pendulum"; env_abr = "pd";
+    elseif (ie == 2)
+        env = "cart_pole"; env_abr = "cp";
+    elseif (ie == 3)
+        env = "cart_double_pole"; env_abr = "cdp";
+    elseif (ie == 4)
+        env = "walker"; env_abr = "cw";
+    end
+    alg = algs(ia);
+    [tbl_meanstd_all, percentual] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
+    title_leg = strcat("env= ", env, " alg= ", algs(ia));
+    if (withlimiar)
+        title_leg = strcat(title_leg, " limi-3500");
+    end
+    if (withNoise)
+        title_leg = strcat(title_leg, " NOISE AND NOT LOAAAADDD");
+    end
+    test_printL_1env_tbl_all_std_perc(title_leg, tbl_meanstd_all, withLoad, percentual)
 end
-algs = ["ac_tc", "dpg", "ddpg"];
-alg = algs(ia);
-[tbl_meanstd_all, percentual] = generate_tbl(env, env_abr, alg, withLoad, onlybad4pend, withlimiar);
-title_leg = strcat("env= ", env, " alg= ", algs(ia), " limi-3500");
-test_printL_1env_tbl_all_std_perc(title_leg, tbl_meanstd_all, withLoad, percentual)
 
 function [perf_good, perf_mid, perf_bad, perf_stdgood, perf_stdmid, perf_stdbad, bpd, bstdpd, bcp, bstdcp, bcdp, bstdcdp] = generate_tables(steps_counted)
     printing = 0;
@@ -330,9 +338,8 @@ function fprinttex(v, s, up, down)
     end
 end
 
-function [tbl_meanstd_all, percentual] = generate_tbl(env, env_abr, alg, withLoad, exc, withlimiar)
+function [tbl_meanstd_all, percentual] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar)
     steps_counted = 10;
-    printing = 1;
     folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
     addpath("~/Dropbox/phd_grl_results/matlab");
 
@@ -342,8 +349,12 @@ function [tbl_meanstd_all, percentual] = generate_tbl(env, env_abr, alg, withLoa
     end
 
     load = [""];
-    if(withLoad)
+    if(withLoad && withNoise)
+        load = ["", "_noisemulti"];
+    elseif (withLoad)
         load = ["", "_load"];
+    elseif (withNoise)
+        return;
     end
 
     n_group = length(group);
@@ -353,12 +364,12 @@ function [tbl_meanstd_all, percentual] = generate_tbl(env, env_abr, alg, withLoa
 
     % %
     n_env = 1;
-    n_vert = 24;
+    n_vert = 17-1-1-1-1-1-1-1-1;
     tbl_meanstd_all = zeros(n_vert, n_env*ng*n_load);
-    percentual = zeros(n_vert, n_group);
+    percentual = zeros(n_vert, n_env*n_group*n_load);
 
     if (contains(env,"cart"))
-        steps_per_second = 20;
+        steps_per_second = 19;
     elseif (contains(env,"pendulum"))
         steps_per_second = 33;
     elseif (contains(env,"walker"))
@@ -369,35 +380,43 @@ function [tbl_meanstd_all, percentual] = generate_tbl(env, env_abr, alg, withLoa
 
     for ig = 1:n_group
         for il = 1:n_load
+%                             group(ig) + load(il) + "_*_none_none_1.0_mean_a1.0_*txt",...
+%                             group(ig) + load(il) + "_*_none_none_1.0_random_a1_*txt",...
+%                             group(ig) + load(il) + "_*_none_data_center_linear_order_0.25_data_center_a0.01*txt",...
+%                             group(ig) + load(il) + "_*_none_data_center_linear_order_0.5_data_center_a0.01*txt",...
+%                             group(ig) + load(il) + "_*_data_center_euclidian_distance_0.5_data_center_a0.01*txt",...
+%                             group(ig) + load(il) + "_*_none_data_center_linear_order_0.5_density_a0.01*txt",...
+%                             group(ig) + load(il) + "_*_none_density_0.5_density_a0.01_*txt",...
+%                             group(ig) + load(il) + "_*_none_density_0.5_data_center_a0.01_*txt",...
+%                             group(ig) + load(il) + "_*_data_center_euclidian_distance_0.1_best_a0.01*txt",...
+%                             group(ig) + load(il) + "_*_density_euclidian_distance_0.01_best_a0.01_*txt",...
+%                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
+%                             group(ig) + load(il) + "_*_data_center_euclidian_distance_0.75_data_center_a0.01*txt",...
+%                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.75_density_a0.01_*txt",...
+%                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_data_center_a0.01_*txt",...
+%                             group(ig) + load(il) + "_*_none_density_0.5_density_a0.01*txt"
             runs_generic = [group(ig) + load(il) + "_*_none_none_1.0_data_center_a1.0_*txt",...
                             group(ig) + load(il) + "_*_none_none_1.0_density_a1.0_*txt",...
-                            group(ig) + load(il) + "_*_none_none_1.0_mean_a1.0_*txt",...
-                            group(ig) + load(il) + "_*_none_none_1.0_random_a1_*txt",...
                             group(ig) + load(il) + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
-                            group(ig) + load(il) + "_*_none_data_center_linear_order_0.25_data_center_a0.01*txt",...
-                            group(ig) + load(il) + "_*_none_data_center_linear_order_0.5_data_center_a0.01*txt",...
                             group(ig) + load(il) + "_*_none_data_center_linear_order_0.75_data_center_a0.01*txt",...
-                            group(ig) + load(il) + "_*_none_data_center_linear_order_0.5_density_a0.01*txt",...
-                            group(ig) + load(il) + "_*_none_density_0.5_density_a0.01_*txt",...
-                            group(ig) + load(il) + "_*_none_density_0.5_data_center_a0.01_*txt",...
                             group(ig) + load(il) + "_*_none_density_1.0_best_a0.01_*txt",...
                             group(ig) + load(il) + "_*_data_center_euclidian_distance_0.25_data_center_a0.01_*txt",...
-                            group(ig) + load(il) + "_*_data_center_euclidian_distance_0.5_data_center_a0.01*txt",...
-                            group(ig) + load(il) + "_*_data_center_euclidian_distance_0.75_data_center_a0.01*txt",...
-                            group(ig) + load(il) + "_*_data_center_euclidian_distance_0.1_best_a0.01*txt",...
-                            group(ig) + load(il) + "_*_density_euclidian_distance_0.01_best_a0.01_*txt",...
                             group(ig) + load(il) + "_*_none_data_center_linear_order_1.0_best_a0.01_*txt",...
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.1_best_a0.01*txt",...
-                            group(ig) + load(il) + "_*_mean_euclidian_distance_0.25_density_a0.01*txt",...
-                            group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_density_a0.01_*txt",...
-                            group(ig) + load(il) + "_*_mean_euclidian_distance_0.75_density_a0.01_*txt",...
-                            group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_data_center_a0.01_*txt",...
-                            group(ig) + load(il) + "_*_none_density_0.5_density_a0.01*txt"];
+                            group(ig) + load(il) + "_*_mean_euclidian_distance_0.25_density_a0.01*txt"];
             i_load = (ng*n_load) + ng*(il-1) + (2*ig)-1; %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)-1
             j_load = (ng*n_load) + ng*(il-1) + (2*ig); %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)
             i = nl*(ig-1) + 2*il -1; %(ng*n_load)*(ie-1) + 
             j = nl*(ig-1) + 2*il;%(ng*n_load)*(ie-1) + 
-            [tbl_meanstd_all(:, i:j), percentual(:,ig)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, withlimiar);
+            k = n_load*(ig-1) + il; %(ng*n_load)*(ie-1) + 
+            [tbl2, perc2] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, withlimiar);
+            disp(size(tbl2));
+            disp(size(perc2));
+            disp(i);
+            disp(j);
+            disp(k);
+            [tbl_meanstd_all(:, i:j), percentual(:,k)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, withlimiar);
+            disp(size(percentual));
         end
 	end
 
@@ -480,7 +499,12 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
         if (printing)
             disp(fd);
         end
+        
         data_no_limiar = readseries(fd, 3, 2, steps_per_second);
+        if (length(data_no_limiar) ~= 10)
+            disp(fd);
+        end
+        
         data = {};
         k = 0;
 %         inc = 100/length(data_no_limiar);
@@ -567,7 +591,8 @@ function test_printL_1env_tbl_all_std_perc(caption, tbl, withLoad, percentual)
         k = 1;
         ii = 0;
         for i=1:2:size(tbl,2)
-            ii = rem(ii,3) + 1;
+            ii = ii + 1;
+%             ii = rem(ii,3) + 1;
             k = 1 + floor(i/jmp_grp);
             fprintf(" & ");
             if ((tbl(j, i)+tbl(j, i+1)) >= bests(k))
@@ -592,7 +617,8 @@ function test_printL_1env_tbl_all_std_perc(caption, tbl, withLoad, percentual)
         end
         ii = 0;
         for i=1:2:size(tbl,2)
-            ii = rem(ii,3) + 1;
+            ii = ii + 1;
+%             ii = rem(ii,3) + 1;
             k = 1 + floor(i/jmp_grp);
             fprintf(" & ");
             if ((tbl(j, i)-tbl(j, i+1)) >= bests(k))
