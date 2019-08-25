@@ -3,12 +3,12 @@ clear;
 close all;
 
 % %
-for ica=1:1
-    printing = 1;
+for ica=3:3
+    printing = 0;
     steps_counted = 10;
-    ie=4;
+    ie=1;
     ia=ica
-    withLoad = 1;
+    withLoad = 0;
     withNoise = 0;
     withlimiar = 1;
     onlybad4pend=0;
@@ -31,7 +31,7 @@ for ica=1:1
     if (withNoise)
         title_leg = strcat(title_leg, " NOISE AND NOT LOAAAADDD");
     end
-    test_printL_1env_tbl_all_std_perc(title_leg, tbl_meanstd_all, withLoad, percentual)
+    print(title_leg, tbl_meanstd_all, withLoad, percentual)
     disp("acabou..........");
 end
 
@@ -113,7 +113,7 @@ function [tbl_meanstd_all, percentual] = generate_tbl(printing, env, env_abr, al
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_density_a0.01_-*txt",...
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.75_density_a0.01_-*txt",...
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_data_center_a0.01_-*txt",...
-                            group(ig) + load(il) + "_*_none_density_linear_order_0.5_density_a0.01_-*txt"]; 
+                            group(ig) + load(il) + "none_density_linear_order_0.5_density_a0.01"]; 
             i_load = (ng*n_load) + ng*(il-1) + (2*ig)-1; %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)-1
             j_load = (ng*n_load) + ng*(il-1) + (2*ig); %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)
             i = nl*(ig-1) + 2*il -1; %(ng*n_load)*(ie-1) + 
@@ -210,14 +210,15 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
         end
         
         data = {};
-        k = 0;
-%         inc = 100/length(data_no_limiar);
-        for i=1:length(data_no_limiar)
-            tmp = data_no_limiar{i};
-            if (mean(tmp((end-5):end,2)) > -3500)
-                k = k + 1;
-                data{k} = data_no_limiar{i};
-                percentual(j) = percentual(j) + 1;
+        if (withLimiar)
+            k = 0;
+            for i=1:length(data_no_limiar)
+                tmp = data_no_limiar{i};
+                if (mean(tmp((end-5):end,2)) > -3500)
+                    k = k + 1;
+                    data{k} = data_no_limiar{i};
+                    percentual(j) = percentual(j) + 1;
+                end
             end
         end
         if (length(data) > 0)
@@ -309,7 +310,6 @@ function test_printL_1env_tbl_all_std_perc(caption, tbl, withLoad, percentual)
         ii = 0;
         for i=1:2:size(tbl,2)
             ii = ii + 1;
-%             ii = rem(ii,3) + 1;
             k = 1 + floor(i/jmp_grp);
             fprintf(" & ");
             if ((tbl(j, i)+tbl(j, i+1)) >= bests(k))
@@ -335,8 +335,131 @@ function test_printL_1env_tbl_all_std_perc(caption, tbl, withLoad, percentual)
         ii = 0;
         for i=1:2:size(tbl,2)
             ii = ii + 1;
-%             ii = rem(ii,3) + 1;
             k = 1 + floor(i/jmp_grp);
+            fprintf(" & ");
+            if ((tbl(j, i)-tbl(j, i+1)) >= bests(k))
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            else
+                fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
+            end
+        end
+        if (j == size(tbl, 1))
+            fprintf(" \\\\ \\hline \n");
+        else
+            fprintf(" \\\\ \\cline{2-8} \n");
+        end
+    end
+    fprintf("  \\end{tabular}\n");
+    fprintf("\\end{table*}\n");
+end
+
+function print(caption, tbl, withLoad, percentual)
+    sz_base = 4;
+    ind_max = 1;
+    jmp_grp = 2;
+%     if(withLoad)
+%         ind_max = 3;
+%         jmp_grp = 4;
+%     end
+    bests =  zeros(1, 6);
+    j = 1;
+    for i=ind_max:jmp_grp:size(tbl,2)
+    	max_base = max(tbl(1:sz_base, i));
+        ind_max_base = tbl(1:sz_base, i) == max_base;
+        iline = (1:sz_base)*ind_max_base;
+        max_basestd = max_base - tbl(iline,i+1);
+        bests(j) = max_basestd;
+        j=j+1;
+    end
+    disp(bests);
+    strategies = ["DC",...
+                  "D",...
+                  "M",...
+                  "RND",...
+                  "DC\_MA\_B",...
+                  "D\_MA\_50\_D",...
+                  "D\_MA\_50\_DC",...
+                  "D\_MA\_B",...
+                  "D\_ED\_MA\_B",...
+                  "M\_ED\_MA\_B",...
+                  "M\_ED\_MA\_50\_D",...
+                  "M\_ED\_MA\_50\_DC"];
+              
+    strategies = ["DC",...
+                  "D",...
+                  "M",...
+                  "RND",...
+                  "DC\_MA\_B",...
+                  "DC\_MA\_25\_DC",...
+                  "DC\_MA\_50\_DC",...
+                  "DC\_MA\_75\_DC",...
+                  "DC\_MA\_50\_D",...
+                  "D\_MA\_50\_D",...
+                  "D\_MA\_50\_DC",...
+                  "D\_MA\_B",...
+                  "DC\_ED\_MA\_25\_DC",...
+                  "DC\_EC\_MA\_50\_DC",...
+                  "DC\_ED\_MA\_75\_DC",...
+                  "DC\_ED\_MA\_B",...
+                  "D\_ED\_MA\_B",...
+                  "M\_ED\_MA\_B",...
+                  "M\_ED\_MA\_25\_D",...
+                  "M\_ED\_MA\_50\_D",...
+                  "M\_ED\_MA\_75\_D",...
+                  "M\_ED\_MA\_50\_DC",...
+                  "DLO\_MA\_50\_D"];
+              
+              
+	fprintf("%% Please add the following required packages to your document preamble:\n");
+    fprintf("%% \\usepackage{multirow}\n");
+    fprintf("  \\begin{table*}[]\n");
+    fprintf("  \\centering\n");
+    fprintf("  \\footnotesize\n");
+    fprintf("  \\caption{%s}\n", caption);
+    fprintf("  \\label{tab_performance_all}\n");
+    fprintf("  \\begin{tabular}{l|c|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{4.4}|}\n");
+    fprintf("    \\cline{2-8}\n");
+    fprintf("     & \\multirow{2}{*}{strategy} & \\multicolumn{2}{c|}{good} & \\multicolumn{2}{c|}{mid} & \\multicolumn{2}{c|}{bad} \\\\ \\cline{3-8} \n");
+    fprintf("     &  & \\multicolumn{1}{|c|}{learning} & \\multicolumn{1}{|c|}{learned} & \\multicolumn{1}{|c|}{learning} & \\multicolumn{1}{|c|}{learned} & \\multicolumn{1}{|c|}{learning} & \\multicolumn{1}{|c|}{learned} \\\\ \\hline\n");
+    for j=1:sz_base
+        if (j == 1)
+            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", sz_base);
+            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{BASE}}}} & \\footnotesize{%s}", strategies(j));
+        else
+            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
+        end
+        k = 1;
+        ii = 0;
+        for i=1:2:size(tbl,2)
+            ii = ii + 1;
+            k = ii;
+%             k = 1 + floor(i/jmp_grp);
+            fprintf(" & ");
+            if ((tbl(j, i)+tbl(j, i+1)) >= bests(k))
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            else
+                fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
+            end
+        end
+        if(j==sz_base)
+            fprintf(" \\\\ \\hline \n");
+        else
+           fprintf(" \\\\ \\cline{2-8} \n");
+        end
+        
+    end
+    for j=(sz_base + 1):size(tbl, 1)
+        if (j == (sz_base + 1))
+            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", (size(tbl, 1)-sz_base));
+            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{NEW}}}} & \\footnotesize{%s}", strategies(j));
+        else
+            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
+        end
+        ii = 0;
+        for i=1:2:size(tbl,2)
+            ii = ii + 1;
+            k = ii;
+%             k = 1 + floor(i/jmp_grp);
             fprintf(" & ");
             if ((tbl(j, i)-tbl(j, i+1)) >= bests(k))
                 fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
