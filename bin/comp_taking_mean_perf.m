@@ -4,7 +4,6 @@ close all;
 
 % % COUNT MEAN (LEAST 10) TO USE IN ORDERING GOO, MID AND BAD
 
-
 steps_counted = 20;
 printing = 1;
 % env = "cart_pole";
@@ -24,10 +23,12 @@ folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_yamls_results/"
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+ alg + "_yamls_results/";
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/walker" + alg + "_yamls_results/";
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_mpols" +alg + "_load_yamls_results/";
+folder = "~/grl_results/leosim_mpols_yamls_results/";
 addpath("~/Dropbox/phd_grl_results/matlab");
 file = env + env_abr + "_replay_ddpg_tensorflow_sincos_i";
 file = env + "_" + env_abr + "tau" + alg + "_i";
 file = "cart_pole_cp_tau_ac_tc16good_load_*_none_none_1.0_random_persistent_a1_";
+file = "leosim_ddpg";
 
 if (contains(env,"cart") || contains(env,"pinball"))
     steps_per_second = 20;
