@@ -461,7 +461,7 @@ function print(caption, tbl, withLoad, percentual)
             k = ii;
 %             k = 1 + floor(i/jmp_grp);
             fprintf(" & ");
-            if ((tbl(j, i)-tbl(j, i+1)) >= bests(k))
+            if ((tbl(j, i)+tbl(j, i+1)) >= bests(k))
                 fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
             else
                 fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
