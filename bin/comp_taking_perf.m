@@ -4,7 +4,7 @@ close all;
 
 % %
 for ica=3:3
-    printing = 0;
+    printing = 1;
     steps_counted = 10;
     ie=1;
     ia=ica
@@ -229,128 +229,6 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
         means_std(j, 1) = mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d)));
         means_std(j, 2) = mean(std_e(length(std_e)-steps_counted+1:length(std_e)));
     end
-end
-
-function test_printL_1env_tbl_all_std_perc(caption, tbl, withLoad, percentual)
-    sz_base = 4;
-    ind_max = 1;
-    jmp_grp = 2;
-    if(withLoad)
-        ind_max = 3;
-        jmp_grp = 4;
-    end
-    bests =  zeros(1, 3);
-    j = 1;
-    for i=ind_max:jmp_grp:size(tbl,2)
-    	max_base = max(tbl(1:sz_base, i));
-        ind_max_base = tbl(1:sz_base, i) == max_base;
-        iline = (1:sz_base)*ind_max_base;
-        max_basestd = max_base - tbl(iline,i+1);
-        bests(j) = max_basestd;
-        j=j+1;
-    end
-    disp(bests);
-    strategies = ["DC",...
-                  "D",...
-                  "M",...
-                  "RND",...
-                  "DC\_MA\_B",...
-                  "D\_MA\_50\_D",...
-                  "D\_MA\_50\_DC",...
-                  "D\_MA\_B",...
-                  "D\_ED\_MA\_B",...
-                  "M\_ED\_MA\_B",...
-                  "M\_ED\_MA\_50\_D",...
-                  "M\_ED\_MA\_50\_DC"];
-              
-    strategies = ["DC",...
-                  "D",...
-                  "M",...
-                  "RND",...
-                  "DC\_MA\_B",...
-                  "DC\_MA\_25\_DC",...
-                  "DC\_MA\_50\_DC",...
-                  "DC\_MA\_75\_DC",...
-                  "DC\_MA\_50\_D",...
-                  "D\_MA\_50\_D",...
-                  "D\_MA\_50\_DC",...
-                  "D\_MA\_B",...
-                  "DC\_ED\_MA\_25\_DC",...
-                  "DC\_EC\_MA\_50\_DC",...
-                  "DC\_ED\_MA\_75\_DC",...
-                  "DC\_ED\_MA\_B",...
-                  "D\_ED\_MA\_B",...
-                  "M\_ED\_MA\_B",...
-                  "M\_ED\_MA\_25\_D",...
-                  "M\_ED\_MA\_50\_D",...
-                  "M\_ED\_MA\_75\_D",...
-                  "M\_ED\_MA\_50\_DC",...
-                  "DLO\_MA\_50\_D"];
-              
-              
-	fprintf("%% Please add the following required packages to your document preamble:\n");
-    fprintf("%% \\usepackage{multirow}\n");
-    fprintf("  \\begin{table*}[]\n");
-    fprintf("  \\centering\n");
-    fprintf("  \\footnotesize\n");
-    fprintf("  \\caption{%s}\n", caption);
-    fprintf("  \\label{tab_performance_all}\n");
-    fprintf("  \\begin{tabular}{l|c|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{4.4}|}\n");
-    fprintf("    \\cline{2-8}\n");
-    fprintf("     & \\multirow{2}{*}{strategy} & \\multicolumn{2}{c|}{good} & \\multicolumn{2}{c|}{mid} & \\multicolumn{2}{c|}{bad} \\\\ \\cline{3-8} \n");
-    fprintf("     &  & \\multicolumn{1}{|c|}{learning} & \\multicolumn{1}{|c|}{learned} & \\multicolumn{1}{|c|}{learning} & \\multicolumn{1}{|c|}{learned} & \\multicolumn{1}{|c|}{learning} & \\multicolumn{1}{|c|}{learned} \\\\ \\hline\n");
-    for j=1:sz_base
-        if (j == 1)
-            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", sz_base);
-            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{BASE}}}} & \\footnotesize{%s}", strategies(j));
-        else
-            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
-        end
-        k = 1;
-        ii = 0;
-        for i=1:2:size(tbl,2)
-            ii = ii + 1;
-            k = 1 + floor(i/jmp_grp);
-            fprintf(" & ");
-            if ((tbl(j, i)+tbl(j, i+1)) >= bests(k))
-                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
-            else
-                fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
-            end
-        end
-        if(j==sz_base)
-            fprintf(" \\\\ \\hline \n");
-        else
-           fprintf(" \\\\ \\cline{2-8} \n");
-        end
-        
-    end
-    for j=(sz_base + 1):size(tbl, 1)
-        if (j == (sz_base + 1))
-            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", (size(tbl, 1)-sz_base));
-            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{NEW}}}} & \\footnotesize{%s}", strategies(j));
-        else
-            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
-        end
-        ii = 0;
-        for i=1:2:size(tbl,2)
-            ii = ii + 1;
-            k = 1 + floor(i/jmp_grp);
-            fprintf(" & ");
-            if ((tbl(j, i)-tbl(j, i+1)) >= bests(k))
-                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
-            else
-                fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
-            end
-        end
-        if (j == size(tbl, 1))
-            fprintf(" \\\\ \\hline \n");
-        else
-            fprintf(" \\\\ \\cline{2-8} \n");
-        end
-    end
-    fprintf("  \\end{tabular}\n");
-    fprintf("\\end{table*}\n");
 end
 
 function print(caption, tbl, withLoad, percentual)
