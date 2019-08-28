@@ -6,9 +6,9 @@ close all;
 for ica=3:3
     printing = 1;
     steps_counted = 10;
-    ie=1;
+    ie=2;
     ia=ica
-    withLoad = 0;
+    withLoad = 1;
     withNoise = 0;
     withlimiar = 1;
     onlybad4pend=0;
@@ -62,7 +62,7 @@ function [tbl_meanstd_all, percentual] = generate_tbl(printing, env, env_abr, al
 
     % %
     n_env = 1;
-    n_vert = 23; %12; %
+    n_vert = 25; %12; %
     tbl_meanstd_all = zeros(n_vert, n_env*ng*n_load);
     percentual = zeros(n_vert, n_env*n_group*n_load);
 
@@ -113,7 +113,9 @@ function [tbl_meanstd_all, percentual] = generate_tbl(printing, env, env_abr, al
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_density_a0.01_-*txt",...
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.75_density_a0.01_-*txt",...
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_data_center_a0.01_-*txt",...
-                            group(ig) + load(il) + "_*_none_density_linear_order_0.5_density_a0.01_-*txt"]; 
+                            group(ig) + load(il) + "_*_none_density_linear_order_0.5_density_a0.01_-*txt",...
+                            group(ig) + load(il) + "_*_none_density_linear_order_0.5_data_center_a0.01_-*txt",...
+                            group(ig) + load(il) + "_*_none_density_linear_order_1.0_best_a0.01_-*txt"];
             i_load = (ng*n_load) + ng*(il-1) + (2*ig)-1; %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)-1
             j_load = (ng*n_load) + ng*(il-1) + (2*ig); %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)
             i = nl*(ig-1) + 2*il -1; %(ng*n_load)*(ie-1) + 
@@ -285,7 +287,9 @@ function print(caption, tbl, withLoad, percentual)
                   "M\_ED\_MA\_50\_D",...
                   "M\_ED\_MA\_75\_D",...
                   "M\_ED\_MA\_50\_DC",...
-                  "DLO\_MA\_50\_D"];
+                  "DLO\_MA\_50\_D",...
+                  "DLO\_MA\_50\_DC",...
+                  "DLO\_MA\_50\_B"];
               
               
 	fprintf("%% Please add the following required packages to your document preamble:\n");
