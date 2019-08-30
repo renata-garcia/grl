@@ -26,7 +26,7 @@ for ica=3:3
     [tbl_meanstd_all, percentual] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
     title_leg = strcat("env= ", env, " alg= ", algs(ia));
     if (withlimiar)
-        title_leg = strcat(title_leg, " limi-3500");
+        title_leg = strcat(title_leg, " limi-2500");
     else
         title_leg = strcat(title_leg, " (counted)");
     end
@@ -218,7 +218,7 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
             k = 0;
             for i=1:length(data_no_limiar)
                 tmp = data_no_limiar{i};
-                if (mean(tmp((end-5):end,2)) > -3500)
+                if (mean(tmp((end-5):end,2)) > -2500)
                     k = k + 1;
                     data{k} = data_no_limiar{i};
                     percentual(j) = percentual(j) + 1;
