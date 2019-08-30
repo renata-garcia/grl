@@ -27,6 +27,8 @@ for ica=3:3
     title_leg = strcat("env= ", env, " alg= ", algs(ia));
     if (withlimiar)
         title_leg = strcat(title_leg, " limi-3500");
+    else
+        title_leg = strcat(title_leg, " (counted)");
     end
     if (withNoise)
         title_leg = strcat(title_leg, " NOISE AND NOT LOAAAADDD");
@@ -62,7 +64,7 @@ function [tbl_meanstd_all, percentual] = generate_tbl(printing, env, env_abr, al
 
     % %
     n_env = 1;
-    n_vert = 25; %12; %
+    n_vert = 22; %12; %
     tbl_meanstd_all = zeros(n_vert, n_env*ng*n_load);
     percentual = zeros(n_vert, n_env*n_group*n_load);
 
@@ -210,7 +212,7 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
         if (length(data_no_limiar) ~= 10)
             disp(fd);
         end
-        
+
         data = {};
         if (withLimiar)
             k = 0;
@@ -221,6 +223,10 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
                     data{k} = data_no_limiar{i};
                     percentual(j) = percentual(j) + 1;
                 end
+            end
+        else
+            for i=1:length(data_no_limiar)
+                percentual(j) = percentual(j) + 1;
             end
         end
         if (length(data) > 0)
