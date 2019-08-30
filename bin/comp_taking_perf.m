@@ -1,43 +1,49 @@
-clc;
-clear;
-close all;
+% clc;
+% clear;
+% close all;
+% 
+% % %
+% size_env = 3;
+% envs_results = cell(1,size_env);
+% for it=1:size_env
+%     printing = 0;
+%     steps_counted = 10;
+%     ie=it;
+%     ia=1;
+%     withLoad = 0;
+%     withNoise = 0;
+%     withlimiar = 1;
+%     onlybad4pend=0;
+%     algs = ["ac_tc", "dpg", "ddpg"];
+%     if (ie == 1)
+%         env = "pendulum"; env_abr = "pd";
+%     elseif (ie == 2)
+%         env = "cart_pole"; env_abr = "cp";
+%     elseif (ie == 3)
+%         env = "cart_double_pole"; env_abr = "cdp";
+%     elseif (ie == 4)
+%         env = "walker"; env_abr = "cw";
+%     end
+%     alg = algs(ia);
+%     [tbl_meanstd_all, percentual, strategies] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
+%     
+%     envs_results{1,ie} = tbl_meanstd_all;
+%     
+%     title_leg = strcat("env= ", env, " alg= ", algs(ia));
+%     if (withlimiar)
+%         title_leg = strcat(title_leg, " limi-2500");
+%     else
+%         title_leg = strcat(title_leg, " (counted)");
+%     end
+%     if (withNoise)
+%         title_leg = strcat(title_leg, " NOISE AND NOT LOAAAADDD");
+%     end
+% %     print_learning_learned_by_groups(title_leg, strategies, tbl_meanstd_all, withLoad, percentual)
+%     disp("acabou..........");
+% end
+print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
 
-% %
-for ica=3:3
-    printing = 1;
-    steps_counted = 10;
-    ie=2;
-    ia=ica
-    withLoad = 1;
-    withNoise = 0;
-    withlimiar = 1;
-    onlybad4pend=0;
-    algs = ["ac_tc", "dpg", "ddpg"];
-    if (ie == 1)
-        env = "pendulum"; env_abr = "pd";
-    elseif (ie == 2)
-        env = "cart_pole"; env_abr = "cp";
-    elseif (ie == 3)
-        env = "cart_double_pole"; env_abr = "cdp";
-    elseif (ie == 4)
-        env = "walker"; env_abr = "cw";
-    end
-    alg = algs(ia);
-    [tbl_meanstd_all, percentual] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
-    title_leg = strcat("env= ", env, " alg= ", algs(ia));
-    if (withlimiar)
-        title_leg = strcat(title_leg, " limi-2500");
-    else
-        title_leg = strcat(title_leg, " (counted)");
-    end
-    if (withNoise)
-        title_leg = strcat(title_leg, " NOISE AND NOT LOAAAADDD");
-    end
-    print(title_leg, tbl_meanstd_all, withLoad, percentual)
-    disp("acabou..........");
-end
-
-function [tbl_meanstd_all, percentual] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar)
+function [tbl_meanstd_all, percentual, strategies] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar)
     steps_counted = 10;
     folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
     addpath("~/Dropbox/phd_grl_results/matlab");
@@ -64,7 +70,7 @@ function [tbl_meanstd_all, percentual] = generate_tbl(printing, env, env_abr, al
 
     % %
     n_env = 1;
-    n_vert = 22; %12; %
+    n_vert = 12; %22; %
     tbl_meanstd_all = zeros(n_vert, n_env*ng*n_load);
     percentual = zeros(n_vert, n_env*n_group*n_load);
 
@@ -78,21 +84,48 @@ function [tbl_meanstd_all, percentual] = generate_tbl(printing, env, env_abr, al
         disp("NONE NONE");
     end
 
+              
+    strategies = ["DC",...
+                  "D",...
+                  "M",...
+                  "RND",...
+                  "DC\_MA\_B",...
+                  "DC\_MA\_25\_DC",...
+                  "DC\_MA\_50\_DC",...
+                  "DC\_MA\_75\_DC",...
+                  "DC\_MA\_50\_D",...
+                  "D\_MA\_50\_D",...
+                  "D\_MA\_50\_DC",...
+                  "D\_MA\_B",...
+                  "DC\_ED\_MA\_25\_DC",...
+                  "DC\_EC\_MA\_50\_DC",...
+                  "DC\_ED\_MA\_75\_DC",...
+                  "DC\_ED\_MA\_B",...
+                  "D\_ED\_MA\_B",...
+                  "M\_ED\_MA\_B",...
+                  "M\_ED\_MA\_25\_D",...
+                  "M\_ED\_MA\_50\_D",...
+                  "M\_ED\_MA\_75\_D",...
+                  "M\_ED\_MA\_50\_DC",...
+                  "DLO\_MA\_50\_D",...
+                  "DLO\_MA\_50\_DC",...
+                  "DLO\_MA\_50\_B"];
+    strategies = ["DC",...
+                  "D",...
+                  "M",...
+                  "RND",...
+                  "DC\_MA\_B",...
+                  "D\_MA\_50\_D",...
+                  "D\_MA\_50\_DC",...
+                  "D\_MA\_B",...
+                  "D\_ED\_MA\_B",...
+                  "M\_ED\_MA\_B",...
+                  "M\_ED\_MA\_50\_D",...
+                  "M\_ED\_MA\_50\_DC"];
+              
     for ig = 1:n_group
         for il = 1:n_load                       
-                        
-             runs_generic = [group(ig) + load(il) + "_*_none_none_1.0_data_center_a1.0_-*txt",...
-                            group(ig) + load(il) + "_*_none_none_1.0_density_a1.0_-*txt",...
-                            group(ig) + load(il) + "_*_none_none_1.0_mean_a1.0_-*txt",...
-                            group(ig) + load(il) + "_*_none_none_1.0_random_a1_-*txt",...
-                            group(ig) + load(il) + "_*_none_data_center_linear_order_1.0_best_a0.01_-*txt",...
-                            group(ig) + load(il) + "_*_none_density_0.5_density_a0.01_-*txt",...
-                            group(ig) + load(il) + "_*_none_density_0.5_data_center_a0.01_-*txt",...
-                            group(ig) + load(il) + "_*_none_density_1.0_best_a0.01_-*txt",...
-                            group(ig) + load(il) + "_*_density_euclidian_distance_0.01_best_a0.01_-*txt",...
-                            group(ig) + load(il) + "_*_mean_euclidian_distance_0.1_best_a0.01_-*txt",...
-                            group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_density_a0.01_-*txt",...
-                            group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_data_center_a0.01_-*txt"];                        
+                                            
              runs_generic = [group(ig) + load(il) + "_*_none_none_1.0_data_center_a1.0_-*txt",...
                             group(ig) + load(il) + "_*_none_none_1.0_density_a1.0_-*txt",...
                             group(ig) + load(il) + "_*_none_none_1.0_mean_a1.0_-*txt",...
@@ -118,6 +151,18 @@ function [tbl_meanstd_all, percentual] = generate_tbl(printing, env, env_abr, al
                             group(ig) + load(il) + "_*_none_density_linear_order_0.5_density_a0.01_-*txt",...
                             group(ig) + load(il) + "_*_none_density_linear_order_0.5_data_center_a0.01_-*txt",...
                             group(ig) + load(il) + "_*_none_density_linear_order_1.0_best_a0.01_-*txt"];
+             runs_generic = [group(ig) + load(il) + "_*_none_none_1.0_data_center_a1.0_-*txt",...
+                            group(ig) + load(il) + "_*_none_none_1.0_density_a1.0_-*txt",...
+                            group(ig) + load(il) + "_*_none_none_1.0_mean_a1.0_-*txt",...
+                            group(ig) + load(il) + "_*_none_none_1.0_random_a1_-*txt",...
+                            group(ig) + load(il) + "_*_none_data_center_linear_order_1.0_best_a0.01_-*txt",...
+                            group(ig) + load(il) + "_*_none_density_0.5_density_a0.01_-*txt",...
+                            group(ig) + load(il) + "_*_none_density_0.5_data_center_a0.01_-*txt",...
+                            group(ig) + load(il) + "_*_none_density_1.0_best_a0.01_-*txt",...
+                            group(ig) + load(il) + "_*_density_euclidian_distance_0.01_best_a0.01_-*txt",...
+                            group(ig) + load(il) + "_*_mean_euclidian_distance_0.1_best_a0.01_-*txt",...
+                            group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_density_a0.01_-*txt",...
+                            group(ig) + load(il) + "_*_mean_euclidian_distance_0.5_data_center_a0.01_-*txt"];    
             i_load = (ng*n_load) + ng*(il-1) + (2*ig)-1; %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)-1
             j_load = (ng*n_load) + ng*(il-1) + (2*ig); %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)
             i = nl*(ig-1) + 2*il -1; %(ng*n_load)*(ie-1) + 
@@ -239,14 +284,10 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
     end
 end
 
-function print(caption, tbl, withLoad, percentual)
+function print_learning_learned_by_groups(caption, strategies, tbl, withLoad, percentual)
     sz_base = 4;
     ind_max = 1;
     jmp_grp = 2;
-%     if(withLoad)
-%         ind_max = 3;
-%         jmp_grp = 4;
-%     end
     bests =  zeros(1, 6);
     j = 1;
     for i=ind_max:jmp_grp:size(tbl,2)
@@ -258,45 +299,6 @@ function print(caption, tbl, withLoad, percentual)
         j=j+1;
     end
     disp(bests);
-    strategies = ["DC",...
-                  "D",...
-                  "M",...
-                  "RND",...
-                  "DC\_MA\_B",...
-                  "D\_MA\_50\_D",...
-                  "D\_MA\_50\_DC",...
-                  "D\_MA\_B",...
-                  "D\_ED\_MA\_B",...
-                  "M\_ED\_MA\_B",...
-                  "M\_ED\_MA\_50\_D",...
-                  "M\_ED\_MA\_50\_DC"];
-              
-    strategies = ["DC",...
-                  "D",...
-                  "M",...
-                  "RND",...
-                  "DC\_MA\_B",...
-                  "DC\_MA\_25\_DC",...
-                  "DC\_MA\_50\_DC",...
-                  "DC\_MA\_75\_DC",...
-                  "DC\_MA\_50\_D",...
-                  "D\_MA\_50\_D",...
-                  "D\_MA\_50\_DC",...
-                  "D\_MA\_B",...
-                  "DC\_ED\_MA\_25\_DC",...
-                  "DC\_EC\_MA\_50\_DC",...
-                  "DC\_ED\_MA\_75\_DC",...
-                  "DC\_ED\_MA\_B",...
-                  "D\_ED\_MA\_B",...
-                  "M\_ED\_MA\_B",...
-                  "M\_ED\_MA\_25\_D",...
-                  "M\_ED\_MA\_50\_D",...
-                  "M\_ED\_MA\_75\_D",...
-                  "M\_ED\_MA\_50\_DC",...
-                  "DLO\_MA\_50\_D",...
-                  "DLO\_MA\_50\_DC",...
-                  "DLO\_MA\_50\_B"];
-              
               
 	fprintf("%% Please add the following required packages to your document preamble:\n");
     fprintf("%% \\usepackage{multirow}\n");
@@ -321,7 +323,6 @@ function print(caption, tbl, withLoad, percentual)
         for i=1:2:size(tbl,2)
             ii = ii + 1;
             k = ii;
-%             k = 1 + floor(i/jmp_grp);
             fprintf(" & ");
             if ((tbl(j, i)+tbl(j, i+1)) >= bests(k))
                 fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
@@ -347,7 +348,6 @@ function print(caption, tbl, withLoad, percentual)
         for i=1:2:size(tbl,2)
             ii = ii + 1;
             k = ii;
-%             k = 1 + floor(i/jmp_grp);
             fprintf(" & ");
             if ((tbl(j, i)+tbl(j, i+1)) >= bests(k))
                 fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
@@ -361,6 +361,93 @@ function print(caption, tbl, withLoad, percentual)
             fprintf(" \\\\ \\cline{2-8} \n");
         end
     end
+    fprintf("  \\end{tabular}\n");
+    fprintf("\\end{table*}\n");
+end
+
+function print_by_envs(caption, strategies, cell, group, withLoad, percentual)
+    sz_tbl = length(cell);
+    igroup = group*2 -1;
+    sz_base = 4;
+    ind_max = 1;
+    jmp_grp = 2;
+    bests =  zeros(1, 6);
+    ibase = 1;
+%     for i=ind_max:jmp_grp:size(tbl,2)
+%     	max_base = max(tbl(1:sz_base, i));
+%         ind_max_base = tbl(1:sz_base, i) == max_base;
+%         iline = (1:sz_base)*ind_max_base;
+%         max_basestd = max_base - tbl(iline,i+1);
+%         bests(j) = max_basestd;
+%         j=j+1;
+%     end
+%     disp(bests);              
+              
+	fprintf("%% Please add the following required packages to your document preamble:\n");
+    fprintf("%% \\usepackage{multirow}\n");
+    fprintf("  \\begin{table*}[]\n");
+    fprintf("  \\centering\n");
+    fprintf("  \\footnotesize\n");
+    fprintf("  \\caption{%s}\n", caption);
+    fprintf("  \\label{tab_performance_all}\n");
+    fprintf("  \\begin{tabular}{l|c|");
+    for icolumn=1:sz_tbl
+        fprintf("D{,}{\\pm}{-1}|");
+    end
+    fprintf("}\n");
+    fprintf("    \\cline{2-%d}\n", sz_tbl+2);
+    fprintf("     & \\multirow{1}{*}{strategy} & ");
+    for icolumn=1:sz_tbl
+        fprintf("\\multicolumn{1}{c|}{env} & ");
+    end
+    fprintf("\\cline{3-%d} \\hline \n", sz_tbl+2);
+    for ibase=1:sz_base
+        if (ibase == 1)
+            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", sz_base);
+            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{BASE}}}} & \\footnotesize{%s}", strategies(ibase));
+        else
+            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(ibase));
+        end
+        icolumn = 0;
+        for i=1:sz_tbl
+            icolumn = icolumn + 1;
+            fprintf(" & ");
+            if ((cell{1,i}(ibase, group)+cell{1,i}(ibase, group+1)) >= bests(icolumn))
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", cell{1,i}(ibase, igroup:igroup+1), percentual(ibase,icolumn));
+            else
+                fprintf("%.0f,%.0f (%d)", cell{1,i}(ibase, igroup:igroup+1), percentual(ibase,icolumn));
+            end
+        end
+        if(ibase==sz_base)
+            fprintf(" \\\\ \\hline \n");
+        else
+           fprintf(" \\\\ \\cline{2-%d} \n", sz_tbl+2);
+        end
+    end
+%     for j=(sz_base + 1):size(tbl, 1)
+%         if (j == (sz_base + 1))
+%             fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", (size(tbl, 1)-sz_base));
+%             fprintf("{\\STAB{\\rotatebox[origin=c]{90}{NEW}}}} & \\footnotesize{%s}", strategies(j));
+%         else
+%             fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
+%         end
+%         ii = 0;
+%         for i=1:2:size(tbl,2)
+%             ii = ii + 1;
+%             k = ii;
+%             fprintf(" & ");
+%             if ((tbl(j, i)+tbl(j, i+1)) >= bests(k))
+%                 fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
+%             else
+%                 fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
+%             end
+%         end
+%         if (j == size(tbl, 1))
+%             fprintf(" \\\\ \\hline \n");
+%         else
+%             fprintf(" \\\\ \\cline{2-8} \n");
+%         end
+%     end
     fprintf("  \\end{tabular}\n");
     fprintf("\\end{table*}\n");
 end
