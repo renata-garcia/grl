@@ -52,7 +52,7 @@ class MultiPolicy : public Policy
   
     enum CombinationStrategy {csBinning, csDataCenterVotingMov, csAlg4StepsNew,
     csStatic, csValueBased, csRoulette};
-    enum ScoreDistance {sdNone, sdBest, sdDensityBased, sdDataCenter,
+    enum ScoreDistance {sdNone, sdBest, sdBestElitism, sdBestPersistent, sdDensityBased, sdDataCenter,
      sdMean, sdRandom, sdRandomPersistent};
     enum UpdateHistory {uhNone, uhEuclideanDistance, uhDensity, uhDensityLinear, uhDataCenter};
     
@@ -159,7 +159,7 @@ class MultiPolicy : public Policy
     virtual LargeVector euclidian_distance(const ActionArray &ensemble_set, const LargeVector center) const;
     virtual LargeVector g_mean(const ActionArray &array) const;
     virtual LargeVector get_actions(const ActionArray &array) const;
-    virtual ActionArray percentile(ActionArray const &array, LargeVector moving_average_, double percentile) const;
+    virtual ActionArray percentile(size_t mode, double time, ActionArray const &array, LargeVector moving_average_, double percentile);
     virtual LargeVector data_center(ActionArray ensemble_set, LargeVector *center) const;
     virtual LargeVector datacenter_update_voting(ActionArray ensemble_set) const;
     virtual LargeVector density_based(ActionArray &ensemble_set, LargeVector *center) const;

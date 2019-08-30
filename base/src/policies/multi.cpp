@@ -52,7 +52,7 @@ void MultiPolicy::request(ConfigurationRequest *config)
   config->push_back(CRP("percentile", "Percentile of Scores / Actions", percentile_));
   
   config->push_back(CRP("select_by_distance", "Select by distance", select_by_distance_str_, CRP::Configuration,
-  {"none", "best", "data_center", "density", "mean", "random", "random_persistent"}));
+  {"none", "best", "best_elitism", "best_persistent", "data_center", "density", "mean", "random", "random_persistent"}));
   
   config->push_back(CRP("score_postprocess", "score_postprocess", score_postprocess_));
   
@@ -139,6 +139,16 @@ void MultiPolicy::configure(Configuration &config)
   {
     select_by_distance_ = sdBest;
     select_ = sdBest;
+  }
+  else if(select_by_distance_str_ == "best_elitism")
+  {
+    select_by_distance_ = sdBestElitism;
+    select_ = sdBestElitism;
+  }
+  else if(select_by_distance_str_ == "best_persistent")
+  {
+    select_by_distance_ = sdBestPersistent;
+    select_ = sdBestPersistent;
   }
   else if(select_by_distance_str_ == "data_center")
   {
@@ -459,7 +469,14 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       CRAWL("MultiPolicy::moving_average_ = alpha_mov_mean_*scores + (1-alpha_mov_mean_)*moving_average_;");
       moving_average_ = alpha_mov_mean_*scores + (1-alpha_mov_mean_)*moving_average_;
       
-      ActionArray active_set = percentile(actions_actors, moving_average_, percentile_);
+      ActionArray active_set;
+      if (select_by_distance_ == sdBestElitism) {
+        active_set = percentile(1, time, actions_actors, moving_average_, percentile_);
+      } else if (select_by_distance_ == sdBestElitism) {
+        active_set = percentile(2, time, actions_actors, moving_average_, percentile_);
+      } else {
+        active_set = percentile(0, time, actions_actors, moving_average_, percentile_);
+      }
 
       for(size_t i = 0; i < active_set.size(); ++i)
         CRAWL("MultiPolicy::csAlg4Steps::choosed active_set[i:" << i << "]: " << active_set[i].v[0]);
@@ -468,6 +485,14 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       {
         case sdBest:
         dist = active_set[0].v;
+          break;
+
+        case sdBestElitism:
+          dist = active_set[policy_persistent_].v;
+          break;
+
+        case sdBestPersistent:
+          dist = active_set[policy_persistent_].v;
           break;
 
         case sdDensityBased:
@@ -1011,7 +1036,7 @@ LargeVector MultiPolicy::get_actions(const ActionArray &array) const
   return actions;
 }
 
-MultiPolicy::ActionArray MultiPolicy::percentile(ActionArray const &array, LargeVector moving_average_, double percentile) const
+MultiPolicy::ActionArray MultiPolicy::percentile(size_t mode, double time,  ActionArray const &array, LargeVector moving_average_, double percentile)
 {
   CRAWL("MultiPolicy::percentile");
   ActionArray retorno;
@@ -1031,6 +1056,16 @@ MultiPolicy::ActionArray MultiPolicy::percentile(ActionArray const &array, Large
     CRAWL("MultiPolicy::percentile::get<0>(tuple_mean_id[k:" << k << "])" << std::get<0>(tuple_mean_id[k]) << ", get<1>(tuple_mean_id[k:" << k << "])" << std::get<1>(tuple_mean_id[k]) << ".");
     size_t j = std::get<1>(tuple_mean_id[k]);
     retorno.push_back( array[j] );
+  }
+  
+  if (mode == 1) {
+    if ((std::get<0>(tuple_mean_id[0]) - std::get<0>(tuple_mean_id[1])) > 10) {
+      policy_persistent_ = std::get<1>(tuple_mean_id[0]);
+    }
+  } else if (mode == 2) {
+    if (!time) {
+      policy_persistent_ = std::get<1>(tuple_mean_id[0]);
+    }
   }
   
   CRAWL("MultiPolicy::percentile::retorno.size(): " << retorno.size());
