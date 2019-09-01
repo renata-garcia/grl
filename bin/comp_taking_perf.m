@@ -1,46 +1,46 @@
-% clc;
-% clear;
-% close all;
-% 
-% % %
-% size_env = 3;
-% envs_results = cell(1,size_env);
-% for it=1:size_env
-%     printing = 0;
-%     steps_counted = 10;
-%     ie=it;
-%     ia=1;
-%     withLoad = 0;
-%     withNoise = 0;
-%     withlimiar = 1;
-%     onlybad4pend=0;
-%     algs = ["ac_tc", "dpg", "ddpg"];
-%     if (ie == 1)
-%         env = "pendulum"; env_abr = "pd";
-%     elseif (ie == 2)
-%         env = "cart_pole"; env_abr = "cp";
-%     elseif (ie == 3)
-%         env = "cart_double_pole"; env_abr = "cdp";
-%     elseif (ie == 4)
-%         env = "walker"; env_abr = "cw";
-%     end
-%     alg = algs(ia);
-%     [tbl_meanstd_all, percentual, strategies] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
-%     
-%     envs_results{1,ie} = tbl_meanstd_all;
-%     
-%     title_leg = strcat("env= ", env, " alg= ", algs(ia));
-%     if (withlimiar)
-%         title_leg = strcat(title_leg, " limi-2500");
-%     else
-%         title_leg = strcat(title_leg, " (counted)");
-%     end
-%     if (withNoise)
-%         title_leg = strcat(title_leg, " NOISE AND NOT LOAAAADDD");
-%     end
-% %     print_learning_learned_by_groups(title_leg, strategies, tbl_meanstd_all, withLoad, percentual)
-%     disp("acabou..........");
-% end
+clc;
+clear;
+close all;
+
+% %
+size_env = 3;
+envs_results = cell(1,size_env);
+for it=1:size_env
+    printing = 0;
+    steps_counted = 10;
+    ie=it;
+    ia=1;
+    withLoad = 0;
+    withNoise = 0;
+    withlimiar = 1;
+    onlybad4pend=0;
+    algs = ["ac_tc", "dpg", "ddpg"];
+    if (ie == 1)
+        env = "pendulum"; env_abr = "pd";
+    elseif (ie == 2)
+        env = "cart_pole"; env_abr = "cp";
+    elseif (ie == 3)
+        env = "cart_double_pole"; env_abr = "cdp";
+    elseif (ie == 4)
+        env = "walker"; env_abr = "cw";
+    end
+    alg = algs(ia);
+    [tbl_meanstd_all, percentual, strategies] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
+    
+    envs_results{1,ie} = tbl_meanstd_all;
+    
+    title_leg = strcat("env= ", env, " alg= ", algs(ia));
+    if (withlimiar)
+        title_leg = strcat(title_leg, " limi-2500");
+    else
+        title_leg = strcat(title_leg, " (counted)");
+    end
+    if (withNoise)
+        title_leg = strcat(title_leg, " NOISE AND NOT LOAAAADDD");
+    end
+%     print_learning_learned_by_groups(title_leg, strategies, tbl_meanstd_all, withLoad, percentual)
+    disp("acabou..........");
+end
 print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
 
 function [tbl_meanstd_all, percentual, strategies] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar)
@@ -366,7 +366,8 @@ function print_learning_learned_by_groups(caption, strategies, tbl, withLoad, pe
 end
 
 function print_by_envs(caption, strategies, cell, group, withLoad, percentual)
-    sz_tbl = length(cell);
+    sz_envs = length(cell);
+    sz_tbl = length(cell{1,1});
     igroup = group*2 -1;
     sz_base = 4;
     ind_max = 1;
@@ -391,16 +392,16 @@ function print_by_envs(caption, strategies, cell, group, withLoad, percentual)
     fprintf("  \\caption{%s}\n", caption);
     fprintf("  \\label{tab_performance_all}\n");
     fprintf("  \\begin{tabular}{l|c|");
-    for icolumn=1:sz_tbl
+    for icolumn=1:sz_envs
         fprintf("D{,}{\\pm}{-1}|");
     end
     fprintf("}\n");
-    fprintf("    \\cline{2-%d}\n", sz_tbl+2);
+    fprintf("    \\cline{2-%d}\n", sz_envs+2);
     fprintf("     & \\multirow{1}{*}{strategy} & ");
-    for icolumn=1:sz_tbl
+    for icolumn=1:sz_envs
         fprintf("\\multicolumn{1}{c|}{env} & ");
     end
-    fprintf("\\cline{3-%d} \\hline \n", sz_tbl+2);
+    fprintf("\\cline{3-%d} \\hline \n", sz_envs+2);
     for ibase=1:sz_base
         if (ibase == 1)
             fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", sz_base);
@@ -409,7 +410,7 @@ function print_by_envs(caption, strategies, cell, group, withLoad, percentual)
             fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(ibase));
         end
         icolumn = 0;
-        for i=1:sz_tbl
+        for i=1:sz_envs
             icolumn = icolumn + 1;
             fprintf(" & ");
             if ((cell{1,i}(ibase, group)+cell{1,i}(ibase, group+1)) >= bests(icolumn))
@@ -421,33 +422,32 @@ function print_by_envs(caption, strategies, cell, group, withLoad, percentual)
         if(ibase==sz_base)
             fprintf(" \\\\ \\hline \n");
         else
-           fprintf(" \\\\ \\cline{2-%d} \n", sz_tbl+2);
+           fprintf(" \\\\ \\cline{2-%d} \n", sz_envs+2);
         end
     end
-%     for j=(sz_base + 1):size(tbl, 1)
-%         if (j == (sz_base + 1))
-%             fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", (size(tbl, 1)-sz_base));
-%             fprintf("{\\STAB{\\rotatebox[origin=c]{90}{NEW}}}} & \\footnotesize{%s}", strategies(j));
-%         else
-%             fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
-%         end
-%         ii = 0;
-%         for i=1:2:size(tbl,2)
-%             ii = ii + 1;
-%             k = ii;
-%             fprintf(" & ");
-%             if ((tbl(j, i)+tbl(j, i+1)) >= bests(k))
-%                 fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
-%             else
-%                 fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
-%             end
-%         end
-%         if (j == size(tbl, 1))
-%             fprintf(" \\\\ \\hline \n");
-%         else
-%             fprintf(" \\\\ \\cline{2-8} \n");
-%         end
-%     end
+    for j=(sz_base + 1):sz_tbl
+        if (j == (sz_base + 1))
+            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", (sz_tbl-sz_base));
+            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{NEW}}}} & \\footnotesize{%s}", strategies(j));
+        else
+            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
+        end
+        icolumn = 0;
+        for i=1:sz_envs
+            icolumn = icolumn + 1;
+            fprintf(" & ");
+            if ((cell{1,i}(j, group)+cell{1,i}(j, group+1)) >= bests(icolumn))
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", cell{1,i}(j, group:group+1), percentual(j,icolumn));
+            else
+                fprintf("%.0f,%.0f (%d)", cell{1,i}(j, group:group+1), percentual(j,icolumn));
+            end
+        end
+        if (j == sz_tbl)
+            fprintf(" \\\\ \\hline \n");
+        else
+            fprintf(" \\\\ \\cline{2-%d} \n", sz_envs+2);
+        end
+    end
     fprintf("  \\end{tabular}\n");
     fprintf("\\end{table*}\n");
 end
