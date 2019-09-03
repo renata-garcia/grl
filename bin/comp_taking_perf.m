@@ -370,19 +370,16 @@ function print_by_envs(caption, strategies, cell, group, withLoad, percentual)
     sz_tbl = length(cell{1,1});
     igroup = group*2 -1;
     sz_base = 4;
-    ind_max = 1;
-    jmp_grp = 2;
-    bests =  zeros(1, 6);
-    ibase = 1;
-%     for i=ind_max:jmp_grp:size(tbl,2)
-%     	max_base = max(tbl(1:sz_base, i));
-%         ind_max_base = tbl(1:sz_base, i) == max_base;
-%         iline = (1:sz_base)*ind_max_base;
-%         max_basestd = max_base - tbl(iline,i+1);
-%         bests(j) = max_basestd;
-%         j=j+1;
-%     end
-%     disp(bests);              
+    bests =  zeros(1, sz_envs);
+    for i=1:sz_envs
+    	max_base = max(cell{1,i}(1:sz_base, group));
+        ind_max_base = cell{1,i}(1:sz_base, group) == max_base;
+        iline = (1:sz_base)*ind_max_base;
+        max_basestd = max_base - cell{1,i}(iline,i+1);
+        bests(i) = max_basestd;
+        i=i+1;
+    end
+    disp(bests);
               
 	fprintf("%% Please add the following required packages to your document preamble:\n");
     fprintf("%% \\usepackage{multirow}\n");
