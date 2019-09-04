@@ -14,7 +14,3 @@ experiment:
       negative_reward: -100
       observe: [ 1, 1, 1, 1, 0, 1, 0 ]
       reference_velocity: 0.12
-    exporter: 
-      type: exporter/csv
-      file: walker_ac_tc_vref_u_gen-test
-      style: meshup
