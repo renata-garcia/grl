@@ -102,6 +102,12 @@ void PendulumSwingupTask::start(int test, Vector *state) const
   (*state)[2] = 0;
 }
 
+bool PendulumSwingupTask::actuate(const Vector &prev, const Vector &state, const Action &action, Vector *actuation) const
+{
+  *actuation = VectorConstructor(fmin(fmax(action[0], -3), 3));
+  return true;
+}
+
 void PendulumSwingupTask::observe(const Vector &state, Observation *obs, int *terminal) const
 {
   if (state.size() != 3)
@@ -113,6 +119,7 @@ void PendulumSwingupTask::observe(const Vector &state, Observation *obs, int *te
   obs->v.resize(2);
   (*obs)[0] = a;
   (*obs)[1] = state[1];
+
   obs->absorbing = false;
   
   if (state[2] > T_)
@@ -132,16 +139,17 @@ void PendulumSwingupTask::evaluate(const Vector &state, const Action &action, co
   *reward = -5*pow(a, 2) - 0.1*pow(next[1], 2) - 1*pow(action[0], 2);
   
   // Normalize reward per timestep.
-  // TODO: make this work for inverted states
-  if (state[2] != next[2])
+  // TODO: Better way of detecting discrete timesteps
+  if ((next[2] - state[2]) != 1)
     *reward *= (next[2]-state[2])/0.03;
 }
 
-bool PendulumSwingupTask::invert(const Observation &obs, Vector *state) const
+bool PendulumSwingupTask::invert(const Observation &obs, Vector *state, double time) const
 {
-  *state = obs;
-  (*state)[0] -= M_PI;
-  *state = extend(*state, VectorConstructor(0.));
+  state->resize(3);
+  (*state)[0] = obs[0]-M_PI;
+  (*state)[1] = obs[1];
+  (*state)[2] = time;
   
   return true;
 }
@@ -175,6 +183,8 @@ void PendulumRegulatorTask::reconfigure(const Configuration &config)
 
 void PendulumRegulatorTask::observe(const Vector &state, Observation *obs, int *terminal) const
 {
+  RegulatorTask::observe(state, obs, terminal);
+
   if (state.size() != 3)
     throw Exception("task/pendulum/regulator requires dynamics/pendulum");
     
@@ -182,13 +192,11 @@ void PendulumRegulatorTask::observe(const Vector &state, Observation *obs, int *
   for (size_t ii=0; ii < 2; ++ii)
     (*obs)[ii] = state[ii];
   obs->absorbing = false;
-
-  *terminal = state[2] > 3;
 }
 
-bool PendulumRegulatorTask::invert(const Observation &obs, Vector *state) const
+bool PendulumRegulatorTask::invert(const Observation &obs, Vector *state, double time) const
 {
-  *state = extend(obs, VectorConstructor(0.));
+  *state = extend(obs, VectorConstructor(time));
   
   return true;
 }

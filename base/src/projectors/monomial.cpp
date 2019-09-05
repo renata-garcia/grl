@@ -35,16 +35,21 @@ REGISTER_CONFIGURABLE(MonomialProjector)
 void MonomialProjector::request(const std::string &role, ConfigurationRequest *config)
 {
   config->push_back(CRP("operating_input", "Origin", operating_input_, CRP::Configuration));
+  config->push_back(CRP("homogeneous", "Use only monomials of the specified degree", (int)homogeneous_, CRP::Configuration, 0, 1));
   config->push_back(CRP("degree", "Maximum degree of monomials", (int)degree_, CRP::Configuration, 0, 10));
   config->push_back(CRP("memory", "int.memory", "Feature vector size", CRP::Provided));
 }
 
 void MonomialProjector::configure(Configuration &config)
 {
+  homogeneous_ = config["homogeneous"];
   degree_ = config["degree"];
   operating_input_ = config["operating_input"].v();
-  
-  memory_ = fact(degree_+operating_input_.size())/(fact(degree_)*fact(operating_input_.size()));
+
+  if (homogeneous_)
+    memory_ = fact(degree_+operating_input_.size()-1)/(fact(degree_)*fact(operating_input_.size()-1));
+  else
+    memory_ = fact(degree_+operating_input_.size())/(fact(degree_)*fact(operating_input_.size()));
   
   config.set("memory", memory_);
 }
@@ -63,36 +68,80 @@ ProjectionPtr MonomialProjector::project(const Vector &in) const
 
   p->vector.resize(memory_);
   
-  size_t ii=0;
-  
-  // Degree 0
-  p->vector[ii++] = 1;
-  
-  if (degree_ > 0)
+  if (homogeneous_)
   {
-    // Degree 1
-    for (size_t dd=0; dd < in.size(); ++dd)
-      p->vector[ii++] = oin[dd];
-  
-    size_t last=1;
-    IndexVector count = IndexVector::Ones(in.size());
-    
-    // Other degrees
-    for (size_t oo=2; oo <= degree_; ++oo)
+    if (degree_ == 0)
     {
-      size_t total=ii-last;
-      last = ii;
-      
+      p->vector[0] = 1;
+    }
+    else if (degree_ == 1)
+    {
       for (size_t dd=0; dd < in.size(); ++dd)
+        p->vector[dd] = oin[dd];
+    }
+    else if (degree_ == 2)
+    {
+      size_t ii=0;
+      for (size_t dd1=0; dd1 < in.size(); ++dd1)
+        for (size_t dd2=dd1; dd2 < in.size(); ++dd2)
+          p->vector[ii++] = oin[dd1]*oin[dd2];
+    }
+    else
+    {
+      IndexVector count = IndexVector::Zero(in.size()+1);
+      count[in.size()] = in.size()-1;
+      
+      for (size_t ii=0; ii < memory_; ++ii)
       {
-        for (size_t jj=last-total; jj < last; ++jj)
-          p->vector[ii++] = p->vector[jj]*oin[dd];
-          
-        total -= count[dd];
-        count[dd] += total;
+        double v = 1;
+        for (size_t dd=0; dd < in.size(); ++dd)
+          v *= oin[count[dd]];
+        p->vector[ii] = v;
+        
+        for (size_t dd=0; dd < in.size(); ++dd)
+        {
+          count[dd] = count[dd] + 1;
+          if (count[dd] > count[dd+1])
+            count[dd] = 0;
+          else
+            break;
+        }
       }
     }
   }
+  else
+  {
+    size_t ii=0;
+    
+    // Degree 0
+    p->vector[ii++] = 1;
+    
+    if (degree_ > 0)
+    {
+      // Degree 1
+      for (size_t dd=0; dd < in.size(); ++dd)
+        p->vector[ii++] = oin[dd];
+    
+      size_t last=1;
+      IndexVector count = IndexVector::Ones(in.size());
+      
+      // Other degrees
+      for (size_t oo=2; oo <= degree_; ++oo)
+      {
+        size_t total=ii-last;
+        last = ii;
+        
+        for (size_t dd=0; dd < in.size(); ++dd)
+        {
+          for (size_t jj=last-total; jj < last; ++jj)
+            p->vector[ii++] = p->vector[jj]*oin[dd];
+            
+          total -= count[dd];
+          count[dd] += total;
+        }
+      }
+    }
+  } 
   
   return ProjectionPtr(p);
 }

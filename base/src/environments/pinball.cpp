@@ -186,12 +186,12 @@ void PinballMovementTask::evaluate(const Vector &state, const Action &action, co
     *reward = -1;
 }
 
-bool PinballMovementTask::invert(const Observation &obs, Vector *state) const
+bool PinballMovementTask::invert(const Observation &obs, Vector *state, double time) const
 {
   state->resize(5);
   for (size_t ii=0; ii < 4; ++ii)
     (*state)[ii] = obs[ii];
-  (*state)[PinballModel::siTime] = 0;
+  (*state)[PinballModel::siTime] = time;
   
   return true;
 }
@@ -233,6 +233,8 @@ void PinballRegulatorTask::reconfigure(const Configuration &config)
 
 void PinballRegulatorTask::observe(const Vector &state, Observation *obs, int *terminal) const
 {
+  RegulatorTask::observe(state, obs, terminal);
+
   if (state.size() != 5)
     throw Exception("task/pinball/regulator requires dynamics/pinball");
     
@@ -240,13 +242,11 @@ void PinballRegulatorTask::observe(const Vector &state, Observation *obs, int *t
   for (size_t ii=0; ii < 4; ++ii)
     (*obs)[ii] = state[ii];
   obs->absorbing = false;
-
-  *terminal = state[4] > 20;
 }
 
-bool PinballRegulatorTask::invert(const Observation &obs, Vector *state) const
+bool PinballRegulatorTask::invert(const Observation &obs, Vector *state, double time) const
 {
-  *state = extend(obs, VectorConstructor(0.));
+  *state = extend(obs, VectorConstructor(time));
   
   return true;
 }

@@ -6,7 +6,7 @@ experiment:
   steps: 0
   rate: 0
   test_interval: 10
-  output: mpol_dpg_20_mean_data
+  output: mpol_dpg_20_meanmov_data
   environment: 
     type: environment/modeled
     model: 

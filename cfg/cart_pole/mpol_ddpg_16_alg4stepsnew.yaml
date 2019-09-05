@@ -1,0 +1,1329 @@
+config:
+  cf0_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
+  cf0_gamma: 0.99
+  cf0_reward_scale: 0.01
+  cf0_interval: 10000
+  cf1_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.001 "relu" "linear" 400 300
+  cf1_gamma: 0.99
+  cf1_reward_scale: 0.1
+  cf1_interval: 10000
+  cf2_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.001 "relu" "linear" 300 200
+  cf2_gamma: 0.99
+  cf2_reward_scale: 0.01
+  cf2_interval: 1000
+  cf3_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.001 "softmax" "linear" 100 50
+  cf3_gamma: 0.99
+  cf3_reward_scale: 1
+  cf3_interval: 10000
+  cf4_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "relu" "linear" 300 200
+  cf4_gamma: 0.99
+  cf4_reward_scale: 0.01
+  cf4_interval: 10000
+  cf5_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "relu" "linear" 400 300
+  cf5_gamma: 0.99
+  cf5_reward_scale: 0.1
+  cf5_interval: 1000
+  cf6_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "relu" "linear" 400 300
+  cf6_gamma: 0.99
+  cf6_reward_scale: 0.01
+  cf6_interval: 10000
+  cf7_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.001 0.0001 "softmax" "linear" 100 50
+  cf7_gamma: 0.99
+  cf7_reward_scale: 1
+  cf7_interval: 1000
+  cf8_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
+  cf8_gamma: 0.98
+  cf8_reward_scale: 0.01
+  cf8_interval: 10000
+  cf9_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
+  cf9_gamma: 0.98
+  cf9_reward_scale: 0.1
+  cf9_interval: 10000
+  cf10_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 400 300
+  cf10_gamma: 0.98
+  cf10_reward_scale: 1
+  cf10_interval: 10000
+  cf11_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 400 300
+  cf11_gamma: 0.98
+  cf11_reward_scale: 0.01
+  cf11_interval: 10000
+  cf12_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 400 300
+  cf12_gamma: 0.98
+  cf12_reward_scale: 0.1
+  cf12_interval: 10000
+  cf13_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "softmax" "linear" 400 300
+  cf13_gamma: 0.98
+  cf13_reward_scale: 1
+  cf13_interval: 10000
+  cf14_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 300 200
+  cf14_gamma: 0.99
+  cf14_reward_scale: 0.01
+  cf14_interval: 1000
+  cf15_file_ddpg_py: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims 0.0001 0.001 "relu" "linear" 300 200
+  cf15_gamma: 0.99
+  cf15_reward_scale: 0.01
+  cf15_interval: 10000
+experiment: 
+  type: experiment/online_learning
+  runs: 10
+  run_offset: 0
+  trials: 1000
+  steps: 0
+  rate: 0
+  test_interval: 10
+  output: cartpole_mpol_ddpg_16_alg4steps
+  environment: 
+    type: environment/modeled
+    model: 
+      type: model/dynamical
+      control_step: 0.05
+      integration_steps: 5
+      dynamics: 
+        type: dynamics/cart_pole
+        end_stop: 1
+    task: 
+      type: task/cart_pole/swingup
+      timeout: 9.99
+      randomization: 1
+      shaping: 0
+      gamma: 1
+      end_stop_penalty: 0
+      action_penalty: 0
+  agent: 
+    type: agent/replay
+    memory_size: 100000
+    replay_steps: 128
+    batch_size: 64
+    observation_steps: 1000
+    threads: 0
+    policy: 
+      type: mapping/policy/multi
+      strategy: alg4stepsNew
+      ensemble_center: none
+      update_history: density
+      percentile: 1
+      select_by_distance: best
+      score_postprocess: 0
+      sampler: 
+        type: sampler/greedy
+      bins: 10
+      static_policy: 0
+      r_distance_parameter: 0.05
+      alpha: 0.01
+      iroulette: 0.3
+      minor_remove_bound: 0.25
+      major_remove_bound: 0.75
+      policy: 
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf1_interval
+                file: config/cf1_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf2_interval
+                file: config/cf2_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf3_interval
+                file: config/cf3_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf4_interval
+                file: config/cf4_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf5_interval
+                file: config/cf5_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf6_interval
+                file: config/cf6_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf7_interval
+                file: config/cf7_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf8_interval
+                file: config/cf8_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf9_interval
+                file: config/cf9_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf10_interval
+                file: config/cf10_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf11_interval
+                file: config/cf11_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf12_interval
+                file: config/cf12_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf13_interval
+                file: config/cf13_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf14_interval
+                file: config/cf14_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf15_interval
+                file: config/cf15_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+        - 
+            type: mapping/policy/filtering
+            observation_idx: [0, 1, 2, 3]
+            action_idx: [0]
+            policy: 
+              type: mapping/policy/action
+              sigma: [1]
+              theta: [0.15]
+              decay_rate: 1
+              decay_min: 0
+              renormalize: 1
+              output_min: experiment/environment/task/action_min++[0]
+              output_max: experiment/environment/task/action_max++[0]
+              projector: 
+                type: projector/pre/normalizing
+                signed: 0
+                input_min: experiment/environment/task/observation_min
+                input_max: experiment/environment/task/observation_max
+                projector: 
+                  type: projector/identity
+              representation: 
+                type: representation/parameterized/tensorflow
+                interval: config/cf0_interval
+                file: config/cf0_file_ddpg_py
+                input_layer: s_in, a_in
+                output_layer: a_out/Tanh, q/BiasAdd
+                unit_node: init
+                update_node: update
+      value: 
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/0/policy/projector
+          representation: experiment/agent/policy/policy/0/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/1/policy/projector
+          representation: experiment/agent/policy/policy/1/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/2/policy/projector
+          representation: experiment/agent/policy/policy/2/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/3/policy/projector
+          representation: experiment/agent/policy/policy/3/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/4/policy/projector
+          representation: experiment/agent/policy/policy/4/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/5/policy/projector
+          representation: experiment/agent/policy/policy/5/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/6/policy/projector
+          representation: experiment/agent/policy/policy/6/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/7/policy/projector
+          representation: experiment/agent/policy/policy/7/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/8/policy/projector
+          representation: experiment/agent/policy/policy/8/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/9/policy/projector
+          representation: experiment/agent/policy/policy/9/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/10/policy/projector
+          representation: experiment/agent/policy/policy/10/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/11/policy/projector
+          representation: experiment/agent/policy/policy/11/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/12/policy/projector
+          representation: experiment/agent/policy/policy/12/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/13/policy/projector
+          representation: experiment/agent/policy/policy/13/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/14/policy/projector
+          representation: experiment/agent/policy/policy/14/policy/representation
+        - 
+          type: mapping/represented
+          projector: experiment/agent/policy/policy/15/policy/projector
+          representation: experiment/agent/policy/policy/15/policy/representation
+      output_min: experiment/environment/task/action_min
+      output_max: experiment/environment/task/action_max
+    predictor: 
+      type: predictor/multi
+      predictor: 
+        - 
+          type: predictor/ddpg
+          gamma: config/cf1_gamma
+          reward_scale: config/cf1_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector: 
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/0/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf2_gamma
+          reward_scale: config/cf2_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/1/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf3_gamma
+          reward_scale: config/cf3_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/2/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf4_gamma
+          reward_scale: config/cf4_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/3/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf5_gamma
+          reward_scale: config/cf5_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/4/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf6_gamma
+          reward_scale: config/cf6_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/5/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf7_gamma
+          reward_scale: config/cf7_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/6/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf8_gamma
+          reward_scale: config/cf8_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/7/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf9_gamma
+          reward_scale: config/cf9_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/8/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf10_gamma
+          reward_scale: config/cf10_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/9/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf11_gamma
+          reward_scale: config/cf11_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/10/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf12_gamma
+          reward_scale: config/cf12_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/11/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf13_gamma
+          reward_scale: config/cf13_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/12/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf14_gamma
+          reward_scale: config/cf14_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/13/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf15_gamma
+          reward_scale: config/cf15_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/14/policy/representation
+        - 
+          type: predictor/ddpg
+          gamma: config/cf0_gamma
+          reward_scale: config/cf0_reward_scale
+          observation: s_in
+          action: a_in
+          value: q/BiasAdd
+          target: target
+          critic_update: update
+          actor_update: a_update
+          discretizer: 0
+          obs_projector: 
+            type: projector/pre/normalizing
+            signed: 0
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          action_projector:  
+            type: projector/pre/normalizing
+            signed: 1
+            input_min: experiment/environment/task/action_min
+            input_max: experiment/environment/task/action_max
+            projector: 
+              type: projector/identity
+          representation: experiment/agent/policy/policy/15/policy/representation
+  test_agent: 
+    type: agent/fixed
+    policy: 
+      type: mapping/policy/multi
+      strategy: experiment/agent/policy/strategy
+      ensemble_center: experiment/agent/policy/ensemble_center
+      update_history: experiment/agent/policy/update_history
+      percentile: experiment/agent/policy/percentile
+      select_by_distance: experiment/agent/policy/select_by_distance
+      score_postprocess: experiment/agent/policy/score_postprocess
+      sampler: experiment/agent/policy/sampler
+      bins: experiment/agent/policy/bins
+      static_policy: experiment/agent/policy/static_policy
+      r_distance_parameter: experiment/agent/policy/r_distance_parameter
+      alpha: experiment/agent/policy/alpha
+      iroulette: experiment/agent/policy/iroulette
+      minor_remove_bound: experiment/agent/policy/minor_remove_bound
+      major_remove_bound: experiment/agent/policy/major_remove_bound
+      policy: 
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/0/policy/output_min
+            output_max: experiment/agent/policy/policy/0/policy/output_max
+            projector: experiment/agent/policy/policy/0/policy/projector
+            representation: experiment/agent/policy/policy/0/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/1/policy/output_min
+            output_max: experiment/agent/policy/policy/1/policy/output_max
+            projector: experiment/agent/policy/policy/1/policy/projector
+            representation: experiment/agent/policy/policy/1/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/2/policy/output_min
+            output_max: experiment/agent/policy/policy/2/policy/output_max
+            projector: experiment/agent/policy/policy/2/policy/projector
+            representation: experiment/agent/policy/policy/2/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/3/policy/output_min
+            output_max: experiment/agent/policy/policy/3/policy/output_max
+            projector: experiment/agent/policy/policy/3/policy/projector
+            representation: experiment/agent/policy/policy/3/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/4/policy/output_min
+            output_max: experiment/agent/policy/policy/4/policy/output_max
+            projector: experiment/agent/policy/policy/4/policy/projector
+            representation: experiment/agent/policy/policy/4/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/5/policy/output_min
+            output_max: experiment/agent/policy/policy/5/policy/output_max
+            projector: experiment/agent/policy/policy/5/policy/projector
+            representation: experiment/agent/policy/policy/5/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/6/policy/output_min
+            output_max: experiment/agent/policy/policy/6/policy/output_max
+            projector: experiment/agent/policy/policy/6/policy/projector
+            representation: experiment/agent/policy/policy/6/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/7/policy/output_min
+            output_max: experiment/agent/policy/policy/7/policy/output_max
+            projector: experiment/agent/policy/policy/7/policy/projector
+            representation: experiment/agent/policy/policy/7/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/8/policy/output_min
+            output_max: experiment/agent/policy/policy/8/policy/output_max
+            projector: experiment/agent/policy/policy/8/policy/projector
+            representation: experiment/agent/policy/policy/8/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/9/policy/output_min
+            output_max: experiment/agent/policy/policy/9/policy/output_max
+            projector: experiment/agent/policy/policy/9/policy/projector
+            representation: experiment/agent/policy/policy/9/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/10/policy/output_min
+            output_max: experiment/agent/policy/policy/10/policy/output_max
+            projector: experiment/agent/policy/policy/10/policy/projector
+            representation: experiment/agent/policy/policy/10/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/11/policy/output_min
+            output_max: experiment/agent/policy/policy/11/policy/output_max
+            projector: experiment/agent/policy/policy/11/policy/projector
+            representation: experiment/agent/policy/policy/11/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/12/policy/output_min
+            output_max: experiment/agent/policy/policy/12/policy/output_max
+            projector: experiment/agent/policy/policy/12/policy/projector
+            representation: experiment/agent/policy/policy/12/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/13/policy/output_min
+            output_max: experiment/agent/policy/policy/13/policy/output_max
+            projector: experiment/agent/policy/policy/13/policy/projector
+            representation: experiment/agent/policy/policy/13/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/14/policy/output_min
+            output_max: experiment/agent/policy/policy/14/policy/output_max
+            projector: experiment/agent/policy/policy/14/policy/projector
+            representation: experiment/agent/policy/policy/14/policy/representation
+        - 
+          type: mapping/policy/filtering
+          observation_idx: [0, 1, 2, 3]
+          action_idx: [0]
+          policy: 
+            type: mapping/policy/action
+            sigma: []
+            theta: []
+            decay_rate: 1
+            decay_min: 0
+            renormalize: 1
+            output_min: experiment/agent/policy/policy/15/policy/output_min
+            output_max: experiment/agent/policy/policy/15/policy/output_max
+            projector: experiment/agent/policy/policy/15/policy/projector
+            representation: experiment/agent/policy/policy/15/policy/representation
+      value: 
+        - experiment/agent/policy/value/0
+        - experiment/agent/policy/value/1
+        - experiment/agent/policy/value/2
+        - experiment/agent/policy/value/3
+        - experiment/agent/policy/value/4
+        - experiment/agent/policy/value/5
+        - experiment/agent/policy/value/6
+        - experiment/agent/policy/value/7
+        - experiment/agent/policy/value/8
+        - experiment/agent/policy/value/9
+        - experiment/agent/policy/value/10
+        - experiment/agent/policy/value/11
+        - experiment/agent/policy/value/12
+        - experiment/agent/policy/value/13
+        - experiment/agent/policy/value/14
+        - experiment/agent/policy/value/15
+      output_min: experiment/environment/task/action_min
+      output_max: experiment/environment/task/action_max
+  save_every: never

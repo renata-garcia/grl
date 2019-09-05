@@ -9,6 +9,7 @@ add_library(${TARGET} SHARED
             ${SRC}/random_generator.cpp
             ${SRC}/signal.cpp
             ${SRC}/statistics.cpp
+            ${SRC}/parser.cpp
             ${SRC}/agents/fixed.cpp
             ${SRC}/agents/black_box.cpp
             ${SRC}/agents/td.cpp
@@ -76,6 +77,8 @@ add_library(${TARGET} SHARED
             ${SRC}/policies/state_feedback.cpp
             ${SRC}/policies/noise.cpp
             ${SRC}/policies/multi.cpp
+            ${SRC}/policies/multi_discrete.cpp
+            ${SRC}/policies/solver.cpp
 #            ${SRC}/predictors/naf.cpp
             ${SRC}/predictors/model.cpp
             ${SRC}/predictors/sarsa.cpp
@@ -103,6 +106,7 @@ add_library(${TARGET} SHARED
             ${SRC}/projectors/rbf.cpp
             ${SRC}/projectors/multi.cpp
             ${SRC}/projectors/split.cpp
+            ${SRC}/projectors/geometric.cpp
             ${SRC}/representations/linear.cpp
             ${SRC}/representations/ann.cpp
 #            ${SRC}/representations/dmp.cpp

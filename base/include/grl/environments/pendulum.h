@@ -71,14 +71,10 @@ class PendulumSwingupTask : public Task
 
     // From Task
     virtual void start(int test, Vector *state) const;
-    virtual bool actuate(const Vector &state, const Action &action, Vector *actuation) const
-    {
-      *actuation = VectorConstructor(fmin(fmax(action[0], -3), 3));
-      return true;
-    }
+    virtual bool actuate(const Vector &prev, const Vector &state, const Action &action, Vector *actuation) const;
     virtual void observe(const Vector &state, Observation *obs, int *terminal) const;
     virtual void evaluate(const Vector &state, const Action &action, const Vector &next, double *reward) const;
-    virtual bool invert(const Observation &obs, Vector *state) const;
+    virtual bool invert(const Observation &obs, Vector *state, double time=0.) const;
 };
 
 /// Pendulum balancing task with quadratic costs
@@ -95,6 +91,7 @@ class PendulumRegulatorTask : public RegulatorTask
       stddev_ = VectorConstructor(0.1, 0);
       q_ = VectorConstructor(1, 0);
       r_ = VectorConstructor(0.01);
+      timeout_ = 3;
     }
   
     // From Configurable
@@ -104,7 +101,7 @@ class PendulumRegulatorTask : public RegulatorTask
 
     // From Task
     virtual void observe(const Vector &state, Observation *obs, int *terminal) const;
-    virtual bool invert(const Observation &obs, Vector *state) const;
+    virtual bool invert(const Observation &obs, Vector *state, double time=0.) const;
 };
 
 }

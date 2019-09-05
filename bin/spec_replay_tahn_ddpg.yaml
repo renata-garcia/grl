@@ -1,0 +1,35 @@
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_lr_actor$0_lr_critic$1_activation_dl$2_layer1_size$3_layer2_size$4
+  parameters:
+  - name: experiment/config/lr_actor
+    values:
+    - 0.0001
+    - 0.001
+    - 0.01
+  - name: experiment/config/lr_critic
+    values:
+    - 0.0001
+    - 0.001
+    - 0.01
+  - name: experiment/config/activation_dl
+    values:
+    - 'softmax'
+    - 'sigmoid'
+    - 'relu'
+    - 'tanh'
+    - 'elu'
+  - name: experiment/config/layer1_size
+    values:
+    - 400
+    - 350
+    - 300
+    - 250
+    - 200
+  - name: experiment/config/layer2_size
+    values:
+    - 300
+    - 250
+    - 200
+    

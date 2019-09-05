@@ -2,6 +2,8 @@ import yaml
 import itertools
 import threading
 import socket
+import select
+import os
 
 try:
     # included in standard lib from Python 2.7
@@ -27,14 +29,38 @@ yaml.add_representer(hashabledict, dict_representer)
 yaml.add_constructor(_mapping_tag, dict_constructor)
 
 class Worker():
-  def __init__(self, socket, output=""):
+  def __init__(self, server, socket, conf, output=""):
+    self.server = server
     self.socket = socket
+    self.conf = conf
     self.output = output
+    self.data = ""
+    self.dead = False
+    
+    # Send configuration
+    self.socket.send(conf + '\0')
 
   def read(self, regret='simple'):
     """Read worker result, returning either simple or cumulative regret"""
-    data = [float(v) for v in self.socket.makefile().readlines()]
+    while True:
+      self.data = self.data + self.socket.makefile().read();
+      
+      if len(self.data) == 0 or self.data[-1] != '\0':
+        self.socket.close()
+        self.data = ""
+        new = self.server.submit(self.conf, self.output)
+        self.socket = new.socket
+      else:
+        break
+    
     self.socket.close()
+    self.dead = True
+    
+    try:
+      data = [float(v) for v in self.data.split('\n')[:-1]]
+    except:
+      print data
+      raise
     
     if self.output:
       stream = open(self.output + ".txt", 'w')
@@ -45,12 +71,27 @@ class Worker():
     if regret == 'simple':
       sample = int(len(data)/20)
       if sample == 0:
-        raise Exception("Worker did not return data")
+        raise Exception("Worker did not return enough data")
       return sum(data[-sample:])/sample
     elif regret == 'cumulative':
       return sum(data)
     else:
       raise Exception("Unknown regret type " + regret)
+
+  def alive(self):
+    if self.dead:
+      return False
+  
+    while True:
+      r, w, e = select.select([self.socket], [], [], 0)
+      if r:
+        buf = self.socket.recv(4096, socket.MSG_DONTWAIT)
+        self.data = self.data + buf
+        if len(buf) == 0:
+          self.dead = True
+          return False
+      else:
+        return True
 
 class Server():
   def __init__(self, port=3373):
@@ -88,11 +129,8 @@ class Server():
         self.condition.wait()
       w = self.workers.pop()
     
-    # Send configuration
-    w.send(conf + '\0')
-    
-    # Return stream for reading by submitter
-    return Worker(w, output)
+    # Instantiate worker
+    return Worker(self, w, conf, output)
 
 def splittype(type):
   """Splits type into base and role."""
@@ -203,6 +241,33 @@ def mergeconf(base, new):
       if k not in base:
         base[k] = v
       else:
-        base[k] = merge(base[k],v)
+        base[k] = mergeconf(base[k],v)
 
   return base
+
+def readconf(path):
+  """Reads configuration, resolving file references"""
+  stream = file(path)
+  conf = yaml.load(stream)
+  stream.close()
+  
+  return _readconf(conf, path)
+
+def _readconf(conf, path):
+  if isinstance(conf, dict):
+    iterfun = lambda c: c.iteritems()
+  elif isinstance(conf, list):
+    iterfun = lambda c: enumerate(c)
+  else:
+    return conf
+  
+  for k,v in iterfun(conf):
+    if isinstance(v, str) and v[-5:] == ".yaml":
+      ref = os.path.join(os.path.dirname(path), v)
+      if os.path.isfile(ref):
+        conf[k] = readconf(ref)
+    else:
+      conf[k] = _readconf(v, path)
+    
+  return conf
+  

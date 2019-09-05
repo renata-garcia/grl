@@ -38,10 +38,10 @@ namespace grl
 {
 
 /// Linear Quadratic Regulator solver
-class LQRSolver : public Solver
+class LQRSolver : public PolicySolver
 {
   public:
-    TYPEINFO("solver/lqr", "Linear Quadratic Regulator solver")
+    TYPEINFO("solver/policy/lqr", "Linear Quadratic Regulator solver")
 
   protected:
     ObservationModel *model_;
@@ -60,6 +60,9 @@ class LQRSolver : public Solver
     virtual LQRSolver *clone() const;
     virtual bool solve();
     
+    // From PolicySolver
+    virtual Policy *policy();
+
   protected:
     virtual int solveDARE(const Matrix &A, const Matrix &B, const Matrix &Q, const Matrix &R, Matrix *X) const;
 };

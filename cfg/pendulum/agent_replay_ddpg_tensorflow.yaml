@@ -1,0 +1,93 @@
+experiment: 
+  type: experiment/online_learning
+  runs: 2
+  run_offset: 0
+  trials: 1000
+  steps: 0
+  rate: 0
+  test_interval: 10
+  output: outfix
+  config:
+    lr_actor: 0.001
+    lr_critic: 0.001
+    activation_dl: "relu"
+    activation_end_critic: "linear"
+    layer1_size: 400
+    layer2_size: 300
+    file_ddpg: ../cfg/network/4layer_tanh_ddpg.py experiment/environment/task/observation_dims experiment/environment/task/action_dims experiment/environment/task/action_max experiment/config/lr_actor experiment/config/lr_critic experiment/config/activation_dl experiment/config/activation_end_critic experiment/config/layer1_size experiment/config/layer2_size
+  agent: 
+    type: agent/replay
+    memory_size: 100000
+    replay_steps: 256
+    batch_size: 64
+    observation_steps: 1000
+    threads: 0
+    policy: 
+      type: mapping/policy/post/noise
+      sigma: [1]
+      theta: [0.15]
+      decay_rate: 0.9
+      decay_min: 0.1
+      output_min: experiment/environment/task/action_min
+      output_max: experiment/environment/task/action_max
+      policy: 
+        type: mapping/policy/filtering
+        observation_idx: [0, 1, 2]
+        action_idx: [0]
+        policy: 
+          type: mapping/policy/action
+          sigma: 0
+          decay_rate: 0
+          decay_min: 0
+          output_min: experiment/environment/task/action_min++[0]
+          output_max: experiment/environment/task/action_max++[0]
+          projector: 
+            type: projector/pre/normalizing
+            input_min: experiment/environment/task/observation_min
+            input_max: experiment/environment/task/observation_max
+            projector: 
+              type: projector/identity
+          representation: 
+            type: representation/parameterized/tensorflow
+            interval: 10000
+            inputs: experiment/environment/task/observation_dims
+            targets: experiment/environment/task/action_dims
+            file: experiment/config/file_ddpg
+            input_layer: s_in
+            output_layer: a_out/mul, q/BiasAdd
+            output_target: q_target
+            update_node: q_update
+    predictor: 
+      type: predictor/ddpg
+      gamma: 0.99
+      observation: s_in
+      action: a_in
+      value: q/BiasAdd
+      target: q_target
+      critic_update: q_update
+      actor_update: a_update
+      obs_projector: 
+        type: projector/pre/normalizing
+        input_min: experiment/environment/task/observation_min
+        input_max: experiment/environment/task/observation_max
+        projector: 
+          type: projector/identity
+      action_projector: 
+        type: projector/identity
+      representation: experiment/agent/policy/policy/policy/representation
+  test_agent: 
+    type: agent/fixed
+    policy: 
+      type: mapping/policy/filtering
+      observation_idx: [0, 1, 2]
+      action_idx: [0]
+      policy: 
+        type: mapping/policy/action
+        sigma: 0
+        decay_rate: 1
+        decay_min: 0
+        output_min: experiment/agent/policy/policy/policy/output_min
+        output_max: experiment/agent/policy/policy/policy/output_max
+        projector: experiment/agent/policy/policy/policy/projector
+        representation: experiment/agent/policy/policy/policy/representation
+  save_every: never

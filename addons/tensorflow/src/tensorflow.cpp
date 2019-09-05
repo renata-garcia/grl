@@ -25,6 +25,8 @@
  * \endverbatim
  */
 
+#include <unistd.h>
+
 #include <vector>
 
 #include <grl/representations/tensorflow.h>
@@ -145,33 +147,13 @@ void TensorFlowRepresentation::request(const std::string &role, ConfigurationReq
 {
   ParameterizedRepresentation::request(role, config);
 
-  if (role == "action")
-  {
-    config->push_back(CRP("inputs", "int.observation_dims", "Number of input dimensions", (int)inputs_, CRP::System, 1));
-    config->push_back(CRP("targets", "int.action_dims", "Number of target dimensions", (int)targets_, CRP::System, 1));
-  }
-  else
-  {
-    if (role == "transition" || role == "value/action")
-      config->push_back(CRP("inputs", "int.observation_dims+int.action_dims", "Number of input dimensions", (int)inputs_, CRP::System, 1));
-    else if (role == "value/state")
-      config->push_back(CRP("inputs", "int.observation_dims", "Number of input dimensions", (int)inputs_, CRP::System, 1));
-    else
-      config->push_back(CRP("inputs", "Number of input dimensions", (int)inputs_, CRP::System, 1));
-      
-    if (role == "transition")
-      config->push_back(CRP("targets", "int.observation_dims+2", "Number of target dimensions", (int)targets_, CRP::System, 1));
-    else
-      config->push_back(CRP("targets", "Number of target dimensions", (int)targets_, CRP::System, 1));
-  }
+  config->push_back(CRP("file", "TensorFlow graph stored in binary protocol buffer, or Python command to generate it", file_));
   
-  config->push_back(CRP("file", "TensorFlow graph stored in binary protocol buffer", file_));
-  
-  config->push_back(CRP("input_layer", "Name of input layer placeholders", input_layer_));
-  config->push_back(CRP("output_layer", "Name of output layer tensors", output_layer_));
-  config->push_back(CRP("output_target", "Name of output layer target placeholders", output_target_));
-  config->push_back(CRP("sample_weights", "Name of sample weights placeholder", sample_weights_));
-  config->push_back(CRP("learning_phase", "Name of learning phase placeholder", learning_phase_));
+  config->push_back(CRP("input_layer", "Name of input layer placeholders (default: inputs of 'inputs' node)", input_layer_));
+  config->push_back(CRP("output_layer", "Name of output layer tensors (default: inputs of 'outputs' node)", output_layer_));
+  config->push_back(CRP("output_target", "Name of output layer target placeholders (default: nodes containing 'target')", output_target_));
+  config->push_back(CRP("sample_weights", "Name of sample weights placeholder (default: nodes containing 'sample_weights')", sample_weights_));
+  config->push_back(CRP("learning_phase", "Name of learning phase placeholder (default: nodes containing 'learning_phase')", learning_phase_));
 
   config->push_back(CRP("init_node", "Name of node to run to initialize weights", init_node_));
   config->push_back(CRP("update_node", "Name of node to run to update weights", update_node_));
@@ -181,8 +163,6 @@ void TensorFlowRepresentation::configure(Configuration &config)
 {
   ParameterizedRepresentation::configure(config);
 
-  inputs_ = config["inputs"];
-  targets_ = config["targets"];
   file_ = config["file"].str();
   
   input_layer_ = config["input_layer"].str();
@@ -199,35 +179,69 @@ void TensorFlowRepresentation::configure(Configuration &config)
     
   NOTICE("Using TensorFlow version " << TF::Version());
   
-  NOTICE("Loading TensorFlow model " << file_);
+  std::string graph_pb;
   
-  std::ifstream ifs(file_);
-  
-  if (!ifs.good())
+  if (file_.find(".py") != std::string::npos)
   {
-    ERROR("Error opening TensorFlow model " << file_);
-    throw bad_param("representation/tensorflow:file");
+    NOTICE("Generating TensorFlow model from " << file_);
+
+    char buf[PATH_MAX];
+    (void)tmpnam_r(buf);
+    std::stringstream ss;
+    ss << file_ << " " << buf;
+    if (system(ss.str().c_str()))
+      throw bad_param("representation/tensorflow:file");
+    
+    std::ifstream ifs(buf);
+    if (!ifs.good())
+    {
+      ERROR("Error opening generated TensorFlow model " << buf);
+      throw bad_param("representation/tensorflow:file");
+    }
+
+    ss.str("");
+    ss << ifs.rdbuf();
+    graph_pb = ss.str();
+    unlink(buf);
   }
+  else
+  {
+    NOTICE("Loading TensorFlow model " << file_);
   
-  std::stringstream ss;
-  ss << ifs.rdbuf();
+    std::ifstream ifs(file_);
+    
+    if (!ifs.good())
+    {
+      ERROR("Error opening TensorFlow model " << file_);
+      throw bad_param("representation/tensorflow:file");
+    }
+    
+    std::stringstream ss;
+    ss << ifs.rdbuf();
+    graph_pb = ss.str();
+  }
   
   GraphDef graph_def;
   
-  if (!graph_def.ParseFromString(ss.str()))
+  if (!graph_def.ParseFromString(graph_pb))
   {
     ERROR("Error parsing ProtoBuf in TensorFlow model " << file_);
     throw bad_param("representation/tensorflow:file");
   }
-  
-  bool auto_output = output_layer_.empty();
 
+  bool auto_input = input_layer_.empty(), auto_output = output_layer_.empty();
+  
   for (int i = 0; i < graph_def.node_size(); i++)
   {
     auto n = graph_def.node(i);
-    
-    if (input_layer_.empty() && n.name().find("input") != std::string::npos)
-      input_layer_ = n.name();
+
+    if (auto_input && n.name() == "inputs")
+      for (int j = 0; j < n.input_size(); j++)
+        input_layer_ = input_layer_ + n.input(j).substr(1) + ", ";
+
+    if (auto_output && n.name() == "outputs")
+      for (int j = 0; j < n.input_size(); j++)
+        output_layer_ = output_layer_ + n.input(j).substr(1) + ", ";
 
     if (output_target_.empty() && n.name().find("target") != std::string::npos)
       output_target_ = n.name();
@@ -238,15 +252,6 @@ void TensorFlowRepresentation::configure(Configuration &config)
     if (learning_phase_.empty() && n.name().find("learning_phase") != std::string::npos)
       learning_phase_ = n.name();
 
-    if (init_node_.empty() && n.name() == "init")
-      init_node_ = n.name();
-
-    if (update_node_.empty() && n.name() == "group_deps")
-      update_node_ = n.name();
-
-    if (auto_output && n.name() == "group_deps_1")
-      output_layer_ = output_layer_ + n.input(0).substr(1) + ", ";
-      
     if (n.op() == "Assign" && n.input_size() == 2 && n.input(1).find("Placeholder") != std::string::npos)
     {
       weights_node_.push_back(n.name());
@@ -255,8 +260,35 @@ void TensorFlowRepresentation::configure(Configuration &config)
     }
   }
   
+  inputs_write_ = cutLongStr(input_layer_);
+  outputs_read_ = cutLongStr(output_layer_);
+
+  INFO("Model parameters");
+  INFO("  Input layer placeholders  : " << inputs_write_);
+  INFO("  Output layer tensors      : " << outputs_read_);
+  INFO("  Target placeholder        : " << output_target_);
+  INFO("  Sample weights placeholder: " << sample_weights_);
+  INFO("  Learning phase placeholder: " << learning_phase_);
+  INFO("  Weight tensors            : " << weights_read_);
+  INFO("  Weight placeholders       : " << weights_write_);
+  INFO("  Weight nodes              : " << weights_node_);
+  INFO("  Init node                 : " << init_node_);
+  INFO("  Update node               : " << update_node_);
+
+  if (input_layer_.empty())
+    throw bad_param("representation/tensorflow:input_layer");
+
+  if (output_layer_.empty())
+    throw bad_param("representation/tensorflow:output_layer");
+
+  if (output_target_.empty())
+    throw bad_param("representation/tensorflow:target");
+
+  if (update_node_.empty())
+    throw bad_param("representation/tensorflow:update_node");
+
   graph_ = TF::NewGraph();
-  TF_Buffer *tf_graph_def = TF::NewBufferFromString((const void*)ss.str().c_str(), ss.str().size());
+  TF_Buffer *tf_graph_def = TF::NewBufferFromString((const void*)graph_pb.c_str(), graph_pb.size());
   TF_ImportGraphDefOptions* tf_graph_options = TF::NewImportGraphDefOptions();
   TF_Status *tf_status = TF::NewStatus();
   TF::GraphImportGraphDef(graph_, tf_graph_def, tf_graph_options, tf_status);
@@ -280,32 +312,12 @@ void TensorFlowRepresentation::configure(Configuration &config)
   TF::DeleteImportGraphDefOptions(tf_graph_options);
   TF::DeleteStatus(tf_status);
   TF::DeleteSessionOptions(tf_session_options);
-  
-  outputs_read_ = cutLongStr(output_layer_);
-  
-  if (input_layer_.empty())
-    throw bad_param("representation/tensorflow:input_layer");
 
-  if (output_layer_.empty())
-    throw bad_param("representation/tensorflow:output_layer");
-
-  if (output_target_.empty())
-    throw bad_param("representation/tensorflow:target");
-
-  if (update_node_.empty())
-    throw bad_param("representation/tensorflow:update_node");
-    
-  INFO("Model loaded");
-  INFO("  Input layer placeholder   : " << input_layer_);
-  INFO("  Output layer tensors      : " << outputs_read_);
-  INFO("  Target placeholder        : " << output_target_);
-  INFO("  Sample weights placeholder: " << sample_weights_);
-  INFO("  Learning phase placeholder: " << learning_phase_);
-  INFO("  Weight tensors            : " << weights_read_);
-  INFO("  Weight placeholders       : " << weights_write_);
-  INFO("  Weight nodes              : " << weights_node_);
-  INFO("  Init node                 : " << init_node_);
-  INFO("  Update node               : " << update_node_);
+  input_shapes_ = IndexVector(inputs_write_.size());
+  for (size_t ii=0; ii < inputs_write_.size(); ++ii)
+    input_shapes_[ii] = GraphGetTensorElements({OperationByName(inputs_write_[ii].c_str()), 0});
+  inputs_ = input_shapes_.sum();
+  targets_ = GraphGetTensorElements({OperationByName(output_target_.c_str()), 0});
   
   // Initialize weights
   reset();
@@ -359,24 +371,27 @@ TensorFlowRepresentation &TensorFlowRepresentation::copy(const Configurable &obj
 
 double TensorFlowRepresentation::read(const ProjectionPtr &projection, Vector *result, Vector *stddev) const
 {
-  CRAWL("single read");
-  
-  timer tmr;
+  timer tmr, sess;
 
   VectorProjection *vp = dynamic_cast<VectorProjection*>(projection.get());
   
   if (vp)
   {
-    // Convert input to tensor
-    int64_t shape[] = {1, (int)vp->vector.size()};
-    TF_Tensor *input = TF::AllocateTensor(TF_FLOAT, shape, 2, vp->vector.size() * sizeof(float));
-    float *data = (float*)TF::TensorData(input);
-    for (size_t ii=0; ii < vp->vector.size(); ++ii)
-      data[ii] = vp->vector[ii];
-      
     // Prepare SessionRun inputs
-    std::vector<TF_Output>  input_ops {{OperationByName(input_layer_.c_str()), 0}};
-    std::vector<TF_Tensor*> input_val {input};
+    std::vector<TF_Output>  input_ops;
+    std::vector<TF_Tensor*> input_val;
+    for (size_t ii=0, nn=0; ii < inputs_write_.size() && nn < vp->vector.size(); nn += input_shapes_[ii++])
+    {
+      input_ops.push_back({OperationByName(inputs_write_[ii].c_str()), 0});
+
+      // Convert input to tensor
+      int64_t shape[] = {1, (int)input_shapes_[ii]};
+      input_val.push_back(TF::AllocateTensor(TF_FLOAT, shape, 2, input_shapes_[ii] * sizeof(float)));
+      
+      float *data = (float*)TF::TensorData(input_val[ii]);
+      for (size_t jj=0; jj < input_shapes_[ii] && jj+nn < vp->vector.size(); ++jj)
+        data[jj] = vp->vector[jj+nn];
+    }
       
     if (!learning_phase_.empty())
     {
@@ -390,9 +405,11 @@ double TensorFlowRepresentation::read(const ProjectionPtr &projection, Vector *r
     
     // Prepare SessionRun outputs
     std::vector<TF_Output>  output_ops(outputs_read_.size());
+    std::vector<TF_Tensor*> output_val(outputs_read_.size());
     for (size_t oo=0; oo < outputs_read_.size(); ++oo)
       output_ops[oo] = {OperationByName(outputs_read_[oo].c_str()), 0};
-    std::vector<TF_Tensor*> output_val(outputs_read_.size());
+    
+    sess.restart();
       
     // Run session
     TF_Status *tf_status = TF::NewStatus();
@@ -401,6 +418,8 @@ double TensorFlowRepresentation::read(const ProjectionPtr &projection, Vector *r
                   output_ops.data(), output_val.data(), output_ops.size(),
                   0, 0,
                   0, tf_status);
+                  
+    sess.stop();
                   
     if (TF::GetCode(tf_status) != TF_OK)
     {
@@ -435,15 +454,13 @@ double TensorFlowRepresentation::read(const ProjectionPtr &projection, Vector *r
     
   if (stddev) *stddev = Vector();
 
-  CRAWL("single read done " << tmr.elapsed());
+  TIMING("single read: " << tmr.elapsed() << " total, " << sess.elapsed() << " TF");
   
   return (*result)[0];
 }
 
 void TensorFlowRepresentation::write(const ProjectionPtr projection, const Vector &target, const Vector &alpha)
 {
-  CRAWL("enqueue single write");
- 
   VectorProjection *vp = dynamic_cast<VectorProjection*>(projection.get());
   
   if (vp)
@@ -465,8 +482,6 @@ void TensorFlowRepresentation::write(const ProjectionPtr projection, const Vecto
 
 void TensorFlowRepresentation::update(const ProjectionPtr projection, const Vector &delta)
 {
-  CRAWL("enqueue single update");
-  
   VectorProjection *vp = dynamic_cast<VectorProjection*>(projection.get());
   
   if (vp)
@@ -481,27 +496,35 @@ void TensorFlowRepresentation::update(const ProjectionPtr projection, const Vect
 
 void TensorFlowRepresentation::finalize()
 {
-  // Convert input to tensor
-  int64_t input_shape[] = {(int)batch_.size(), (int)batch_[0].first.size()};
-  TF_Tensor *input = TF::AllocateTensor(TF_FLOAT, input_shape, 2, batch_.size() * batch_[0].first.size() * sizeof(float));
-  float *data = (float*)TF::TensorData(input);
-  for (size_t ii=0; ii < batch_.size(); ++ii)
-    for (size_t jj=0; jj < batch_[ii].first.size(); ++jj)
-      data[ii*batch_[ii].first.size()+jj] = batch_[ii].first[jj];
+  timer tmr, sess;
+
+  // Prepare SessionRun inputs
+  std::vector<TF_Output>  input_ops;
+  std::vector<TF_Tensor*> input_val;
+  for (size_t ii=0, nn=0; ii < inputs_write_.size() && nn < batch_[0].first.size(); nn += input_shapes_[ii++])
+  {
+    input_ops.push_back({OperationByName(inputs_write_[ii].c_str()), 0});
+
+    // Convert input to tensor
+    int64_t shape[] = {(int)batch_.size(), (int)input_shapes_[ii]};
+    input_val.push_back(TF::AllocateTensor(TF_FLOAT, shape, 2, batch_.size() * input_shapes_[ii] * sizeof(float)));
+    
+    float *data = (float*)TF::TensorData(input_val[ii]);
+    for (size_t jj=0; jj < batch_.size(); ++jj)
+      for (size_t kk=0; kk < input_shapes_[ii] && kk+nn < batch_[jj].first.size(); ++kk)
+        data[jj*batch_[jj].first.size()+kk] = batch_[jj].first[kk+nn];
+  }
+  
+  input_ops.push_back({OperationByName(output_target_.c_str()), 0});
 
   // Convert target to tensor
   int64_t target_shape[] = {(int)batch_.size(), (int)batch_[0].second.size()};
-  TF_Tensor *target = TF::AllocateTensor(TF_FLOAT, target_shape, 2, batch_.size() * batch_[0].second.size() * sizeof(float));
-  data = (float*)TF::TensorData(target);
+  input_val.push_back(TF::AllocateTensor(TF_FLOAT, target_shape, 2, batch_.size() * batch_[0].second.size() * sizeof(float)));
+  float *data = (float*)TF::TensorData(input_val[input_val.size()-1]);
   for (size_t ii=0; ii < batch_.size(); ++ii)
     for (size_t jj=0; jj < batch_[ii].second.size(); ++jj)
       data[ii*batch_[ii].second.size()+jj] = batch_[ii].second[jj];
       
-  // Prepare SessionRun inputs
-  std::vector<TF_Output> input_ops  {{OperationByName(input_layer_.c_str()), 0},
-                                     {OperationByName(output_target_.c_str()), 0}};
-  std::vector<TF_Tensor*> input_val {input, target};
-                                      
   if (!learning_phase_.empty())
   {
     // Prepare learning phase tensor
@@ -514,7 +537,7 @@ void TensorFlowRepresentation::finalize()
   if (!sample_weights_.empty())
   {
     // Prepare sample weight tensor
-    TF_Tensor *weights = TF::AllocateTensor(TF_FLOAT, input_shape, 1, batch_.size() * sizeof(float));
+    TF_Tensor *weights = TF::AllocateTensor(TF_FLOAT, target_shape, 1, batch_.size() * sizeof(float));
     float *data = (float*)TF::TensorData(weights);
     for (size_t ii=0; ii < batch_.size(); ++ii)
       data[ii] = 1.;
@@ -522,6 +545,8 @@ void TensorFlowRepresentation::finalize()
     input_ops.push_back({OperationByName(sample_weights_.c_str()), 0});
     input_val.push_back(weights);
   }
+  
+  sess.restart();
   
   // Run session for update node
   TF_Operation *tf_operation = OperationByName(update_node_.c_str()); 
@@ -531,6 +556,8 @@ void TensorFlowRepresentation::finalize()
                 0, 0, 0,
                 &tf_operation, 1,
                 0, tf_status);
+                
+  sess.stop();
                 
   if (TF::GetCode(tf_status) != TF_OK)
   {
@@ -544,6 +571,9 @@ void TensorFlowRepresentation::finalize()
   TF::DeleteStatus(tf_status);
 
   checkSynchronize();
+  
+  TIMING("finalize (" << batch_.size() << "): " << tmr.elapsed() << " total, " << sess.elapsed() << " TF");
+  
   batch_.clear();
 }
 
@@ -551,9 +581,13 @@ void TensorFlowRepresentation::batchRead(size_t sz)
 {
   pthread_mutex_lock(&mutex_);
   
-  // Allocate input tensor
-  int64_t shape[] = {(int)sz, (int)inputs_};
-  batch_input_ = TF::AllocateTensor(TF_FLOAT, shape, 2, sz * inputs_ * sizeof(float));
+  batch_inputs_ = std::vector<TF_Tensor*>(inputs_write_.size());
+  for (size_t ii=0; ii < inputs_write_.size(); ++ii)
+  {
+    // Allocate input tensor
+    int64_t shape[] = {(int)sz, (int)input_shapes_[ii]};
+    batch_inputs_[ii] = TF::AllocateTensor(TF_FLOAT, shape, 2, sz * input_shapes_[ii] * sizeof(float));
+  }
   
   counter_ = 0;
 }
@@ -562,9 +596,13 @@ void TensorFlowRepresentation::batchWrite(size_t sz)
 {
   pthread_mutex_lock(&mutex_);
 
-  // Allocate input tensor
-  int64_t input_shape[] = {(int)sz, (int)inputs_};
-  batch_input_ = TF::AllocateTensor(TF_FLOAT, input_shape, 2, sz * inputs_ * sizeof(float));
+  batch_inputs_ = std::vector<TF_Tensor*>(inputs_write_.size());
+  for (size_t ii=0; ii < inputs_write_.size(); ++ii)
+  {
+    // Allocate input tensor
+    int64_t shape[] = {(int)sz, (int)input_shapes_[ii]};
+    batch_inputs_[ii] = TF::AllocateTensor(TF_FLOAT, shape, 2, sz * input_shapes_[ii] * sizeof(float));
+  }
   
   // Allocate target tensor
   int64_t target_shape[] = {(int)sz, (int)targets_};
@@ -575,17 +613,24 @@ void TensorFlowRepresentation::batchWrite(size_t sz)
 
 void TensorFlowRepresentation::enqueue(const ProjectionPtr &projection)
 {
-  CRAWL("enqueue read");
+//  CRAWL("enqueue read");
   
   VectorProjection *vp = dynamic_cast<VectorProjection*>(projection.get());
   
   if (vp)
   {
     // Convert input to tensor
-    float *data = (float*)TF::TensorData(batch_input_) + counter_*inputs_;
-    for (size_t ii=0; ii < inputs_; ++ii)
-      data[ii] = vp->vector[ii];
-
+    size_t ii=0;
+    for (size_t nn=0; ii < batch_inputs_.size() && nn < vp->vector.size(); nn += input_shapes_[ii++])
+    {
+      float *data = (float*)TF::TensorData(batch_inputs_[ii]) + counter_*(int)input_shapes_[ii];
+      for (size_t jj=0; jj < input_shapes_[ii] && jj+nn < vp->vector.size(); ++jj)
+        data[jj] = vp->vector[jj+nn];
+    }
+    
+    if (ii < batch_inputs_.size())
+      batch_inputs_.erase(batch_inputs_.begin()+ii, batch_inputs_.end());
+    
     counter_++;
   }
   else
@@ -594,19 +639,26 @@ void TensorFlowRepresentation::enqueue(const ProjectionPtr &projection)
 
 void TensorFlowRepresentation::enqueue(const ProjectionPtr &projection, const Vector &target)
 {
-  CRAWL("enqueue write");
+//  CRAWL("enqueue write");
   
   VectorProjection *vp = dynamic_cast<VectorProjection*>(projection.get());
   
   if (vp)
   {
     // Convert input to tensor
-    float *data = (float*)TF::TensorData(batch_input_) + counter_*inputs_;
-    for (size_t ii=0; ii < inputs_; ++ii)
-      data[ii] = vp->vector[ii];
+    size_t ii=0;
+    for (size_t nn=0; ii < batch_inputs_.size() && nn < vp->vector.size(); nn += input_shapes_[ii++])
+    {
+      float *data = (float*)TF::TensorData(batch_inputs_[ii]) + counter_*(int)input_shapes_[ii];
+      for (size_t jj=0; jj < input_shapes_[ii] && jj+nn < vp->vector.size(); ++jj)
+        data[jj] = vp->vector[jj+nn];
+    }
+
+    if (ii < batch_inputs_.size())
+      batch_inputs_.erase(batch_inputs_.begin()+ii, batch_inputs_.end());
 
     // Convert target to tensor
-    data = (float*)TF::TensorData(batch_target_) + counter_*targets_;
+    float *data = (float*)TF::TensorData(batch_target_) + counter_*targets_;
     for (size_t ii=0; ii < targets_; ++ii)
       data[ii] = target[ii];
 
@@ -618,9 +670,13 @@ void TensorFlowRepresentation::enqueue(const ProjectionPtr &projection, const Ve
 
 void TensorFlowRepresentation::read(Matrix *out)
 {
+  timer tmr, sess;
+
   // Prepare SessionRun inputs
-  std::vector<TF_Output>  input_ops {{OperationByName(input_layer_.c_str()), 0}};
-  std::vector<TF_Tensor*> input_val {batch_input_};
+  std::vector<TF_Output>  input_ops(batch_inputs_.size());
+  std::vector<TF_Tensor*> input_val = batch_inputs_;
+  for (size_t ii=0; ii < batch_inputs_.size(); ++ii)
+    input_ops[ii] = {OperationByName(inputs_write_[ii].c_str()), 0};
 
   pthread_mutex_unlock(&mutex_);
     
@@ -639,6 +695,8 @@ void TensorFlowRepresentation::read(Matrix *out)
   for (size_t oo=0; oo < outputs_read_.size(); ++oo)
     output_ops[oo] = {OperationByName(outputs_read_[oo].c_str()), 0};
   std::vector<TF_Tensor*> output_val(outputs_read_.size());
+  
+  sess.restart();
 
   // Run session
   TF_Status *tf_status = TF::NewStatus();
@@ -647,6 +705,8 @@ void TensorFlowRepresentation::read(Matrix *out)
                 output_ops.data(), output_val.data(), output_ops.size(),
                 0, 0,
                 0, tf_status);
+                
+  sess.stop();
                 
   if (TF::GetCode(tf_status) != TF_OK)
   {
@@ -677,14 +737,22 @@ void TensorFlowRepresentation::read(Matrix *out)
   for (size_t oo=0; oo < output_val.size(); ++oo)
     TF::DeleteTensor(output_val[oo]);
   TF::DeleteStatus(tf_status);
+
+  TIMING("batch read (" << out->rows() << "): " << tmr.elapsed() << " total, " << sess.elapsed() << " TF");
 }
 
 void TensorFlowRepresentation::write()
 {
+  timer tmr, sess;
+
   // Prepare SessionRun inputs
-  std::vector<TF_Output> input_ops  {{OperationByName(input_layer_.c_str()), 0},
-                                     {OperationByName(output_target_.c_str()), 0}};
-  std::vector<TF_Tensor*> input_val {batch_input_, batch_target_};
+  std::vector<TF_Output>  input_ops(batch_inputs_.size());
+  std::vector<TF_Tensor*> input_val = batch_inputs_;
+  for (size_t ii=0; ii < batch_inputs_.size(); ++ii)
+    input_ops[ii] = {OperationByName(inputs_write_[ii].c_str()), 0};
+
+  input_ops.push_back({OperationByName(output_target_.c_str()), 0});
+  input_val.push_back(batch_target_);
 
   int counter = counter_;
   pthread_mutex_unlock(&mutex_);
@@ -711,6 +779,8 @@ void TensorFlowRepresentation::write()
     input_val.push_back(weights);
   }
 
+  sess.restart();
+
   // Run session for update node
   TF_Operation *tf_operation = OperationByName(update_node_.c_str()); 
   TF_Status *tf_status = TF::NewStatus();
@@ -719,6 +789,8 @@ void TensorFlowRepresentation::write()
                 0, 0, 0,
                 &tf_operation, 1,
                 0, tf_status);
+
+  sess.stop();
                 
   if (TF::GetCode(tf_status) != TF_OK)
   {
@@ -732,6 +804,8 @@ void TensorFlowRepresentation::write()
   TF::DeleteStatus(tf_status);
   
   checkSynchronize();
+
+  TIMING("batch write (" << counter << "): " << tmr.elapsed() << " total, " << sess.elapsed() << " TF");
 }
 
 size_t TensorFlowRepresentation::size() const
@@ -844,6 +918,8 @@ void TensorFlowRepresentation::setParams(const LargeVector &params)
 
 void TensorFlowRepresentation::SessionRun(const std::vector<std::pair<std::string, TensorPtr> > &inputs, const std::vector<std::string> &outputs, const std::vector<std::string> &ops, std::vector<TensorPtr> *results, bool learn)
 {
+  timer tmr, sess;
+
   std::vector<TF_Output> input_ops(inputs.size()), output_ops(outputs.size());
   std::vector<TF_Tensor*> input_val(inputs.size()), output_val(outputs.size()), input_del;
   std::vector<TF_Operation*> operations(ops.size());
@@ -883,6 +959,8 @@ void TensorFlowRepresentation::SessionRun(const std::vector<std::pair<std::strin
 
   for (size_t ii=0; ii != ops.size(); ++ii)
     operations[ii] = OperationByName(ops[ii].c_str());
+
+  sess.restart();
   
   TF_Status *tf_status = TF::NewStatus();
   TF::SessionRun(session_, 0,
@@ -890,6 +968,8 @@ void TensorFlowRepresentation::SessionRun(const std::vector<std::pair<std::strin
                 output_ops.data(), output_val.data(), output_ops.size(),
                 operations.data(), operations.size(),
                 0, tf_status);
+                
+  sess.stop(); 
 
   if (TF::GetCode(tf_status) != TF_OK)
   {
@@ -927,6 +1007,8 @@ void TensorFlowRepresentation::SessionRun(const std::vector<std::pair<std::strin
   
   if (learn)
     checkSynchronize();
+    
+  TIMING("custom session: " << tmr.elapsed() << " total, " << sess.elapsed() << " TF");
 }
 
 TF_Operation* TensorFlowRepresentation::OperationByName(const char* name) const
@@ -939,4 +1021,21 @@ TF_Operation* TensorFlowRepresentation::OperationByName(const char* name) const
   }
   
   return op;
+}
+
+int64_t TensorFlowRepresentation::GraphGetTensorElements(TF_Output output) const
+{
+  int64_t shape[2];
+  TF_Status *tf_status = TF::NewStatus();
+
+  TF::GraphGetTensorShape(graph_, output, shape, 2, tf_status);
+  if (TF::GetCode(tf_status) != TF_OK)
+  {
+    ERROR(TF::Message(tf_status));
+    throw Exception("Could not find tensor shape");
+  }
+  
+  TF::DeleteStatus(tf_status);
+  
+  return shape[1];
 }

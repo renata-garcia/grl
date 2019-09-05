@@ -761,7 +761,7 @@ experiment:
             outputs: 1
             output_min: []
             output_max: []
-      bins: 5
+      bins: 2
       static_policy: 0
       r_distance_parameter: 0.001
       output_min: experiment/environment/task/action_min

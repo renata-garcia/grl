@@ -26,6 +26,8 @@
  */
 
 #include <unistd.h>
+
+#include <chrono>
 #include <iostream>
 #include <iomanip>
 
@@ -51,6 +53,7 @@ void OnlineLearningExperiment::request(ConfigurationRequest *config)
   
   config->push_back(CRP("state", "signal/vector.observation", "Current observed state of the environment", CRP::Provided));
   config->push_back(CRP("action", "signal/vector.action", "Last action applied to the environment", CRP::Provided));
+  config->push_back(CRP("test_action", "signal/vector.action", "Last action applied to the test environment", CRP::Provided));
   config->push_back(CRP("curve", "signal/vector", "Learning curve", CRP::Provided));
 
   config->push_back(CRP("load_file", "Load policy filename", load_file_));
@@ -75,10 +78,12 @@ void OnlineLearningExperiment::configure(Configuration &config)
   
   state_ = new VectorSignal();
   action_ = new VectorSignal();
+  test_action_ = new VectorSignal();
   curve_ = new VectorSignal();
   
   config.set("state", state_);
   config.set("action", action_);
+  config.set("test_action", test_action_);
   config.set("curve", curve_);
 
   if (test_interval_ >= 0 && !test_agent_)
@@ -95,6 +100,7 @@ LargeVector OnlineLearningExperiment::run()
 {
   std::ofstream ofs;
   std::vector<double> curve;
+  double avg1=0, avg2=0;
   
   // Store configuration with output
   if (!output_.empty())
@@ -127,6 +133,8 @@ LargeVector OnlineLearningExperiment::run()
       agent_->walk(loadconfig);
     }
     
+    std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+
     for (size_t ss=0, tt=0; (!trials_ || tt < trials_) && (!steps_ || ss < steps_); ++tt)
     { 
       Observation obs;
@@ -146,6 +154,9 @@ LargeVector OnlineLearningExperiment::run()
       agent->start(obs, &action);
       state_->set(obs.v);
       action_->set(action.v);
+      if (test)
+        test_action_->set(action.v);
+
 
       do
       {
@@ -172,21 +183,33 @@ LargeVector OnlineLearningExperiment::run()
 
           state_->set(obs.v);
           action_->set(action.v);
+          if (test)
+            test_action_->set(action.v);
+
           
           if (!test) ss++;
         }
       } while (!terminal);
+      
+      std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+      double duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()/1000000.;
 
       if (test_interval_ >= 0)
       {
         if (test)
         {
           std::ostringstream oss;
-          oss << std::setw(15) << tt+1-(tt+1)/(test_interval_+1) << std::setw(15) << ss << std::setw(15) << std::setprecision(3) << std::fixed << total_reward;
+          oss << std::setw(15) << tt+1-(tt+1)/(test_interval_+1) << std::setw(15) << ss << std::setw(15) << std::setprecision(3) << std::fixed << total_reward << std::setw(15) << std::setprecision(3) << duration;
           agent_->report(oss);
           environment_->report(oss);
-          curve_->set(VectorConstructor(total_reward));
+          
+          if (curve.empty())
+            avg1 = avg2 = total_reward;
+          avg1 = 0.1*total_reward + 0.9*avg1;
+          avg2 = 0.01*total_reward + 0.99*avg2;
+            
           curve.push_back(total_reward);
+          curve_->set(VectorConstructor(total_reward, avg1, avg2));
         
           INFO(oss.str());
           if (ofs.is_open())
@@ -196,11 +219,17 @@ LargeVector OnlineLearningExperiment::run()
       else
       {
         std::ostringstream oss;
-        oss << std::setw(15) << tt << std::setw(15) << ss << std::setw(15) << std::setprecision(3) << std::fixed << total_reward;
+        oss << std::setw(15) << tt << std::setw(15) << ss << std::setw(15) << std::setprecision(3) << std::fixed << total_reward << std::setw(15) << std::setprecision(3) << duration;
         agent_->report(oss);
         environment_->report(oss);
-        curve_->set(VectorConstructor(total_reward));
+
+        if (curve.empty())
+          avg1 = avg2 = total_reward;
+        avg1 = 0.1*total_reward + 0.9*avg1;
+        avg2 = 0.01*total_reward + 0.99*avg2;
+          
         curve.push_back(total_reward);
+        curve_->set(VectorConstructor(total_reward, avg1, avg2));
 
         INFO(oss.str());
         if (ofs.is_open())

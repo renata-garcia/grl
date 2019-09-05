@@ -1,0 +1,20 @@
+- file: all
+  configuration:
+  - name: experiment/output
+    value: $@_$0_$1_$2_$3_a$4_
+  parameters:
+  - name: experiment/agent/policy/ensemble_center
+    values:
+    - mean
+  - name: experiment/agent/policy/update_history
+    values:
+    - euclidian_distance
+  - name: experiment/agent/policy/percentile
+    values:
+    - 0.5
+  - name: experiment/agent/policy/select_by_distance
+    values:
+    - data_center
+  - name: experiment/agent/policy/alpha
+    values:
+    - 0.01

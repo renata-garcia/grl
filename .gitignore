@@ -44,3 +44,4 @@ doc/html/
 addons/tensorflow/lib
 results/
 .vscode/
+bin/figs/

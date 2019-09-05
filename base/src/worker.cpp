@@ -45,7 +45,7 @@
 #include <grl/configurable.h>
 #include <grl/experiment.h>
 
-#define BUFSIZE (16*1024)
+#define BUFSIZE (64*1024)
 
 #define SETSOCKOPT(s, level, optname, optval)\
 do {\
@@ -141,16 +141,16 @@ class Worker: public itc::Thread
         {
           NOTICE("Waiting for configuration");
 
-          char yaml[BUFSIZE] = {0};
-          size_t n=0;
+          string yaml;
+          char buf[BUFSIZE] = {0};
           ssize_t nread;
           do
           {
-            nread = read(fd, &yaml[n], BUFSIZE - n);
-            n += nread;
-          } while (nread && yaml[n-1]);
+            nread = read(fd, buf, BUFSIZE);
+            yaml.append(buf, nread);
+          } while (nread && buf[nread-1]);
           
-          if (!n)
+          if (yaml.empty())
           {
             WARNING("Connection closed by server");
             break;
@@ -158,6 +158,7 @@ class Worker: public itc::Thread
 
           INFO("Loading configuration from socket");
 
+          yaml.pop_back();
           try
           {
             temp = loadYAML("", "", nullptr, YAML::Load(yaml));
@@ -222,7 +223,8 @@ class Worker: public itc::Thread
           std::string str = oss.str();
           const char *cstr = str.c_str();
           
-          if (write(fd, cstr, strlen(cstr)) != strlen(cstr))
+          // NOTE: Writes embedded NULL character as terminator
+          if (write(fd, cstr, strlen(cstr)+1) != strlen(cstr)+1)
             ERROR("Couldn't write result");
         }
         while (0);

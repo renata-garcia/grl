@@ -1,0 +1,2027 @@
+experiment:
+  runs: 10
+  run_offset: 0
+  trials: 10000
+  steps: 0
+  rate: 0
+  test_interval: 10
+  output: cartpole_mpol_dpg_26_density_based_bm_a01_data
+  environment:
+    model:
+      control_step: 0.05
+      integration_steps: 5
+      dynamics:
+        end_stop: 1
+        type: dynamics/cart_pole
+      type: model/dynamical
+    task:
+      timeout: 9.99
+      randomization: 0
+      shapping: 0
+      end_stop_penalty: 0
+      action_penalty: 0
+      gamma: 1
+      shaping: 0
+      type: task/cart_pole/swingup
+    exporter: 0
+    type: environment/modeled
+  agent:
+    policy:
+      strategy: density_based
+      alpha: 0.01
+      policy:
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+        -
+          sigma: [ 1 ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector:
+            tilings: 16
+            memory: 8388608
+            safe: 0
+            resolution: [ 2.5, 0.157075, 2.5, 1.57075 ]
+            wrapping: [ 0, 6.283, 0, 0 ]
+            type: projector/tile_coding
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../projector/memory
+            outputs: ../../../../../../environment/task/action_dims
+            output_min: ../../../../../../environment/task/action_min
+            output_max: ../../../../../../environment/task/action_max
+            type: representation/parameterized/linear
+          type: mapping/policy/action
+      value:
+        -
+          projector: ../../../policy/0/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/0/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/1/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/1/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/2/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/2/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/3/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/3/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/4/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/4/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/5/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/5/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/6/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/6/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/7/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/7/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/8/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/8/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/9/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/9/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/10/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/10/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/11/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/11/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/12/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/12/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/13/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/13/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/14/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/14/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/15/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/15/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/16/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/16/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/17/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/17/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/18/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/18/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/19/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/19/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/20/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/20/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/21/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/21/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/22/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/22/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/23/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/23/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/24/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/24/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/25/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/25/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+        -
+          projector: ../../../policy/26/projector
+          representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../policy/26/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          type: mapping/represented
+      output_min: ../../../environment/task/action_min
+      output_max: ../../../environment/task/action_max
+      sampler: 0x7f3d75370680
+      bins: 10
+      static_policy: 0
+      r_distance_parameter: 0.001
+      type: mapping/policy/multi
+    predictor:
+      predictor:
+        -
+          alpha: 0.02
+          beta_v: 0.1
+          beta_a: 0.01
+          gamma: 0.97
+          lambda: 0.65
+          target: off-policy
+          projector: ../../../../policy/policy/0/projector
+          critic_representation: ../../../../policy/value/0/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/0/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/0/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.02
+          beta_v: 0.01
+          beta_a: 0.01
+          gamma: 0.97
+          lambda: 0.65
+          target: off-policy
+          projector: ../../../../policy/policy/1/projector
+          critic_representation: ../../../../policy/value/1/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/1/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/1/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.01
+          beta_v: 0.1
+          beta_a: 0.01
+          gamma: 0.97
+          lambda: 0.65
+          target: off-policy
+          projector: ../../../../policy/policy/2/projector
+          critic_representation: ../../../../policy/value/2/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/2/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/2/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.01
+          beta_v: 0.01
+          beta_a: 0.01
+          gamma: 0.97
+          lambda: 0.65
+          target: off-policy
+          projector: ../../../../policy/policy/3/projector
+          critic_representation: ../../../../policy/value/3/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/3/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/3/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.01
+          beta_v: 0.01
+          beta_a: 0.01
+          gamma: 0.99
+          lambda: 0.65
+          target: off-policy
+          projector: ../../../../policy/policy/4/projector
+          critic_representation: ../../../../policy/value/4/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/4/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/4/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.02
+          beta_v: 0.1
+          beta_a: 0.1
+          gamma: 0.97
+          lambda: 0.65
+          target: off-policy
+          projector: ../../../../policy/policy/5/projector
+          critic_representation: ../../../../policy/value/5/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/5/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/5/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.02
+          beta_v: 0.1
+          beta_a: 0.1
+          gamma: 0.99
+          lambda: 0.65
+          target: off-policy
+          projector: ../../../../policy/policy/6/projector
+          critic_representation: ../../../../policy/value/6/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/6/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/6/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.02
+          beta_v: 0.1
+          beta_a: 0.1
+          gamma: 0.97
+          lambda: 0.60
+          target: off-policy
+          projector: ../../../../policy/policy/7/projector
+          critic_representation: ../../../../policy/value/7/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/7/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/7/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.02
+          beta_v: 0.1
+          beta_a: 0.01
+          gamma: 0.97
+          lambda: 0.60
+          target: off-policy
+          projector: ../../../../policy/policy/8/projector
+          critic_representation: ../../../../policy/value/8/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/8/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/8/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.02
+          beta_v: 0.1
+          beta_a: 0.01
+          gamma: 0.98
+          lambda: 0.70
+          target: off-policy
+          projector: ../../../../policy/policy/9/projector
+          critic_representation: ../../../../policy/value/9/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/9/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/9/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.02
+          beta_v: 0.01
+          beta_a: 0.1
+          gamma: 0.98
+          lambda: 0.70
+          target: off-policy
+          projector: ../../../../policy/policy/10/projector
+          critic_representation: ../../../../policy/value/10/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/10/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/10/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.02
+          beta_v: 0.01
+          beta_a: 0.01
+          gamma: 0.97
+          lambda: 0.60
+          target: off-policy
+          projector: ../../../../policy/policy/11/projector
+          critic_representation: ../../../../policy/value/11/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/11/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/11/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.02
+          beta_v: 0.01
+          beta_a: 0.1
+          gamma: 0.99
+          lambda: 0.65
+          target: off-policy
+          projector: ../../../../policy/policy/12/projector
+          critic_representation: ../../../../policy/value/12/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/12/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/12/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.02
+          beta_v: 0.01
+          beta_a: 0.1
+          gamma: 0.97
+          lambda: 0.65
+          target: off-policy
+          projector: ../../../../policy/policy/13/projector
+          critic_representation: ../../../../policy/value/13/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/13/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/13/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.02
+          beta_v: 0.1
+          beta_a: 0.1
+          gamma: 0.98
+          lambda: 0.70
+          target: off-policy
+          projector: ../../../../policy/policy/14/projector
+          critic_representation: ../../../../policy/value/14/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/14/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/14/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.01
+          beta_v: 0.1
+          beta_a: 0.01
+          gamma: 0.98
+          lambda: 0.70
+          target: off-policy
+          projector: ../../../../policy/policy/15/projector
+          critic_representation: ../../../../policy/value/15/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/15/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/15/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.02
+          beta_v: 0.01
+          beta_a: 0.01
+          gamma: 0.98
+          lambda: 0.70
+          target: off-policy
+          projector: ../../../../policy/policy/16/projector
+          critic_representation: ../../../../policy/value/16/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/16/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/16/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.01
+          beta_v: 0.01
+          beta_a: 0.01
+          gamma: 0.97
+          lambda: 0.60
+          target: off-policy
+          projector: ../../../../policy/policy/17/projector
+          critic_representation: ../../../../policy/value/17/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/17/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/17/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.01
+          beta_v: 0.1
+          beta_a: 0.01
+          gamma: 0.97
+          lambda: 0.60
+          target: off-policy
+          projector: ../../../../policy/policy/18/projector
+          critic_representation: ../../../../policy/value/18/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/18/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/18/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.02
+          beta_v: 0.01
+          beta_a: 0.01
+          gamma: 0.97
+          lambda: 0.60
+          target: off-policy
+          projector: ../../../../policy/policy/19/projector
+          critic_representation: ../../../../policy/value/19/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/19/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/19/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.01
+          beta_v: 0.1
+          beta_a: 0.01
+          gamma: 0.99
+          lambda: 0.65
+          target: off-policy
+          projector: ../../../../policy/policy/20/projector
+          critic_representation: ../../../../policy/value/20/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/20/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/20/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.1
+          beta_v: 0.1
+          beta_a: 0.01
+          gamma: 0.97
+          lambda: 0.65
+          target: off-policy
+          projector: ../../../../policy/policy/21/projector
+          critic_representation: ../../../../policy/value/21/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/21/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/21/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.1
+          beta_v: 0.01
+          beta_a: 0.01
+          gamma: 0.97
+          lambda: 0.65
+          target: off-policy
+          projector: ../../../../policy/policy/22/projector
+          critic_representation: ../../../../policy/value/22/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/22/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/22/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.1
+          beta_v: 0.1
+          beta_a: 0.01
+          gamma: 0.97
+          lambda: 0.60
+          target: off-policy
+          projector: ../../../../policy/policy/23/projector
+          critic_representation: ../../../../policy/value/23/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/23/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/23/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.1
+          beta_v: 0.01
+          beta_a: 0.01
+          gamma: 0.97
+          lambda: 0.60
+          target: off-policy
+          projector: ../../../../policy/policy/24/projector
+          critic_representation: ../../../../policy/value/24/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/24/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/24/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.1
+          beta_v: 0.1
+          beta_a: 0.01
+          gamma: 0.98
+          lambda: 0.70
+          target: off-policy
+          projector: ../../../../policy/policy/25/projector
+          critic_representation: ../../../../policy/value/25/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/25/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/25/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+        -
+          alpha: 0.1
+          beta_v: 0.1
+          beta_a: 0.01
+          gamma: 0.98
+          lambda: 0.70
+          target: off-policy
+          projector: ../../../../policy/policy/26/projector
+          critic_representation: ../../../../policy/value/26/representation
+          critic_trace:
+            type: trace/enumerated/replacing
+          advantage_representation:
+            interval: 0
+            init_min: [ 0 ]
+            init_max: [ 0 ]
+            memory: ../../../../../policy/policy/26/projector/memory
+            outputs: 1
+            output_min: [  ]
+            output_max: [  ]
+            type: representation/parameterized/linear
+          actor_representation: ../../../../policy/policy/26/representation
+          importer: 0
+          exporter: 0
+          type: predictor/dpg
+      type: predictor/multi
+    type: agent/td
+  test_agent:
+    policy:
+      strategy: ../../../agent/policy/strategy
+      alpha: ../../../agent/policy/alpha
+      policy:
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/0/projector
+          representation: ../../../../../agent/policy/policy/0/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/1/projector
+          representation: ../../../../../agent/policy/policy/1/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/2/projector
+          representation: ../../../../../agent/policy/policy/2/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/3/projector
+          representation: ../../../../../agent/policy/policy/3/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/4/projector
+          representation: ../../../../../agent/policy/policy/4/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/5/projector
+          representation: ../../../../../agent/policy/policy/5/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/6/projector
+          representation: ../../../../../agent/policy/policy/6/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/7/projector
+          representation: ../../../../../agent/policy/policy/7/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/8/projector
+          representation: ../../../../../agent/policy/policy/8/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/9/projector
+          representation: ../../../../../agent/policy/policy/9/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/10/projector
+          representation: ../../../../../agent/policy/policy/10/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/11/projector
+          representation: ../../../../../agent/policy/policy/11/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/12/projector
+          representation: ../../../../../agent/policy/policy/12/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/13/projector
+          representation: ../../../../../agent/policy/policy/13/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/14/projector
+          representation: ../../../../../agent/policy/policy/14/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/15/projector
+          representation: ../../../../../agent/policy/policy/15/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/16/projector
+          representation: ../../../../../agent/policy/policy/16/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/17/projector
+          representation: ../../../../../agent/policy/policy/17/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/18/projector
+          representation: ../../../../../agent/policy/policy/18/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/19/projector
+          representation: ../../../../../agent/policy/policy/19/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/20/projector
+          representation: ../../../../../agent/policy/policy/20/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/21/projector
+          representation: ../../../../../agent/policy/policy/21/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/22/projector
+          representation: ../../../../../agent/policy/policy/22/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/23/projector
+          representation: ../../../../../agent/policy/policy/23/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/24/projector
+          representation: ../../../../../agent/policy/policy/24/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/25/projector
+          representation: ../../../../../agent/policy/policy/25/representation
+          type: mapping/policy/action
+        -
+          sigma: [  ]
+          decay_rate: 1
+          decay_min: 0
+          output_min: ../../../../../environment/task/action_min
+          output_max: ../../../../../environment/task/action_max
+          projector: ../../../../../agent/policy/policy/26/projector
+          representation: ../../../../../agent/policy/policy/26/representation
+          type: mapping/policy/action
+      value:
+        0: ../../../../agent/policy/value/0
+        1: ../../../../agent/policy/value/1
+        2: ../../../../agent/policy/value/2
+        3: ../../../../agent/policy/value/3
+        4: ../../../../agent/policy/value/4
+        5: ../../../../agent/policy/value/5
+        6: ../../../../agent/policy/value/6
+        7: ../../../../agent/policy/value/7
+        8: ../../../../agent/policy/value/8
+        9: ../../../../agent/policy/value/9
+        10: ../../../../agent/policy/value/10
+        11: ../../../../agent/policy/value/11
+        12: ../../../../agent/policy/value/12
+        13: ../../../../agent/policy/value/13
+        14: ../../../../agent/policy/value/14
+        15: ../../../../agent/policy/value/15
+        16: ../../../../agent/policy/value/16
+        17: ../../../../agent/policy/value/17
+        18: ../../../../agent/policy/value/18
+        19: ../../../../agent/policy/value/19
+        20: ../../../../agent/policy/value/20
+        21: ../../../../agent/policy/value/21
+        22: ../../../../agent/policy/value/22
+        23: ../../../../agent/policy/value/23
+        24: ../../../../agent/policy/value/24
+        25: ../../../../agent/policy/value/25
+        26: ../../../../agent/policy/value/26
+      output_min: ../../../environment/task/action_min
+      output_max: ../../../environment/task/action_max
+      sampler: 0
+      bins: 10
+      static_policy: 0
+      r_distance_parameter: 0.001
+      type: mapping/policy/multi
+    type: agent/fixed
+  save_every: never
+  load_file: ""
+  type: experiment/online_learning
+critic_visual0:
+  field_dims: [ 0, 1 ]
+  input_min: ../../experiment/environment/task/observation_min
+  input_max: ../../experiment/environment/task/observation_max
+  points: 65536
+  savepoints: 1048576
+  projection: mean
+  output_dim: 0
+  projector: ../../experiment/agent/policy/policy/0/projector
+  representation: ../../experiment/agent/policy/policy/0/representation
+  state: 0
+  type: visualization/field/value
+critic_visual1:
+  field_dims: [ 0, 1 ]
+  input_min: ../../experiment/environment/task/observation_min
+  input_max: ../../experiment/environment/task/observation_max
+  points: 65536
+  savepoints: 1048576
+  projection: mean
+  output_dim: 0
+  projector: ../../experiment/agent/policy/policy/1/projector
+  representation: ../../experiment/agent/policy/policy/1/representation
+  state: 0
+  type: visualization/field/value
+critic_visual2:
+  field_dims: [ 0, 1 ]
+  input_min: ../../experiment/environment/task/observation_min
+  input_max: ../../experiment/environment/task/observation_max
+  points: 65536
+  savepoints: 1048576
+  projection: mean
+  output_dim: 0
+  projector: ../../experiment/agent/policy/policy/2/projector
+  representation: ../../experiment/agent/policy/policy/2/representation
+  state: 0
+  type: visualization/field/value
+critic_visual3:
+  field_dims: [ 0, 1 ]
+  input_min: ../../experiment/environment/task/observation_min
+  input_max: ../../experiment/environment/task/observation_max
+  points: 65536
+  savepoints: 1048576
+  projection: mean
+  output_dim: 0
+  projector: ../../experiment/agent/policy/policy/3/projector
+  representation: ../../experiment/agent/policy/policy/3/representation
+  state: 0
+  type: visualization/field/value
+critic_visual4:
+  field_dims: [ 0, 1 ]
+  input_min: ../../experiment/environment/task/observation_min
+  input_max: ../../experiment/environment/task/observation_max
+  points: 65536
+  savepoints: 1048576
+  projection: mean
+  output_dim: 0
+  projector: ../../experiment/agent/policy/policy/4/projector
+  representation: ../../experiment/agent/policy/policy/4/representation
+  state: 0
+  type: visualization/field/value
+policy_visualization0:
+  field_dims: [ 0, 1 ]
+  input_min: ../../experiment/environment/task/observation_min
+  input_max: ../../experiment/environment/task/observation_max
+  points: 65536
+  savepoints: 1048576
+  projection: mean
+  mapping: ../../experiment/test_agent/policy/policy/2
+  output_dim: 0
+  state: 0
+  type: visualization/field/mapping
+policy_visualization1:
+  field_dims: [ 0, 1 ]
+  input_min: ../../experiment/environment/task/observation_min
+  input_max: ../../experiment/environment/task/observation_max
+  points: 65536
+  savepoints: 1048576
+  projection: mean
+  mapping: ../../experiment/test_agent/policy/policy/3
+  output_dim: 0
+  state: 0
+  type: visualization/field/mapping
+actions:
+  input_dims: [  ]
+  input_min: [ -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15, -15 ]
+  input_max: [ 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15 ]
+  memory: 256
+  state: ../../experiment/test_agent/policy/actions
+  type: visualization/state
+action:
+  input_dims: [  ]
+  input_min: [ -15 ]
+  input_max: [ 15 ]
+  memory: 256
+  state: ../../experiment/action
+  type: visualization/state
+state:
+  input_dims: [  ]
+  input_min: ../../experiment/environment/task/observation_min
+  input_max: ../../experiment/environment/task/observation_max
+  memory: 256
+  state: ../../experiment/state
+  type: visualization/state

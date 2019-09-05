@@ -27,11 +27,12 @@
 
 #include <algorithm>
 #include <grl/configurable.h>
+#include <grl/parser.h>
 
 using namespace grl;
 
 unsigned char grl::grl_log_verbosity__ = 3;
-const char *grl::grl_log_levels__[] = {"\x1B[31m\x1B[1m(ERR)\x1B[0m", "\x1B[33m\x1B[1m(WRN)\x1B[0m", "\x1B[34m\x1B[1m(NTC)\x1B[0m", "\x1B[32m\x1B[1m(INF)\x1B[0m", "\x1B[0m\x1B[1m(DBG)\x1B[0m", "\x1B[0m(CRL)"};
+const char *grl::grl_log_levels__[] = {"\x1B[31m\x1B[1m(ERR)\x1B[0m", "\x1B[33m\x1B[1m(WRN)\x1B[0m", "\x1B[34m\x1B[1m(NTC)\x1B[0m", "\x1B[32m\x1B[1m(INF)\x1B[0m", "\x1B[0m\x1B[1m(DBG)\x1B[0m", "\x1B[0m(CRL)", "\x1B[30m\x1B[1m(TIM)\x1B[0m"};
 
 /// Write out YAML node as string. 
 std::string YAMLToString(const YAML::Node &node)
@@ -66,34 +67,25 @@ std::string YAMLToString(const YAML::Node &node)
 
 Configurator *grl::loadYAML(const std::string &file, const std::string &element, Configurator *parent)
 {
-  // Case 1: key:value pair
-  std::string key = file;
-  char *value = strchr((char*)key.c_str(), ':');
-  if (value)
-  {
-    *(value++) = '\0';
-    
-    if (!parent)
-      parent = new Configurator();
-    
-    loadYAML("", key.c_str(), parent, YAML::Load(value));
-    
-    return parent;
+  YAML::Node node;
+  std::string id=file;
+  
+  try {
+    node = YAML::LoadFile(file.c_str());
+  } catch (YAML::BadFile &e) {
+    node = YAML::Load(file);
+    id = "";
   }
   
-  // Case 2: merging
   if (element.empty() && parent)
   {
-    YAML::Node node = YAML::LoadFile(file.c_str());
-    
     for (YAML::const_iterator it = node.begin(); it != node.end(); ++it)
-      loadYAML(file, it->first.as<std::string>(), parent, it->second);
+      loadYAML(id, it->first.as<std::string>(), parent, it->second);
       
     return parent;
   }
-
-  // Case 3: loading
-  return loadYAML(file, element, parent, YAML::LoadFile(file.c_str()));
+  
+  return loadYAML(id, element, parent, node);
 }
 
 Configurator *grl::loadYAML(const std::string &file, const std::string &element, Configurator *parent, const YAML::Node &node)
@@ -170,6 +162,7 @@ Configurator *grl::loadYAML(const std::string &file, const std::string &element,
   else
   {
     std::string value = YAMLToString(node);
+    value = resolveEnv(value, file);
     
     if (value.size() >= 5 && value.substr(value.size()-5) == ".yaml")
     {
@@ -182,7 +175,13 @@ Configurator *grl::loadYAML(const std::string &file, const std::string &element,
       }
       
       TRACE(path << ": reference to file " << value);
-      return loadYAML(value, element, parent);
+      try {
+        YAML::Node _ = YAML::LoadFile(value.c_str());
+        return loadYAML(value, element, parent);
+      } catch (YAML::BadFile &e) {
+        WARNING(path << ": reference to non-existing file " << value);
+        return new ParameterConfigurator(element, value, parent);
+      }
     }
     else
     {
@@ -192,6 +191,51 @@ Configurator *grl::loadYAML(const std::string &file, const std::string &element,
     }
   }
 }      
+
+std::string grl::resolveEnv(const std::string &value, const std::string &file)
+{
+  size_t pos = 0;
+  std::string retval = value;
+
+  while ((pos = retval.find_first_of("$", pos)) != std::string::npos)
+  {
+    size_t endpos = ++pos;
+    std::string var;
+
+    if (retval[endpos] == '@')
+    {
+      endpos++;
+      if (!file.empty())
+      {
+        size_t path_pos = file.find_last_of("/");
+        if (path_pos != std::string::npos)
+          var = file.substr(0, path_pos);
+        else
+          var = ".";
+      }
+      else
+        var = ".";
+    }
+    else if (isalpha(retval[endpos]) || retval[endpos] == '_')
+    {
+      var = retval[endpos++];
+      while (isalnum(retval[endpos]))
+        var += retval[endpos++];
+      
+      char *evar = getenv(var.c_str());
+      if (evar)
+        var = evar;
+      else
+        var = "";
+    }
+    else
+      continue;
+    
+    retval = retval.substr(0, pos-1) + var + retval.substr(endpos);
+  }
+  
+  return retval;
+}
 
 /// *** ListConfigurator ***
 
@@ -310,7 +354,7 @@ void ReferenceConfigurator::reconfigure(const Configuration &config, bool recurs
 
 bool ParameterConfigurator::isseparator(char c) const
 {
-  return c == ' ' || c == '\t' || c == '[' || c == ']' || c == '+' || c == ',';
+  return c == ' ' || c == '\t' || c == '[' || c == ']' || c == '+' || c == ',' || c == '-' || c == '*' || c == '(' || c == ')';
 }
 
 Configurator *ParameterConfigurator::resolve(const std::string &id, Configurator *parent)
@@ -343,8 +387,6 @@ std::string ParameterConfigurator::localize(const std::string &id, const Configu
   else
     return id;
 }
-
-#define OPERATORS "+*"
 
 std::string ParameterConfigurator::str() const
 {
@@ -381,76 +423,8 @@ std::string ParameterConfigurator::str() const
     else
       expv.insert(expv.size(), id);
   }
-
-  // Do some light math
-  size_t c;
-  while ((c=strcspn(expv.c_str(), OPERATORS)) < expv.size()) {
-    std::string left, right;
-    size_t start=c, end=c+1;
-    int double_op = 0;
-
-    // Recognize ++ for vector extension
-    if (c+1 < expv.size() && expv[c] == expv[c+1])
-    {
-      double_op = 1;
-      end++;
-      c++;
-    }
-
-    // Right
-    for (size_t ii=c+1; ii < expv.size() && !strchr(OPERATORS, expv[ii]); ++ii, ++end)
-      right.push_back(expv[ii]);
-
-    // Left
-    for (int ii=c-1-double_op; ii >= 0 && !strchr(OPERATORS, expv[ii]); --ii, --start)
-      left.push_back(expv[ii]);
-
-    std::reverse(left.begin(), left.end());
-
-    if (left.empty() || right.empty())
-      break;
-
-    // Parse values
-    std::istringstream issx, issy;
-    std::vector<double> x_in, y_in, z_out;
-
-    issx.str(left);  issx >> x_in;
-    issy.str(right); issy >> y_in;
-
-    LargeVector x, y, z;
-    toVector(x_in, x);
-    toVector(y_in, y);
-
-    // Perform operation
-    switch (expv[c])
-    {
-      case '+':
-        // TODO: Rationalize this to only extend vectors when using ++ operator
-        if (x.size() == 1 && y.size() == 1 && !double_op) z = x + y;
-        else                                              z = extend(x, y);
-        break;
-      case '*':
-        if (x.size() == 1)             z = x[0] * y;
-        else if (y.size() == 1)        z = x * y[0];
-        else if (x.size() == y.size()) z = x * y;
-        else
-          ERROR("Cannot multiply " << x_in << " and " << y_in << ": vector size mismatch");
-        break;
-    }
-
-    fromVector(z, z_out);
-
-    // Replace in original string
-    std::ostringstream oss;
-    oss << std::setprecision(std::numeric_limits<double>::max_digits10);
-    
-    if (z.size() == 1) oss << z_out[0];
-    else               oss << z_out;
-
-    expv.replace(start, end-start, oss.str());
-  }
-
-  return expv;
+  
+  return evaluateExpression(expv);
 }
 
 Configurable *ParameterConfigurator::ptr()

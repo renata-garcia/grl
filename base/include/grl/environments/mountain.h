@@ -72,6 +72,7 @@ class MountainRegulatorTask : public RegulatorTask
       stddev_ = VectorConstructor(0.1, 0.1, 0., 0.);
       q_ = VectorConstructor(1., 1., 0., 0.);
       r_ = VectorConstructor(0.01, 0.01);
+      timeout_ = 20;
     }
   
     // From Configurable
@@ -79,7 +80,7 @@ class MountainRegulatorTask : public RegulatorTask
 
     // From Task
     virtual void observe(const Vector &state, Observation *obs, int *terminal) const;
-    virtual bool invert(const Observation &obs, Vector *state) const;
+    virtual bool invert(const Observation &obs, Vector *state, double time=0.) const;
 };
 
 }

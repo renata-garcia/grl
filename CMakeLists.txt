@@ -25,7 +25,7 @@ set(MODULES base
             #externals/cma
             externals/ics
             externals/itc
-            #externals/rbdl
+            externals/rbdl
             #externals/cppzmq
             externals/pybind11
             #addons/cma
@@ -34,15 +34,17 @@ set(MODULES base
             addons/glut
             #addons/ros
             #addons/matlab
-            #addons/odesim
-            #addons/rbdl
-            #addons/muscod
-            #addons/leo
-            #addons/leo2
+            addons/odesim
+            addons/rbdl
+            addons/muscod
+#            addons/leo
+            addons/leosim
+            addons/leo2
             addons/tlm
             addons/lqr
             #addons/zeromq
             addons/tensorflow
+            addons/box2d
             addons/python
 )
 
@@ -72,7 +74,7 @@ foreach(module ${MODULES})
   grl_build_library(${module})
 endforeach()
 
-install(PROGRAMS bin/grlc bin/grlcc bin/grlq bin/grlo bin/grllib.py bin/tooltip.py DESTINATION ${GRL_BIN_DESTINATION})
+install(PROGRAMS bin/grlc bin/grlcc bin/grlq bin/grlo bin/grlr bin/grllib.py bin/tooltip.py DESTINATION ${GRL_BIN_DESTINATION})
 install(DIRECTORY cfg/ DESTINATION ${GRL_SHARE_DESTINATION}/cfg FILES_MATCHING PATTERN "*.yaml")
 
 if (catkin_FOUND)

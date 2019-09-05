@@ -59,6 +59,8 @@ void LinearRepresentation::request(const std::string &role, ConfigurationRequest
     config->push_back(CRP("output_min", "Lower output limit", output_min_, CRP::System));
     config->push_back(CRP("output_max", "Upper output limit", output_max_, CRP::System));
   }
+  
+  config->push_back(CRP("limit", "Limit parameters to same range as outputs", limit_, CRP::Configuration, 0, 1));
 }
 
 void LinearRepresentation::configure(Configuration &config)
@@ -67,6 +69,7 @@ void LinearRepresentation::configure(Configuration &config)
 
   memory_ = config["memory"];
   outputs_ = config["outputs"];
+  limit_ = config["limit"];
   
   init_min_ = config["init_min"].v();
   if (init_min_.size() && init_min_.size() < outputs_)
@@ -117,53 +120,6 @@ void LinearRepresentation::reconfigure(const Configuration &config)
           params_[ii*outputs_+jj] = rand->getUniform(init_min_[jj], init_max_[jj]);
           
       synchronize();
-    }
-    else if (config["action"].str() == "load")
-    {
-      std::string cfg_path = path();
-      std::replace(cfg_path.begin(), cfg_path.end(), '/', '_');
-      std::string file = config["file"].str() + cfg_path + ".dat";
-
-      FILE *f = fopen(file.c_str(), "rb");
-      if (!f)
-      {
-        WARNING("Could not open '" << file << "' for reading");
-        return;
-      }
-      
-      fseek(f, 0, SEEK_END);
-      if (ftell(f) != (long int)(params_.size() * sizeof(double)))
-      {
-        WARNING("Configuration mismatch for '" << file << "'");
-        fclose(f);
-        return;
-      }
-      
-      fseek(f, 0, SEEK_SET);
-      if (fread(params_.data(), sizeof(double), params_.size(), f) != params_.size())
-      {
-        WARNING("Could not read '" << file << "'");
-        fclose(f);
-        return;
-      }
-      fclose(f);
-      synchronize();
-    }
-    else if (config["action"].str() == "save")
-    {
-      std::string cfg_path = path();
-      std::replace(cfg_path.begin(), cfg_path.end(), '/', '_');
-      std::string file = config["file"].str() + cfg_path + ".dat";
-
-      FILE *f = fopen(file.c_str(), "wb");
-      if (!f)
-      {
-        WARNING("Could not open '" << file << "' for writing");
-        return;
-      }
-      
-      fwrite(params_.data(), sizeof(double), params_.size(), f);
-      fclose(f);
     }
   }  
 }
@@ -251,7 +207,12 @@ void LinearRepresentation::update(const ProjectionPtr projection, const Vector &
       for (size_t ii=0; ii != ip->indices.size(); ++ii)
         for (size_t jj=0; jj < outputs_; ++jj)
           if (ip->indices[ii] != IndexProjection::invalid_index())
-            params_[ip->indices[ii]*outputs_+jj] = fmin(fmax(params_[ip->indices[ii]*outputs_+jj] + delta[jj], output_min_[jj]), output_max_[jj]);
+          {
+            if (limit_)
+              params_[ip->indices[ii]*outputs_+jj] = fmin(fmax(params_[ip->indices[ii]*outputs_+jj] + delta[jj], output_min_[jj]), output_max_[jj]);
+            else
+              params_[ip->indices[ii]*outputs_+jj] = params_[ip->indices[ii]*outputs_+jj] + delta[jj];
+          }
     }
     else
     {
@@ -267,7 +228,12 @@ void LinearRepresentation::update(const ProjectionPtr projection, const Vector &
       for (size_t ii=0; ii != ip->indices.size(); ++ii)
         for (size_t jj=0; jj < outputs_; ++jj)
           if (ip->indices[ii] != IndexProjection::invalid_index())
-            params_[ip->indices[ii]*outputs_+jj] = fmin(fmax(params_[ip->indices[ii]*outputs_+jj] + ip->weights[ii]*delta[jj]/norm2, output_min_[jj]), output_max_[jj]);
+          {
+            if (limit_)
+              params_[ip->indices[ii]*outputs_+jj] = fmin(fmax(params_[ip->indices[ii]*outputs_+jj] + ip->weights[ii]*delta[jj]/norm2, output_min_[jj]), output_max_[jj]);
+            else
+              params_[ip->indices[ii]*outputs_+jj] = params_[ip->indices[ii]*outputs_+jj] + ip->weights[ii]*delta[jj]/norm2;
+          }
     }
   }
   else
@@ -289,7 +255,10 @@ void LinearRepresentation::update(const ProjectionPtr projection, const Vector &
 
       for (size_t ii=0; ii != vp->vector.size(); ++ii)
         for (size_t jj=0; jj < outputs_; ++jj)
-          params_[ii*outputs_+jj] = fmin(fmax(params_[ii*outputs_+jj] + vp->vector[ii]*delta[jj]/norm2, output_min_[jj]), output_max_[jj]);
+          if (limit_)
+            params_[ii*outputs_+jj] = fmin(fmax(params_[ii*outputs_+jj] + vp->vector[ii]*delta[jj]/norm2, output_min_[jj]), output_max_[jj]);
+          else
+            params_[ii*outputs_+jj] = params_[ii*outputs_+jj] + vp->vector[ii]*delta[jj]/norm2;
     }
     else
       throw Exception("representation/parameterized/linear requires a projector returning IndexProjection or VectorProjection");

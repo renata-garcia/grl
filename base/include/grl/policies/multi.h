@@ -1,8 +1,8 @@
 /** \file multi.h
  * \brief Policy combiner header file.
  *
- * \author    Wouter Caarls <wouter@caarls.org>
- * \date      2018-03-13
+ * \author    Renata Garcia Oliveira <renata.garcia.eng@gmail.com>
+ * \date      2019-03-13
  *
  * \copyright \verbatim
  * Copyright (c) 2018, Wouter Caarls
@@ -33,6 +33,10 @@
 #include <grl/sampler.h>
 #include <grl/signal.h>
 #include <grl/vector.h>
+#include <tuple>
+
+#define ASC 0
+#define DESC 1
 
 namespace grl
 {
@@ -40,30 +44,80 @@ namespace grl
 /// Policy that combines two or more sub-policies using different strategies
 class MultiPolicy : public Policy
 {
+
   public:
     TYPEINFO("mapping/policy/multi", "Combines multiple policies")
     
-    enum CombinationStrategy {csBinning, csDensityBased, csDataCenter, csDataCenterMeanMov, csMean, csMeanMov, csRandom, csStatic, csValueBased};
-
+    typedef std::vector<Action> ActionArray;
+  
+    enum CombinationStrategy {csBinning, csDataCenterVotingMov, csAlg4StepsNew,
+    csStatic, csValueBased, csRoulette};
+    enum ScoreDistance {sdNone, sdBest, sdBestElitism, sdBestPersistent, sdDensityBased, sdDataCenter,
+     sdMean, sdRandom, sdRandomPersistent};
+    enum UpdateHistory {uhNone, uhEuclideanDistance, uhDensity, uhDensityLinear, uhDataCenter};
+    
   protected:
+    size_t policy_persistent_;
     std::string strategy_str_;
+    std::string ensemble_center_str_;
+    std::string update_history_str_;
+    std::string select_by_distance_str_;
     CombinationStrategy strategy_;
+    UpdateHistory update_history_;
+    ///////////////////////////////
+    ScoreDistance ensemble_center_;
+    UpdateHistory scores_;
+    ScoreDistance select_;
+    ///////////////////////////////
+    ScoreDistance select_by_distance_;
     Projector *projector_;
     Representation *representation_;
     Vector min_, max_;
     TypedConfigurableList<Policy> policy_;
     TypedConfigurableList<Mapping> value_;
     int bins_;
+    int data_center_mean_size_;
     int static_policy_;
     double r_distance_parameter_;
+    double alpha_mov_mean_;
+    double minor_remove_bound_;
+    double major_remove_bound_;
     VectorSignal *action_;
     Sampler *sampler_;
     std::vector<double> *mean_mov_;
-    size_t iterations_;
-    size_t *pt_iterations_;
+    std::vector<double> *voting_policies_;
+    LargeVector last_action_;
+    double iRoulette_;
+    uint32_t iterations_;
+    struct data {
+      double value;
+      size_t id;
+	  };
+    struct node {
+      LargeVector action;
+      LargeVector normalized;
+      double mean_mov_i;
+      double score;
+      size_t id;
+	  };
+    //------------------------------------------------------
+    double percentile_;
+    LargeVector action_persistent;
+    LargeVector moving_average_;
+    int score_postprocess_; // 0 or 1
 
   public:
-    MultiPolicy() : bins_(10), static_policy_(), r_distance_parameter_(0.001), iterations_(0), pt_iterations_(&iterations_)
+    MultiPolicy() : bins_(10),
+                    data_center_mean_size_(2),
+                    static_policy_(0),
+                    r_distance_parameter_(0.005),
+                    alpha_mov_mean_(0.01),
+                    minor_remove_bound_(0.25),
+                    major_remove_bound_(0.75),
+                    iRoulette_(0.3),
+                    iterations_(0),
+                    percentile_(1.),
+                    policy_persistent_(0)
     {
       srand(time(0));
     }
@@ -74,7 +128,45 @@ class MultiPolicy : public Policy
     virtual void reconfigure(const Configuration &config);
 
     // From Policy
-    virtual void act(const Observation &in, Action *out) const;
+    virtual void act(double time, const Observation &in, Action *out);
+
+    // From Multi Policy
+    virtual std::vector<size_t> choosing_quartile_of_mean_mov(std::vector<Action> &in) const;
+    static bool compare_asc_value_with_id(const data &a, const data &b);
+    static bool compare_desc_value_with_id(const data &a, const data &b);
+    virtual void get_max_index(double dist, size_t i, double &max, std::vector<size_t> &i_max_density) const;
+    virtual size_t get_max_index_by_euclidian_distance(const std::vector<Action> &policies_aa, LargeVector mean) const;
+    virtual LargeVector get_mean(const std::vector<Action> &policies_aa) const;
+    virtual void get_min_index(double dist, size_t i, double &min, std::vector<size_t> &i_min_density) const;
+    virtual LargeVector get_policy_mean(const Observation &in, std::vector<Action> &policies_aa, LargeVector &values) const;
+    virtual LargeVector get_policy_mean(const Observation &in, std::vector<node> *policies_aa, LargeVector *values) const;
+    virtual size_t get_random_index(const std::vector<size_t> &i_max_density) const;
+    virtual void update_mean_mov(const std::vector<double> &in) const;
+    virtual void update_mean_mov_with_euclidian(const std::vector<Action> &in, LargeVector center) const;
+    virtual void update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const;
+
+    virtual void choosing_quartile_of_mean_mov(std::vector<node> *in) const;
+    virtual void set_density_based(std::vector<node> *in) const;
+    virtual LargeVector get_mean(const std::vector<node> &in) const;
+    virtual void update_mean_mov(std::vector<node> *in) const;
+    static bool compare_asc_mean_mov_i(const node &a, const node &b);
+    static bool compare_desc_mean_mov_i(const node &a, const node &b);
+    virtual void set_euclidian_distance(std::vector<node> *in, LargeVector mean) const;
+    virtual size_t get_max_index(const std::vector<node> &in) const;
+    virtual size_t get_min_index(const std::vector<node> &in) const;
+
+    //trying again
+    virtual LargeVector euclidian_distance(const ActionArray &ensemble_set, const LargeVector center) const;
+    virtual LargeVector g_mean(const ActionArray &array) const;
+    virtual LargeVector get_actions(const ActionArray &array) const;
+    virtual ActionArray percentile(size_t mode, double time, ActionArray const &array, LargeVector moving_average_, double percentile);
+    virtual LargeVector data_center(ActionArray ensemble_set, LargeVector *center) const;
+    virtual LargeVector datacenter_update_voting(ActionArray ensemble_set) const;
+    virtual LargeVector density_based(ActionArray &ensemble_set, LargeVector *center) const;
+    virtual LargeVector density_based_update_voting(ActionArray &ensemble_set, LargeVector *center) const;
+    virtual size_t get_max_index(const LargeVector &in) const;
+    virtual ActionArray run_policies(const Observation &in, LargeVector *values = NULL) const;
+ 
 };
 
 /// Policy that combines two or more sub-policies using different strategies
