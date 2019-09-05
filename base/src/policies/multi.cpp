@@ -417,7 +417,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
           break;
 
         case sdBestDelayPersistent:
-          if (iterations_ < 10) {
+          if (iterations_ < 100) {
             dist = active_set[(size_t)rand()%active_set.size()].v;
             CRAWL("MultiPolicy::csAlg4Steps::sdBestDelayPersistent::if (iterations_ < 100) {");
           } else {
