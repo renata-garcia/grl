@@ -51,7 +51,7 @@ void MultiPolicy::request(ConfigurationRequest *config)
   config->push_back(CRP("percentile", "Percentile of Scores / Actions", percentile_));
   
   config->push_back(CRP("select_by_distance", "Select by distance", select_by_distance_str_, CRP::Configuration,
-  {"none", "best", "best_elitism", "best_persistent", "best_delay_persistent", "data_center", "density", "mean", "random", "random_persistent"}));
+  {"none", "best", "best_elitism", "best_persistent", "best_delay_persistent", "best_dc_persistent", "data_center", "density", "mean", "random", "random_persistent"}));
   
   config->push_back(CRP("score_postprocess", "score_postprocess", score_postprocess_));
   
@@ -151,6 +151,11 @@ void MultiPolicy::configure(Configuration &config)
   {
     select_by_distance_ = sdBestDelayPersistent;
     select_ = sdBestDelayPersistent;
+  }
+  else if(select_by_distance_str_ == "best_dc_persistent")
+  {
+    select_by_distance_ = sdBestDCPersistent;
+    select_ = sdBestDCPersistent;
   }
   else if(select_by_distance_str_ == "data_center")
   {
@@ -423,6 +428,14 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
           } else {
             dist = active_set[policy_persistent_].v;
             CRAWL("MultiPolicy::csAlg4Steps::sdBestDelayPersistent::dist = active_set[policy_persistent_].v;");
+          }
+          break;
+
+        case sdBestDCPersistent:
+          if (iterations_ < 100) {
+            data_center(active_set, &dist);
+          } else {
+            dist = active_set[policy_persistent_].v;
           }
           break;
 
