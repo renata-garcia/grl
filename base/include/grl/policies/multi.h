@@ -86,7 +86,6 @@ class MultiPolicy : public Policy
     Sampler *sampler_;
     std::vector<double> *mean_mov_;
     std::vector<double> *voting_policies_;
-    // LargeVector last_action_;
     double iRoulette_;
     double iterations_;
     struct data {

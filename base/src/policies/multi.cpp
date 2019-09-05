@@ -236,7 +236,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
 {
   if (!time) {
     iterations_++;
-    CRAWL("MultiPolicy::act::in::pt_iterations_: " << iterations_);
+    CRAWL("MultiPolicy::act::sdBestDelayPersistent::in::pt_iterations_: " << iterations_);
   }
   Action tmp_action;
   LargeVector dist;
@@ -246,8 +246,6 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
   std::vector<Action> aa_dist();
   policy_[0]->act(in, &actions_actors[0]);
   int n_dimension = actions_actors[0].v.size();
-  // if (iterations_ == 1)
-  //   last_action_ = LargeVector::Zero(n_dimension);
   Vector send_actions(n_policies);
   
   switch (strategy_)
@@ -419,10 +417,12 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
           break;
 
         case sdBestDelayPersistent:
-          if (iterations_ < 100) {
+          if (iterations_ < 10) {
             dist = active_set[(size_t)rand()%active_set.size()].v;
+            CRAWL("MultiPolicy::csAlg4Steps::sdBestDelayPersistent::if (iterations_ < 100) {");
           } else {
             dist = active_set[policy_persistent_].v;
+            CRAWL("MultiPolicy::csAlg4Steps::sdBestDelayPersistent::dist = active_set[policy_persistent_].v;");
           }
           break;
 
