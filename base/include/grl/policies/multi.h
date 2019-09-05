@@ -50,9 +50,9 @@ class MultiPolicy : public Policy
     
     typedef std::vector<Action> ActionArray;
   
-    enum CombinationStrategy {csBinning, csDataCenterVotingMov, csAlg4StepsNew,
+    enum CombinationStrategy {csBinning, csAlg4StepsNew,
     csStatic, csValueBased, csRoulette};
-    enum ScoreDistance {sdNone, sdBest, sdBestElitism, sdBestPersistent, sdDensityBased, sdDataCenter,
+    enum ScoreDistance {sdNone, sdBest, sdBestElitism, sdBestPersistent, sdBestDelayPersistent, sdDensityBased, sdDataCenter,
      sdMean, sdRandom, sdRandomPersistent};
     enum UpdateHistory {uhNone, uhEuclideanDistance, uhDensity, uhDensityLinear, uhDataCenter};
     
@@ -86,9 +86,9 @@ class MultiPolicy : public Policy
     Sampler *sampler_;
     std::vector<double> *mean_mov_;
     std::vector<double> *voting_policies_;
-    LargeVector last_action_;
+    // LargeVector last_action_;
     double iRoulette_;
-    uint32_t iterations_;
+    double iterations_;
     struct data {
       double value;
       size_t id;
@@ -115,7 +115,7 @@ class MultiPolicy : public Policy
                     minor_remove_bound_(0.25),
                     major_remove_bound_(0.75),
                     iRoulette_(0.3),
-                    iterations_(0),
+                    iterations_(0.),
                     percentile_(1.),
                     policy_persistent_(0)
     {
@@ -131,29 +131,9 @@ class MultiPolicy : public Policy
     virtual void act(double time, const Observation &in, Action *out);
 
     // From Multi Policy
-    virtual std::vector<size_t> choosing_quartile_of_mean_mov(std::vector<Action> &in) const;
-    static bool compare_asc_value_with_id(const data &a, const data &b);
-    static bool compare_desc_value_with_id(const data &a, const data &b);
     virtual void get_max_index(double dist, size_t i, double &max, std::vector<size_t> &i_max_density) const;
-    virtual size_t get_max_index_by_euclidian_distance(const std::vector<Action> &policies_aa, LargeVector mean) const;
-    virtual LargeVector get_mean(const std::vector<Action> &policies_aa) const;
-    virtual void get_min_index(double dist, size_t i, double &min, std::vector<size_t> &i_min_density) const;
     virtual LargeVector get_policy_mean(const Observation &in, std::vector<Action> &policies_aa, LargeVector &values) const;
     virtual LargeVector get_policy_mean(const Observation &in, std::vector<node> *policies_aa, LargeVector *values) const;
-    virtual size_t get_random_index(const std::vector<size_t> &i_max_density) const;
-    virtual void update_mean_mov(const std::vector<double> &in) const;
-    virtual void update_mean_mov_with_euclidian(const std::vector<Action> &in, LargeVector center) const;
-    virtual void update_voting_preferences_ofchoosen_mean_mov(const std::vector<Action> &in, size_t ind) const;
-
-    virtual void choosing_quartile_of_mean_mov(std::vector<node> *in) const;
-    virtual void set_density_based(std::vector<node> *in) const;
-    virtual LargeVector get_mean(const std::vector<node> &in) const;
-    virtual void update_mean_mov(std::vector<node> *in) const;
-    static bool compare_asc_mean_mov_i(const node &a, const node &b);
-    static bool compare_desc_mean_mov_i(const node &a, const node &b);
-    virtual void set_euclidian_distance(std::vector<node> *in, LargeVector mean) const;
-    virtual size_t get_max_index(const std::vector<node> &in) const;
-    virtual size_t get_min_index(const std::vector<node> &in) const;
 
     //trying again
     virtual LargeVector euclidian_distance(const ActionArray &ensemble_set, const LargeVector center) const;
