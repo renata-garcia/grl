@@ -1,48 +1,48 @@
-% clc;
-% clear;
-% close all;
-% 
-% % %
-% init_size_env = 1;
-% size_env = 2;
-% envs_results = cell(1,size_env);
-% for it=init_size_env:size_env
-%     printing = 1;
-%     steps_counted = 10;
-%     ie=it;
-%     ia=3;
-%     withLoad = 0;
-%     withNoise = 0;
-%     withlimiar = 1;
-%     onlybad4pend=0;
-%     algs = ["ac_tc", "dpg", "ddpg"];
-%     if (ie == 1)
-%         env = "pendulum"; env_abr = "pd";
-%     elseif (ie == 2)
-%         env = "cart_pole"; env_abr = "cp";
-%     elseif (ie == 3)
-%         env = "cart_double_pole"; env_abr = "cdp";
-%     elseif (ie == 4)
-%         env = "walker"; env_abr = "cw";
-%     end
-%     alg = algs(ia);
-%     [tbl_meanstd_all, percentual, strategies] = generate_tbl_cmp_bad(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
-%     %[tbl_meanstd_all, percentual, strategies] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
-%     
-%     envs_results{1,ie} = tbl_meanstd_all;
-%     
-%     title_leg = strcat("env= ", env, " alg= ", algs(ia));
-%     if (withlimiar)
-%         title_leg = strcat(title_leg, " limi-2500");
-%     else
-%         title_leg = strcat(title_leg, " (counted)");
-%     end
-%     if (withNoise)
-%         title_leg = strcat(title_leg, " NOISE AND NOT LOAAAADDD");
-%     end
-% %     print_learning_learned_by_groups(title_leg, strategies, tbl_meanstd_all, withLoad, percentual)
-%     disp("acabou..........");
-% end
+clc;
+clear;
+close all;
+
+% %
+init_size_env = 1;
+size_env = 2;
+envs_results = cell(1,size_env);
+for it=init_size_env:size_env
+    printing = 0;
+    steps_counted = 10;
+    ie=it;
+    ia=3;
+    withLoad = 0;
+    withNoise = 0;
+    withlimiar = 1;
+    onlybad4pend=0;
+    algs = ["ac_tc", "dpg", "ddpg"];
+    if (ie == 1)
+        env = "pendulum"; env_abr = "pd";
+    elseif (ie == 2)
+        env = "cart_pole"; env_abr = "cp";
+    elseif (ie == 3)
+        env = "cart_double_pole"; env_abr = "cdp";
+    elseif (ie == 4)
+        env = "walker"; env_abr = "cw";
+    end
+    alg = algs(ia);
+    [tbl_meanstd_all, percentual, strategies] = generate_tbl_cmp_bad(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
+    %[tbl_meanstd_all, percentual, strategies] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
+    
+    envs_results{1,ie} = tbl_meanstd_all;
+    
+    title_leg = strcat("env= ", env, " alg= ", algs(ia));
+    if (withlimiar)
+        title_leg = strcat(title_leg, " limi-2500");
+    else
+        title_leg = strcat(title_leg, " (counted)");
+    end
+    if (withNoise)
+        title_leg = strcat(title_leg, " NOISE AND NOT LOAAAADDD");
+    end
+    print_learning_learned_by_groups(title_leg, strategies, tbl_meanstd_all, withLoad, percentual)
+    disp("acabou..........");
+end
 print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
 
 function [tbl_meanstd_all, percentual, strategies] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar)
@@ -234,7 +234,6 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_cmp_bad(printi
     addpath("~/Dropbox/phd_grl_results/matlab");
 
     group = ["good", "mid", "bad"];
-    group = ["bad"];
     if (exc)
         group = ["bad"];
     end
