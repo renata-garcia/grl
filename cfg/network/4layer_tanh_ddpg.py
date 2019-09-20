@@ -16,7 +16,11 @@ from keras.models import Model
 from keras.layers.core import Dense, Lambda
 from keras.layers.merge import Concatenate
 from keras.layers.normalization import BatchNormalization
-from keras.backend import get_session
+from keras.backend import get_session, set_session
+
+gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.05)
+sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
+set_session(sess)
 
 print(sys.argv)
 print(len(sys.argv))
