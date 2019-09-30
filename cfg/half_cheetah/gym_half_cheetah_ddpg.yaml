@@ -10,7 +10,7 @@ experiment:
   save_every: never
   environment: 
     type: environment/gym
-    id: HalfCheetah-v1
+    id: HalfCheetah-v2
     render: 0
   agent: 
     type: agent/replay
