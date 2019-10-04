@@ -685,10 +685,9 @@ function print_learning_learned_by_groups(caption, strategies, tbl, withLoad, pe
     fprintf("  \\scriptsize\n");
     fprintf("  \\caption{%s}\n", caption);
     fprintf("  \\label{tab_performance_all}\n");
-    fprintf("  \\begin{tabular}{l|c|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{4.4}|}\n");
-    fprintf("    \\cline{2-8}\n");
-    fprintf("     & \\multirow{2}{*}{strategy} & \\multicolumn{2}{c|}{good} & \\multicolumn{2}{c|}{mid} & \\multicolumn{2}{c|}{bad} \\\\ \\cline{3-8} \n");
-    fprintf("     &  & \\multicolumn{1}{|c|}{learning} & \\multicolumn{1}{|c|}{learned} & \\multicolumn{1}{|c|}{learning} & \\multicolumn{1}{|c|}{learned} & \\multicolumn{1}{|c|}{learning} & \\multicolumn{1}{|c|}{learned} \\\\ \\hline\n");
+    fprintf("  \\begin{tabular}{l|c|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|}\n");
+    fprintf("    \\cline{2-5}\n");
+    fprintf("     & \\multicolumn{1}{|c|}{strategy} & \\multicolumn{1}{c|}{good} & \\multicolumn{1}{c|}{mid} & \\multicolumn{1}{c|}{bad} \\\\ \\hline \n");
     for j=1:sz_base
         if (j == 1)
             fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", sz_base);
@@ -709,10 +708,11 @@ function print_learning_learned_by_groups(caption, strategies, tbl, withLoad, pe
             end
         end
         if(j==sz_base)
-            fprintf(" \\\\ \\Xhline{0.8pt} \n");
+            fprintf(" \\\\ \\hline \n");
         else
-           fprintf(" \\\\ \\cline{2-8} \n");
+           fprintf(" \\\\ \\cline{2-5} \n");
         end
+%         fprintf(" \\\\ \\Xhline{0.8pt} \n");
         
     end
     for j=(sz_base + 1):size(tbl, 1)
@@ -733,11 +733,13 @@ function print_learning_learned_by_groups(caption, strategies, tbl, withLoad, pe
                 fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
             end
         end
-        if ((j == size(tbl, 1)) || (rem(j,3) == 0))
-            fprintf(" \\\\ \\Xhline{0.8pt} \n");
+%         if ((j == size(tbl, 1)) || (rem(j,3) == 0))
+        if ((j == size(tbl, 1)))
+            fprintf(" \\\\ \\hline \n");
         else
-            fprintf(" \\\\ \\cline{2-8} \n");
+            fprintf(" \\\\ \\cline{2-5} \n");
         end
+%       fprintf(" \\\\ \\Xhline{0.8pt} \n");
     end
     fprintf("  \\end{tabular}\n");
     fprintf("\\end{table*}\n");

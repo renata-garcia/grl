@@ -155,3 +155,33 @@ array_runs = [
 title_fig = "FINDING BEST SINGLE HC";
 
 ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+%%
+array_runs = [
+"half_cheetah_hc_ddpg_replay_steps256_batch_size64_interval1000_gamma0.85_reward_scale1.0_sigma[1]*txt",...
+"half_cheetah_hc_ddpg_replay_steps256_batch_size64_interval1000_gamma0.99_reward_scale1.0_sigma[1]*txt"];
+
+title_fig = "FINDING BEST SINGLE HC";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+%%
+array_runs = [
+"half_cheetah_hc_ddpg_replay_steps256_batch_size64_interval10000_gamma0.75_reward_scale0.01_sigma[1]*txt",...
+"half_cheetah_hc_ddpg_replay_steps256_batch_size64_interval10000_gamma0.85_reward_scale0.01_sigma[1]*txt",...
+"half_cheetah_hc_ddpg_replay_steps256_batch_size64_interval10000_gamma0.9_reward_scale0.01_sigma[1]*txt"];
+
+title_fig = "FINDING BEST SINGLE HC";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+%%
+array_runs = [
+"half_cheetah_hc_ddpg_replay_steps256_batch_size64_interval10000_gamma0.98_reward_scale0.01_sigma[1]*txt",...
+"half_cheetah_hc_ddpg_replay_steps256_batch_size64_interval10000_gamma0.99_reward_scale0.01_sigma[1]*txt",...
+"half_cheetah_hc_ddpg_replay_steps256_batch_size64_interval10000_gamma0.9_reward_scale0.01_sigma[1]*txt"];
+
+title_fig = "FINDING BEST SINGLE HC";
+
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
