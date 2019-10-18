@@ -13,7 +13,7 @@ for it=init_size_env:size_env
     steps_counted = 20;
     ie=it;
     ia=3;
-    withLoad = 0;
+    withLoad = 1;
     withNoise = 0;
     withlimiar = 0;
     onlybad4pend=0;
@@ -824,7 +824,9 @@ function print_learning_learned_by_groups(caption, strategies, tbl, withLoad, pe
             ii = ii + 1;
             k = ii;
             fprintf(" & ");
-            if ((tbl(j, i)-tbl(j, i+1)) >= bests(k))
+            if (((tbl(j, i)-tbl(j, i+1)) >= bests(k)) && ((tbl(j, i)+tbl(j, i+1)) >= bests(k)) )
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            elseif ( (tbl(j, i)+tbl(j, i+1)) >= bests(k) )
                 fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
             else
                 fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
@@ -853,7 +855,7 @@ function print_learning_learned_by_groups(caption, strategies, tbl, withLoad, pe
             if (((tbl(j, i)-tbl(j, i+1)) >= bests(k)) && ((tbl(j, i)+tbl(j, i+1)) >= bests(k)) )
                 fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
             elseif ( (tbl(j, i)+tbl(j, i+1)) >= bests(k) )
-                fprintf("\\textit{%.0f},\\textit{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
             else
                 fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
             end
