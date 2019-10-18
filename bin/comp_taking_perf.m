@@ -48,7 +48,7 @@ for it=init_size_env:size_env
     if (withLoad)
         title_leg = strcat(title_leg, " LOAAAADDD");
     end
-    print_learning_learned_by_groups(title_leg, strategies, tbl_meanstd_all, withLoad, percentual)
+    print_learning_learned_by_groups(title_leg, env_abr, strategies, tbl_meanstd_all, withLoad, percentual)
     disp("acabou..........");
 end
 % print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
@@ -787,7 +787,7 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
     end
 end
 
-function print_learning_learned_by_groups(caption, strategies, tbl, withLoad, percentual)
+function print_learning_learned_by_groups(caption, env_abr, strategies, tbl, withLoad, percentual)
     sz_base = 3;
     ind_max = 1;
     jmp_grp = 2;
@@ -807,7 +807,11 @@ function print_learning_learned_by_groups(caption, strategies, tbl, withLoad, pe
     fprintf("  \\centering\n");
     fprintf("  \\scriptsize\n");
     fprintf("  \\caption{%s}\n", caption);
-    fprintf("  \\label{tbl_performance_online}\n");
+    if(withLoad)
+        fprintf("  \\label{tbl_performance_%s}\n", env_abr);
+    else
+        fprintf("  \\label{tbl_performance_online_%s}\n", env_abr);
+    end
     fprintf("  \\begin{tabular}{l|c|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|}\n");
     fprintf("    \\cline{2-5}\n");
     fprintf("     & \\multicolumn{1}{|c|}{strategy} & \\multicolumn{1}{c|}{good} & \\multicolumn{1}{c|}{mid} & \\multicolumn{1}{c|}{bad} \\\\ \\hline \n");
