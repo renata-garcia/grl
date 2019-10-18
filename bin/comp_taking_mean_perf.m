@@ -15,6 +15,7 @@ env = "walker"; env_abr = "";
 env = "compass_walker"; env_abr = "cw_";
 env = "cart_pole"; env_abr = "cp_";
 env = "pendulum"; env_abr = "pd_";
+env = "half_cheetah"; env_abr = "wc_";
 alg = "";
 alg = "_dpg";% env_abr = "";
 alg = "_ac_tc";
@@ -29,6 +30,7 @@ file = "cart_pole_cp_tau_ac_tc16good_load_*_none_none_1.0_random_persistent_a1_"
 file = "leosim_ddpg";
 file = env + "_" + env_abr + "tau" + alg + "_i";
 file = env + "_" + "replay_ddpg_tensorflow_sincos_i";
+file = env + "_" + "tau_replay_ddpg_tensorflow_sincos_i";
 
 if (contains(env,"cart") || contains(env,"pinball"))
     steps_per_second = 20;
@@ -38,6 +40,8 @@ elseif (contains(env,"pendulum"))
     steps_per_second = 33;
 elseif (contains(env,"leosim"))
     steps_per_second = 30;
+elseif (contains(env,"half_cheetah"))
+    steps_per_second = 100;
 else
     disp("NONE NONE");
 end
