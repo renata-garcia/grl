@@ -13,7 +13,6 @@ for it=init_size_env:size_env
     steps_counted = 20;
     ie=it;
     ia=3;
-    bestResult = 1;
     withLoad = 0;
     withNoise = 0;
     withlimiar = 0;
@@ -49,7 +48,7 @@ for it=init_size_env:size_env
     if (withLoad)
         title_leg = strcat(title_leg, " LOAAAADDD");
     end
-    print_learning_learned_by_groups(bestResult, title_leg, strategies, tbl_meanstd_all, withLoad, percentual)
+    print_learning_learned_by_groups(title_leg, strategies, tbl_meanstd_all, withLoad, percentual)
     disp("acabou..........");
 end
 % print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
@@ -788,7 +787,7 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
     end
 end
 
-function print_learning_learned_by_groups(bestResult, caption, strategies, tbl, withLoad, percentual)
+function print_learning_learned_by_groups(caption, strategies, tbl, withLoad, percentual)
     sz_base = 3;
     ind_max = 1;
     jmp_grp = 2;
@@ -804,13 +803,11 @@ function print_learning_learned_by_groups(bestResult, caption, strategies, tbl, 
     end
     disp(bests);
               
-	fprintf("%% Please add the following required packages to your document preamble:\n");
-    fprintf("%% \\usepackage{multirow}\n");
     fprintf("  \\begin{table*}[]\n");
     fprintf("  \\centering\n");
     fprintf("  \\scriptsize\n");
     fprintf("  \\caption{%s}\n", caption);
-    fprintf("  \\label{tab_performance_all}\n");
+    fprintf("  \\label{tbl_performance_online}\n");
     fprintf("  \\begin{tabular}{l|c|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|}\n");
     fprintf("    \\cline{2-5}\n");
     fprintf("     & \\multicolumn{1}{|c|}{strategy} & \\multicolumn{1}{c|}{good} & \\multicolumn{1}{c|}{mid} & \\multicolumn{1}{c|}{bad} \\\\ \\hline \n");
