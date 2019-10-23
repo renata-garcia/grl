@@ -103,7 +103,6 @@ class MultiPolicy : public Policy
     double percentile_;
     LargeVector action_persistent;
     LargeVector moving_average_;
-    int score_postprocess_; // 0 or 1
 
   public:
     MultiPolicy() : bins_(10),

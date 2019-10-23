@@ -53,8 +53,6 @@ void MultiPolicy::request(ConfigurationRequest *config)
   config->push_back(CRP("select_by_distance", "Select by distance", select_by_distance_str_, CRP::Configuration,
   {"none", "best", "best_elitism005", "best_elitism0001", "best_persistent", "best_delay_persistent", "best_d_persistent", "best_dc_persistent", "data_center", "density", "mean", "random", "random_persistent"}));
   
-  config->push_back(CRP("score_postprocess", "score_postprocess", score_postprocess_));
-  
   config->push_back(CRP("sampler", "sampler", "Sampler for value-based strategy", sampler_, true));
   config->push_back(CRP("bins", "Binning Simple Discretization", bins_));
   config->push_back(CRP("static_policy", "Static Policy Chosen to Learning", static_policy_));
@@ -192,8 +190,6 @@ void MultiPolicy::configure(Configuration &config)
     select_by_distance_ = sdRandomPersistent;
     select_ = sdRandomPersistent;
   }
-
-  score_postprocess_ = config["score_postprocess"];
 
   sampler_ = (Sampler*)config["sampler"].ptr();
 
@@ -398,9 +394,6 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
 
       for(size_t i = 0; i < policy_.size(); ++i)
         CRAWL("MultiPolicy::csAlg4StepsNew::scores[i= " << i << "]: " << scores[i]);
-
-      if (score_postprocess_ == 1)
-        throw Exception("MultiPolicy::csAlg4StepsNew::score_postprocess_ not implemented!");
 
       CRAWL("MultiPolicy::moving_average_ = alpha_mov_mean_*scores + (1-alpha_mov_mean_)*moving_average_;");
       moving_average_ = alpha_mov_mean_*scores + (1-alpha_mov_mean_)*moving_average_;
