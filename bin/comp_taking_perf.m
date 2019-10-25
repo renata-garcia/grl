@@ -9,8 +9,9 @@ size_env = 3;
 it = 1;
 envs_results = cell(1,size_env);
 for it=init_size_env:size_env
-    printing = 0;
-    steps_counted = 20;
+    printing = 1;
+    steps_counted = 10;
+    runs_number = 31;
     ie=it;
     ia=3;
     withLoad = 1;
@@ -30,8 +31,8 @@ for it=init_size_env:size_env
     alg = algs(ia);
 %     [tbl_meanstd_all, percentual, strategies] = generate_tbl_cp(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
 %     [tbl_meanstd_all, percentual, strategies] = generate_tbl_article_others(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
-    [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
-%     [tbl_meanstd_all, percentual, strategies] = generate_tbl_cmp_bad(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
+    [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar, steps_counted, runs_number);
+    %     [tbl_meanstd_all, percentual, strategies] = generate_tbl_cmp_bad(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
 %     [tbl_meanstd_all, percentual, strategies] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
     
     envs_results{1,ie} = tbl_meanstd_all;
@@ -53,8 +54,7 @@ for it=init_size_env:size_env
 end
 % print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
 
-function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar)
-    steps_counted = 10;
+function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar, steps_counted, runs_number)
     folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
     addpath("~/Dropbox/phd_grl_results/matlab");
 
@@ -128,14 +128,13 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printi
             i = nl*(ig-1) + 2*il -1; %(ng*n_load)*(ie-1) + 
             j = nl*(ig-1) + 2*il;%(ng*n_load)*(ie-1) + 
             k = n_load*(ig-1) + il; %(ng*n_load)*(ie-1) + 
-            [tbl2, perc2] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, withlimiar);
-            [tbl_meanstd_all(:, i:j), percentual(:,k)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, withlimiar);
+            [tbl2, perc2] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
+            [tbl_meanstd_all(:, i:j), percentual(:,k)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
         end
     end
 end
 
-function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article_others(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar)
-    steps_counted = 10;
+function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article_others(printing, env, env_abr, alg, withLoad, withNoise, exc, runs_number, withlimiar)
     folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
     addpath("~/Dropbox/phd_grl_results/matlab");
 
@@ -225,14 +224,13 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article_others
             i = nl*(ig-1) + 2*il -1; %(ng*n_load)*(ie-1) + 
             j = nl*(ig-1) + 2*il;%(ng*n_load)*(ie-1) + 
             k = n_load*(ig-1) + il; %(ng*n_load)*(ie-1) + 
-            [tbl2, perc2] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, withlimiar);
-            [tbl_meanstd_all(:, i:j), percentual(:,k)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, withlimiar);
+            [tbl2, perc2] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
+            [tbl_meanstd_all(:, i:j), percentual(:,k)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
         end
     end
 end
 
-function [tbl_meanstd_all, percentual, strategies] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar)
-    steps_counted = 10;
+function [tbl_meanstd_all, percentual, strategies] = generate_tbl(printing, env, env_abr, alg, withLoad, withNoise, exc, runs_number, withlimiar)
     folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
     addpath("~/Dropbox/phd_grl_results/matlab");
 
@@ -372,14 +370,13 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl(printing, env,
             i = nl*(ig-1) + 2*il -1; %(ng*n_load)*(ie-1) + 
             j = nl*(ig-1) + 2*il;%(ng*n_load)*(ie-1) + 
             k = n_load*(ig-1) + il; %(ng*n_load)*(ie-1) + 
-            [tbl2, perc2] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, withlimiar);
-            [tbl_meanstd_all(:, i:j), percentual(:,k)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, withlimiar);
+            [tbl2, perc2] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
+            [tbl_meanstd_all(:, i:j), percentual(:,k)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
         end
     end
 end
 
-function [tbl_meanstd_all, percentual, strategies] = generate_tbl_cp(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar)
-    steps_counted = 10;
+function [tbl_meanstd_all, percentual, strategies] = generate_tbl_cp(printing, env, env_abr, alg, withLoad, withNoise, exc, runs_number, withlimiar)
     folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
     addpath("~/Dropbox/phd_grl_results/matlab");
 
@@ -495,14 +492,13 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_cp(printing, e
             i = nl*(ig-1) + 2*il -1; %(ng*n_load)*(ie-1) + 
             j = nl*(ig-1) + 2*il;%(ng*n_load)*(ie-1) + 
             k = n_load*(ig-1) + il; %(ng*n_load)*(ie-1) + 
-            [tbl2, perc2] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, withlimiar);
-            [tbl_meanstd_all(:, i:j), percentual(:,k)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, withlimiar);
+            [tbl2, perc2] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
+            [tbl_meanstd_all(:, i:j), percentual(:,k)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
         end
     end
 end
 
 function [tbl_meanstd_all, percentual, strategies] = generate_tbl_cmp_bad(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar)
-    steps_counted = 10;
     folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
     addpath("~/Dropbox/phd_grl_results/matlab");
 
@@ -711,7 +707,8 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_cmp_bad(printi
                                   "r25" + type + "_*_mean_euclidian_distance_0.25_density_a0.01_*.txt",...
                                   "r25" + type + "_*_mean_euclidian_distance_0.5_density_a0.01_*.txt",...
                           "r50" + type + "_*_mean_euclidian_distance_0.5_density_a0.01_*.txt"];
-        [tbl_meanstd_specific_bad, percentual_spec_bad] = test_take_mean_mpol(folder, env, env_abr, "", alg, runs_specific_bad, printing, steps_per_second, steps_counted, withlimiar);
+        [tbl_meanstd_specific_bad, percentual_spec_bad] = test_take_mean_mpol(folder, env, env_abr, "", alg, runs_specific_bad, printing, steps_per_second, steps_counted, runs_number, withlimiar);
+
         
         disp(tbl_meanstd_specific_good);
         disp(tbl_meanstd_specific_mid);
@@ -725,7 +722,7 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_cmp_bad(printi
 end
 
 
-function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, load, alg, runs, printing, steps_per_second, steps_counted, withLimiar)
+function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, load, alg, runs, printing, steps_per_second, steps_counted, runs_number, withLimiar)
     subfolder = "";
     preffix = "";
     
@@ -757,7 +754,7 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
         end
         
         data_no_limiar = readseries(fd, 3, 2, steps_per_second);
-        if (length(data_no_limiar) ~= steps_counted)
+        if (length(data_no_limiar) < runs_number) %~=
             disp(fd);
         end
 
@@ -785,95 +782,6 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
         means_std(j, 1) = mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d)));
         means_std(j, 2) = mean(std_e(length(std_e)-steps_counted+1:length(std_e)));
     end
-end
-
-function print_learning_learned_by_groups(caption, env_abr, strategies, tbl, withLoad, percentual)
-    sz_base = 3;
-    ind_max = 1;
-    jmp_grp = 2;
-    bests =  zeros(1, 6);
-    j = 1;
-    for i=ind_max:jmp_grp:size(tbl,2)
-    	max_base = max(tbl(1:sz_base, i));
-        ind_max_base = tbl(1:sz_base, i) == max_base;
-        iline = (1:sz_base)*ind_max_base;
-        max_basestd = max_base - tbl(iline,i+1);
-        bests(j) = max_basestd;
-        j=j+1;
-    end
-    disp(bests);
-              
-    fprintf("  \\begin{table*}[]\n");
-    fprintf("  \\centering\n");
-    fprintf("  \\scriptsize\n");
-    fprintf("  \\caption{%s}\n", caption);
-    if(withLoad)
-        fprintf("  \\label{tbl_performance_%s}\n", env_abr);
-    else
-        fprintf("  \\label{tbl_performance_online_%s}\n", env_abr);
-    end
-    fprintf("  \\begin{tabular}{l|c|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|}\n");
-    fprintf("    \\cline{2-5}\n");
-    fprintf("     & \\multicolumn{1}{|c|}{strategy} & \\multicolumn{1}{c|}{good} & \\multicolumn{1}{c|}{mid} & \\multicolumn{1}{c|}{bad} \\\\ \\hline \n");
-    for j=1:sz_base
-        if (j == 1)
-            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", sz_base);
-            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{BASE}}}} & \\footnotesize{%s}", strategies(j));
-        else
-            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
-        end
-        k = 1;
-        ii = 0;
-        for i=1:2:size(tbl,2)
-            ii = ii + 1;
-            k = ii;
-            fprintf(" & ");
-            if (((tbl(j, i)-tbl(j, i+1)) >= bests(k)) && ((tbl(j, i)+tbl(j, i+1)) >= bests(k)) )
-                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
-            elseif ( (tbl(j, i)+tbl(j, i+1)) >= bests(k) )
-                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
-            else
-                fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
-            end
-        end
-        if(j==sz_base)
-            fprintf(" \\\\ \\hline \n");
-        else
-           fprintf(" \\\\ \\cline{2-5} \n");
-        end
-%         fprintf(" \\\\ \\Xhline{0.8pt} \n");
-        
-    end
-    for j=(sz_base + 1):size(tbl, 1)
-        if (j == (sz_base + 1))
-            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", (size(tbl, 1)-sz_base));
-            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{NEW}}}} & \\footnotesize{%s}", strategies(j));
-        else
-            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
-        end
-        ii = 0;
-        for i=1:2:size(tbl,2)
-            ii = ii + 1;
-            k = ii;
-            fprintf(" & ");
-            if (((tbl(j, i)-tbl(j, i+1)) >= bests(k)) && ((tbl(j, i)+tbl(j, i+1)) >= bests(k)) )
-                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
-            elseif ( (tbl(j, i)+tbl(j, i+1)) >= bests(k) )
-                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
-            else
-                fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
-            end
-        end
-%         if ((j == size(tbl, 1)) || (rem(j,3) == 0))
-        if ((j == size(tbl, 1)))
-            fprintf(" \\\\ \\hline \n");
-        else
-            fprintf(" \\\\ \\cline{2-5} \n");
-        end
-%       fprintf(" \\\\ \\Xhline{0.8pt} \n");
-    end
-    fprintf("  \\end{tabular}\n");
-    fprintf("\\end{table*}\n");
 end
 
 function print_by_envs(caption, strategies, cell, group, withLoad, percentual)
@@ -956,6 +864,113 @@ function print_by_envs(caption, strategies, cell, group, withLoad, percentual)
         else
             fprintf(" \\\\ \\cline{2-%d} \n", sz_envs+2);
         end
+    end
+    fprintf("  \\end{tabular}\n");
+    fprintf("\\end{table*}\n");
+end
+
+function print_learning_learned_by_groups(caption, env_abr, strategies, tbl, withLoad, percentual)
+    sz_base = 3;
+    bests =  zeros(1, 6);
+    j = 1;
+    for i=1:2:size(tbl,2)
+    	max_base = max(tbl(1:sz_base, i));
+        ind_max_base = tbl(1:sz_base, i) == max_base;
+        iline = (1:sz_base)*ind_max_base;
+        max_basestd = max_base - tbl(iline,i+1);
+        bests(j) = max_basestd;
+        j=j+1;
+    end
+    disp(bests);
+    
+    j = 1;
+    best =  zeros(1, size(tbl,2)/2);
+    for i=1:2:size(tbl,2)
+        max_best = max(tbl(:,i));
+        ind_max = tbl(:, i) == max_best;
+        iline = (1:length(tbl))*ind_max;
+        max_std = max_best - tbl(iline,i+1)
+        max_best
+        tbl(iline,i+1)
+        best(j) = max_std;
+        j=j+1;
+    end
+    disp(best);
+    
+    fprintf("  \\begin{table*}[]\n");
+    fprintf("  \\centering\n");
+    fprintf("  \\scriptsize\n");
+    fprintf("  \\caption{%s}\n", caption);
+    if(withLoad)
+        fprintf("  \\label{tbl_performance_%s}\n", env_abr);
+    else
+        fprintf("  \\label{tbl_performance_online_%s}\n", env_abr);
+    end
+    fprintf("  \\begin{tabular}{l|c|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|}\n");
+    fprintf("    \\cline{2-5}\n");
+    fprintf("     & \\multicolumn{1}{|c|}{strategy} & \\multicolumn{1}{c|}{good} & \\multicolumn{1}{c|}{mid} & \\multicolumn{1}{c|}{bad} \\\\ \\hline \n");
+    for j=1:sz_base
+        if (j == 1)
+            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", sz_base);
+            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{BASE}}}} & \\footnotesize{%s}", strategies(j));
+        else
+            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
+        end
+        k = 1;
+        ii = 0;
+        for i=1:2:size(tbl,2)
+            ii = ii + 1;
+            k = ii;
+            fprintf(" & ");
+            if ( (tbl(j, i)+tbl(j, i+1)) >= best(k) )
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)\\textbf{*}", tbl(j, i:i+1), percentual(j,ii));
+%               fprintf("\\textit{\\textbf{%.0f}},\\textit{\\textbf{%.0f}} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            elseif (((tbl(j, i)-tbl(j, i+1)) >= bests(k)) && ((tbl(j, i)+tbl(j, i+1)) >= bests(k)) )
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            elseif ( (tbl(j, i)+tbl(j, i+1)) >= bests(k) )
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            else
+                fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
+            end
+        end
+        if(j==sz_base)
+            fprintf(" \\\\ \\hline \n");
+        else
+           fprintf(" \\\\ \\cline{2-5} \n");
+        end
+%         fprintf(" \\\\ \\Xhline{0.8pt} \n");
+        
+    end
+    for j=(sz_base + 1):size(tbl, 1)
+        if (j == (sz_base + 1))
+            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", (size(tbl, 1)-sz_base));
+            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{NEW}}}} & \\footnotesize{%s}", strategies(j));
+        else
+            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
+        end
+        ii = 0;
+        for i=1:2:size(tbl,2)
+            ii = ii + 1;
+            k = ii;
+            fprintf(" & ");
+            if ( (tbl(j, i)+tbl(j, i+1)) >= best(k) )
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)\\textbf{*}", tbl(j, i:i+1), percentual(j,ii));
+%               fprintf("\\textit{\\textbf{%.0f}},\\textit{\\textbf{%.0f}} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            elseif (((tbl(j, i)-tbl(j, i+1)) >= bests(k)) && ((tbl(j, i)+tbl(j, i+1)) >= bests(k)) )
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            elseif ( (tbl(j, i)+tbl(j, i+1)) >= bests(k) )
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            else
+                fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
+            end
+        end
+%         if ((j == size(tbl, 1)) || (rem(j,3) == 0))
+        if ((j == size(tbl, 1)))
+            fprintf(" \\\\ \\hline \n");
+        else
+            fprintf(" \\\\ \\cline{2-5} \n");
+        end
+%       fprintf(" \\\\ \\Xhline{0.8pt} \n");
     end
     fprintf("  \\end{tabular}\n");
     fprintf("\\end{table*}\n");
