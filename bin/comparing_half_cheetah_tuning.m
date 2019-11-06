@@ -281,6 +281,8 @@ for j=1:length(array_runs)
         disp(fd);
     end
     [t, mean_d, ~, std_e] = avgseries(readseries(fd, 3, 2, steps_per_second));
+    data_no_limiar = readseries(fd, 3, 2, steps_per_second);
+    disp(length(data_no_limiar));
     disp(mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d))));
     disp(mean(std_e(length(std_e)-steps_counted+1:length(std_e))));
 end
