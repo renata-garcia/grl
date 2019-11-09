@@ -9,7 +9,7 @@ size_env = 3;
 it = 1;
 envs_results = cell(1,size_env);
 for it=init_size_env:size_env
-    printing = 1;
+    printing = 0;
     steps_counted = 10;
     runs_number = 31;
     ie=it;
@@ -49,7 +49,7 @@ for it=init_size_env:size_env
     if (withLoad)
         title_leg = strcat(title_leg, " LOAAAADDD");
     end
-    print_learning_learned_by_groups(title_leg, env_abr, strategies, tbl_meanstd_all, withLoad, percentual)
+    print_article(title_leg, env_abr, strategies, tbl_meanstd_all, withLoad, percentual)
     disp("acabou..........");
 end
 % print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
@@ -967,6 +967,113 @@ function print_learning_learned_by_groups(caption, env_abr, strategies, tbl, wit
 %         if ((j == size(tbl, 1)) || (rem(j,3) == 0))
         if ((j == size(tbl, 1)))
             fprintf(" \\\\ \\hline \n");
+        else
+            fprintf(" \\\\ \\cline{2-5} \n");
+        end
+%       fprintf(" \\\\ \\Xhline{0.8pt} \n");
+    end
+    fprintf("  \\end{tabular}\n");
+    fprintf("\\end{table*}\n");
+end
+
+function print_article(caption, env_abr, strategies, tbl, withLoad, percentual)
+    sz_base = 3;
+    bests =  zeros(1, 6);
+    j = 1;
+    for i=1:2:size(tbl,2)
+    	max_base = max(tbl(1:sz_base, i));
+        ind_max_base = tbl(1:sz_base, i) == max_base;
+        iline = (1:sz_base)*ind_max_base;
+        max_basestd = max_base - tbl(iline,i+1);
+        bests(j) = max_basestd;
+        j=j+1;
+    end
+    disp(bests);
+    
+    j = 1;
+    best =  zeros(1, size(tbl,2)/2);
+    for i=1:2:size(tbl,2)
+        max_best = max(tbl(:,i));
+        ind_max = tbl(:, i) == max_best;
+        iline = (1:length(tbl))*ind_max;
+        max_std = max_best - tbl(iline,i+1)
+        max_best
+        tbl(iline,i+1)
+        best(j) = max_std;
+        j=j+1;
+    end
+    disp(best);
+    
+    fprintf("  \\begin{table*}[]\n");
+    fprintf("  \\centering\n");
+    fprintf("  \\footnotesize\n");
+    fprintf("  \\caption{%s}\n", caption);
+    if(withLoad)
+        fprintf("  \\label{tbl_performance_%s}\n", env_abr);
+    else
+        fprintf("  \\label{tbl_performance_online_%s}\n", env_abr);
+    end
+    fprintf("  \\begin{tabular}{l|c|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|D{,}{\\pm}{-1}|}\n");
+%     fprintf("    \\cline{2-5}\n");
+    fprintf("    \\hline \n");
+    fprintf("     \\multicolumn{2}{|c|}{strategy} & \\multicolumn{1}{c|}{good} & \\multicolumn{1}{c|}{mid} & \\multicolumn{1}{c|}{bad} \\\\ \\hline \\hline \n");
+    for j=1:sz_base
+        if (j == 1)
+            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", sz_base);
+            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{BASE}}}} & \\footnotesize{%s}", strategies(j));
+        else
+            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
+        end
+        k = 1;
+        ii = 0;
+        for i=1:2:size(tbl,2)
+            ii = ii + 1;
+            k = ii;
+            fprintf(" & ");
+            if ( (tbl(j, i)+tbl(j, i+1)) >= best(k) )
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)\\textbf{*}", tbl(j, i:i+1), percentual(j,ii));
+%               fprintf("\\textit{\\textbf{%.0f}},\\textit{\\textbf{%.0f}} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            elseif (((tbl(j, i)-tbl(j, i+1)) >= bests(k)) && ((tbl(j, i)+tbl(j, i+1)) >= bests(k)) )
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            elseif ( (tbl(j, i)+tbl(j, i+1)) >= bests(k) )
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            else
+                fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
+            end
+        end
+        if(j==sz_base)
+            fprintf(" \\\\ \\hline \\hline \n");
+        else
+           fprintf(" \\\\ \\cline{2-5} \n");
+        end
+%         fprintf(" \\\\ \\Xhline{0.8pt} \n");
+        
+    end
+    for j=(sz_base + 1):size(tbl, 1)
+        if (j == (sz_base + 1))
+            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
+        else
+            fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
+        end
+        ii = 0;
+        for i=1:2:size(tbl,2)
+            ii = ii + 1;
+            k = ii;
+            fprintf(" & ");
+            if ( (tbl(j, i)+tbl(j, i+1)) >= best(k) )
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)\\textbf{*}", tbl(j, i:i+1), percentual(j,ii));
+%               fprintf("\\textit{\\textbf{%.0f}},\\textit{\\textbf{%.0f}} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            elseif (((tbl(j, i)-tbl(j, i+1)) >= bests(k)) && ((tbl(j, i)+tbl(j, i+1)) >= bests(k)) )
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            elseif ( (tbl(j, i)+tbl(j, i+1)) >= bests(k) )
+                fprintf("\\textbf{%.0f},\\textbf{%.0f} (%d)", tbl(j, i:i+1), percentual(j,ii));
+            else
+                fprintf("%.0f,%.0f (%d)", tbl(j, i:i+1), percentual(j,ii));
+            end
+        end
+        if ((j == size(tbl, 1)) || (rem(j,3) == 0))
+%         if ((j == size(tbl, 1)))
+            fprintf(" \\\\ \\hline \\hline \n");
         else
             fprintf(" \\\\ \\cline{2-5} \n");
         end
