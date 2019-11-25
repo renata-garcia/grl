@@ -4,11 +4,11 @@ close all;
 
 % %
 init_size_env = 1;
-% size_env = 1;
-size_env = 3;
+% size_env = 3;
+size_env = 1;
 it = 1;
 envs_results = cell(1,size_env);
-for it=init_size_env:size_env
+% for it=init_size_env:size_env
     printing = 1;
     steps_counted = 10;
     runs_number = 31;
@@ -51,7 +51,7 @@ for it=init_size_env:size_env
     end
     print_article(title_leg, env_abr, strategies, tbl_meanstd_all, withLoad, percentual)
     disp("acabou..........");
-end
+% end
 % print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
 
 function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar, steps_counted, runs_number)
@@ -138,7 +138,7 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printi
             i = nl*(ig-1) + 2*il -1; %(ng*n_load)*(ie-1) + 
             j = nl*(ig-1) + 2*il;%(ng*n_load)*(ie-1) + 
             k = n_load*(ig-1) + il; %(ng*n_load)*(ie-1) + 
-            [tbl2, perc2] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
+%             [tbl2, perc2] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
             [tbl_meanstd_all(:, i:j), percentual(:,k)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
         end
     end
@@ -756,6 +756,7 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
     [t, mean_d, ~, std_e] = avgseries(readseries(fd, 3, 2, steps_per_second));
 
     means_std = zeros(length(array_runs), 2);
+    data_last_perf = zeros(steps_counted, length(array_runs));
     percentual = zeros(length(array_runs), 1);
     for j=1:length(array_runs)
         fd = folder + array_runs(j);
@@ -791,7 +792,22 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
         end
         means_std(j, 1) = mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d)));
         means_std(j, 2) = 1.96 * mean(std_e(length(std_e)-steps_counted+1:length(std_e)));
+        data_last_perf(:,j) = mean_d(length(mean_d)-steps_counted+1:length(mean_d));
     end
+    display("testing")    ;
+    for i=1:length(array_runs)
+        for j=(i+1):length(array_runs)
+            [hipotese1,pvalue] = ttest2(data_last_perf(:,i),data_last_perf(:,j),'alpha',0.01,'tail','both');
+            display(['H 99%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);
+
+            [hipotese1,pvalue] = ttest2(data_last_perf(:,i),data_last_perf(:,j),'alpha',0.05,'tail','both');
+            display(['H 95%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+
+            [hipotese1,pvalue] = ttest2(data_last_perf(:,i),data_last_perf(:,j),'alpha',0.10,'tail','both');
+            display(['H 90%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+        end
+    end
+    
 end
 
 function print_by_envs(caption, strategies, cell, group, withLoad, percentual)

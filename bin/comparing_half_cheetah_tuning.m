@@ -291,13 +291,13 @@ end
 
 for i=1:length(array_runs)
     for j=(i+1):length(array_runs)
-        [hipotese1,pvalue] = ttest(mean_hc(:,i),mean_hc(:,j),'alpha',0.01,'tail','both');
+        [hipotese1,pvalue] = ttest2(mean_hc(:,i),mean_hc(:,j),'alpha',0.01,'tail','both');
         display(['H 99%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);
         
-        [hipotese1,pvalue] = ttest(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
+        [hipotese1,pvalue] = ttest2(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
         display(['H 95%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
         
-        [hipotese1,pvalue] = ttest(mean_hc(:,i),mean_hc(:,j),'alpha',0.10,'tail','both');
+        [hipotese1,pvalue] = ttest2(mean_hc(:,i),mean_hc(:,j),'alpha',0.10,'tail','both');
         display(['H 90%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
     end
 end
