@@ -4,11 +4,11 @@ close all;
 
 % %
 init_size_env = 1;
-% size_env = 1;
-size_env = 3;
-it = 1;
+% size_env = 3;
+size_env = 1;
+it = 4;
 envs_results = cell(1,size_env);
-for it=init_size_env:size_env
+% for it=init_size_env:size_env
     printing = 0;
     steps_counted = 10;
     runs_number = 31;
@@ -20,13 +20,13 @@ for it=init_size_env:size_env
     onlybad4pend=0;
     algs = ["ac_tc", "dpg", "ddpg"];
     if (ie == 1)
-        env = "pendulum"; env_abr = "pd";
+        env = "pendulum"; env_abr = "pd_";
     elseif (ie == 2)
-        env = "cart_pole"; env_abr = "cp";
+        env = "cart_pole"; env_abr = "cp_";
     elseif (ie == 3)
-        env = "cart_double_pole"; env_abr = "cdp";
+        env = "cart_double_pole"; env_abr = "cdp_";
     elseif (ie == 4)
-        env = "walker"; env_abr = "cw";
+        env = "half_cheetah"; env_abr = "";
     end
     alg = algs(ia);
 %     [tbl_meanstd_all, percentual, strategies] = generate_tbl_cp(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar);
@@ -51,7 +51,7 @@ for it=init_size_env:size_env
     end
     print_article(title_leg, env_abr, strategies, tbl_meanstd_all, withLoad, percentual)
     disp("acabou..........");
-end
+% end
 % print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
 
 function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar, steps_counted, runs_number)
@@ -88,8 +88,8 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printi
         steps_per_second = 19;
     elseif (contains(env,"pendulum"))
         steps_per_second = 33;
-    elseif (contains(env,"walker"))
-        steps_per_second = 5;
+    elseif (contains(env,"half_cheetah"))
+        steps_per_second = 100;
     else
         disp("NONE NONE");
     end
@@ -728,10 +728,10 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
     
     if (alg == "ac_tc" || alg == "dpg")
         subfolder = env + "_mpols" + "_" + alg + load + "_yamls_results/";
-        preffix = env + "_" + env_abr +"_tau_" + alg + "16";
+        preffix = env + "_" + env_abr +"tau_" + alg + "16";
     elseif (alg == "ddpg")
         subfolder = env + "_mpols" + load + "_yamls_results/";
-        preffix = env + "_" + env_abr +"_tau_mpol_replay_ddpg_tensorflow_sincos_16";
+        preffix = env + "_" + env_abr +"tau_mpol_replay_ddpg_tensorflow_sincos_16";
     end
 
     array_runs = runs;
