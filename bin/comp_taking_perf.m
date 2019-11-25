@@ -4,11 +4,11 @@ close all;
 
 % %
 init_size_env = 1;
-% size_env = 3;
-size_env = 1;
-it = 4;
+% size_env = 1;
+size_env = 3;
+it = 1;
 envs_results = cell(1,size_env);
-% for it=init_size_env:size_env
+for it=init_size_env:size_env
     printing = 1;
     steps_counted = 10;
     runs_number = 31;
@@ -51,7 +51,7 @@ envs_results = cell(1,size_env);
     end
     print_article(title_leg, env_abr, strategies, tbl_meanstd_all, withLoad, percentual)
     disp("acabou..........");
-% end
+end
 % print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
 
 function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar, steps_counted, runs_number)
@@ -80,7 +80,7 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printi
 
     % %
     n_env = 1;
-    n_vert = 12+4; %12; %
+    n_vert = 12;% +4; %
     tbl_meanstd_all = zeros(n_vert, n_env*ng*n_load);
     percentual = zeros(n_vert, n_env*n_group*n_load);
 
@@ -105,11 +105,12 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printi
                   "M\_ED\_MA\_25\_M",...
                   "M\_ED\_MA\_25\_DC",...
                   "M\_ED\_MA\_25\_D",...
-                  "DC\_ED\_MA\_25\_DC",...
-                  "DCR\_MA\_50\_DC",...
-                  "DCR\_MA\_50\_D",...
-                  "D\_MA\_50\_DC",...
-                  "D\_MA\_50\_D"];
+                  "DC\_ED\_MA\_25\_DC"];
+%               ,...
+%                   "DCR\_MA\_50\_DC",...
+%                   "DCR\_MA\_50\_D",...
+%                   "D\_MA\_50\_DC",...
+%                   "D\_MA\_50\_D"];
               
     for ig = 1:n_group
         for il = 1:n_load                       
@@ -125,11 +126,12 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printi
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.25_mean_a0.01_*txt",...
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.25_data_center_a0.01_*txt",...
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.25_density_a0.01_-*txt",...
-                            group(ig) + load(il) + "_*_data_center_euclidian_distance_0.25_data_center_a0.01_*txt",...
-                            group(ig) + load(il) + "_*_none_data_center_linear_order_0.5_data_center_a0.01_*txt",...
-                            group(ig) + load(il) + "_*_none_data_center_linear_order_0.5_density_a0.01_*txt",...
-                            group(ig) + load(il) + "_*_none_density_0.5_data_center_a0.01_*txt",...
-                            group(ig) + load(il) + "_*_none_density_0.5_density_a0.01_*txt"];
+                            group(ig) + load(il) + "_*_data_center_euclidian_distance_0.25_data_center_a0.01_*txt"];
+%                         ,...
+%                             group(ig) + load(il) + "_*_none_data_center_linear_order_0.5_data_center_a0.01_*txt",...
+%                             group(ig) + load(il) + "_*_none_data_center_linear_order_0.5_density_a0.01_*txt",...
+%                             group(ig) + load(il) + "_*_none_density_0.5_data_center_a0.01_*txt",...
+%                             group(ig) + load(il) + "_*_none_density_0.5_density_a0.01_*txt"];
                         
             i_load = (ng*n_load) + ng*(il-1) + (2*ig)-1; %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)-1
             j_load = (ng*n_load) + ng*(il-1) + (2*ig); %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)
@@ -788,7 +790,7 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
             [t, mean_d, ~, std_e] = avgseries(data_no_limiar);
         end
         means_std(j, 1) = mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d)));
-        means_std(j, 2) = mean(std_e(length(std_e)-steps_counted+1:length(std_e)));
+        means_std(j, 2) = 1.96 * mean(std_e(length(std_e)-steps_counted+1:length(std_e)));
     end
 end
 

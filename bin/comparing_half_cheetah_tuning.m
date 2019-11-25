@@ -275,7 +275,7 @@ array_runs = [
     "half_cheetah_tau_replay_ddpg_tensorflow_sincos16good_j*_none_data_center_linear_order_0.25_data_center_a0.01_-*.txt",...
     "half_cheetah_tau_replay_ddpg_tensorflow_sincos16good_j*_mean_euclidian_distance_0.25_density_a0.01_-*txt"];
 
-mean_hc = zeros(60,length(array_runs));
+mean_hc = zeros(10,length(array_runs));
 for j=1:length(array_runs)
     fd = folder + array_runs(j);
     if (printing)
@@ -284,7 +284,7 @@ for j=1:length(array_runs)
     [t, mean_d, ~, std_e] = avgseries(readseries(fd, 3, 2, steps_per_second));
     data_no_limiar = readseries(fd, 3, 2, steps_per_second);
     disp(length(data_no_limiar));
-    mean_hc(:, j) = mean_d;
+    mean_hc(:, j) = mean_d(length(mean_d)-steps_counted+1:length(mean_d));
     disp(mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d))));
     disp(mean(std_e(length(std_e)-steps_counted+1:length(std_e))));
 end
@@ -321,7 +321,7 @@ array_runs = [
     "half_cheetah_tau_replay_ddpg_tensorflow_sincos16mid_j1_none_data_center_linear_order_0.25_data_center_a0.01_-*txt",...
     "half_cheetah_tau_replay_ddpg_tensorflow_sincos16mid_j0_mean_euclidian_distance_0.25_density_a0.01_-*txt"];
 
-mean_hc = zeros(60,length(array_runs));
+mean_hc = zeros(10,length(array_runs));
 for j=1:length(array_runs)
     fd = folder + array_runs(j);
     if (printing)
@@ -330,7 +330,7 @@ for j=1:length(array_runs)
     [t, mean_d, ~, std_e] = avgseries(readseries(fd, 3, 2, steps_per_second));
     data_no_limiar = readseries(fd, 3, 2, steps_per_second);
     disp(length(data_no_limiar));
-    mean_hc(:, j) = mean_d;
+    mean_hc(:, j) = mean_d(length(mean_d)-steps_counted+1:length(mean_d));
     disp(mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d))));
     disp(mean(std_e(length(std_e)-steps_counted+1:length(std_e))));
 end
@@ -363,7 +363,7 @@ array_runs = [
     "half_cheetah_tau_replay_ddpg_tensorflow_sincos16bad_j1_none_none_1.0_data_center_a1.0_-*txt",...
     "half_cheetah_tau_replay_ddpg_tensorflow_sincos16bad_j1_data_center_euclidian_distance_0.25_data_center_a0.01_-*txt"];
 
-mean_hc = zeros(60,length(array_runs));
+mean_hc = zeros(10,length(array_runs));
 for j=1:length(array_runs)
     fd = folder + array_runs(j);
     if (printing)
@@ -372,7 +372,7 @@ for j=1:length(array_runs)
     [t, mean_d, ~, std_e] = avgseries(readseries(fd, 3, 2, steps_per_second));
     data_no_limiar = readseries(fd, 3, 2, steps_per_second);
     disp(length(data_no_limiar));
-    mean_hc(:, j) = mean_d;
+    mean_hc(:, j) = mean_d(length(mean_d)-steps_counted+1:length(mean_d));
     disp(mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d))));
     disp(mean(std_e(length(std_e)-steps_counted+1:length(std_e))));
 end
