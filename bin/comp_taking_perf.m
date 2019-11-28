@@ -6,12 +6,12 @@ close all;
 init_size_env = 1;
 % size_env = 3;
 size_env = 1;
-it = 1;
+it = 4;
 envs_results = cell(1,size_env);
 % for it=init_size_env:size_env
     printing = 1;
     steps_counted = 10;
-    runs_number = 31;
+    runs_number = 10;
     ie=it;
     ia=3;
     withLoad = 1;
@@ -80,7 +80,7 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printi
 
     % %
     n_env = 1;
-    n_vert = 12;% +4; %
+    n_vert = 12;% 
     tbl_meanstd_all = zeros(n_vert, n_env*ng*n_load);
     percentual = zeros(n_vert, n_env*n_group*n_load);
 
@@ -106,11 +106,6 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printi
                   "M\_ED\_MA\_25\_DC",...
                   "M\_ED\_MA\_25\_D",...
                   "DC\_ED\_MA\_25\_DC"];
-%               ,...
-%                   "DCR\_MA\_50\_DC",...
-%                   "DCR\_MA\_50\_D",...
-%                   "D\_MA\_50\_DC",...
-%                   "D\_MA\_50\_D"];
               
     for ig = 1:n_group
         for il = 1:n_load                       
@@ -127,11 +122,6 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printi
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.25_data_center_a0.01_*txt",...
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.25_density_a0.01_-*txt",...
                             group(ig) + load(il) + "_*_data_center_euclidian_distance_0.25_data_center_a0.01_*txt"];
-%                         ,...
-%                             group(ig) + load(il) + "_*_none_data_center_linear_order_0.5_data_center_a0.01_*txt",...
-%                             group(ig) + load(il) + "_*_none_data_center_linear_order_0.5_density_a0.01_*txt",...
-%                             group(ig) + load(il) + "_*_none_density_0.5_data_center_a0.01_*txt",...
-%                             group(ig) + load(il) + "_*_none_density_0.5_density_a0.01_*txt"];
                         
             i_load = (ng*n_load) + ng*(il-1) + (2*ig)-1; %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)-1
             j_load = (ng*n_load) + ng*(il-1) + (2*ig); %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)
@@ -805,6 +795,10 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
 
             [hipotese1,pvalue] = ttest2(data_last_perf(:,i),data_last_perf(:,j),'alpha',0.10,'tail','both');
             display(['H 90%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+            
+            [hipotese1,pvalue] = signrank(data_last_perf(:,i),data_last_perf(:,j),'alpha',0.10,'tail','both');
+            display(['H TP%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+            
         end
     end
     

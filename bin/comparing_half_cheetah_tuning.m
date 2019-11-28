@@ -264,6 +264,7 @@ ploting_executions(folder, title_fig, steps_per_second, array_runs);
 clc;
 steps_counted = 10;
 printing = 1;
+printing_hh = 0;
 
 folder_old = folder;
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/half_cheetah_mpols_yamls_results/";
@@ -289,16 +290,21 @@ for j=1:length(array_runs)
     disp(mean(std_e(length(std_e)-steps_counted+1:length(std_e))));
 end
 
-for i=1:length(array_runs)
-    for j=(i+1):length(array_runs)
-        [hipotese1,pvalue] = ttest2(mean_hc(:,i),mean_hc(:,j),'alpha',0.01,'tail','both');
-        display(['H 99%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);
-        
-        [hipotese1,pvalue] = ttest2(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
-        display(['H 95%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
-        
-        [hipotese1,pvalue] = ttest2(mean_hc(:,i),mean_hc(:,j),'alpha',0.10,'tail','both');
-        display(['H 90%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+if (printing_hh)
+    for i=1:length(array_runs)
+        for j=(i+1):length(array_runs)
+            [hipotese1,pvalue] = ttest2(mean_hc(:,i),mean_hc(:,j),'alpha',0.01,'tail','both');
+            display(['H 99%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);
+
+            [hipotese1,pvalue] = ttest2(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
+            display(['H 95%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+
+            [hipotese1,pvalue] = ttest(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
+            display(['H TT%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+
+            [hipotese1,pvalue] = signrank(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
+            display(['H TP%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+        end
     end
 end
 
@@ -310,16 +316,17 @@ folder = folder_old;
 clc;
 steps_counted = 10;
 printing = 1;
+printing_hh = 0;
 
 folder_old = folder;
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/half_cheetah_mpols_yamls_results/";
 
 array_runs = [
-    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16mid_j1_none_none_1.0_data_center_a1.0_-*txt",...
-    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16mid_j1_none_none_1.0_density_a1.0_-*txt",...
-    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16mid_j1_data_center_euclidian_distance_0.25_data_center_a0.01_-*txt",...
-    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16mid_j1_none_data_center_linear_order_0.25_data_center_a0.01_-*txt",...
-    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16mid_j0_mean_euclidian_distance_0.25_density_a0.01_-*txt"];
+    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16mid_j*_none_none_1.0_data_center_a1.0_-*txt",...
+    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16mid_j*_none_none_1.0_density_a1.0_-*txt",...
+    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16mid_j*_data_center_euclidian_distance_0.25_data_center_a0.01_-*txt",...
+    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16mid_j*_none_data_center_linear_order_0.25_data_center_a0.01_-*txt",...
+    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16mid_j*_mean_euclidian_distance_0.25_density_a0.01_-*txt"];
 
 mean_hc = zeros(10,length(array_runs));
 for j=1:length(array_runs)
@@ -335,19 +342,23 @@ for j=1:length(array_runs)
     disp(mean(std_e(length(std_e)-steps_counted+1:length(std_e))));
 end
 
-for i=1:length(array_runs)
-    for j=(i+1):length(array_runs)
-        [hipotese1,pvalue] = ttest(mean_hc(:,i),mean_hc(:,j),'alpha',0.01,'tail','both');
-        display(['H 99%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);
-        
-        [hipotese1,pvalue] = ttest(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
-        display(['H 95%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
-        
-        [hipotese1,pvalue] = ttest(mean_hc(:,i),mean_hc(:,j),'alpha',0.10,'tail','both');
-        display(['H 90%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+if (printing_hh)
+    for i=1:length(array_runs)
+        for j=(i+1):length(array_runs)
+            [hipotese1,pvalue] = ttest2(mean_hc(:,i),mean_hc(:,j),'alpha',0.01,'tail','both');
+            display(['H 99%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);
+
+            [hipotese1,pvalue] = ttest2(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
+            display(['H 95%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+
+            [hipotese1,pvalue] = ttest(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
+            display(['H TT%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+
+            [hipotese1,pvalue] = signrank(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
+            display(['H TP%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+        end
     end
 end
-
 
 folder = folder_old;
 
@@ -355,13 +366,14 @@ folder = folder_old;
 clc;
 steps_counted = 10;
 printing = 1;
+printing_hh = 0;
 
 folder_old = folder;
 folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/half_cheetah_mpols_yamls_results/";
 
 array_runs = [
-    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16bad_j1_none_none_1.0_data_center_a1.0_-*txt",...
-    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16bad_j1_data_center_euclidian_distance_0.25_data_center_a0.01_-*txt"];
+    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16bad_j*_none_none_1.0_data_center_a1.0_-*txt",...
+    "half_cheetah_tau_replay_ddpg_tensorflow_sincos16bad_j*_data_center_euclidian_distance_0.25_data_center_a0.01_-*txt"];
 
 mean_hc = zeros(10,length(array_runs));
 for j=1:length(array_runs)
@@ -377,16 +389,21 @@ for j=1:length(array_runs)
     disp(mean(std_e(length(std_e)-steps_counted+1:length(std_e))));
 end
 
-for i=1:length(array_runs)
-    for j=(i+1):length(array_runs)
-        [hipotese1,pvalue] = ttest(mean_hc(:,i),mean_hc(:,j),'alpha',0.01,'tail','both');
-        display(['H 99%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);
-        
-        [hipotese1,pvalue] = ttest(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
-        display(['H 95%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
-        
-        [hipotese1,pvalue] = ttest(mean_hc(:,i),mean_hc(:,j),'alpha',0.10,'tail','both');
-        display(['H 90%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+if (printing_hh)
+    for i=1:length(array_runs)
+        for j=(i+1):length(array_runs)
+            [hipotese1,pvalue] = ttest2(mean_hc(:,i),mean_hc(:,j),'alpha',0.01,'tail','both');
+            display(['H 99%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);
+
+            [hipotese1,pvalue] = ttest2(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
+            display(['H 95%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+
+            [hipotese1,pvalue] = ttest(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
+            display(['H TT%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+
+            [hipotese1,pvalue] = signrank(mean_hc(:,i),mean_hc(:,j),'alpha',0.05,'tail','both');
+            display(['H TP%:: i: ', num2str(i), ' - j: ', num2str(j), ' - pvalue: ', num2str(pvalue), ' - hipotese1: ', num2str(hipotese1)]);        
+        end
     end
 end
 
