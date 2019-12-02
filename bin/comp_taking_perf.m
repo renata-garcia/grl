@@ -6,10 +6,10 @@ close all;
 init_size_env = 1;
 % size_env = 3;
 size_env = 1;
-it = 4;
+it = 2;
 envs_results = cell(1,size_env);
 % for it=init_size_env:size_env
-    printing = 1;
+    printing = 0;
     steps_counted = 10;
     runs_number = 35;
     ie=it;
@@ -256,9 +256,20 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
         end
         if (length(data) > 0)
             [t, mean_d, ~, std_e] = avgseries(data);
+            d = data(end,:);
         else
             [t, mean_d, ~, std_e] = avgseries(data_no_limiar);
+            d = data_no_limiar(end,:);
         end
+        hst_data = zeros(length(d),1);
+        for kk=1:length(d)
+            tmp = d{kk};
+            hst_data(kk) = tmp(end,2);
+        end
+%         figure;
+%         plot(1:length(d), hst_data);
+%         figure;
+%         histogram(transpose(hst_data));
         means_std(j, 1) = mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d)));
         means_std(j, 2) = 1.96 * mean(std_e(length(std_e)-steps_counted+1:length(std_e)));
         data_last_perf(:,j) = mean_d(length(mean_d)-steps_counted+1:length(mean_d));
