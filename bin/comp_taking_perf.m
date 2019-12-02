@@ -4,12 +4,12 @@ close all;
 
 % %
 init_size_env = 1;
-% size_env = 1;
-size_env = 3;
-it = 1;
+% size_env = 3;
+size_env = 1;
+it = 4;
 envs_results = cell(1,size_env);
-for it=init_size_env:size_env
-    printing = 0;
+% for it=init_size_env:size_env
+    printing = 1;
     steps_counted = 10;
     runs_number = 35;
     ie=it;
@@ -29,8 +29,13 @@ for it=init_size_env:size_env
         env = "half_cheetah"; env_abr = "";
     end
     alg = algs(ia);
-    [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar, steps_counted, runs_number);    
+    if ((it == 4) && (withLoad == 0))
+        [tbl_meanstd_all, percentual, strategies] = half_cheetah_gen_tbl(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar, steps_counted, runs_number);    
     envs_results{1,ie} = tbl_meanstd_all;
+    else
+        [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar, steps_counted, runs_number);    
+    envs_results{1,ie} = tbl_meanstd_all;
+    end
     
     title_leg = strcat("env= ", env, " alg= ", algs(ia));
     if (withlimiar)
@@ -44,9 +49,9 @@ for it=init_size_env:size_env
     if (withLoad)
         title_leg = strcat(title_leg, " LOAAAADDD");
     end
-    print_article(title_leg, env_abr, strategies, tbl_meanstd_all, withLoad, percentual)
+    print_article(title_leg, env_abr, strategies, tbl_meanstd_all, withLoad, percentual, ((it == 4) && (withLoad == 0)))
     disp("acabou..........");
-end
+% end
 % print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
 
 function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar, steps_counted, runs_number)
@@ -115,6 +120,73 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printi
                             group(ig) + load(il) + "_*_none_density_0.25_density_a0.01_-*txt",...
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.25_mean_a0.01_*txt",...
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.25_data_center_a0.01_*txt",...
+                            group(ig) + load(il) + "_*_mean_euclidian_distance_0.25_density_a0.01_-*txt",...
+                            group(ig) + load(il) + "_*_data_center_euclidian_distance_0.25_data_center_a0.01_*txt"];
+                        
+            i_load = (ng*n_load) + ng*(il-1) + (2*ig)-1; %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)-1
+            j_load = (ng*n_load) + ng*(il-1) + (2*ig); %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)
+            i = nl*(ig-1) + 2*il -1; %(ng*n_load)*(ie-1) + 
+            j = nl*(ig-1) + 2*il;%(ng*n_load)*(ie-1) + 
+            k = n_load*(ig-1) + il; %(ng*n_load)*(ie-1) + 
+%             [tbl2, perc2] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
+            [tbl_meanstd_all(:, i:j), percentual(:,k)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
+        end
+    end
+end
+
+
+function [tbl_meanstd_all, percentual, strategies] = half_cheetah_gen_tbl(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar, steps_counted, runs_number)
+    folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
+    addpath("~/Dropbox/phd_grl_results/matlab");
+
+    group = ["good", "mid", "bad"];
+    if (exc)
+        group = ["bad"];
+    end
+
+    load = "";
+    if(withLoad && withNoise)
+        load = ["", "_noisemulti"];
+    elseif (withLoad)
+        load = "_load";
+    elseif (withNoise)
+        disp("ERR: not load and noise");
+        return;
+    end
+
+    n_group = length(group);
+    n_load = length(load);
+    ng = 2*n_group;
+    nl = 2*n_load;
+
+    % %
+    n_env = 1;
+    n_vert = 5;% 
+    tbl_meanstd_all = zeros(n_vert, n_env*ng*n_load);
+    percentual = zeros(n_vert, n_env*n_group*n_load);
+
+    if (contains(env,"cart"))
+        steps_per_second = 19;
+    elseif (contains(env,"pendulum"))
+        steps_per_second = 33;
+    elseif (contains(env,"half_cheetah"))
+        steps_per_second = 100;
+    else
+        disp("NONE NONE");
+    end
+    
+    strategies = ["DC",...
+                  "D",...
+                  "DCR\_MA\_25\_DC",....
+                  "M\_ED\_MA\_25\_D",...
+                  "DC\_ED\_MA\_25\_DC"];
+              
+    for ig = 1:n_group
+        for il = 1:n_load                       
+
+            runs_generic = [group(ig) + load(il) + "_*_none_none_1.0_data_center_a1.0_-*txt",...
+                            group(ig) + load(il) + "_*_none_none_1.0_density_a1.0_-*txt",...
+                            group(ig) + load(il) + "_*_none_data_center_linear_order_0.25_data_center_a0.01_-*txt",...
                             group(ig) + load(il) + "_*_mean_euclidian_distance_0.25_density_a0.01_-*txt",...
                             group(ig) + load(il) + "_*_data_center_euclidian_distance_0.25_data_center_a0.01_*txt"];
                         
@@ -210,7 +282,7 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
 %     end 
 end
 
-function print_article(caption, env_abr, strategies, tbl, withLoad, percentual)
+function print_article(caption, env_abr, strategies, tbl, withLoad, percentual, hc)
     sz_base = 3;
         
     j = 1;
@@ -253,8 +325,12 @@ function print_article(caption, env_abr, strategies, tbl, withLoad, percentual)
     fprintf("     \\multicolumn{2}{|c|}{strategy} & \\multicolumn{1}{c|}{good} & \\multicolumn{1}{c|}{mid} & \\multicolumn{1}{c|}{bad} \\\\ \\hline \\hline \n");
     for j=1:sz_base
         if (j == 1)
-            fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", sz_base);
-            fprintf("{\\STAB{\\rotatebox[origin=c]{90}{BASE}}}} & \\footnotesize{%s}", strategies(j));
+            if (hc == 0)
+                fprintf("    \\multicolumn{1}{|l|}{\\multirow{%d}{*}", sz_base);
+                fprintf("{\\STAB{\\rotatebox[origin=c]{90}{BASE}}}} & \\footnotesize{%s}", strategies(j));
+            else
+                fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
+            end
         else
             fprintf("    \\multicolumn{1}{|l|}{} & \\footnotesize{%s}", strategies(j));
         end
