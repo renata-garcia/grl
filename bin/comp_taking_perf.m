@@ -6,12 +6,13 @@ close all;
 init_size_env = 1;
 % size_env = 3;
 size_env = 1;
-it = 2;
+it = 4;
 envs_results = cell(1,size_env);
+envs_mean = [];
 % for it=init_size_env:size_env
     printing = 0;
     steps_counted = 10;
-    runs_number = 35;
+    runs_number = 30;
     ie=it;
     ia=3;
     withLoad = 0;
@@ -29,13 +30,14 @@ envs_results = cell(1,size_env);
         env = "half_cheetah"; env_abr = "";
     end
     alg = algs(ia);
-    if ((it == 4) && (withLoad == 0))
+    if (it == 4)
         [tbl_meanstd_all, percentual, strategies] = half_cheetah_gen_tbl(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar, steps_counted, runs_number);    
     envs_results{1,ie} = tbl_meanstd_all;
     else
         [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar, steps_counted, runs_number);    
     envs_results{1,ie} = tbl_meanstd_all;
     end
+    envs_mean = [envs_mean , tbl_meanstd_all(:,1:2:end)];
     
     title_leg = strcat("env= ", env, " alg= ", algs(ia));
     if (withlimiar)
@@ -49,9 +51,19 @@ envs_results = cell(1,size_env);
     if (withLoad)
         title_leg = strcat(title_leg, " LOAAAADDD");
     end
-    print_article(title_leg, env_abr, strategies, tbl_meanstd_all, withLoad, percentual, ((it == 4) && (withLoad == 0)))
+    print_article(title_leg, env_abr, strategies, tbl_meanstd_all, withLoad, percentual, (it == 4))
     disp("acabou..........");
 % end
+tbl = envs_mean;
+max_tbl = max(tbl);
+err = (max_tbl - tbl)./max_tbl;
+err_good = err(:,1:3:end);
+sum_err = sum(err,2);
+sum_err_good = sum(err_good,2);
+alg_minor_err_for = find(max(sum_err)==sum_err);
+alg_minor_err_for_good = find(max(sum_err_good)==sum_err_good);
+display(alg_minor_err_for);
+display(alg_minor_err_for_good);
 % print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
 
 function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar, steps_counted, runs_number)
@@ -161,7 +173,7 @@ function [tbl_meanstd_all, percentual, strategies] = half_cheetah_gen_tbl(printi
 
     % %
     n_env = 1;
-    n_vert = 5;% 
+    n_vert = 3;% 
     tbl_meanstd_all = zeros(n_vert, n_env*ng*n_load);
     percentual = zeros(n_vert, n_env*n_group*n_load);
 
@@ -177,8 +189,6 @@ function [tbl_meanstd_all, percentual, strategies] = half_cheetah_gen_tbl(printi
     
     strategies = ["DC",...
                   "D",...
-                  "DCR\_MA\_25\_DC",....
-                  "M\_ED\_MA\_25\_D",...
                   "DC\_ED\_MA\_25\_DC"];
               
     for ig = 1:n_group
@@ -186,8 +196,6 @@ function [tbl_meanstd_all, percentual, strategies] = half_cheetah_gen_tbl(printi
 
             runs_generic = [group(ig) + load(il) + "_*_none_none_1.0_data_center_a1.0_-*txt",...
                             group(ig) + load(il) + "_*_none_none_1.0_density_a1.0_-*txt",...
-                            group(ig) + load(il) + "_*_none_data_center_linear_order_0.25_data_center_a0.01_-*txt",...
-                            group(ig) + load(il) + "_*_mean_euclidian_distance_0.25_density_a0.01_-*txt",...
                             group(ig) + load(il) + "_*_data_center_euclidian_distance_0.25_data_center_a0.01_*txt"];
                         
             i_load = (ng*n_load) + ng*(il-1) + (2*ig)-1; %(ng*n_load)*(ie-1) + ng*(il-1) + (2*ig)-1
