@@ -4,12 +4,12 @@ close all;
 
 % %
 init_size_env = 1;
-% size_env = 3;
-size_env = 1;
+% size_env = 1;
+size_env = 3;
 it = 4;
 envs_results = cell(1,size_env);
 envs_mean = [];
-% for it=init_size_env:size_env
+for it=init_size_env:size_env
     printing = 0;
     steps_counted = 10;
     runs_number = 30;
@@ -53,17 +53,18 @@ envs_mean = [];
     end
     print_article(title_leg, env_abr, strategies, tbl_meanstd_all, withLoad, percentual, (it == 4))
     disp("acabou..........");
-% end
+end
 tbl = envs_mean;
 max_tbl = max(tbl);
-err = (max_tbl - tbl)./max_tbl;
+err = abs((max_tbl - tbl)./max_tbl);
 err_good = err(:,1:3:end);
 sum_err = sum(err,2);
 sum_err_good = sum(err_good,2);
-alg_minor_err_for = find(max(sum_err)==sum_err);
-alg_minor_err_for_good = find(max(sum_err_good)==sum_err_good);
+alg_minor_err_for = find(min(sum_err)==sum_err);
+alg_minor_err_for_good = find(min(sum_err_good)==sum_err_good);
 display(alg_minor_err_for);
 display(alg_minor_err_for_good);
+display(min(sum_err)/9);
 % print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
 
 function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar, steps_counted, runs_number)
