@@ -3,34 +3,69 @@ clear;
 close all;
 
 % % COUNT MEAN (LEAST 10) TO USE IN ORDERING GOO, MID AND BAD
+% % COUNT MEAN (LEAST 20) TO USE IN ORDERING SINGLE RUNS
 
 steps_counted = 20;
-printing = 1;
-% env = "cart_pole";
-% env = "cart_double_pole_cdp_tau";
-env = "cart_double_pole"; env_abr = "cdp_";
-env = "leosim"; env_abr = "_tau";
-env = "pinball"; env_abr = "";
-env = "walker"; env_abr = "";
-env = "compass_walker"; env_abr = "cw_";
-env = "cart_pole"; env_abr = "cp_";
-env = "pendulum"; env_abr = "pd_";
-env = "half_cheetah"; env_abr = "wc_";
-alg = "";
-alg = "_dpg";% env_abr = "";
-alg = "_ac_tc";
-folder = "/home/renatargo/projects/grl/build/";
-folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+ alg + "_yamls_results/";
-folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/walker" + alg + "_yamls_results/";
-folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_mpols" +alg + "_load_yamls_results/";
-folder = "~/grl_results/leosim_mpols_yamls_results/";
-folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_yamls_results/";
+printing = 0;
+run_mean = "hc_single"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
+run_mean = "pd_gd_e_lrc21_i1"; %["pd_gd_e_avg"; "pd_gd_e_lrc31_i0"; "pd_gd_e_lrc31_i1"; "pd_gd_e_lrc21_i1"]
+
+%folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_mpols" +alg + "_load_yamls_results/";
+%folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_mpols" +alg + "_yamls_results/";
+
 addpath("~/Dropbox/phd_grl_results/matlab");
-file = "cart_pole_cp_tau_ac_tc16good_load_*_none_none_1.0_random_persistent_a1_";
-file = "leosim_ddpg";
-file = env + "_" + env_abr + "tau" + alg + "_i";
-file = env + "_" + "replay_ddpg_tensorflow_sincos_i";
-file = env + "_" + "tau_replay_ddpg_tensorflow_sincos_i";
+
+if (contains(run_mean,"pd") && contains(run_mean,"single"))
+    env = "pendulum"; env_abr = "pd_";
+    alg = "";
+    folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_yamls_results/";
+    file = env + "_" + env_abr + "tau_replay_ddpg_tensorflow_sincos_i";
+    steps_counted = 20;
+elseif(contains(run_mean,"cp") && contains(run_mean,"single"))
+    env = "cart_pole"; env_abr = "cp_";
+    alg = "";
+    folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_yamls_results/";
+    file = env + "_" + "replay_ddpg_tensorflow_sincos_i";
+    steps_counted = 20;
+elseif(contains(run_mean,"cdp") && contains(run_mean,"single"))
+    env = "cart_double_pole"; env_abr = "cdp_";
+    alg = "";
+    folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_yamls_results/";
+    file = env + "_" + env_abr + "tau_replay_ddpg_tensorflow_sincos_i";
+    steps_counted = 20;
+elseif(contains(run_mean,"hc") && contains(run_mean,"single"))
+    env = "half_cheetah"; env_abr = "wc_";
+    alg = "";
+    folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_yamls_results/";
+    file = env + "_" + "tau_replay_ddpg_tensorflow_sincos_i";
+    steps_counted = 20;
+end
+
+
+if (contains(run_mean,"pd") && contains(run_mean,"_e_avg") && contains(run_mean,"_gd_"))
+    env = "pendulum";
+    folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_ensemble_yamls_results/";
+    file = env + "_16good_avg-";
+    steps_counted = 20;
+elseif (contains(run_mean,"pd") && contains(run_mean,"_e_lrc31_i0") && contains(run_mean,"_gd_"))
+    env = "pendulum";
+    folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_ensemble_yamls_results/";
+    file = env + "_16good_ens_lrcritic0001_init0-";
+    steps_counted = 20;
+elseif (contains(run_mean,"pd") && contains(run_mean,"_e_lrc31_i1") && contains(run_mean,"_gd_"))
+    env = "pendulum";
+    folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_ensemble_yamls_results/";
+    file = env + "_16good_init1-";
+    steps_counted = 20;
+elseif (contains(run_mean,"pd") && contains(run_mean,"_e_lrc21_i1") && contains(run_mean,"_gd_"))
+    env = "pendulum";
+    folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_ensemble_yamls_results/";
+    file = env + "_16good_ens_lrcritic001_init1-";
+    steps_counted = 20;
+end
+
+disp(run_mean)
+disp(folder+file)
 
 if (contains(env,"cart") || contains(env,"pinball"))
     steps_per_second = 20;
@@ -45,8 +80,9 @@ elseif (contains(env,"half_cheetah"))
 else
     disp("NONE NONE");
 end
-% array_runs = [file + "*.txt"];
-%     file + "0_j*.txt",...
+
+% array_runs = [
+%     file + "*.txt"];
 
 array_runs = [
     file + "1_j*.txt",...
@@ -89,5 +125,7 @@ for j=1:length(array_runs)
     end
     [t, mean_d, ~, std_e] = avgseries(readseries(fd, 3, 2, steps_per_second));
     disp(mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d))));
-    disp(mean(std_e(length(std_e)-steps_counted+1:length(std_e))));
+    if (printing)
+        disp(mean(std_e(length(std_e)-steps_counted+1:length(std_e))));
+    end
 end
