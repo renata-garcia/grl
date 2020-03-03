@@ -10,7 +10,7 @@ printing =0 ;
 root = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
 root = "/media/renata/renatargo/";
 run_mean = "aaa"; %["pd_gd_e_avg"; "pd_gd_e_lrc31_i0"; "pd_gd_e_lrc31_i1"; "pd_gd_e_lrc21_i1"]
-run_mean = "pd_single"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
+run_mean = "cp_single"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
 
 %folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_mpols" +alg + "_load_yamls_results/";
 %folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_mpols" +alg + "_yamls_results/";
@@ -35,22 +35,23 @@ addpath("~/Dropbox/phd_grl_results/matlab");
 
 if (contains(run_mean,"pd") && contains(run_mean,"single"))
     env = "pendulum"; env_abr = "pd_";
-    file = env + "_" + env_abr + "tau_replay_ddpg_tensorflow_sincos_i";
 elseif(contains(run_mean,"cp") && contains(run_mean,"single"))
     env = "cart_pole"; env_abr = "cp_";
-    file = env + "_" + "replay_ddpg_tensorflow_sincos_i";
 elseif(contains(run_mean,"cdp") && contains(run_mean,"single"))
     env = "cart_double_pole"; env_abr = "cdp_";
-    file = env + "_" + env_abr + "tau_replay_ddpg_tensorflow_sincos_i";
 elseif(contains(run_mean,"hc") && contains(run_mean,"single"))
     env = "half_cheetah"; env_abr = "wc_";
-    file = env + "_" + "tau_replay_ddpg_tensorflow_sincos_i";
 end
 
 if (contains(run_mean,"single"))
     folder = root + env+"_yamls_results/";
+    file = env + "_" + env_abr + "tau_replay_ddpg_tensorflow_sincos_i";
     alg = "";
     steps_counted = 20;
+end
+
+if(contains(run_mean,"hc") && contains(run_mean,"single"))
+    file = env + "_" + "tau_replay_ddpg_tensorflow_sincos_i";
 end
 
 % %News Tests, if persists todo refactore
