@@ -6,11 +6,16 @@ close all;
 % % COUNT MEAN (LEAST 20) TO USE IN ORDERING SINGLE RUNS
 
 steps_counted = 20;
-printing =0 ;
-root = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
-root = "/media/renata/renatargo/";
-run_mean = "aaa"; %["pd_gd_e_avg"; "pd_gd_e_lrc31_i0"; "pd_gd_e_lrc31_i1"; "pd_gd_e_lrc21_i1"]
+steps_per_second = 0;
+printing =1 ;
+root = config_env_os();
+env = "";
+run_mean = "pd_gd_e_avg"; %["pd_gd_e_avg"; "pd_gd_e_lrc31_i0"; "pd_gd_e_lrc31_i1"; "pd_gd_e_lrc21_i1"]
 run_mean = "cp_single"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
+run_mean = "pd_rnd_cov_relu_mpol_ddpg16_dc"; %["pd_rnd_n_mpol_ddpg16_dced25dc"; "pd_rnd_n_mpol_ddpg16_dc"; "pd_rnd_n_1";
+%"pd_rnd_relu_mpol_ddpg16_dced25dc"; "pd_rnd_relu_mpol_ddpg16_dc"; "pd_rnd_relu_mpol_ddpg3_dced25dc"; "pd_rnd_relu_mpol_ddpg3_dc";]
+%"pd_rnd_cov_relu_mpol_ddpg16_dced25dc"; "pd_rnd_cov_relu_mpol_ddpg16_dc"; "pd_rnd_cov_relu_mpol_ddpg3_dced25dc"; "pd_rnd_cov_relu_mpol_ddpg3_dc";]
+
 
 %folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_mpols" +alg + "_load_yamls_results/";
 %folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_mpols" +alg + "_yamls_results/";
@@ -23,15 +28,13 @@ run_mean = "cp_single"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
 % alg_t = "_data_center_euclidian_distance_0.25_data_center_a0.01_";
 % alg_t = "_none_density_0.25_density_a0.01_";
 % alg_t = "_mean_euclidian_distance_0.25_mean_a0.01_";
-alg_t = "_mean_euclidian_distance_0.25_data_center_a0.01_";
-alg_t = "_mean_euclidian_distance_0.25_density_a0.01_";
-alg_t = "_none_data_center_linear_order_0.25_data_center_a0.01_";
-type = "good";
-env = "cart_double_pole";
-folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_mpols_loadnewgrptest_yamls_results/";
-file = env + "_tau_replay_ddpg_tensorflow_sincos16"+type+"_load_j*" + alg_t;
-
-addpath("~/Dropbox/phd_grl_results/matlab");
+% alg_t = "_mean_euclidian_distance_0.25_data_center_a0.01_";
+% alg_t = "_mean_euclidian_distance_0.25_density_a0.01_";
+% alg_t = "_none_data_center_linear_order_0.25_data_center_a0.01_";
+% type = "good";
+% env = "cart_double_pole";
+% folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_mpols_loadnewgrptest_yamls_results/";
+% file = env + "_tau_replay_ddpg_tensorflow_sincos16"+type+"_load_j*" + alg_t;
 
 if (contains(run_mean,"pd") && contains(run_mean,"single"))
     env = "pendulum"; env_abr = "pd_";
@@ -77,8 +80,46 @@ elseif (contains(run_mean,"pd") && contains(run_mean,"_e_lrc21_i1") && contains(
     steps_counted = 20;
 end
 
-disp(run_mean)
-disp(folder+file)
+if (contains(run_mean,"pd") && contains(run_mean,"_rnd_"))
+    env = "pendulum";
+    env_abr = "pd";
+elseif (contains(run_mean,"cp") && contains(run_mean,"_rnd_"))
+    env = "cart_pole";
+    env_abr = "cp";
+elseif (contains(run_mean,"cdp") && contains(run_mean,"_rnd_"))
+    env = "cart_double_pole";
+    env_abr = "cdp";
+elseif (contains(run_mean,"hc") && contains(run_mean,"_rnd_"))
+    env = "half_cheetah";
+    env_abr = "hc";
+end
+if (contains(run_mean,"_rnd_n"))
+    folder = root + "tests_random_hyperparameters/" + env_abr + "_agent_mpol_and_single_config_ddpg_rnd1a10_results/";
+    file = env + "_" + env_abr + "_rnd_";
+elseif (contains(run_mean,"pd") && contains(run_mean,"_rnd_relu"))
+    folder = root + "tests_random_hyperparameters/" + env_abr + "_agent_mpol_and_single_config_ddpg_rnd1a10_token_no_softmax_results/";
+    file = env + "_" + env_abr + "_rnd_";
+    alg = "";
+elseif (contains(run_mean,"pd") && contains(run_mean,"_rnd_cov_relu"))
+    folder = root + "tests_random_hyperparameters\" + env_abr + "_agent_mpol_and_single_config_ddpg_rnd1a10_token_no_softmax_results_converged\";
+    file = env + "_" + env_abr + "_rnd_";
+    alg = "";
+end
+if (contains(run_mean,"pd") && contains(run_mean,"_ddpg16_dced25dc"))
+    file = file + "*_tau_replay_ddpg_tensorflow_sincos16_j0_data_center_euclidian_distance_0.25_data_center_a0.01_";
+elseif (contains(run_mean,"pd") && contains(run_mean,"_ddpg16_dc"))
+    file = file + "*_tau_replay_ddpg_tensorflow_sincos16_j0_none_none_1.0_data_center_a1.0_";
+elseif (contains(run_mean,"pd") && contains(run_mean,"_ddpg3_dced25dc"))
+    file = file + "*_tau_replay_ddpg_tensorflow_sincos3_j0_data_center_euclidian_distance_0.25_data_center_a0.01_";
+elseif (contains(run_mean,"pd") && contains(run_mean,"_ddpg3_dc"))
+    file = file + "*_tau_replay_ddpg_tensorflow_sincos3_j0_none_none_1.0_data_center_a1.0_";
+elseif (contains(run_mean,"pd") && contains(run_mean,"_n_1"))
+    file = file + "1_tau_replay_ddpg_tensorflow_sincos_i*_j0";
+end
+%"pd_rnd_relu_mpol_dced25dc"; "pd_rnd_relu_mpol_dc"; "pd_rnd_relu_1"; 
+
+disp(run_mean);
+disp(folder+file);
 
 if (contains(env,"cart") || contains(env,"pinball"))
     steps_per_second = 20;
@@ -144,4 +185,4 @@ for j=1:length(array_runs)
         disp(mean(std_e(length(std_e)-steps_counted+1:length(std_e))));
     end
 end
-disp(length(dir(fd)))
+disp(length(dir(fd)));

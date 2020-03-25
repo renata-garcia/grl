@@ -3,7 +3,7 @@ clear;
 close all;
 
 % %
-root = "/media/renata/renatargo/";
+root = config_env_os() + "framework_tests/";
 init_size_env = 1;
 % size_env = 3;
 size_env = 1;
@@ -11,14 +11,14 @@ it = 1;
 envs_results = cell(1,size_env);
 envs_mean = [];
 for it=init_size_env:size_env
-    printing = 0;
+    printing = 1;
     steps_counted = 10;
     runs_number = 30;
     ie=it;
     ia=4;
-    withLoad = 1;
+    withLoad = 0;
     withNoise = 0;
-    withlimiar = 0;
+    withlimiar = 1;
     onlybad4pend=0;
     algs = ["ac_tc", "dpg", "ddpg", "2020ddpg"];
     if (ie == 1)
@@ -69,8 +69,6 @@ display(min(sum_err)/9);
 % print_by_envs(title_leg, strategies, envs_results, 1, withLoad, percentual)
 
 function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(root, printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar, steps_counted, runs_number)
-    addpath("~/Dropbox/phd_grl_results/matlab");
-
     group = ["good", "mid", "bad"];
     if (exc)
         group = ["bad"];
@@ -149,9 +147,6 @@ end
 
 
 function [tbl_meanstd_all, percentual, strategies] = half_cheetah_gen_tbl(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar, steps_counted, runs_number)
-    folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/";
-    addpath("~/Dropbox/phd_grl_results/matlab");
-
     group = ["good", "mid", "bad"];
     if (exc)
         group = ["bad"];
@@ -222,7 +217,7 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
         preffix = env + "_" + env_abr +"tau_mpol_replay_ddpg_tensorflow_sincos_16";
     elseif (alg == "2020ddpg")
         subfolder = env + "_mpols" + load + "_yamls_results/";
-        preffix = env + "_tau_replay_ddpg_tensorflow_sincos16";
+        preffix = env + "_" + env_abr + "tau_replay_ddpg_tensorflow_sincos16";
     end
 
     array_runs = runs;
