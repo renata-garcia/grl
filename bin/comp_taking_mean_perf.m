@@ -14,7 +14,7 @@ file="";
 folder="";
 run_mean = "pd_gd_e_avg"; %["pd_gd_e_avg"; "pd_gd_e_lrc31_i0"; "pd_gd_e_lrc31_i1"; "pd_gd_e_lrc21_i1"]
 run_mean = "hc_single"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
-% run_mean = "hc_fd_rnd_relu_fd_mpol_ddpg16_dced25dc";
+run_mean = "hc_fd_rnd_relu_fd_mpol_ddpg16_dced25dc";
 withLimiar = 0;
 %env_abr
 %_fd_rnd_relu_fd_ _fd_rnd_cov_relu_fd_ _fd_rnd_relu_4gamma_fd_ _fd_rnd_relu_4gamma_cov_fd_ _fd_rnd_n_1_fd_
@@ -192,7 +192,7 @@ for j=1:length(array_runs)
 %     [t, mean_d, ~, std_e] = avgseries(readseries(fd, 3, 2, steps_per_second));
     mean_i = mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d)));
     std_i = mean(std_e(length(std_e)-steps_counted+1:length(std_e)));
-    fprintf("%.0f \t %.0f \n", mean_i, std_i);
+    fprintf("%.0f \t %.0f \n", mean_i, 1.96 * std_i);
 end
     
 if (length(data) > 0)
