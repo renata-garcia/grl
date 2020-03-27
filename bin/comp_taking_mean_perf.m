@@ -7,15 +7,15 @@ close all;
 
 steps_counted = 20;
 steps_per_second = 0;
-printing =1 ;
+printing =0 ;
 root = config_env_os();
 env = "";
 file="";
 folder="";
 run_mean = "pd_gd_e_avg"; %["pd_gd_e_avg"; "pd_gd_e_lrc31_i0"; "pd_gd_e_lrc31_i1"; "pd_gd_e_lrc21_i1"]
-run_mean = "cp_single"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
-run_mean = "pd_fd_rnd_relu_4gamma_cov_fd_mpol_ddpg16_dced25dc";
-withLimiar = -2000;
+run_mean = "hc_single"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
+% run_mean = "hc_fd_rnd_relu_fd_mpol_ddpg16_dced25dc";
+withLimiar = 0;
 %env_abr
 %_fd_rnd_relu_fd_ _fd_rnd_cov_relu_fd_ _fd_rnd_relu_4gamma_fd_ _fd_rnd_relu_4gamma_cov_fd_ _fd_rnd_n_1_fd_
 %_mpol_ddpg16_ _mpol_ddpg3_
@@ -28,13 +28,13 @@ elseif(contains(run_mean,"cp") && (contains(run_mean,"single") || contains(run_m
 elseif(contains(run_mean,"cdp") && (contains(run_mean,"single") || contains(run_mean,"_rnd_")))
     env = "cart_double_pole"; env_abr = "cdp";
 elseif(contains(run_mean,"hc") && (contains(run_mean,"single") || contains(run_mean,"_rnd_")))
-    env = "half_cheetah"; env_abr = "wc";
+    env = "half_cheetah"; env_abr = "hc";
 end
 disp("env::env_abr>> " + env +" :: " + env_abr)
 
 if (contains(run_mean,"single"))
-    folder = root + env+"_yamls_results/";
-    file = env + "_" + env_abr + "tau_replay_ddpg_tensorflow_sincos_i";
+    folder = root + "framework_tests/" + env+"_yamls_results/";
+    file = env + "_" + env_abr + "_" + "tau_replay_ddpg_tensorflow_sincos_i";
     alg = "";
     steps_counted = 20;
 end
@@ -190,9 +190,13 @@ for j=1:length(array_runs)
         disp(fd);
     end
 %     [t, mean_d, ~, std_e] = avgseries(readseries(fd, 3, 2, steps_per_second));
-    disp(mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d))));
-    if (printing)
-        disp(mean(std_e(length(std_e)-steps_counted+1:length(std_e))));
-    end
+    mean_i = mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d)));
+    std_i = mean(std_e(length(std_e)-steps_counted+1:length(std_e)));
+    fprintf("%.0f \t %.0f \n", mean_i, std_i);
 end
-disp(length(dir(fd)));
+    
+if (length(data) > 0)
+   disp(length(data));
+else
+    disp(length(dir(fd)));
+end
