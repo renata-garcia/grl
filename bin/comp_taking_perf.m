@@ -5,8 +5,8 @@ close all;
 % %
 root = config_env_os() + "framework_tests/";
 init_size_env = 1;
-% size_env = 3;
-size_env = 1;
+size_env = 4;
+%size_env = 1;
 it = 1;
 envs_results = cell(1,size_env);
 envs_mean = [];
@@ -15,12 +15,12 @@ for it=init_size_env:size_env
     steps_counted = 10;
     runs_number = 30;
     ie=it;
-    ia=4;
-    withLoad = 0;
+    ia=3;
+    withLoad = 1;
     withNoise = 0;
-    withlimiar = 1;
+    withlimiar = 0;
     onlybad4pend=0;
-    algs = ["ac_tc", "dpg", "ddpg", "2020ddpg"];
+    algs = ["ac_tc", "dpg", "ddpg"];
     if (ie == 1)
         env = "pendulum"; env_abr = "pd_";
     elseif (ie == 2)
@@ -32,7 +32,7 @@ for it=init_size_env:size_env
     end
     alg = algs(ia);
     if (it == 4)
-        [tbl_meanstd_all, percentual, strategies] = half_cheetah_gen_tbl(printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar, steps_counted, runs_number);    
+        [tbl_meanstd_all, percentual, strategies] = half_cheetah_gen_tbl(root, printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar, steps_counted, runs_number);    
         envs_results{1,ie} = tbl_meanstd_all;
     else
         [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(root, printing, env, env_abr, alg, withLoad, withNoise, onlybad4pend, withlimiar, steps_counted, runs_number);    
@@ -146,7 +146,7 @@ function [tbl_meanstd_all, percentual, strategies] = generate_tbl_article(root, 
 end
 
 
-function [tbl_meanstd_all, percentual, strategies] = half_cheetah_gen_tbl(printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar, steps_counted, runs_number)
+function [tbl_meanstd_all, percentual, strategies] = half_cheetah_gen_tbl(root, printing, env, env_abr, alg, withLoad, withNoise, exc, withlimiar, steps_counted, runs_number)
     group = ["good", "mid", "bad"];
     if (exc)
         group = ["bad"];
@@ -200,7 +200,7 @@ function [tbl_meanstd_all, percentual, strategies] = half_cheetah_gen_tbl(printi
             j = nl*(ig-1) + 2*il;%(ng*n_load)*(ie-1) + 
             k = n_load*(ig-1) + il; %(ng*n_load)*(ie-1) + 
 %             [tbl2, perc2] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
-            [tbl_meanstd_all(:, i:j), percentual(:,k)] = test_take_mean_mpol(folder, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
+            [tbl_meanstd_all(:, i:j), percentual(:,k)] = test_take_mean_mpol(root, env, env_abr, load(il), alg, runs_generic, printing, steps_per_second, steps_counted, runs_number, withlimiar);
         end
     end
 end
@@ -214,10 +214,8 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
         preffix = env + "_" + env_abr +"tau_" + alg + "16";
     elseif (alg == "ddpg")
         subfolder = env + "_mpols" + load + "_yamls_results/";
-        preffix = env + "_" + env_abr +"tau_mpol_replay_ddpg_tensorflow_sincos_16";
-    elseif (alg == "2020ddpg")
-        subfolder = env + "_mpols" + load + "_yamls_results/";
-        preffix = env + "_" + env_abr + "tau_replay_ddpg_tensorflow_sincos16";
+%         preffix = env + "_" + "tau_mpol_replay_ddpg_tensorflow_sincos_16";
+        preffix = env + "_" + "tau_replay_ddpg_tensorflow_sincos16";
     end
 
     array_runs = runs;
@@ -240,6 +238,7 @@ function [means_std, percentual] = test_take_mean_mpol(folder, env, env_abr, loa
             disp(fd);
         end
         
+        %checks if number file has minimum runs_number
         data_no_limiar = readseries(fd, 3, 2, steps_per_second);
         if (length(data_no_limiar) < runs_number) %~=
             disp(fd);
@@ -405,4 +404,3 @@ function print_article(caption, env_abr, strategies, tbl, withLoad, percentual, 
     fprintf("  \\end{tabular}\n");
     fprintf("\\end{table*}\n");
 end
-

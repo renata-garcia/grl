@@ -14,31 +14,12 @@ file="";
 folder="";
 run_mean = "pd_gd_e_avg"; %["pd_gd_e_avg"; "pd_gd_e_lrc31_i0"; "pd_gd_e_lrc31_i1"; "pd_gd_e_lrc21_i1"]
 run_mean = "cp_single"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
-run_mean = "cp_rnd_cov_relu_mpol_ddpg16_dced25dc"; %["pd_rnd_n_mpol_ddpg16_dced25dc"; "pd_rnd_n_mpol_ddpg16_dc"; "pd_rnd_n_1";
-%"pd_rnd_relu_mpol_ddpg16_dced25dc"; "pd_rnd_relu_mpol_ddpg16_dc"; "pd_rnd_relu_mpol_ddpg3_dced25dc"; "pd_rnd_relu_mpol_ddpg3_dc";]
-%"pd_rnd_cov_relu_mpol_ddpg16_dced25dc"; "pd_rnd_cov_relu_mpol_ddpg16_dc"; "pd_rnd_cov_relu_mpol_ddpg3_dced25dc"; "pd_rnd_cov_relu_mpol_ddpg3_dc";]
-%"cp_rnd_relu_mpol_ddpg16_dced25dc"; "cp_rnd_relu_mpol_ddpg16_dc"; "cp_rnd_n_1"]
-%"cp_rnd_cov_relu_mpol_ddpg16_dced25dc"; "cp_rnd_cov_relu_mpol_ddpg16_dc";]
-
-
-%folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_mpols" +alg + "_load_yamls_results/";
-%folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_mpols" +alg + "_yamls_results/";
-% alg_t = "_none_none_1.0_data_center_a1.0_";
-% alg_t = "_none_none_1.0_density_a1.0_";
-% alg_t = "_none_none_1.0_mean_a1.0_";
-% alg_t = "_none_data_center_linear_order_1.0_best_a0.01_";
-% alg_t = "_none_density_1.0_best_a0.01_";
-% alg_t = "_mean_euclidian_distance_0.1_best_a0.01_";
-% alg_t = "_data_center_euclidian_distance_0.25_data_center_a0.01_";
-% alg_t = "_none_density_0.25_density_a0.01_";
-% alg_t = "_mean_euclidian_distance_0.25_mean_a0.01_";
-% alg_t = "_mean_euclidian_distance_0.25_data_center_a0.01_";
-% alg_t = "_mean_euclidian_distance_0.25_density_a0.01_";
-% alg_t = "_none_data_center_linear_order_0.25_data_center_a0.01_";
-% type = "good";
-% env = "cart_double_pole";
-% folder = "~/Dropbox/phd_grl_results/phd_grl_mpol_results/"+env+"_mpols_loadnewgrptest_yamls_results/";
-% file = env + "_tau_replay_ddpg_tensorflow_sincos16"+type+"_load_j*" + alg_t;
+run_mean = "pd_fd_rnd_relu_4gamma_cov_fd_mpol_ddpg16_dced25dc";
+withLimiar = -2000;
+%env_abr
+%_fd_rnd_relu_fd_ _fd_rnd_cov_relu_fd_ _fd_rnd_relu_4gamma_fd_ _fd_rnd_relu_4gamma_cov_fd_ _fd_rnd_n_1_fd_
+%_mpol_ddpg16_ _mpol_ddpg3_
+%_dced25dc _dc _rnd_n_1
 
 if (contains(run_mean,"pd") && (contains(run_mean,"single") || contains(run_mean,"_rnd_")))
     env = "pendulum"; env_abr = "pd";
@@ -85,18 +66,27 @@ elseif (contains(run_mean,"pd") && contains(run_mean,"_e_lrc21_i1") && contains(
     steps_counted = 20;
 end
 
-if (contains(run_mean,"_rnd_n_"))
-    folder = root + "tests_random_hyperparameters/" + env_abr + "_agent_mpol_and_single_config_ddpg_rnd1a10_results/";
-    file = env + "_" + env_abr + "_rnd_";
-elseif (contains(run_mean,"_rnd_relu"))
+if (contains(run_mean,"_fd_rnd_relu_fd_"))
     folder = root + "tests_random_hyperparameters/" + env_abr + "_agent_mpol_and_single_config_ddpg_rnd1a10_token_no_softmax_results/";
     file = env + "_" + env_abr + "_rnd_";
     alg = "";
-elseif (contains(run_mean,"_rnd_cov_relu"))
+elseif (contains(run_mean,"_fd_rnd_cov_relu_fd_"))
     folder = root + "tests_random_hyperparameters/" + env_abr + "_agent_mpol_and_single_config_ddpg_rnd1a10_token_no_softmax_results_converged/";
     file = env + "_" + env_abr + "_rnd_";
     alg = "";
+elseif (contains(run_mean,"_fd_rnd_relu_4gamma_fd_"))
+    folder = root + "tests_random_hyperparameters/" + env_abr + "_agent_mpol_and_single_config_ddpg_rnd1a10_token_no_softmax_4gamma_results/";
+    file = env + "_" + env_abr + "_rnd_";
+    alg = "";
+elseif (contains(run_mean,"_fd_rnd_relu_4gamma_cov_fd_"))
+    folder = root + "tests_random_hyperparameters/" + env_abr + "_agent_mpol_and_single_config_ddpg_rnd1a10_token_no_softmax_4gamma_results_converged/";
+    file = env + "_" + env_abr + "_rnd_";
+    alg = "";
 end
+if (contains(run_mean,"_fd_rnd_n_1_fd_"))
+    file = env + "_" + env_abr + "_rnd_";
+end
+
 if (contains(run_mean,"_ddpg16_dced25dc"))
     file = file + "*_tau_replay_ddpg_tensorflow_sincos16_j0_data_center_euclidian_distance_0.25_data_center_a0.01_";
 elseif (contains(run_mean,"_ddpg16_dc"))
@@ -166,12 +156,40 @@ else
         file + "*.txt"];
 end
 
+%% withLimiar
+
+%checks if number file has minimum runs_number
 for j=1:length(array_runs)
+    
     fd = folder + array_runs(j);
+    data_no_limiar = readseries(fd, 3, 2, steps_per_second);
+    
+    data = {};
+    if (withLimiar)
+        k = 0;
+        for i=1:length(data_no_limiar)
+            tmp = data_no_limiar{i};
+            disp(mean(tmp(length(tmp)-steps_counted+1:length(tmp),2)));
+            if (mean(tmp((end-5):end,2)) > withLimiar)
+                k = k + 1;
+                data{k} = data_no_limiar{i};
+            end
+        end
+    end
+    
+    if (length(data) > 0)
+        [t, mean_d, ~, std_e] = avgseries(data);
+        d = data(end,:);
+    else
+        [t, mean_d, ~, std_e] = avgseries(data_no_limiar);
+        d = data_no_limiar(end,:);
+    end
+
+%     fd = folder + array_runs(j);
     if (printing)
         disp(fd);
     end
-    [t, mean_d, ~, std_e] = avgseries(readseries(fd, 3, 2, steps_per_second));
+%     [t, mean_d, ~, std_e] = avgseries(readseries(fd, 3, 2, steps_per_second));
     disp(mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d))));
     if (printing)
         disp(mean(std_e(length(std_e)-steps_counted+1:length(std_e))));
