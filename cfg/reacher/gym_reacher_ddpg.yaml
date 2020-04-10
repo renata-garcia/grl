@@ -1,0 +1,79 @@
+experiment: 
+  type: experiment/online_learning
+  runs: 10
+  run_offset: 0
+  trials: 0
+  steps: 750000
+  rate: 0
+  test_interval: 10
+  output: half_cheetah_ddpg
+  save_every: never
+  environment: 
+    type: environment/gym
+    id: Reacher-v2
+    render: 0
+  agent: 
+    type: agent/replay
+    replay_steps: 256
+    batch_size: 64
+    observation_steps: 1000
+    threads: 0
+    policy: 
+      type: mapping/policy/action
+      sigma: [1]
+      theta: [0.15]
+      decay_rate: 1
+      decay_min: 0
+      renormalize: 1
+      output_min: [ -1, -1]
+      output_max: [ 1, 1]
+      projector:
+        type: projector/pre/normalizing
+        signed: 0
+        input_min: [-1, -1, -1, -1, -0.27, -0.27, -150, -50, -1, -1, 0]
+        input_max: [ 1,  1,  1,  1,  0.27,  0.27,  150,  50,  1,  1, 0]
+        projector:
+          type: projector/identity
+      representation:
+        type: representation/parameterized/tensorflow
+        interval: 10
+        tau: 0.01
+        file: ../cfg/network/4layer_tanh_ddpg.py 11 2 0.001 0.001 "relu" "linear" 400 300
+        input_layer: s_in, a_in
+        output_layer: a_out/Tanh
+        init_node: init
+        update_node: update
+        file_suffix: my_policy0_1
+    predictor:
+      type: predictor/ddpg
+      gamma: 0.48
+      reward_scale: 1
+      observation: s_in
+      action: a_in
+      value: q/BiasAdd
+      target: target
+      critic_update: update
+      actor_update: a_update
+      discretizer: 0
+      obs_projector: experiment/agent/policy/projector
+      action_projector:
+        type: projector/pre/normalizing
+        signed: 1
+        input_min: experiment/agent/policy/output_min
+        input_max: experiment/agent/policy/output_max
+        projector: 
+          type: projector/identity
+      representation: experiment/agent/policy/representation
+  test_agent: 
+    type: agent/fixed
+    policy: 
+      type: mapping/policy/action
+      sigma: []
+      theta: []
+      decay_rate: 1
+      decay_min: 0
+      renormalize: 1
+      output_min: experiment/agent/policy/output_min
+      output_max: experiment/agent/policy/output_max
+      projector: experiment/agent/policy/projector
+      representation: experiment/agent/policy/representation
