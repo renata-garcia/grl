@@ -396,6 +396,17 @@ env = "pendulum";
 env_abr = "pd";
 subfolder = env + "_mpols_yamls_results/";
 preffix = env + "_" + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_16";
+
+title_fig = [env, "MPOL M\_ED\_50\_D throuhgt TYPEs"];
+array_runs = ["../../../../../media/renatargo/renatargo/pd16goodtrainrndpolicy*.dat",...
+              subfolder + preffix + "good_*_mean_euclidian_distance_0.5_density_a0.01_*.txt"];
+ploting_executions(folder, title_fig, steps_per_second, array_runs);
+
+%%
+env = "pendulum";
+env_abr = "pd";
+subfolder = env + "_mpols_yamls_results/";
+preffix = env + "_" + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_16";
 type = "bad";
 title_fig = [env, "MPOL BEST BAD TYPE UNTIL NOW"];
 ploting_mpols(n, folder, subfolder, preffix, steps_per_second, type, title_fig,...    

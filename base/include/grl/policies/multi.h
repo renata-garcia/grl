@@ -53,7 +53,7 @@ class MultiPolicy : public Policy
     enum CombinationStrategy {csBinning, csAlg4StepsNew,
     csStatic, csValueBased, csRoulette};
     enum ScoreDistance {sdNone, sdBest, sdBestElitism005, sdBestElitism0001, sdBestPersistent, sdBestDPersistent, sdBestDCPersistent, sdBestDelayPersistent, sdDensityBased, sdDataCenter,
-     sdMean, sdRandom, sdRandomPersistent};
+     sdMean, sdRandom, sdRandomPersistent, sdAlternatelyPersistent};
     enum UpdateHistory {uhNone, uhEuclideanDistance, uhDensity, uhDensityLinear, uhDataCenter};
     
   protected:

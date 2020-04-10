@@ -51,7 +51,7 @@ void MultiPolicy::request(ConfigurationRequest *config)
   config->push_back(CRP("percentile", "Percentile of Scores / Actions", percentile_));
   
   config->push_back(CRP("select_by_distance", "Select by distance", select_by_distance_str_, CRP::Configuration,
-  {"none", "best", "best_elitism005", "best_elitism0001", "best_persistent", "best_delay_persistent", "best_d_persistent", "best_dc_persistent", "data_center", "density", "mean", "random", "random_persistent"}));
+  {"none", "best", "best_elitism005", "best_elitism0001", "best_persistent", "best_delay_persistent", "best_d_persistent", "best_dc_persistent", "data_center", "density", "mean", "random", "random_persistent", "alternately_persistent"}));
   
   config->push_back(CRP("sampler", "sampler", "Sampler for value-based strategy", sampler_, true));
   config->push_back(CRP("bins", "Binning Simple Discretization", bins_));
@@ -189,6 +189,11 @@ void MultiPolicy::configure(Configuration &config)
   {
     select_by_distance_ = sdRandomPersistent;
     select_ = sdRandomPersistent;
+  }
+  else if(select_by_distance_str_ == "alternative_persistent")
+  {
+    select_by_distance_ = sdAlternatelyPersistent;
+    select_ = sdAlternatelyPersistent;
   }
 
   sampler_ = (Sampler*)config["sampler"].ptr();
@@ -472,6 +477,15 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
             policy_persistent_ = aleatorio%active_set.size();
           dist = active_set[policy_persistent_].v;
           CRAWL("MultiPolicy::csAlg4Steps::case sdRandom active_set[policy_random: " << policy_persistent_ << "]->v: " << dist);
+        }
+        break;
+
+        case sdAlternatelyPersistent:
+        {
+          if (!time)
+            policy_persistent_ = (policy_persistent_ + 1)%active_set.size();
+          dist = active_set[policy_persistent_].v;
+          CRAWL("MultiPolicy::csAlg4Steps::case sdAlternatelyPersistent active_set[policy_random: " << policy_persistent_ << "]->v: " << dist);
         }
         break;
       }
