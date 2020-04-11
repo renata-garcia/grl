@@ -190,7 +190,7 @@ void MultiPolicy::configure(Configuration &config)
     select_by_distance_ = sdRandomPersistent;
     select_ = sdRandomPersistent;
   }
-  else if(select_by_distance_str_ == "alternative_persistent")
+  else if(select_by_distance_str_ == "alternately_persistent")
   {
     select_by_distance_ = sdAlternatelyPersistent;
     select_ = sdAlternatelyPersistent;
@@ -408,6 +408,7 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
       for(size_t i = 0; i < active_set.size(); ++i)
         CRAWL("MultiPolicy::csAlg4Steps::choosed active_set[i:" << i << "]: " << active_set[i].v[0]);
 
+      CRAWL("MultiPolicy::csAlg4Steps::sdBestDelayPersistent::select_by_distance_: " << select_by_distance_);
       switch (select_by_distance_)
       {
         case sdBest:
@@ -458,7 +459,9 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
           break;
           
         case sdMean:
+          CRAWL("MultiPolicy::csAlg4Steps::case sdMean before");
           dist = g_mean(active_set);
+          CRAWL("MultiPolicy::csAlg4Steps::case sdMean after" << dist);
           break;
 
         case sdRandom:
@@ -482,10 +485,12 @@ void MultiPolicy::act(double time, const Observation &in, Action *out)
 
         case sdAlternatelyPersistent:
         {
+          CRAWL("MultiPolicy::csAlg4Steps::case sdAlternatelyPersistent before");
           if (!time)
             policy_persistent_ = (policy_persistent_ + 1)%active_set.size();
+          CRAWL("MultiPolicy::csAlg4Steps::case sdAlternatelyPersistent policy_persistent_" << policy_persistent_);
           dist = active_set[policy_persistent_].v;
-          CRAWL("MultiPolicy::csAlg4Steps::case sdAlternatelyPersistent active_set[policy_random: " << policy_persistent_ << "]->v: " << dist);
+          //CRAWL("MultiPolicy::csAlg4Steps::case sdAlternatelyPersistent active_set[policy_random: " << policy_persistent_ << "]->v: " << dist);
         }
         break;
       }
