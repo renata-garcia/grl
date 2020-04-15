@@ -5,19 +5,20 @@ close all;
 % % COUNT MEAN (LEAST 10) TO USE IN ORDERING GOO, MID AND BAD
 % % COUNT MEAN (LEAST 20) TO USE IN ORDERING SINGLE RUNS
 
-steps_counted = 20;
+steps_counted = 10;
 steps_per_second = 0;
-printing =0 ;
+printing =1 ;
 root = config_env_os();
 env = "";
 file="";
 folder="";
 run_mean = "pd_gd_e_avg"; %["pd_gd_e_avg"; "pd_gd_e_lrc31_i0"; "pd_gd_e_lrc31_i1"; "pd_gd_e_lrc21_i1"]
 run_mean = "hc_single"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
-run_mean = "hc_fd_rnd_relu_fd_mpol_ddpg16_dced25dc";
+run_mean = "hc_fd_rnd_alternately_persistent_fd_tg_bad_tg_ddpg16_mean_";
 withLimiar = 0;
 %env_abr
-%_fd_rnd_relu_fd_ _fd_rnd_cov_relu_fd_ _fd_rnd_relu_4gamma_fd_ _fd_rnd_relu_4gamma_cov_fd_ _fd_rnd_n_1_fd_
+%_fd_rnd_relu_fd_ _fd_rnd_cov_relu_fd_ _fd_rnd_relu_4gamma_fd_
+%_fd_rnd_relu_4gamma_cov_fd_ _fd_rnd_n_1_fd_ _fd_rnd_alternately_persistent_fd_
 %_mpol_ddpg16_ _mpol_ddpg3_
 %_dced25dc _dc _rnd_n_1
 
@@ -83,8 +84,23 @@ elseif (contains(run_mean,"_fd_rnd_relu_4gamma_cov_fd_"))
     file = env + "_" + env_abr + "_rnd_";
     alg = "";
 end
+
+if (contains(run_mean,"_tg_good_tg_"))
+    tg = "good";
+elseif (contains(run_mean,"_tg_mid_tg_"))
+    tg = "mid";
+elseif (contains(run_mean,"_tg_bad_tg_"))
+    tg = "bad";
+end
+
 if (contains(run_mean,"_fd_rnd_n_1_fd_"))
     file = env + "_" + env_abr + "_rnd_";
+elseif (contains(run_mean,"hc_fd_rnd_alternately_persistent_fd_"))
+    folder = root + "tests_ddpg_2020/" + env + "/";
+    file = env + "_tau_replay_ddpg_tensorflow_sincos16good_j*_alternately_persistent_"; 
+elseif (contains(run_mean,"_fd_rnd_alternately_persistent_fd_"))
+    folder = root + "tests_ddpg_2020/" + env + "/";
+    file = env + "_" + env_abr + "_tau_replay_ddpg_tensorflow_sincos16" + tg + "_j*_"; 
 end
 
 if (contains(run_mean,"_ddpg16_dced25dc"))
@@ -97,6 +113,12 @@ elseif (contains(run_mean,"_ddpg3_dc"))
     file = file + "*_tau_replay_ddpg_tensorflow_sincos3_j0_none_none_1.0_data_center_a1.0_";
 elseif (contains(run_mean,"_n_1"))
     file = file + "1_tau_replay_ddpg_tensorflow_sincos_i*_j0";
+elseif (contains(run_mean,"_ddpg16_mean_"))
+    file = file + "none_none_1.0_mean_a1.0_";
+elseif (contains(run_mean,"_ddpg16_data_center_"))
+    file = file + "none_none_1.0_data_center_a1.0_";
+elseif (contains(run_mean,"_ddpg16_density_"))
+    file = file + "none_none_1.0_density_a1.0_";
 end
 %"pd_rnd_relu_mpol_dced25dc"; "pd_rnd_relu_mpol_dc"; "pd_rnd_relu_1"; 
 
