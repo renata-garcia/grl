@@ -7,14 +7,15 @@ close all;
 
 steps_counted = 10;
 steps_per_second = 0;
-printing =1 ;
+printing = 1;
 root = config_env_os();
 env = "";
 file="";
 folder="";
 run_mean = "pd_gd_e_avg"; %["pd_gd_e_avg"; "pd_gd_e_lrc31_i0"; "pd_gd_e_lrc31_i1"; "pd_gd_e_lrc21_i1"]
 run_mean = "hc_single"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
-run_mean = "hc_fd_rnd_alternately_persistent_fd_tg_bad_tg_ddpg16_mean_";
+run_mean = "hc_mpols_tg_good_tg_ddpg16_mean_"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
+run_mean = "hc_fd_rnd_alternately_persistent_fd_tg_mid_tg_ddpg16_mean_";
 withLimiar = 0;
 %env_abr
 %_fd_rnd_relu_fd_ _fd_rnd_cov_relu_fd_ _fd_rnd_relu_4gamma_fd_
@@ -22,22 +23,50 @@ withLimiar = 0;
 %_mpol_ddpg16_ _mpol_ddpg3_
 %_dced25dc _dc _rnd_n_1
 
-if (contains(run_mean,"pd") && (contains(run_mean,"single") || contains(run_mean,"_rnd_")))
-    env = "pendulum"; env_abr = "pd";
-elseif(contains(run_mean,"cp") && (contains(run_mean,"single") || contains(run_mean,"_rnd_")))
-    env = "cart_pole"; env_abr = "cp";
-elseif(contains(run_mean,"cdp") && (contains(run_mean,"single") || contains(run_mean,"_rnd_")))
-    env = "cart_double_pole"; env_abr = "cdp";
-elseif(contains(run_mean,"hc") && (contains(run_mean,"single") || contains(run_mean,"_rnd_")))
-    env = "half_cheetah"; env_abr = "hc";
+% if (contains(run_mean,"pd") && (contains(run_mean,"single") || contains(run_mean,"_rnd_")))
+%     env = "pendulum"; env_abr = "pd";
+% elseif(contains(run_mean,"cp") && (contains(run_mean,"single") || contains(run_mean,"_rnd_")))
+%     env = "cart_pole"; env_abr = "cp";
+% elseif(contains(run_mean,"cdp") && (contains(run_mean,"single") || contains(run_mean,"_rnd_")))
+%     env = "cart_double_pole"; env_abr = "cdp";
+% elseif(contains(run_mean,"hc") && (contains(run_mean,"single") || contains(run_mean,"_rnd_")))
+%     env = "half_cheetah"; env_abr = "hc";
+% end
+if (contains(run_mean,"pd"))
+    env = "pendulum"; env_abr = "_pd";
+elseif(contains(run_mean,"cp"))
+    env = "cart_pole"; env_abr = "_cp";
+elseif(contains(run_mean,"cdp"))
+    env = "cart_double_pole"; env_abr = "_cdp";
+elseif(contains(run_mean,"hc"))
+    env = "half_cheetah"; env_abr = "";
 end
 disp("env::env_abr>> " + env +" :: " + env_abr)
 
+
+if (contains(run_mean,"_tg_good_tg_"))
+    tg = "good";
+elseif (contains(run_mean,"_tg_mid_tg_"))
+    tg = "mid";
+elseif (contains(run_mean,"_tg_bad_tg_"))
+    tg = "bad";
+end
+
 if (contains(run_mean,"single"))
-    folder = root + "framework_tests/" + env+"_yamls_results/";
+    folder = root + "tests_framework/" + env+"_yamls_results/";
     file = env + "_" + env_abr + "_" + "tau_replay_ddpg_tensorflow_sincos_i";
     alg = "";
     steps_counted = 20;
+end
+
+if (contains(run_mean,"mpols"))
+    folder = root + "tests_framework/" + env+"_mpols_yamls_results/";
+    file = env + "_" + env_abr + "tau_mpol_replay_ddpg_tensorflow_sincos_16" + tg + "*";
+    alg = "";
+    steps_counted = 20;
+%     if(contains(run_mean, "_ddpg16_density_"))
+%         file = file + tg + "*" + "none_none_1.0_density_a1.0";
+%     end
 end
 
 if(contains(run_mean,"hc") && contains(run_mean,"single"))
@@ -85,19 +114,11 @@ elseif (contains(run_mean,"_fd_rnd_relu_4gamma_cov_fd_"))
     alg = "";
 end
 
-if (contains(run_mean,"_tg_good_tg_"))
-    tg = "good";
-elseif (contains(run_mean,"_tg_mid_tg_"))
-    tg = "mid";
-elseif (contains(run_mean,"_tg_bad_tg_"))
-    tg = "bad";
-end
-
 if (contains(run_mean,"_fd_rnd_n_1_fd_"))
     file = env + "_" + env_abr + "_rnd_";
 elseif (contains(run_mean,"hc_fd_rnd_alternately_persistent_fd_"))
     folder = root + "tests_ddpg_2020/" + env + "/";
-    file = env + "_tau_replay_ddpg_tensorflow_sincos16good_j*_alternately_persistent_"; 
+    file = env + "_tau_replay_ddpg_tensorflow_sincos16" + tg + "_j*_alternately_persistent_"; 
 elseif (contains(run_mean,"_fd_rnd_alternately_persistent_fd_"))
     folder = root + "tests_ddpg_2020/" + env + "/";
     file = env + "_" + env_abr + "_tau_replay_ddpg_tensorflow_sincos16" + tg + "_j*_"; 
@@ -139,7 +160,7 @@ else
     disp("NONE NONE");
 end
 
-if (contains(run_mean,"single")) || (contains(run_mean,"mpols"))
+if (contains(run_mean,"single"))
     array_runs = [
         file + "1_j*.txt",...
         file + "2_j*.txt",...
