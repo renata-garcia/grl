@@ -15,7 +15,7 @@ folder="";
 run_mean = "pd_gd_e_avg"; %["pd_gd_e_avg"; "pd_gd_e_lrc31_i0"; "pd_gd_e_lrc31_i1"; "pd_gd_e_lrc21_i1"]
 run_mean = "hc_single"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
 run_mean = "hc_mpols_tg_good_tg_ddpg16_mean_"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
-run_mean = "hc_fd_rnd_alternately_persistent_fd_tg_mid_tg_ddpg16_mean_";
+run_mean = "cp_fd_rnd_alternately_persistent_fd_tg_good_tg_ddpg8_strat_data_center_";
 withLimiar = 0;
 %env_abr
 %_fd_rnd_relu_fd_ _fd_rnd_cov_relu_fd_ _fd_rnd_relu_4gamma_fd_
@@ -50,6 +50,18 @@ elseif (contains(run_mean,"_tg_mid_tg_"))
     tg = "mid";
 elseif (contains(run_mean,"_tg_bad_tg_"))
     tg = "bad";
+end
+
+if (contains(run_mean,"_ddpg16_"))
+    ddpg_sz = "16";
+elseif (contains(run_mean,"_ddpg8_"))
+    ddpg_sz = "8";
+elseif (contains(run_mean,"_ddpg3mirror_"))
+    ddpg_sz = "3mirror";
+elseif (contains(run_mean,"_ddpg8mirror_"))
+    ddpg_sz = "8mirror";
+elseif (contains(run_mean,"_ddpg12mirror_"))
+    ddpg_sz = "12mirror";
 end
 
 if (contains(run_mean,"single"))
@@ -121,7 +133,7 @@ elseif (contains(run_mean,"hc_fd_rnd_alternately_persistent_fd_"))
     file = env + "_tau_replay_ddpg_tensorflow_sincos16" + tg + "_j*_alternately_persistent_"; 
 elseif (contains(run_mean,"_fd_rnd_alternately_persistent_fd_"))
     folder = root + "tests_ddpg_2020/" + env + "/";
-    file = env + "_" + env_abr + "_tau_replay_ddpg_tensorflow_sincos16" + tg + "_j*_"; 
+    file = env + env_abr + "_tau_replay_ddpg_tensorflow_sincos" + ddpg_sz + tg + "_j*_"; 
 end
 
 if (contains(run_mean,"_ddpg16_dced25dc"))
@@ -134,11 +146,11 @@ elseif (contains(run_mean,"_ddpg3_dc"))
     file = file + "*_tau_replay_ddpg_tensorflow_sincos3_j0_none_none_1.0_data_center_a1.0_";
 elseif (contains(run_mean,"_n_1"))
     file = file + "1_tau_replay_ddpg_tensorflow_sincos_i*_j0";
-elseif (contains(run_mean,"_ddpg16_mean_"))
+elseif (contains(run_mean,"_strat_mean_"))
     file = file + "none_none_1.0_mean_a1.0_";
-elseif (contains(run_mean,"_ddpg16_data_center_"))
+elseif (contains(run_mean,"_strat_data_center_"))
     file = file + "none_none_1.0_data_center_a1.0_";
-elseif (contains(run_mean,"_ddpg16_density_"))
+elseif (contains(run_mean,"_strat_density_"))
     file = file + "none_none_1.0_density_a1.0_";
 end
 %"pd_rnd_relu_mpol_dced25dc"; "pd_rnd_relu_mpol_dc"; "pd_rnd_relu_1"; 
