@@ -8,25 +8,26 @@ close all;
 run_mean = "pd_gd_e_avg"; %["pd_gd_e_avg"; "pd_gd_e_lrc31_i0"; "pd_gd_e_lrc31_i1"; "pd_gd_e_lrc21_i1"]
 run_mean = "hc_single"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
 run_mean = "hc_mpols_tg_good_tg_ddpg16_mean_"; %["hc_single"; "pd_single"; "cp_single";"cdp_single"]
-run_mean = "hc_fd_rnd_alternately_persistent_fd_tg_good_tg_ddpg16_strat_mean_";
+run_mean = "cp_fd_rnd_alternately_persistent_fd_tg_good_tg_ddpg16_strat_mean_";
 %env_abr
 %_fd_rnd_relu_fd_ _fd_rnd_cov_relu_fd_ _fd_rnd_relu_4gamma_fd_
 %_fd_rnd_relu_4gamma_cov_fd_ _fd_rnd_n_1_fd_ _fd_rnd_alternately_persistent_fd_
 %_mpol_ddpg16_ _mpol_ddpg3_
 %_dced25dc _dc _rnd_n_1
 
-environment = "hc";
-type = ["good", "mid", "bad"];
+environment = "pd";
+type = ["good", "mid", "bad"]; %"bad"]; % 
 strategy = ["mean", "data_center", "density"];
-mode = "ddpg3mirror"; % ddpg16 ddpg8 ddpg3 ddpg3mirror ddpg8mirror ddpg12mirror
+mode = "ddpg12mirror"; % ddpg16 ddpg8 ddpg3 ddpg3mirror ddpg8mirror ddpg12mirror
+load = "";%"_load"; %
 
 for i=1:length(type)
     for j=1:length(strategy)
-        teste(environment + "_fd_rnd_alternately_persistent_fd_tg_" + type(i) + "_tg_" + mode + "_strat_" + strategy(j) + "_")
+        teste(environment + "_fd_rnd_alternately_persistent_fd_tg_" + type(i) + "_tg_" + mode + "_strat_" + strategy(j) + "_", load)
     end
 end
 
-function teste(run_mean)
+function teste(run_mean, load)
     printing = 0;
     withLimiar = 0;
     steps_counted = 10;
@@ -51,11 +52,11 @@ function teste(run_mean)
 
 
     if (contains(run_mean,"_tg_good_tg_"))
-        tg = "good";
+        tg = "good" + load;
     elseif (contains(run_mean,"_tg_mid_tg_"))
-        tg = "mid";
+        tg = "mid" + load;
     elseif (contains(run_mean,"_tg_bad_tg_"))
-        tg = "bad";
+        tg = "bad" + load;
     end
 
     if (contains(run_mean,"_ddpg16_"))
