@@ -1,3 +1,4 @@
+experiment:
   environment: 
     type: environment/gym
     id: HalfCheetah-v2
