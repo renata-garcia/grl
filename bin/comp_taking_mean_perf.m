@@ -15,10 +15,10 @@ run_mean = "cp_fd_rnd_alternately_persistent_fd_tg_good_tg_ddpg16_strat_mean_";
 %_mpol_ddpg16_ _mpol_ddpg3_
 %_dced25dc _dc _rnd_n_1
 
-environment = "pd";
+environment = "hx";
 type = ["good", "mid", "bad"]; %"bad"]; % 
 strategy = ["mean", "data_center", "density"];
-mode = "ddpg12mirror"; % ddpg16 ddpg8 ddpg3 ddpg3mirror ddpg8mirror ddpg12mirror
+mode = "ddpg3duel"; % ddpg16 ddpg8 ddpg3 ddpg3mirror ddpg8mirror ddpg12mirror ddpg3duel
 load = "";%"_load"; %
 
 for i=1:length(type)
@@ -43,7 +43,7 @@ function teste(run_mean, load)
         env = "cart_pole"; env_abr = "_cp";
     elseif(contains(run_mean,"cdp"))
         env = "cart_double_pole"; env_abr = "_cdp";
-    elseif(contains(run_mean,"hc"))
+    elseif(contains(run_mean,"hc") || contains(run_mean,"hx"))
         env = "half_cheetah"; env_abr = "";
     end
     if (printing)
@@ -71,6 +71,8 @@ function teste(run_mean, load)
         ddpg_sz = "8mirror";
     elseif (contains(run_mean,"_ddpg12mirror_"))
         ddpg_sz = "12mirror";
+    elseif (contains(run_mean,"_ddpg3duel_"))
+        ddpg_sz = "3duel";
     end
 
     if (contains(run_mean,"single"))
