@@ -11,28 +11,38 @@ run_mean = "hc_mpols_tg_good_tg_ddpg16_mean_"; %["hc_single"; "pd_single"; "cp_s
 run_mean = "cp_fd_rnd_alternately_persistent_fd_tg_good_tg_ddpg16_strat_mean_";
 %env_abr
 %_fd_rnd_relu_fd_ _fd_rnd_cov_relu_fd_ _fd_rnd_relu_4gamma_fd_
-%_fd_rnd_relu_4gamma_cov_fd_ _fd_rnd_n_1_fd_ _fd_rnd_alternately_persistent_fd_
-%_mpol_ddpg16_ _mpol_ddpg3_
+%_fd_rnd_relu_4gamma_cov_fd_ _fd_rnd_n_1_fd_
+%_mpols_ddpg16_ _mpols_ddpg3_
 %_dced25dc _dc _rnd_n_1
 
-environment = "hx";
-type = ["good", "mid", "bad"]; %"bad"]; % 
-strategy = ["mean", "data_center", "density"];
-mode = "ddpg3duel"; % ddpg16 ddpg8 ddpg3 ddpg3mirror ddpg8mirror ddpg12mirror ddpg3duel
+%#HOST
+%_fd_rnd_alternately_persistent_fd_
+%_fd_mpols_fd_
+
+environment = "hc"; %hx
+type = ["good", "bad"]; %"good", "mid", "bad"
+strategy = ["mean", "data_center", "density"]; %"mean", "data_center", "density", "random"
+mode = "ddpg3"; % ddpg16 ddpg8 ddpg3 ddpg3mirror ddpg8mirror ddpg12mirror ddpg3duel
 load = "";%"_load"; %
+host = "_fd_rnd_alternately_persistent_fd_";
+
+if (mode == "ddpg3duel") && (environment == "hc")
+    environment = "hx";
+end
 
 for i=1:length(type)
     for j=1:length(strategy)
-        teste(environment + "_fd_rnd_alternately_persistent_fd_tg_" + type(i) + "_tg_" + mode + "_strat_" + strategy(j) + "_", load)
+        teste(environment + host + "tg_" + type(i) + "_tg_" + mode + "_strat_" + strategy(j) + "_", load, 0);
     end
 end
 
-function teste(run_mean, load)
+function teste(run_mean, load, modedisplay)
     printing = 0;
     withLimiar = 0;
     steps_counted = 10;
     steps_per_second = 0;
     root = config_env_os(0);
+    mddisp = modedisplay;
     env = "";
     file="";
     folder="";
@@ -46,10 +56,10 @@ function teste(run_mean, load)
     elseif(contains(run_mean,"hc") || contains(run_mean,"hx"))
         env = "half_cheetah"; env_abr = "";
     end
+    
     if (printing)
         disp("env::env_abr>> " + env +" :: " + env_abr);
     end
-
 
     if (contains(run_mean,"_tg_good_tg_"))
         tg = "good" + load;
@@ -77,14 +87,14 @@ function teste(run_mean, load)
 
     if (contains(run_mean,"single"))
         folder = root + "tests_framework/" + env+"_yamls_results/";
-        file = env + "_" + env_abr + "_" + "tau_replay_ddpg_tensorflow_sincos_i";
+        file = env + env_abr + "_" + "tau_replay_ddpg_tensorflow_sincos_i";
         alg = "";
         steps_counted = 20;
     end
 
     if (contains(run_mean,"mpols"))
         folder = root + "tests_framework/" + env+"_mpols_yamls_results/";
-        file = env + "_" + env_abr + "tau_mpol_replay_ddpg_tensorflow_sincos_16" + tg + "*";
+        file = env + env_abr + "_tau_mpol_replay_ddpg_tensorflow_sincos_" + ddpg_sz + tg + "*";
         alg = "";
         steps_counted = 20;
     %     if(contains(run_mean, "_ddpg16_density_"))
@@ -167,6 +177,8 @@ function teste(run_mean, load)
         file = file + "none_none_1.0_data_center_a1.0_";
     elseif (contains(run_mean,"_strat_density_"))
         file = file + "none_none_1.0_density_a1.0_";
+    elseif (contains(run_mean,"_strat_random_"))
+        file = file + "none_none_1.0_random_a1.0_";
     end
     %"pd_rnd_relu_mpol_dced25dc"; "pd_rnd_relu_mpol_dc"; "pd_rnd_relu_1"; 
 
@@ -263,13 +275,22 @@ function teste(run_mean, load)
         end
     %     [t, mean_d, ~, std_e] = avgseries(readseries(fd, 3, 2, steps_per_second));
         mean_i = mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d)));
-        std_i = mean(std_e(length(std_e)-steps_counted+1:length(std_e)));
-        fprintf("%.0f \n %.0f \n", mean_i, 1.96 * std_i);
+        std_e_i = mean(std_e(length(std_e)-steps_counted+1:length(std_e)));
+        if (mddisp == 0)
+            fprintf("%.0f \n %.0f \n", mean_i, 1.96 * std_e_i);
+        elseif (mddisp == 1)
+            fprintf("%.0f \n", mean_i);
+        elseif (mddisp == 2)
+            fprintf("%.0f \n", 1.96 * std_e_i);
+        end
     end
 
-    if (length(data) > 0)
-       fprintf("%d \n", length(data));
-    else
-       fprintf("%d \n", length(dir(fd)));
+    if (mddisp == 0)
+        if (length(data) > 0)
+           fprintf("%d \n", length(data));
+        else
+           fprintf("%d \n", length(dir(fd)));
+        end
     end
+    
 end
