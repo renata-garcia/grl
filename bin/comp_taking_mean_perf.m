@@ -22,9 +22,9 @@ run_mean = "cp_fd_rnd_alternately_persistent_fd_tg_good_tg_ddpg16_strat_mean_";
 environment = "hc"; %hx
 type = ["good", "bad"]; %"good", "mid", "bad"
 strategy = ["mean", "data_center", "density"]; %"mean", "data_center", "density", "random"
-mode = "ddpg3"; % ddpg16 ddpg8 ddpg3 ddpg3mirror ddpg8mirror ddpg12mirror ddpg3duel
+mode = "ddpg16"; % ddpg16 ddpg8 ddpg3 ddpg3mirror ddpg8mirror ddpg12mirror ddpg3duel
 load = "";%"_load"; %
-host = "_fd_rnd_alternately_persistent_fd_";
+host = "_fd_mpols_fd_";
 
 if (mode == "ddpg3duel") && (environment == "hc")
     environment = "hx";
@@ -277,19 +277,34 @@ function teste(run_mean, load, modedisplay)
         mean_i = mean(mean_d(length(mean_d)-steps_counted+1:length(mean_d)));
         std_e_i = mean(std_e(length(std_e)-steps_counted+1:length(std_e)));
         if (mddisp == 0)
-            fprintf("%.0f \n %.0f \n", mean_i, 1.96 * std_e_i);
+            fprintf("%.0f  %.0f ", mean_i, 1.96 * std_e_i);
         elseif (mddisp == 1)
-            fprintf("%.0f \n", mean_i);
+            fprintf("%.0f ", mean_i);
         elseif (mddisp == 2)
-            fprintf("%.0f \n", 1.96 * std_e_i);
+            fprintf("%.0f ", 1.96 * std_e_i);
         end
+%         if (mddisp == 0)
+%             fprintf("%.0f \n %.0f \n", mean_i, 1.96 * std_e_i);
+%         elseif (mddisp == 1)
+%             fprintf("%.0f \n", mean_i);
+%         elseif (mddisp == 2)
+%             fprintf("%.0f \n", 1.96 * std_e_i);
+%         end
     end
+
+%     if (mddisp == 0)
+%         if (length(data) > 0)
+%            fprintf("%d \n", length(data));
+%         else
+%            fprintf("%d \n", length(dir(fd)));
+%         end
+%     end
 
     if (mddisp == 0)
         if (length(data) > 0)
-           fprintf("%d \n", length(data));
+           fprintf("%d ", length(data));
         else
-           fprintf("%d \n", length(dir(fd)));
+           fprintf("%d ", length(dir(fd)));
         end
     end
     

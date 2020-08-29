@@ -5,8 +5,8 @@ close all;
 % %
 % root = "/media/renata/renatargo/";
 % addpath("~/Dropbox/phd_grl_results/matlab");
-root = "D:";
-addpath("../../../../../../Dropbox/phd_grl_results/matlab");
+root = "";
+addpath("/home/renata/Dropbox/phd_grl_results/matlab");
 init_size_env = 1;
 % size_env = 3;
 size_env = 4;
