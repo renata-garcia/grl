@@ -1,55 +1,55 @@
-% clc;
-% clear;
-% close all;
-% 
-% % %
-% root = config_env_os() + "framework_tests/";
-% init_size_env = 1;
-% % size_env = 3;
-% size_env = 2;
-% its = 1;
-% envs_results = cell(1,size_env);
-% envs_mean = [];
-% for it=init_size_env:size_env
-%     printing = 1;
-%     steps_counted = 10;
-%     runs_number = 30;
-%     ie=it;
-%     ia=1;
-%     withNoise = 0;
-%     withlimiar = 0;
-%     algs = ["ddpg"];
-%     if (ie == 1)
-%         env = "pendulum"; env_abr = "pd_";
-%     elseif (ie == 2)
-%         env = "cart_pole"; env_abr = "cp_";
-%     elseif (ie == 3)
-%         env = "cart_double_pole"; env_abr = "cdp_";
-%     elseif (ie == 4)
-%         env = "half_cheetah"; env_abr = "";
-%     end
-%     alg = algs(ia);
-%     [tbl_meanstd_all, percentual] = generate_tbl_article(root, printing, env, env_abr, alg, withNoise, withlimiar, steps_counted, runs_number);
-%     envs_results{1,ie} = tbl_meanstd_all;
-%     envs_mean = [envs_mean , tbl_meanstd_all(:,1:2:end)];
-%     
-%     title_leg = strcat("env= ", env, " alg= ", algs(ia));
-%     title_leg = strcat(title_leg, " (counted)");
-% %     print_article(title_leg, env_abr, tbl_meanstd_all, percentual, (it == 4))
-%     disp("acabou..........");
-% end
-% tbl = envs_mean;
-% max_tbl = max(tbl);
-% err = abs((max_tbl - tbl)./max_tbl);
-% err_good = err(:,1:3:end);
-% sum_err = sum(err,2);
-% sum_err_good = sum(err_good,2);
-% alg_minor_err_for = find(min(sum_err)==sum_err);
-% alg_minor_err_for_good = find(min(sum_err_good)==sum_err_good);
-% display(alg_minor_err_for);
-% display(alg_minor_err_for_good);
-% display(min(sum_err)/9);
-print_by_envs(title_leg, envs_results, 1, percentual)
+clc;
+clear;
+close all;
+
+% %
+root = config_env_os(0) + "tests_framework/";
+init_size_env = 3;
+% size_env = 3;
+size_env = 3;
+its = 1;
+envs_results = cell(1,size_env);
+envs_mean = [];
+for it=init_size_env:size_env
+    printing = 1;
+    steps_counted = 20;
+    runs_number = 30;
+    ie=it;
+    ia=1;
+    withNoise = 0;
+    withlimiar = 0;
+    algs = ["ddpg"];
+    if (ie == 1)
+        env = "pendulum"; env_abr = "pd_";
+    elseif (ie == 2)
+        env = "cart_pole"; env_abr = "cp_";
+    elseif (ie == 3)
+        env = "cart_double_pole"; env_abr = "cdp_";
+    elseif (ie == 4)
+        env = "half_cheetah"; env_abr = "";
+    end
+    alg = algs(ia);
+    [tbl_meanstd_all, percentual] = generate_tbl_article(root, printing, env, env_abr, alg, withNoise, withlimiar, steps_counted, runs_number);
+    envs_results{1,ie} = tbl_meanstd_all;
+    envs_mean = [envs_mean , tbl_meanstd_all(:,1:2:end)];
+    
+    title_leg = strcat("env= ", env, " alg= ", algs(ia));
+    title_leg = strcat(title_leg, " (counted)");
+%     print_article(title_leg, env_abr, tbl_meanstd_all, percentual, (it == 4))
+    disp("acabou..........");
+end
+tbl = envs_mean;
+max_tbl = max(tbl);
+err = abs((max_tbl - tbl)./max_tbl);
+err_good = err(:,1:3:end);
+sum_err = sum(err,2);
+sum_err_good = sum(err_good,2);
+alg_minor_err_for = find(min(sum_err)==sum_err);
+alg_minor_err_for_good = find(min(sum_err_good)==sum_err_good);
+display(alg_minor_err_for);
+display(alg_minor_err_for_good);
+display(min(sum_err)/9);
+% print_by_envs(title_leg, envs_results, 1, percentual)
 
 function [tbl_meanstd_all, percentual] = generate_tbl_article(root, printing, env, env_abr, alg, withNoise, withlimiar, steps_counted, runs_number)
 
